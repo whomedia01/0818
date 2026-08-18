@@ -90,6 +90,11 @@ document.addEventListener('alpine:init', () => {
         activeStudioTitle: '',
         keywords: ['지식을 성과로 만드는 맞춤형 교육 솔루션', '맞춤형 이러닝 콘텐츠 개발', '160평 전문 스튜디오 & 고품질 영상 연출', '오프라인 기반 블렌디드 러닝 & 전문 특강', '지속가능한 성장을 이끄는 조직 체계'],
         currentKeywordIndex: 0,
+        heroKeywords: ['이러닝 콘텐츠 개발', '하이엔드 영상 제작', '블렌디드 러닝'],
+        heroKeywordIndex: 0,
+        heroTypedText: '이러닝 콘텐츠 개발',
+        isDeletingHeroText: false,
+        heroCharIndex: 0,
 
         // [전체 포트폴리오 목록 - PORTFOLIO_DATA 상수로 100% 보장]
         portfolioItems: PORTFOLIO_DATA,
@@ -138,6 +143,7 @@ document.addEventListener('alpine:init', () => {
         init() {
             try {
                 setInterval(() => { this.currentKeywordIndex = (this.currentKeywordIndex + 1) % this.keywords.length; }, 2800);
+                this.startHeroTyping();
                 this.startServiceAutoPlay();
                 this.startAboutAutoPlay();
                 this.startStudioAutoPlay();
@@ -150,6 +156,44 @@ document.addEventListener('alpine:init', () => {
             } catch(e) {
                 console.warn('Init non-blocking exception handled:', e);
             }
+        },
+
+        startHeroTyping() {
+            const words = this.heroKeywords;
+            let wordIdx = 0;
+            let charIdx = words[0].length;
+            let isDeleting = false;
+            this.heroTypedText = words[0];
+
+            const tick = () => {
+                const currentWord = words[wordIdx];
+                if (isDeleting) {
+                    charIdx--;
+                    this.heroTypedText = currentWord.substring(0, charIdx);
+                } else {
+                    charIdx++;
+                    this.heroTypedText = currentWord.substring(0, charIdx);
+                }
+
+                let delay = isDeleting ? 40 : 85;
+
+                if (!isDeleting && charIdx === currentWord.length) {
+                    delay = 2300; // Pause on completed word (2.3s)
+                    isDeleting = true;
+                } else if (isDeleting && charIdx === 0) {
+                    isDeleting = false;
+                    wordIdx = (wordIdx + 1) % words.length;
+                    this.heroKeywordIndex = wordIdx;
+                    delay = 350; // Pause before typing next word
+                }
+
+                setTimeout(tick, delay);
+            };
+
+            setTimeout(() => {
+                isDeleting = true;
+                setTimeout(tick, 2000);
+            }, 1800);
         },
 
         async submitInquiry() {

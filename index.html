@@ -405,6 +405,71 @@
         .animate-studio-marquee:hover {
             animation-play-state: paused;
         }
+
+        /* Digital LED / Neon Signboard Text Effects */
+        .neon-text-base {
+            color: #94a3b8;
+            transition: color 0.4s ease, text-shadow 0.4s ease;
+        }
+
+        .neon-glow-cyan {
+            color: #ffffff;
+            text-shadow: 0 0 6px #38bdf8, 0 0 14px #0ea5e9, 0 0 25px #0284c7, 0 0 40px rgba(2, 132, 199, 0.6);
+        }
+
+        .neon-glow-subtle {
+            color: #e2e8f0;
+            text-shadow: 0 0 4px rgba(56, 189, 248, 0.6), 0 0 10px rgba(14, 165, 233, 0.4);
+        }
+
+        @keyframes neonNumberPulse {
+            0%, 100% {
+                color: #ffffff;
+                text-shadow: 0 0 6px #38bdf8, 0 0 15px #00f0ff, 0 0 28px #0ea5e9, 0 0 45px rgba(14, 165, 233, 0.85);
+                transform: scale(1);
+            }
+            50% {
+                color: #e0f2fe;
+                text-shadow: 0 0 3px #38bdf8, 0 0 8px #0ea5e9, 0 0 16px rgba(14, 165, 233, 0.5);
+                transform: scale(1.02);
+            }
+        }
+
+        .animate-neon-number-1 {
+            display: inline-block;
+            animation: neonNumberPulse 2.2s ease-in-out infinite;
+        }
+
+        .animate-neon-number-2 {
+            display: inline-block;
+            animation: neonNumberPulse 2.2s ease-in-out 0.7s infinite;
+        }
+
+        .animate-neon-number-3 {
+            display: inline-block;
+            animation: neonNumberPulse 2.2s ease-in-out 1.4s infinite;
+        }
+
+        /* Staggered Fade-Up Typography Animations (Explicit robust implementation) */
+        .hero-line-fade {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .hero-line-fade.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hero-line-fade.delay-1 {
+            transition-delay: 0.05s;
+        }
+        .hero-line-fade.delay-2 {
+            transition-delay: 0.35s;
+        }
+        .hero-line-fade.delay-3 {
+            transition-delay: 0.65s;
+        }
     </style>
     
     <!-- Tailwind CSS CDN -->
@@ -529,6 +594,11 @@
                 activeStudioTitle: '',
                 keywords: ['지식을 성과로 만드는 맞춤형 교육 솔루션', '맞춤형 이러닝 콘텐츠 개발', '160평 전문 스튜디오 & 고품질 영상 연출', '오프라인 기반 블렌디드 러닝 & 전문 특강', '지속가능한 성장을 이끄는 조직 체계'],
                 currentKeywordIndex: 0,
+                heroKeywords: ['이러닝 콘텐츠 개발', '하이엔드 영상 제작', '블렌디드 러닝'],
+                heroKeywordIndex: 0,
+                heroTypedText: '이러닝 콘텐츠 개발',
+                isDeletingHeroText: false,
+                heroCharIndex: 0,
 
                 // [전체 포트폴리오 목록 - PORTFOLIO_DATA 상수로 100% 보장]
                 portfolioItems: PORTFOLIO_DATA,
@@ -577,6 +647,7 @@
                 init() {
                     try {
                         setInterval(() => { this.currentKeywordIndex = (this.currentKeywordIndex + 1) % this.keywords.length; }, 2800);
+                        this.startHeroTyping();
                         this.startServiceAutoPlay();
                         this.startAboutAutoPlay();
                         this.startStudioAutoPlay();
@@ -589,6 +660,44 @@
                     } catch(e) {
                         console.warn('Init non-blocking exception handled:', e);
                     }
+                },
+
+                startHeroTyping() {
+                    const words = this.heroKeywords;
+                    let wordIdx = 0;
+                    let charIdx = words[0].length;
+                    let isDeleting = false;
+                    this.heroTypedText = words[0];
+
+                    const tick = () => {
+                        const currentWord = words[wordIdx];
+                        if (isDeleting) {
+                            charIdx--;
+                            this.heroTypedText = currentWord.substring(0, charIdx);
+                        } else {
+                            charIdx++;
+                            this.heroTypedText = currentWord.substring(0, charIdx);
+                        }
+
+                        let delay = isDeleting ? 40 : 85;
+
+                        if (!isDeleting && charIdx === currentWord.length) {
+                            delay = 2300; // Pause on completed word (2.3s)
+                            isDeleting = true;
+                        } else if (isDeleting && charIdx === 0) {
+                            isDeleting = false;
+                            wordIdx = (wordIdx + 1) % words.length;
+                            this.heroKeywordIndex = wordIdx;
+                            delay = 350; // Pause before typing next word
+                        }
+
+                        setTimeout(tick, delay);
+                    };
+
+                    setTimeout(() => {
+                        isDeleting = true;
+                        setTimeout(tick, 2000);
+                    }, 1800);
                 },
 
                 async submitInquiry() {
@@ -1061,102 +1170,114 @@
         <!-- Interactive Stage Spotlight Overlay (Follows Mouse Cursor) -->
         <div id="interactive-spotlight" class="hidden md:block"></div>
 
-    <!-- HERO SECTION -->
-    <section id="hero" aria-label="메인 솔루션 및 이러닝 영상 제작" class="relative bg-brand-navy-dark text-white overflow-hidden flex flex-col justify-between min-h-[100dvh] md:h-auto md:min-h-screen md:min-h-[100dvh] md:justify-center pt-16 sm:pt-20 md:pt-24 pb-20 md:pb-36">
-        <!-- Ambient Particles Canvas -->
-        <canvas id="hero-particles-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-60"></canvas>
-        
-        <!-- Top Slogan Container -->
-        <div class="w-full px-4 sm:px-6 lg:px-8 py-3 sm:py-8 md:py-0 relative z-30 max-w-[1200px] mx-auto my-0 md:my-auto shrink-0">
-            <div class="max-w-3xl text-left space-y-2 sm:space-y-4">
+    <!-- HERO SECTION (3-TIER RESTRUCTURED LAYOUT: 1.TOP TYPOGRAPHY / 2.CLEAN VISUAL / 3.MARQUEE TICKER) -->
+    <section id="hero" aria-label="메인 솔루션 및 이러닝 영상 제작" class="relative bg-brand-navy-dark text-white overflow-hidden flex flex-col justify-start pt-20 sm:pt-24 md:pt-28 pb-0">
+        <!-- Ambient Particles Canvas & Radial Glow -->
+        <canvas id="hero-particles-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-40"></canvas>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(30,136,229,0.14),transparent_65%)] pointer-events-none z-0"></div>
 
-                <h1 id="hero-headline" class="text-xl sm:text-3xl lg:text-5xl xl:text-6xl font-black text-white leading-tight sm:leading-[1.25] tracking-tight drop-shadow-2xl break-keep">
-                    <span class="block text-cyan-400 font-black text-xl xs:text-2xl sm:text-3xl lg:text-5xl xl:text-6xl leading-snug sm:leading-tight break-keep">
-                        지식을 성과로 만드는 맞춤형 교육 솔루션
+        <!-- 1. [상단 영역] 핵심 사업 대형 타이포그래피 (Top Typography Area) -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 pt-4 sm:pt-8 md:pt-10 pb-6 sm:pb-10 md:pb-12 relative z-20 max-w-[1240px] mx-auto text-center">
+            <!-- Eyebrow Tag -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs sm:text-sm font-bold mb-4 sm:mb-6 shadow-[0_0_15px_rgba(34,211,238,0.15)]">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span>지식을 성과로 만드는 스마트 교육 &amp; 미디어 솔루션</span>
+            </div>
+
+            <!-- 3 Core Slogans in Giant Bold/Black Typography with Staggered Fade-Up -->
+            <div class="flex flex-col items-center justify-center space-y-2 xs:space-y-2.5 sm:space-y-3.5 md:space-y-4 max-w-5xl mx-auto select-none">
+                <!-- Line 1: 이러닝 콘텐츠 개발 -->
+                <div class="hero-line-fade delay-1 w-full text-center">
+                    <span class="block text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white tracking-tighter leading-none drop-shadow-2xl">
+                        이러닝 콘텐츠 개발
                     </span>
-                    <div class="mt-3 sm:mt-4 flex flex-wrap items-center justify-start gap-2 sm:gap-3">
-                        <!-- Scoreboard Flip Card 1: 이러닝 콘텐츠 개발 -->
-                        <div class="scoreboard-container inline-block">
-                            <div class="scoreboard-card animate-flip-1 relative px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border border-cyan-500/40 shadow-[0_6px_16px_rgba(0,0,0,0.6),0_0_12px_rgba(34,211,238,0.2)] overflow-hidden cursor-pointer select-none">
-                                <div class="absolute top-0 inset-x-0 h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-t-xl"></div>
-                                <span class="relative z-10 block text-white font-black text-xs xs:text-sm sm:text-2xl lg:text-3xl tracking-tight text-center drop-shadow-md">
-                                    이러닝 콘텐츠 개발
-                                </span>
-                            </div>
-                        </div>
+                </div>
 
-                        <span class="text-cyan-400 font-extrabold text-sm sm:text-2xl drop-shadow-[0_0_10px_rgba(34,211,238,0.9)]">·</span>
+                <!-- Line 2: 영상 미디어 제작 전문 (Cyan-to-Blue Gradient Highlight) -->
+                <div class="hero-line-fade delay-2 w-full text-center">
+                    <span class="block text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-cyan-400 to-blue-500 tracking-tighter leading-none drop-shadow-[0_6px_30px_rgba(34,211,238,0.35)]">
+                        영상 미디어 제작 전문
+                    </span>
+                </div>
 
-                        <!-- Scoreboard Flip Card 2: 영상 제작 -->
-                        <div class="scoreboard-container inline-block">
-                            <div class="scoreboard-card animate-flip-2 relative px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border border-cyan-500/40 shadow-[0_6px_16px_rgba(0,0,0,0.6),0_0_12px_rgba(34,211,238,0.2)] overflow-hidden cursor-pointer select-none">
-                                <div class="absolute top-0 inset-x-0 h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-t-xl"></div>
-                                <span class="relative z-10 block text-white font-black text-xs xs:text-sm sm:text-2xl lg:text-3xl tracking-tight text-center drop-shadow-md">
-                                    영상 제작
-                                </span>
-                            </div>
-                        </div>
-
-                        <span class="text-cyan-400 font-extrabold text-sm sm:text-2xl drop-shadow-[0_0_10px_rgba(34,211,238,0.9)]">·</span>
-
-                        <!-- Scoreboard Flip Card 3: 블렌디드 러닝 -->
-                        <div class="scoreboard-container inline-block">
-                            <div class="scoreboard-card animate-flip-3 relative px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border border-cyan-500/40 shadow-[0_6px_16px_rgba(0,0,0,0.6),0_0_12px_rgba(34,211,238,0.2)] overflow-hidden cursor-pointer select-none">
-                                <div class="absolute top-0 inset-x-0 h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-t-xl"></div>
-                                <span class="relative z-10 block text-white font-black text-xs xs:text-sm sm:text-2xl lg:text-3xl tracking-tight text-center drop-shadow-md">
-                                    블렌디드 러닝
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </h1>
-
-                <p class="hidden sm:block text-slate-200 text-xs sm:text-base lg:text-lg font-normal sm:font-medium leading-relaxed max-w-2xl pt-1 break-keep drop-shadow-lg">
-                    다년간 축적된 B2B·B2G 수행 경험을 바탕으로, 온라인 미디어 제작부터 오프라인 기반 블렌디드 러닝까지 교육 목표에 부합하는 종합 솔루션을 제안합니다.
-                </p>
+                <!-- Line 3: B2B/B2G 교육사업 -->
+                <div class="hero-line-fade delay-3 w-full text-center">
+                    <span class="block text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white/95 tracking-tighter leading-none drop-shadow-2xl">
+                        B2B/B2G 교육사업
+                    </span>
+                </div>
             </div>
         </div>
 
-        <!-- Middle Studio Video Box -->
-        <div class="relative w-full px-4 sm:px-6 md:px-0 my-3 md:my-0 flex-1 min-h-0 md:flex-none md:min-h-0 md:aspect-auto md:absolute md:inset-0 z-10 md:z-0 overflow-hidden select-none flex items-center justify-center">
-            <div class="hero-video-wrapper relative w-full aspect-[16/9] sm:aspect-[21/9] md:aspect-auto md:w-full md:h-full rounded-2xl md:rounded-none overflow-hidden bg-slate-950 border border-slate-800 md:border-none shadow-2xl flex items-center justify-center">
-                <video class="hero-video-bg w-full h-full object-cover pointer-events-none border-0"
-                       autoplay loop muted playsinline aria-hidden="true">
+        <!-- 2. [중단 영역] 텍스트 없는 클린 비주얼 (영상/이미지) (Middle Clean Visual Area) -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8 md:pb-10 relative z-20 max-w-[1240px] mx-auto">
+            <div class="relative w-full aspect-[16/10] sm:aspect-[21/9] md:aspect-[2.35/1] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),0_0_30px_rgba(34,211,238,0.08)] flex items-center justify-center">
+                <!-- 100% Crisp, Pure Clean Visual Video scaled up (1.3x) -->
+                <video class="w-full h-full object-cover scale-[1.30] pointer-events-none border-0"
+                       autoplay loop muted playsinline aria-hidden="true"
+                       style="object-position: center 35%;">
                     <source src="https://raw.githubusercontent.com/whomedia01/whomedia4/main/whomedia_hero.mp4" type="video/mp4" />
                 </video>
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-slate-950/30 pointer-events-none md:hidden"></div>
             </div>
-
-            <div class="absolute inset-0 z-10 bg-gradient-to-b from-[#0A0E1A]/60 via-[#0D1424]/35 to-[#0A0E1A]/75 pointer-events-none hidden md:block"></div>
-            <div class="hidden md:block absolute top-1/4 -left-20 w-96 h-96 bg-brand-mint/10 rounded-full filter blur-[100px] pointer-events-none z-20"></div>
-            <div class="hidden md:block absolute bottom-1/3 -right-20 w-96 h-96 bg-blue-600/10 rounded-full filter blur-[120px] pointer-events-none z-20"></div>
         </div>
 
-        <!-- Bottom Key Metrics Banner -->
-        <div class="relative md:absolute md:bottom-0 md:left-0 md:right-0 w-full z-30 md:z-50 bg-[#0A0E1A]/95 md:bg-[#111111] border-t border-slate-800 md:border-white/10 shadow-2xl py-3 sm:py-8 shrink-0 flex items-center">
-            <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 text-center">
-                    <div class="flex flex-col items-center justify-center p-2.5 sm:p-3 bg-slate-900/90 sm:bg-transparent border border-slate-800 sm:border-none rounded-xl sm:rounded-none shadow-sm">
-                        <div class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-none mb-1">
-                            <span class="stat-counter font-black" data-counter-target="17">17</span><span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-base">년</span>
+        <!-- 3. [하단 영역] 압도적 인프라 증명 가로형 뱃지 전광판 (Horizontal Badge Metrics Bar) -->
+        <div class="w-full relative z-20 bg-[#070B16] border-y border-slate-800/90 py-3.5 sm:py-5 overflow-hidden shadow-inner">
+            <div class="max-w-5xl mx-auto px-3 sm:px-6 select-none">
+                <!-- Compact Horizontal Wrap Flex (1-2 lines on mobile, 1 line on tablet/desktop) -->
+                <div class="flex flex-row flex-wrap items-center justify-center gap-2 sm:gap-4 md:gap-6 text-center">
+                    <!-- Badge 1: [ 17년 업력 ] -->
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-slate-900/80 border border-cyan-500/30 shadow-[0_0_12px_rgba(34,211,238,0.15)]">
+                        <span class="animate-neon-number-1 text-base xs:text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight">17년</span>
+                        <span class="neon-glow-subtle text-xs xs:text-sm sm:text-base font-semibold text-slate-200">업력</span>
+                    </div>
+
+                    <!-- Divider Star 1 -->
+                    <span class="text-cyan-400 font-bold text-xs sm:text-sm md:text-base drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]">✦</span>
+
+                    <!-- Badge 2: [ 160평 스튜디오 ] -->
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-slate-900/80 border border-cyan-500/30 shadow-[0_0_12px_rgba(34,211,238,0.15)]">
+                        <span class="animate-neon-number-2 text-base xs:text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight">160평</span>
+                        <span class="neon-glow-subtle text-xs xs:text-sm sm:text-base font-semibold text-slate-200">스튜디오</span>
+                    </div>
+
+                    <!-- Divider Star 2 -->
+                    <span class="text-cyan-400 font-bold text-xs sm:text-sm md:text-base drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]">✦</span>
+
+                    <!-- Badge 3: [ 100+ 협력기관 ] -->
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-slate-900/80 border border-cyan-500/30 shadow-[0_0_12px_rgba(34,211,238,0.15)]">
+                        <span class="animate-neon-number-3 text-base xs:text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight">100+</span>
+                        <span class="neon-glow-subtle text-xs xs:text-sm sm:text-base font-semibold text-slate-200">협력기관</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Metrics Banner (Bottom of Hero) with Extra Bottom Padding for Fixed Mobile Dock (pb-28 sm:pb-12) -->
+        <div class="w-full relative z-20 bg-[#0A0E1A] border-b border-slate-800 shadow-2xl pt-4 sm:pt-6 pb-28 sm:pb-8">
+            <div class="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-center">
+                    <div class="flex flex-col items-center justify-center p-3 bg-slate-900/70 border border-slate-800/80 rounded-xl sm:rounded-2xl shadow-sm">
+                        <div class="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-none mb-1">
+                            <span class="stat-counter" data-counter-target="17">17</span><span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-base">년</span>
                         </div>
                         <div class="text-xs sm:text-sm font-medium text-slate-300">축적의 노하우</div>
                     </div>
-                    <div class="flex flex-col items-center justify-center p-2.5 sm:p-3 bg-slate-900/90 sm:bg-transparent border border-slate-800 sm:border-none rounded-xl sm:rounded-none shadow-sm">
-                        <div class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-none mb-1">
-                            <span class="stat-counter font-black" data-counter-target="100">100</span><span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-base">+</span>
+                    <div class="flex flex-col items-center justify-center p-3 bg-slate-900/70 border border-slate-800/80 rounded-xl sm:rounded-2xl shadow-sm">
+                        <div class="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-none mb-1">
+                            <span class="stat-counter" data-counter-target="100">100</span><span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-base">+</span>
                         </div>
                         <div class="text-xs sm:text-sm font-medium text-slate-300">주요 협력기관</div>
                     </div>
-                    <div class="flex flex-col items-center justify-center p-2.5 sm:p-3 bg-slate-900/90 sm:bg-transparent border border-slate-800 sm:border-none rounded-xl sm:rounded-none shadow-sm">
-                        <div class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-none mb-1">
-                            <span class="stat-counter font-black" data-counter-target="1500" data-counter-comma="true">1,500</span><span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-base">+</span>
+                    <div class="flex flex-col items-center justify-center p-3 bg-slate-900/70 border border-slate-800/80 rounded-xl sm:rounded-2xl shadow-sm">
+                        <div class="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-none mb-1">
+                            <span class="stat-counter" data-counter-target="1500" data-counter-comma="true">1,500</span><span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-base">+</span>
                         </div>
                         <div class="text-xs sm:text-sm font-medium text-slate-300">누적 프로젝트</div>
                     </div>
-                    <div class="flex flex-col items-center justify-center p-2.5 sm:p-3 bg-slate-900/90 sm:bg-transparent border border-slate-800 sm:border-none rounded-xl sm:rounded-none shadow-sm">
-                        <div class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-none mb-1">
-                            <span class="stat-counter font-black" data-counter-target="10000" data-counter-comma="true">10,000</span><span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-base">+</span>
+                    <div class="flex flex-col items-center justify-center p-3 bg-slate-900/70 border border-slate-800/80 rounded-xl sm:rounded-2xl shadow-sm">
+                        <div class="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-none mb-1">
+                            <span class="stat-counter" data-counter-target="10000" data-counter-comma="true">10,000</span><span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-base">+</span>
                         </div>
                         <div class="text-xs sm:text-sm font-medium text-slate-300">연간 제작 콘텐츠</div>
                     </div>
@@ -2420,6 +2541,15 @@
     <!-- ADVANCED MOTION & LIGHTING EFFECTS CONTROLLER -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // ==========================================
+            // 0. HERO STAGGERED FADE-UP ANIMATION TRIGGER
+            // ==========================================
+            setTimeout(() => {
+                document.querySelectorAll('.hero-line-fade').forEach(el => {
+                    el.classList.add('is-visible');
+                });
+            }, 80);
+
             // ==========================================
             // 1. INTERACTIVE MOUSE SPOTLIGHT (조명 트래킹)
             // ==========================================
