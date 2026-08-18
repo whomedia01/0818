@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <!-- High-Contrast Inverted Metallic White & Silver Gradients -->
+    <linearGradient id="whiteCore" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="60%" stop-color="#F1F5F9" />
+      <stop offset="100%" stop-color="#CBD5E1" />
+    </linearGradient>
+
+    <linearGradient id="silverInner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC" />
+      <stop offset="60%" stop-color="#E2E8F0" />
+      <stop offset="100%" stop-color="#94A3B8" />
+    </linearGradient>
+
+    <linearGradient id="silverOuter" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E2E8F0" />
+      <stop offset="60%" stop-color="#CBD5E1" />
+      <stop offset="100%" stop-color="#64748B" />
+    </linearGradient>
+
+    <filter id="whiteGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#000000" flood-opacity="0.85" />
+      <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#FFFFFF" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <g filter="url(#whiteGlow)">
+    <!-- 1. Far Left Slab -->
+    <path d="M 12 28 L 26 17 L 35 81 L 12 72 Z" fill="url(#silverOuter)" stroke="#090A0F" stroke-width="1.2" stroke-linejoin="round" />
+
+    <!-- 2. Left Inner Slab -->
+    <path d="M 28 15.5 L 47 7 L 36 84 L 37 80.5 Z" fill="url(#silverInner)" stroke="#090A0F" stroke-width="1.2" stroke-linejoin="round" />
+
+    <!-- 3. Center Diamond (W Core - Brightest White) -->
+    <path d="M 50 5 L 64 50 L 50 95 L 36 50 Z" fill="url(#whiteCore)" stroke="#090A0F" stroke-width="1.5" stroke-linejoin="round" />
+    <!-- Center Bevel Ridge -->
+    <line x1="50" y1="5" x2="50" y2="95" stroke="#FFFFFF" stroke-width="1" opacity="0.9" />
+
+    <!-- 4. Right Inner Slab -->
+    <path d="M 72 15.5 L 53 7 L 64 84 L 63 80.5 Z" fill="url(#silverInner)" stroke="#090A0F" stroke-width="1.2" stroke-linejoin="round" />
+
+    <!-- 5. Far Right Slab -->
+    <path d="M 88 28 L 74 17 L 65 81 L 88 72 Z" fill="url(#silverOuter)" stroke="#090A0F" stroke-width="1.2" stroke-linejoin="round" />
+  </g>
+</svg>
