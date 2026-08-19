@@ -1705,65 +1705,79 @@
 
 
         <!-- ========================================================================= -->
-        <!-- [PC 전용 Centered Content Container: max-w-[1200px] mx-auto] (md:flex hidden) -->
+        <!-- [PC 전용 Centered Content Container: max-w-[1280px] Desktop Optimized Layout] -->
         <!-- ========================================================================= -->
-        <div class="hidden md:flex absolute inset-0 z-10 flex-col justify-between pt-6 lg:pt-10 pb-6 lg:pb-8 px-4 sm:px-6 lg:px-8 max-w-[1200px] w-full mx-auto left-0 right-0 pointer-events-none select-none">
+        <div class="hidden md:flex absolute inset-0 z-10 flex-col justify-between pt-8 lg:pt-12 pb-8 lg:pb-10 px-6 lg:px-12 max-w-[1280px] w-full mx-auto left-0 right-0 pointer-events-none select-none">
             
-            <!-- 1. PC 중앙: 키네틱 타이포그래피 슬로건 + 디지털 호흡 서브텍스트 + 롤링 솔루션 배너 -->
+            <!-- 1. PC 중앙: 2단 시네마틱 키네틱 타이포그래피 + 서브 텍스트 호흡 + 와이드 아키텍처 배너 -->
             <div class="my-auto flex flex-col items-center justify-center text-center space-y-4 lg:space-y-6 pt-2">
-                <!-- 5 Kinetic Typography Fragments Assembled in Center -->
-                <div class="flex flex-wrap items-center justify-center gap-x-4 lg:gap-x-6 gap-y-2 text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-tight text-white drop-shadow-[0_8px_35px_rgba(0,0,0,0.95)]">
-                    <span class="kinetic-piece-1 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">우리의 프레임 안에서</span>
-                    <span class="kinetic-piece-2 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">당신의 비전은</span>
-                    <span class="kinetic-piece-3 text-cyan-300 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">콘텐츠가 되고</span>
-                    <span class="kinetic-piece-4 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">세상의</span>
-                    <span class="kinetic-piece-5 text-brand-mint drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">기준이 됩니다</span>
+                <!-- PC 맞춤형 2단 정렬 시네마틱 헤드라인 -->
+                <div class="space-y-1.5 lg:space-y-3">
+                    <div class="text-3xl md:text-5xl lg:text-6xl xl:text-[4rem] font-black tracking-tight leading-[1.15] text-white drop-shadow-[0_8px_35px_rgba(0,0,0,0.95)] flex flex-wrap items-center justify-center gap-x-3 lg:gap-x-4">
+                        <span class="kinetic-piece-1 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">우리의 프레임 안에서</span>
+                        <span class="kinetic-piece-2 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">당신의 비전은</span>
+                        <span class="kinetic-piece-3 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-teal-200 to-cyan-400 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">콘텐츠가 되고</span>
+                    </div>
+                    <div class="text-3xl md:text-5xl lg:text-6xl xl:text-[4rem] font-black tracking-tight leading-[1.15] text-white drop-shadow-[0_8px_35px_rgba(0,0,0,0.95)] flex flex-wrap items-center justify-center gap-x-3 lg:gap-x-4">
+                        <span class="kinetic-piece-4 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">세상의</span>
+                        <span class="kinetic-piece-5 bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-teal-100 to-brand-mint drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">기준이 됩니다.</span>
+                    </div>
                 </div>
 
-                <!-- [메인 슬로건 하단 서브 텍스트: 디지털 호흡(Breathing) 애니메이션] -->
+                <!-- [PC 슬로건 하단 서브 텍스트: 디지털 호흡(Breathing) 애니메이션] -->
                 <div class="pt-2">
-                    <p class="text-breath text-sm tracking-[0.2em] font-medium text-slate-200 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                    <p class="text-breath text-base lg:text-lg tracking-[0.25em] font-medium text-slate-200 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
                         영상 제작 · 콘텐츠 개발 · 교육과정 구축
                     </p>
                 </div>
 
                 <!-- PC 중앙 하단: 와이드 롤링 애니메이션 배너 (전문 에듀테크 아키텍처 비전 제시) -->
-                <div class="w-full max-w-2xl mx-auto pt-2 pointer-events-auto">
-                    <div class="bg-slate-900/90 backdrop-blur-xl border border-cyan-500/35 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(34,211,238,0.15)] py-3 px-6 overflow-hidden">
-                        <div class="relative overflow-hidden min-h-[64px] flex items-center justify-center">
+                <div class="w-full max-w-3xl lg:max-w-4xl mx-auto pt-2 lg:pt-3 pointer-events-auto">
+                    <div class="bg-slate-900/85 backdrop-blur-2xl border border-cyan-500/35 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(34,211,238,0.12)] py-3.5 lg:py-4 px-6 lg:px-10 overflow-hidden">
+                        <div class="relative overflow-hidden min-h-[68px] lg:min-h-[72px] flex items-center justify-center">
                             <!-- Step 1 (0s~1.5s): 'Learning Experience?' (학습 경험의 설계) -->
                             <div class="text-roll-step1 px-2 text-center">
-                                <div class="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3">
-                                    <span class="text-xl lg:text-2xl font-black text-cyan-300 tracking-tight drop-shadow-[0_2px_15px_rgba(34,211,238,0.6)] flex items-center justify-center gap-2">
-                                        <span class="text-cyan-400 text-xs sm:text-sm font-bold px-2 py-0.5 rounded bg-cyan-500/20 border border-cyan-400/40">STEP 1</span>
+                                <div class="flex items-center justify-center gap-3 lg:gap-4">
+                                    <span class="text-xs lg:text-sm font-black px-2.5 lg:px-3 py-0.5 lg:py-1 rounded bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 tracking-wider">
+                                        STEP 01
+                                    </span>
+                                    <span class="text-xl lg:text-2xl font-black text-cyan-300 tracking-tight drop-shadow-[0_2px_15px_rgba(34,211,238,0.6)]">
                                         Learning Experience?
                                     </span>
-                                    <span class="text-xs sm:text-sm font-bold text-slate-300/90 tracking-tight">(학습 경험의 설계)</span>
+                                    <span class="text-xs lg:text-sm font-bold text-slate-300/90 tracking-tight">
+                                        (학습 경험의 정밀한 설계)
+                                    </span>
                                 </div>
                             </div>
 
                             <!-- Step 2 (1.5s~3s): 'Media Transformation?' (미디어의 혁신적 전환) -->
                             <div class="text-roll-step2 px-2 text-center">
-                                <div class="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3">
-                                    <span class="text-xl lg:text-2xl font-black text-white/95 tracking-tight drop-shadow-[0_2px_15px_rgba(255,255,255,0.45)] flex items-center justify-center gap-2">
-                                        <span class="text-slate-300 text-xs sm:text-sm font-bold px-2 py-0.5 rounded bg-white/15 border border-white/30">STEP 2</span>
+                                <div class="flex items-center justify-center gap-3 lg:gap-4">
+                                    <span class="text-xs lg:text-sm font-black px-2.5 lg:px-3 py-0.5 lg:py-1 rounded bg-white/15 border border-white/30 text-white tracking-wider">
+                                        STEP 02
+                                    </span>
+                                    <span class="text-xl lg:text-2xl font-black text-white/95 tracking-tight drop-shadow-[0_2px_15px_rgba(255,255,255,0.45)]">
                                         Media Transformation?
                                     </span>
-                                    <span class="text-xs sm:text-sm font-bold text-slate-300/90 tracking-tight">(미디어의 혁신적 전환)</span>
+                                    <span class="text-xs lg:text-sm font-bold text-slate-300/90 tracking-tight">
+                                        (미디어의 혁신적 전환)
+                                    </span>
                                 </div>
                             </div>
 
                             <!-- Step 3 (3s~10s, 7s Stay): 'Total Edu-Media Architecture' (총합적 교육 미디어 설계) -->
                             <div class="text-roll-step3 px-2 text-center">
                                 <div class="flex flex-col items-center justify-center gap-1">
-                                    <div class="flex items-center justify-center gap-2 flex-wrap">
-                                        <span class="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.3)]">EDUTECH SOLUTION</span>
+                                    <div class="flex items-center justify-center gap-2.5 flex-wrap">
+                                        <span class="text-xs font-extrabold px-3 py-0.5 rounded-full bg-cyan-500/25 border border-cyan-400/50 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.3)]">
+                                            TOTAL ARCHITECTURE
+                                        </span>
                                         <span class="text-xl lg:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-100 to-emerald-300 drop-shadow-[0_2px_15px_rgba(34,211,238,0.5)]">
                                             Data-Driven Learning Architecture
                                         </span>
                                     </div>
-                                    <span class="text-xs sm:text-sm font-bold text-slate-200 tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                                        학습 경험을 설계하는 에듀테크 솔루션
+                                    <span class="text-xs lg:text-sm font-medium text-slate-200 tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                                        학습 경험을 설계하고 완성하는 No.1 에듀테크 솔루션
                                     </span>
                                 </div>
                             </div>
@@ -1774,37 +1788,37 @@
 
             <!-- 2. PC 최하단: 풀스크린 하단에 펼쳐지는 에듀테크 정량적 지표 패널 -->
             <div class="w-full pointer-events-auto">
-                <div class="grid grid-cols-4 gap-4 text-center select-none">
+                <div class="grid grid-cols-4 gap-4 lg:gap-6 text-center select-none">
                     <!-- 1. 17년 업력 -->
-                    <div class="flex flex-col items-center justify-center p-3.5 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md">
-                        <div class="text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1">
-                            17<span class="text-cyan-400 font-extrabold ml-0.5 text-base">년</span>
+                    <div class="group flex flex-col items-center justify-center p-4 lg:p-5 bg-slate-900/80 hover:bg-slate-900/95 transition-all duration-300 border border-slate-800/90 hover:border-cyan-500/50 rounded-2xl shadow-[0_12px_35px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+                        <div class="text-3xl lg:text-4xl xl:text-5xl font-black text-white tracking-tight leading-none mb-1.5 group-hover:text-cyan-300 transition-colors">
+                            17<span class="text-cyan-400 font-extrabold ml-1 text-base lg:text-lg">년</span>
                         </div>
-                        <div class="text-xs lg:text-sm font-semibold text-slate-300">교육 설계 노하우</div>
+                        <div class="text-xs lg:text-sm font-bold text-slate-200">교육 설계 노하우</div>
                     </div>
 
                     <!-- 2. R&D 인프라 -->
-                    <div class="flex flex-col items-center justify-center p-3.5 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md">
-                        <div class="text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1">
-                            160<span class="text-cyan-400 font-extrabold ml-0.5 text-base">평</span>
+                    <div class="group flex flex-col items-center justify-center p-4 lg:p-5 bg-slate-900/80 hover:bg-slate-900/95 transition-all duration-300 border border-slate-800/90 hover:border-cyan-500/50 rounded-2xl shadow-[0_12px_35px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+                        <div class="text-3xl lg:text-4xl xl:text-5xl font-black text-white tracking-tight leading-none mb-1.5 group-hover:text-cyan-300 transition-colors">
+                            160<span class="text-cyan-400 font-extrabold ml-1 text-base lg:text-lg">평</span>
                         </div>
-                        <div class="text-xs lg:text-sm font-semibold text-slate-300">에듀 R&amp;D 인프라</div>
+                        <div class="text-xs lg:text-sm font-bold text-slate-200">에듀 R&amp;D 인프라</div>
                     </div>
 
                     <!-- 3. 1,500+ 누적 아키텍처 -->
-                    <div class="flex flex-col items-center justify-center p-3.5 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md">
-                        <div class="text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1">
-                            1,500<span class="text-cyan-400 font-extrabold ml-0.5 text-base">+</span>
+                    <div class="group flex flex-col items-center justify-center p-4 lg:p-5 bg-slate-900/80 hover:bg-slate-900/95 transition-all duration-300 border border-slate-800/90 hover:border-cyan-500/50 rounded-2xl shadow-[0_12px_35px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+                        <div class="text-3xl lg:text-4xl xl:text-5xl font-black text-white tracking-tight leading-none mb-1.5 group-hover:text-cyan-300 transition-colors">
+                            1,500<span class="text-cyan-400 font-extrabold ml-1 text-base lg:text-lg">+</span>
                         </div>
-                        <div class="text-xs lg:text-sm font-semibold text-slate-300">학습 설계 프로젝트</div>
+                        <div class="text-xs lg:text-sm font-bold text-slate-200">학습 설계 프로젝트</div>
                     </div>
 
                     <!-- 4. 100+ 주요 산학 파트너 -->
-                    <div class="flex flex-col items-center justify-center p-3.5 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md">
-                        <div class="text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1">
-                            100<span class="text-cyan-400 font-extrabold ml-0.5 text-base">+</span>
+                    <div class="group flex flex-col items-center justify-center p-4 lg:p-5 bg-slate-900/80 hover:bg-slate-900/95 transition-all duration-300 border border-slate-800/90 hover:border-cyan-500/50 rounded-2xl shadow-[0_12px_35px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+                        <div class="text-3xl lg:text-4xl xl:text-5xl font-black text-white tracking-tight leading-none mb-1.5 group-hover:text-cyan-300 transition-colors">
+                            100<span class="text-cyan-400 font-extrabold ml-1 text-base lg:text-lg">+</span>
                         </div>
-                        <div class="text-xs lg:text-sm font-semibold text-slate-300">산학연 파트너십</div>
+                        <div class="text-xs lg:text-sm font-bold text-slate-200">산학연 파트너십</div>
                     </div>
                 </div>
             </div>
