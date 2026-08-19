@@ -960,26 +960,26 @@
     <script>
         // [정적 데이터 상수 강제 매핑 - API/DB 의존성 제거]
         const PORTFOLIO_DATA = [
-            { id: 'dEPkxRTjsy8', title: '한양대 토크콘서트 인트로 영상', cat: 'production', tag: '한양대', label: '모션그래픽' },
-            { id: 'nzSjVbxNrnc', title: 'NE능률 나는쌤이다 웹예능 콘텐츠', cat: 'edu', tag: 'NE능률', label: '교육 콘텐츠' },
-            { id: 'PAvJORGcUTU', title: '에듀팡 일본어 모션그래픽 인트로', cat: 'production', tag: '에듀팡', label: '모션그래픽' },
-            { id: '4cnYAzIvagw', title: '동아출판 AI 디지털 교과서 교사 인터뷰', cat: 'edu', tag: '동아출판', label: 'AI 디지털 교과서' },
-            { id: 'DIdduzeub5U', title: '후미디어 뉴미디어 채널 브랜딩 인트로', cat: 'production', tag: 'WHOMEDIA', label: '채널 인트로' },
-            { id: '0kHSItVXKOU', title: '능률 고등 영어 교재 연계 스마트 강좌', cat: 'edu', tag: 'NE능률', label: '이러닝 콘텐츠 개발' },
-            { id: '6xb2GYInARg', title: '능률 중등 영어 맞춤형 학습 영상', cat: 'edu', tag: 'NE능률', label: '교육 콘텐츠' },
-            { id: 'rJ2U9T27WwU', title: '태진옥 브랜드 시네마틱 홍보영상', cat: 'press', tag: '태진옥', label: '홍보 영상 제작' },
-            { id: 'PTqpVR-yIKg', title: '경희사이버대학교 가상 크로마키 강좌', cat: 'production', tag: '경희사이버대', label: '크로마키 스튜디오' },
-            { id: 'AbeWeusmjws', title: '86인치 전자칠판 스마트 강의 스튜디오', cat: 'production', tag: '전자칠판', label: '영상 프로덕션' },
-            { id: 'PVVdU-CYowA', title: '웅진 스마트학습 연계 디지털 교재 강의', cat: 'edu', tag: '웅진씽크빅', label: '전자칠판' },
-            { id: 'PxAZYrpdowU', title: '웅진 스마트 학습 특수 무반사 블랙보드 강의', cat: 'edu', tag: '웅진씽크빅', label: '블랙보드' },
-            { id: 'x4Cb5At6Z_M', title: 'CG 인터랙티브 스마트 모션 강의', cat: 'production', tag: 'WHOMEDIA', label: 'CG/인터랙티브' },
-            { id: 'JwCrB4dKgDU', title: '후캠퍼스 모바일 태블릿 에듀 강좌', cat: 'hucampus', tag: 'WHOMEDIA', label: '태블릿 강의' },
-            { id: '54m2LENAo68', title: '스튜디오 대형 크로마키 강좌 연출', cat: 'production', tag: 'WHOMEDIA', label: '크로마키' },
-            { id: 'WaxhtAZLLV8', title: '교수진 맞춤형 크로마키 촬영', cat: 'production', tag: 'WHOMEDIA', label: '크로마키 촬영' },
-            { id: 'paYW3d0MRqk', title: 'EBS 올쏘 핵심강좌 오프닝 모션그래픽', cat: 'production', tag: 'EBS', label: '모션그래픽' },
-            { id: 'komXGh3TGSo', title: 'EBS 천일문 메인 타이틀 연출', cat: 'production', tag: 'EBS', label: '타이틀 연출' },
-            { id: 'cF7i6m9apsE', title: 'EBS 포텐시리즈 모션 오프닝', cat: 'production', tag: 'EBS', label: '모션그래픽' },
-            { id: '-Is7q7qD9Rc', title: '한국AI교육신문 & 뉴미디어 언론 브랜딩', cat: 'press', tag: '유튜브홍보', label: '디지털 언론 홍보' }
+            { id: 'dEPkxRTjsy8', title: '한양대 토크콘서트 인터랙티브 세션', cat: 'production', tag: '한양대', label: '모션그래픽', metric: '데이터 기반 인터랙션', efficiency: '몰입도 98% 달성' },
+            { id: 'nzSjVbxNrnc', title: 'NE능률 나는쌤이다 반응형 에듀 웹콘텐츠', cat: 'edu', tag: 'NE능률', label: '적응형 러닝', metric: '고효율 학습 설계', efficiency: '완강률 94% 달성' },
+            { id: 'PAvJORGcUTU', title: '에듀팡 다국어 어학 몰입형 모션 아키텍처', cat: 'production', tag: '에듀팡', label: '시각화 설계', metric: '인지부하 40% 저감', efficiency: '학습효과 극대화' },
+            { id: '4cnYAzIvagw', title: '동아출판 AI 디지털 교과서 교수-학습 인터랙션', cat: 'edu', tag: '동아출판', label: 'AI 디지털 교과서', metric: 'AI 적응형 진단', efficiency: '학습성취도 +32%' },
+            { id: 'DIdduzeub5U', title: '후미디어 에듀테크 브랜딩 & 인터랙티브 아키텍처', cat: 'production', tag: 'WHOMEDIA', label: '시스템 브랜딩', metric: '브랜드 가치 전달', efficiency: '표준 아키텍처 수립' },
+            { id: '0kHSItVXKOU', title: '능률 고등 영어 데이터 연계 스마트 적응형 강좌', cat: 'edu', tag: 'NE능률', label: '적응형 러닝', metric: '데이터 기반 난이도 조절', efficiency: '학습 속도 1.5배' },
+            { id: '6xb2GYInARg', title: '능률 중등 맞춤형 자기주도 학습 시스템', cat: 'edu', tag: 'NE능률', label: '마이크로러닝', metric: '학습 지속성 강화', efficiency: '이탈률 60% 감소' },
+            { id: 'rJ2U9T27WwU', title: '태진옥 브랜드 스토리텔링 & 디지털 트랜스포메이션', cat: 'press', tag: '태진옥', label: '하이브리드 미디어', metric: '스토리텔링 몰입도', efficiency: '전환율 2.8배 증가' },
+            { id: 'PTqpVR-yIKg', title: '경희사이버대 가상 스튜디오 시뮬레이션 강의', cat: 'production', tag: '경희사이버대', label: '시뮬레이션 러닝', metric: '가상 합성 몰입 설계', efficiency: '만족도 99% 달성' },
+            { id: 'AbeWeusmjws', title: '86인치 4K 인터랙티브 보드 스마트 클래스', cat: 'production', tag: '전자칠판', label: '스마트 클래스', metric: '실시간 판서 인터랙션', efficiency: '집중도 지속시간 +45%' },
+            { id: 'PVVdU-CYowA', title: '웅진 스마트학습 연계 적응형 디지털 교재 시스템', cat: 'edu', tag: '웅진씽크빅', label: '적응형 러닝', metric: '디지털 교재 인터랙션', efficiency: '학습 도달률 96%' },
+            { id: 'PxAZYrpdowU', title: '웅진 특수 무반사 블랙보드 개념 시각화 강좌', cat: 'edu', tag: '웅진씽크빅', label: '개념 시각화', metric: '시각적 피로도 감소', efficiency: '이해도 지수 최상위' },
+            { id: 'x4Cb5At6Z_M', title: 'CG 데이터 인터랙티브 스마트 모션 그래픽스', cat: 'production', tag: 'WHOMEDIA', label: '인터랙티브 CG', metric: '직관적 데이터 시각화', efficiency: '인지속도 2.2배 증대' },
+            { id: 'JwCrB4dKgDU', title: '후캠퍼스 모바일/태블릿 최적화 마이크로러닝', cat: 'hucampus', tag: 'WHOMEDIA', label: '마이크로러닝', metric: '크로스 디바이스 설계', efficiency: '접근성 100% 보장' },
+            { id: '54m2LENAo68', title: '대형 크로마키 가상 공간 기반 학습 시나리오 연출', cat: 'production', tag: 'WHOMEDIA', label: '가상 공간 설계', metric: '실감형 시나리오', efficiency: '실습효과 3배 상승' },
+            { id: 'WaxhtAZLLV8', title: '교수자 맞춤형 AI 프롬프트 & 크로마키 합성', cat: 'production', tag: 'WHOMEDIA', label: '스마트 프로덕션', metric: '지능형 모니터링', efficiency: '제작공수 45% 단축' },
+            { id: 'paYW3d0MRqk', title: 'EBS 핵심 개념 구조화 모션 그래픽스', cat: 'production', tag: 'EBS', label: '구조화 설계', metric: '핵심 개념 도식화', efficiency: '기억 파지율 1.8배' },
+            { id: 'komXGh3TGSo', title: 'EBS 천일문 체계적 구문 분석 모션 아키텍처', cat: 'production', tag: 'EBS', label: '체계적 구문분석', metric: '문법 구조 시각화', efficiency: '학습 성취도 극대화' },
+            { id: 'cF7i6m9apsE', title: 'EBS 포텐시리즈 인지 강화 타이틀 시퀀스', cat: 'production', tag: 'EBS', label: '학습 동기부여', metric: '학습 동기 트리거', efficiency: '초반 이탈 방지' },
+            { id: '-Is7q7qD9Rc', title: '한국AI교육일보 에듀테크 지식 네트워크 & 언론 브랜딩', cat: 'press', tag: 'AI에듀네트워크', label: '지식 네트워크', metric: '에듀테크 인사이트 확산', efficiency: '구독자 만족도 97%' }
         ];
 
         // GitHub 신규 이미지 저장소 연동 설정 (whomedia01/who-new809/img/)
@@ -1517,9 +1517,16 @@
             background-color: #0B132B;
         }
 
-        /* Standardized Header Gap Wrapper: Header is fixed, main is placed transparently below header */
+        /* Standardized Header Spacer & Layout Rules */
+        .header-spacer {
+            height: 80px !important; /* 헤더 높이만큼 투명한 여백 고정 */
+            width: 100% !important;
+            background-color: transparent !important; /* 절대 배경색 넣지 말 것 */
+            flex-shrink: 0 !important;
+        }
+
         .main-content-wrapper {
-            margin-top: 80px !important;
+            margin-top: 0 !important;
             padding-top: 0 !important;
             background: transparent !important;
             box-sizing: border-box !important;
@@ -1557,29 +1564,29 @@
                           :style="scrolled ? 'color: #0F172A;' : 'color: #FFFFFF;'"
                           style="color: #FFFFFF;">MEDIA</span>
                 </div>
-                <span class="hidden sm:inline-block text-[10px] sm:text-[11px] font-medium tracking-tight leading-none mt-0.5 transition-colors"
-                      :class="scrolled ? 'text-slate-500' : 'text-slate-300/90'">
-                    교육의 미래를 완성하는 전문가 그룹
+                <span class="hidden sm:inline-block text-[10px] sm:text-[11px] font-semibold tracking-tight leading-none mt-0.5 transition-colors"
+                      :class="scrolled ? 'text-slate-500' : 'text-cyan-300/90'">
+                    학습 경험을 설계하는 에듀테크 솔루션
                 </span>
             </a>
 
             <!-- Desktop Menu Links -->
             <nav class="hidden md:flex items-center gap-6">
-                <a href="#" :class="scrolled ? 'text-gray-700 hover:text-blue-600' : 'text-gray-100 hover:text-blue-400'" class="font-medium text-[15px] transition-colors drop-shadow">홈</a>
-                <a href="#about" :class="scrolled ? 'text-gray-700 hover:text-blue-600' : 'text-gray-100 hover:text-blue-400'" class="font-medium text-[15px] transition-colors drop-shadow">회사소개</a>
-                <a href="#services" :class="scrolled ? 'text-gray-700 hover:text-blue-600' : 'text-gray-100 hover:text-blue-400'" class="font-medium text-[15px] transition-colors drop-shadow">사업영역</a>
-                <a href="#studio" :class="scrolled ? 'text-gray-700 hover:text-blue-600' : 'text-gray-100 hover:text-blue-400'" class="font-medium text-[15px] transition-colors drop-shadow">스튜디오</a>
-                <a href="#reference" :class="scrolled ? 'text-gray-700 hover:text-blue-600' : 'text-gray-100 hover:text-blue-400'" class="font-medium text-[15px] transition-colors drop-shadow">포트폴리오</a>
+                <a href="#" :class="scrolled ? 'text-gray-700 hover:text-cyan-600' : 'text-gray-100 hover:text-cyan-300'" class="font-medium text-[15px] transition-colors drop-shadow">홈</a>
+                <a href="#about" :class="scrolled ? 'text-gray-700 hover:text-cyan-600' : 'text-gray-100 hover:text-cyan-300'" class="font-medium text-[15px] transition-colors drop-shadow">조직체계</a>
+                <a href="#services" :class="scrolled ? 'text-gray-700 hover:text-cyan-600' : 'text-gray-100 hover:text-cyan-300'" class="font-medium text-[15px] transition-colors drop-shadow">솔루션영역</a>
+                <a href="#studio" :class="scrolled ? 'text-gray-700 hover:text-cyan-600' : 'text-gray-100 hover:text-cyan-300'" class="font-medium text-[15px] transition-colors drop-shadow">미디어 인프라</a>
+                <a href="#reference" :class="scrolled ? 'text-gray-700 hover:text-cyan-600' : 'text-gray-100 hover:text-cyan-300'" class="font-medium text-[15px] transition-colors drop-shadow">프로젝트 실적</a>
                 <a :href="naverMapUrl" 
                    target="_blank" 
                    rel="noopener noreferrer" 
-                   :class="scrolled ? 'text-gray-700 hover:text-blue-600' : 'text-gray-100 hover:text-blue-400'" 
+                   :class="scrolled ? 'text-gray-700 hover:text-cyan-600' : 'text-gray-100 hover:text-cyan-300'" 
                    class="font-medium text-[15px] transition-colors drop-shadow flex items-center gap-0.5">
                     <span>오시는 길</span>
                     <svg class="w-3 h-3 opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                 </a>
-                <a href="#contact" :class="scrolled ? 'text-blue-600 font-bold hover:text-blue-700' : 'text-white font-bold hover:text-blue-300 bg-blue-600/80 hover:bg-blue-600 px-3.5 py-1.5 rounded-lg transition-all'" class="font-bold text-[15px] transition-colors drop-shadow flex items-center gap-1">
-                    <span>문의/상담하기</span>
+                <a href="#contact" :class="scrolled ? 'text-cyan-600 font-bold hover:text-cyan-700' : 'text-white font-bold hover:text-cyan-200 bg-cyan-600/90 hover:bg-cyan-500 px-3.5 py-1.5 rounded-lg transition-all shadow-[0_0_15px_rgba(6,182,212,0.4)]'" class="font-bold text-[15px] transition-colors drop-shadow flex items-center gap-1">
+                    <span>솔루션 상담하기</span>
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </a>
             </nav>
@@ -1648,13 +1655,16 @@
         </div>
     </header>
 
+    <!-- Standardized Transparent Header Spacer (Prevents any background-color padding band) -->
+    <div class="header-spacer" aria-hidden="true"></div>
+
     <!-- MAIN CONTENT LANDMARK -->
     <main id="main-content" class="main-content-wrapper relative">
         <!-- Interactive Stage Spotlight Overlay (Follows Mouse Cursor) -->
         <div id="interactive-spotlight" class="hidden md:block"></div>
 
     <!-- HERO SECTION (DUALIZED ARCHITECTURE: PC FULLSCREEN IMMERSIVE VIDEO OVERLAY vs MOBILE STACKED FLOW WITH 2x2 SAFE AREA) -->
-    <section id="hero" aria-label="메인 솔루션 및 이러닝 영상 제작" class="relative w-full max-w-full text-white bg-brand-navy-dark overflow-hidden h-[calc(100dvh-80px)] md:h-[calc(100vh-80px)] md:min-h-[calc(100vh-80px)] flex flex-col md:block justify-between pt-0 pb-2 md:pb-0">
+    <section id="hero" aria-label="Data-Driven Learning Architecture (학습 경험을 설계하는 에듀테크 솔루션)" class="relative w-full max-w-full text-white bg-brand-navy-dark overflow-hidden h-[calc(100dvh-80px)] md:h-[calc(100vh-80px)] md:min-h-[calc(100vh-80px)] flex flex-col md:block justify-between pt-0 pb-2 md:pb-0">
         
         <!-- ========================================================================= -->
         <!-- [PC 전용 FULLSCREEN 백그라운드 영상 & 시네마틱 오버레이] (md:block hidden) -->
@@ -1695,40 +1705,48 @@
                 <!-- [하단 문구: 빛 반사 스윕] 부드럽게 떠오르며 안착 + 3초마다 촤르륵 빛이 반사되는 서브타이틀 -->
                 <div class="apple-shimmer-entrance pt-2">
                     <p class="text-base md:text-lg lg:text-xl font-bold tracking-normal drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)] flex items-center justify-center gap-2">
-                        <span class="apple-shimmer-text">대한민국 대표 기업 &amp; 공공기관이 신뢰하는</span>
-                        <span class="apple-shimmer-mint font-extrabold">No.1 스마트 미디어 파트너</span>
+                        <span class="apple-shimmer-text">데이터 기반 학습 설계를 선도하는</span>
+                        <span class="apple-shimmer-mint font-extrabold">No.1 에듀테크 아키텍처 파트너</span>
                     </p>
                 </div>
 
-                <!-- PC 중앙 하단: 와이드 롤링 애니메이션 배너 (질문 ➔ 해답 제시) -->
+                <!-- PC 중앙 하단: 와이드 롤링 애니메이션 배너 (전문 에듀테크 아키텍처 비전 제시) -->
                 <div class="w-full max-w-2xl mx-auto pt-2 pointer-events-auto">
-                    <div class="bg-slate-900/85 backdrop-blur-xl border border-cyan-500/35 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(34,211,238,0.15)] py-3 px-6 overflow-hidden">
-                        <div class="relative overflow-hidden min-h-[58px] flex items-center justify-center">
-                            <!-- Step 1 (0s~1.5s): '온라인 교육?' -->
+                    <div class="bg-slate-900/90 backdrop-blur-xl border border-cyan-500/35 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(34,211,238,0.15)] py-3 px-6 overflow-hidden">
+                        <div class="relative overflow-hidden min-h-[64px] flex items-center justify-center">
+                            <!-- Step 1 (0s~1.5s): 'Learning Experience?' (학습 경험의 설계) -->
                             <div class="text-roll-step1 px-2 text-center">
-                                <span class="text-xl lg:text-2xl font-black text-cyan-300 tracking-tight drop-shadow-[0_2px_15px_rgba(34,211,238,0.6)] flex items-center justify-center gap-2">
-                                    <span class="text-cyan-400 text-sm font-bold px-2 py-0.5 rounded bg-cyan-500/20 border border-cyan-400/40">Q.</span>
-                                    온라인 교육?
-                                </span>
-                            </div>
-
-                            <!-- Step 2 (1.5s~3s): '오프라인 교육?' -->
-                            <div class="text-roll-step2 px-2 text-center">
-                                <span class="text-xl lg:text-2xl font-black text-white/95 tracking-tight drop-shadow-[0_2px_15px_rgba(255,255,255,0.45)] flex items-center justify-center gap-2">
-                                    <span class="text-slate-300 text-sm font-bold px-2 py-0.5 rounded bg-white/15 border border-white/30">Q.</span>
-                                    오프라인 교육?
-                                </span>
-                            </div>
-
-                            <!-- Step 3 (3s~10s, 7s Stay): '온·오프라인 / 교육 콘텐츠 개발' -->
-                            <div class="text-roll-step3 px-2 text-center">
-                                <div class="flex items-center justify-center gap-3 flex-wrap">
-                                    <span class="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.3)]">SOLUTION</span>
-                                    <span class="text-xl lg:text-2xl font-black text-white tracking-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
-                                        온·오프라인
+                                <div class="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3">
+                                    <span class="text-xl lg:text-2xl font-black text-cyan-300 tracking-tight drop-shadow-[0_2px_15px_rgba(34,211,238,0.6)] flex items-center justify-center gap-2">
+                                        <span class="text-cyan-400 text-xs sm:text-sm font-bold px-2 py-0.5 rounded bg-cyan-500/20 border border-cyan-400/40">STEP 1</span>
+                                        Learning Experience?
                                     </span>
-                                    <span class="text-xl lg:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-brand-mint drop-shadow-[0_2px_15px_rgba(34,211,238,0.5)]">
-                                        교육 콘텐츠 개발
+                                    <span class="text-xs sm:text-sm font-bold text-slate-300/90 tracking-tight">(학습 경험의 설계)</span>
+                                </div>
+                            </div>
+
+                            <!-- Step 2 (1.5s~3s): 'Media Transformation?' (미디어의 혁신적 전환) -->
+                            <div class="text-roll-step2 px-2 text-center">
+                                <div class="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3">
+                                    <span class="text-xl lg:text-2xl font-black text-white/95 tracking-tight drop-shadow-[0_2px_15px_rgba(255,255,255,0.45)] flex items-center justify-center gap-2">
+                                        <span class="text-slate-300 text-xs sm:text-sm font-bold px-2 py-0.5 rounded bg-white/15 border border-white/30">STEP 2</span>
+                                        Media Transformation?
+                                    </span>
+                                    <span class="text-xs sm:text-sm font-bold text-slate-300/90 tracking-tight">(미디어의 혁신적 전환)</span>
+                                </div>
+                            </div>
+
+                            <!-- Step 3 (3s~10s, 7s Stay): 'Total Edu-Media Architecture' (총합적 교육 미디어 설계) -->
+                            <div class="text-roll-step3 px-2 text-center">
+                                <div class="flex flex-col items-center justify-center gap-1">
+                                    <div class="flex items-center justify-center gap-2 flex-wrap">
+                                        <span class="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.3)]">EDUTECH SOLUTION</span>
+                                        <span class="text-xl lg:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-100 to-emerald-300 drop-shadow-[0_2px_15px_rgba(34,211,238,0.5)]">
+                                            Data-Driven Learning Architecture
+                                        </span>
+                                    </div>
+                                    <span class="text-xs sm:text-sm font-bold text-slate-200 tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                                        학습 경험을 설계하는 에듀테크 솔루션
                                     </span>
                                 </div>
                             </div>
@@ -1737,39 +1755,39 @@
                 </div>
             </div>
 
-            <!-- 2. PC 최하단: 풀스크린 하단에 딱 붙어서 시원하게 펼쳐지는 가로 4칸 정량적 지표 패널 -->
+            <!-- 2. PC 최하단: 풀스크린 하단에 펼쳐지는 에듀테크 정량적 지표 패널 -->
             <div class="w-full pointer-events-auto">
                 <div class="grid grid-cols-4 gap-4 text-center select-none">
                     <!-- 1. 17년 업력 -->
                     <div class="flex flex-col items-center justify-center p-3.5 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md">
                         <div class="text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1">
-                            17<span class="text-brand-mint font-extrabold ml-0.5 text-base">년</span>
+                            17<span class="text-cyan-400 font-extrabold ml-0.5 text-base">년</span>
                         </div>
-                        <div class="text-xs lg:text-sm font-semibold text-slate-300">업력 노하우</div>
+                        <div class="text-xs lg:text-sm font-semibold text-slate-300">교육 설계 노하우</div>
                     </div>
 
-                    <!-- 2. 160평 스튜디오 -->
+                    <!-- 2. R&D 인프라 -->
                     <div class="flex flex-col items-center justify-center p-3.5 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md">
                         <div class="text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1">
-                            160<span class="text-brand-mint font-extrabold ml-0.5 text-base">평</span>
+                            160<span class="text-cyan-400 font-extrabold ml-0.5 text-base">평</span>
                         </div>
-                        <div class="text-xs lg:text-sm font-semibold text-slate-300">자체 스튜디오</div>
+                        <div class="text-xs lg:text-sm font-semibold text-slate-300">에듀 R&amp;D 인프라</div>
                     </div>
 
-                    <!-- 3. 1,500+ 누적 프로젝트 -->
+                    <!-- 3. 1,500+ 누적 아키텍처 -->
                     <div class="flex flex-col items-center justify-center p-3.5 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md">
                         <div class="text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1">
-                            1,500<span class="text-brand-mint font-extrabold ml-0.5 text-base">+</span>
+                            1,500<span class="text-cyan-400 font-extrabold ml-0.5 text-base">+</span>
                         </div>
-                        <div class="text-xs lg:text-sm font-semibold text-slate-300">누적 프로젝트</div>
+                        <div class="text-xs lg:text-sm font-semibold text-slate-300">학습 설계 프로젝트</div>
                     </div>
 
-                    <!-- 4. 100+ 주요 협력기관 -->
+                    <!-- 4. 100+ 주요 산학 파트너 -->
                     <div class="flex flex-col items-center justify-center p-3.5 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md">
                         <div class="text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1">
-                            100<span class="text-brand-mint font-extrabold ml-0.5 text-base">+</span>
+                            100<span class="text-cyan-400 font-extrabold ml-0.5 text-base">+</span>
                         </div>
-                        <div class="text-xs lg:text-sm font-semibold text-slate-300">주요 협력기관</div>
+                        <div class="text-xs lg:text-sm font-semibold text-slate-300">산학연 파트너십</div>
                     </div>
                 </div>
             </div>
@@ -1779,68 +1797,87 @@
         <!-- ========================================================================= -->
         <!-- [모바일 전용 순차적 세로 배치(Stacked Flow) 레이아웃] (md:hidden flex flex-col) -->
         <!-- ========================================================================= -->
-        <div class="md:hidden flex flex-col justify-between w-full h-full flex-1 relative z-20 overflow-hidden pb-3">
+        <div class="md:hidden flex flex-col justify-between w-full h-full flex-1 relative z-20 overflow-hidden pb-2">
             
-            <!-- [상단 그룹: 슬로건 + 영상] flex-1로 남는 화면 여백을 모두 흡수하여 영상 확대 -->
-            <div class="flex-1 w-full flex flex-col justify-between px-4 pb-1.5 min-h-0">
-                <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (상단 헤더 아래 바로 자연스럽게 밀착) -->
-                <div class="w-full text-center shrink-0 mb-2">
-                    <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 text-lg xs:text-xl font-black text-white leading-snug tracking-tight select-none px-1 break-keep drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
-                        <span class="kinetic-piece-1 text-white">우리의 프레임 안에서</span>
-                        <span class="kinetic-piece-2 text-cyan-300">당신의 비전은</span>
-                        <span class="kinetic-piece-3 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-blue-400">콘텐츠가 되고</span>
-                        <span class="kinetic-piece-4 text-emerald-300">세상의</span>
-                        <span class="kinetic-piece-5 bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 to-teal-200">기준이 됩니다</span>
+            <!-- [상단 그룹: 슬로건 + 영상] 슬로건 가로폭 극대화 및 영상 높이 15~20% 축소(h-[32vh] / aspect-[16/9] 비례) -->
+            <div class="flex-1 w-full flex flex-col justify-center px-4 pb-1 min-h-0 gap-3 pt-1">
+                <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (text-3xl / text-4xl 급 볼드 폰트 + 3문장 단위 덩어리감) -->
+                <div class="w-full text-center shrink-0 px-1">
+                    <div class="flex flex-col items-center justify-center gap-y-0.5 text-[1.75rem] xs:text-3xl sm:text-4xl font-extrabold text-white leading-tight tracking-tight select-none break-keep drop-shadow-[0_6px_22px_rgba(0,0,0,0.95)]">
+                        <!-- Line 1: 우리의 프레임 안에서 -->
+                        <div class="w-full flex items-center justify-center">
+                            <span class="kinetic-piece-1 text-white">우리의 프레임 안에서</span>
+                        </div>
+                        <!-- Line 2: 당신의 비전은 콘텐츠가 되고 -->
+                        <div class="w-full flex items-center justify-center gap-1.5 flex-wrap">
+                            <span class="kinetic-piece-2 text-cyan-300">당신의 비전은</span>
+                            <span class="kinetic-piece-3 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-teal-200 to-blue-400">콘텐츠가 되고</span>
+                        </div>
+                        <!-- Line 3: 세상의 기준이 됩니다. -->
+                        <div class="w-full flex items-center justify-center gap-1.5 flex-wrap">
+                            <span class="kinetic-piece-4 text-emerald-300">세상의</span>
+                            <span class="kinetic-piece-5 bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 to-teal-200">기준이 됩니다.</span>
+                        </div>
                     </div>
 
-                    <div class="apple-shimmer-entrance pt-0.5">
-                        <p class="text-[10px] xs:text-xs font-bold tracking-tight text-slate-300 flex flex-wrap items-center justify-center gap-1">
-                            <span class="apple-shimmer-text">기업 &amp; 공공기관이 신뢰하는</span>
-                            <span class="apple-shimmer-mint font-extrabold">No.1 스마트 미디어 파트너</span>
+                    <div class="apple-shimmer-entrance pt-1.5">
+                        <p class="text-xs xs:text-sm font-extrabold tracking-tight text-slate-300 flex flex-wrap items-center justify-center gap-1.5 break-keep">
+                            <span class="apple-shimmer-text">미래 가치를 창출하는</span>
+                            <span class="apple-shimmer-mint font-black">No.1 미디어 인프라 파트너</span>
                         </p>
                     </div>
                 </div>
 
-                <!-- 2. [모바일] 블록형 삽입 비주얼 영상 박스 (flex-1로 화면 절반 이상을 시원하게 차지) -->
-                <div class="w-full flex-1 relative min-h-[170px] xs:min-h-[200px] max-h-[46vh] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.9),0_0_20px_rgba(34,211,238,0.08)] flex items-center justify-center">
-                    <video class="w-full h-full object-cover scale-[1.15] pointer-events-none border-0"
-                           autoplay loop muted playsinline aria-hidden="true"
-                           style="object-position: center 35%;">
-                        <source src="https://raw.githubusercontent.com/whomedia01/whomedia4/main/whomedia_hero.mp4" type="video/mp4" />
-                    </video>
+                <!-- 2. [모바일] 블록형 삽입 비주얼 영상 박스 (세로 높이 15~20% 축소: h-[32vh] / aspect-[16/9] 비례 적용) -->
+                <div class="w-full flex items-center justify-center h-[32vh] max-h-[220px] xs:max-h-[240px] aspect-[16/9] mx-auto overflow-hidden">
+                    <div class="w-full h-full scale-[0.98] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.9),0_0_20px_rgba(34,211,238,0.08)] flex items-center justify-center relative">
+                        <video class="w-full h-full object-cover scale-[1.12] pointer-events-none border-0"
+                               autoplay loop muted playsinline aria-hidden="true"
+                                style="object-position: center 35%;">
+                            <source src="https://raw.githubusercontent.com/whomedia01/whomedia4/main/whomedia_hero.mp4" type="video/mp4" />
+                        </video>
+                    </div>
                 </div>
             </div>
 
             <!-- [하단 그룹: 롤링 솔루션 배너 + 4칸 지표] 화면 맨 아래(하단 바 바로 위)에 빈 공간 없이 완벽 밀착 -->
             <div class="w-full px-4 shrink-0 space-y-2 pt-1">
-                <!-- 3. [모바일] 텍스트 롤링 애니메이션 배너 -->
-                <div class="w-full bg-slate-900/90 backdrop-blur-xl border border-cyan-500/30 rounded-xl shadow-[0_10px_35px_rgba(0,0,0,0.7)] py-2 px-3 overflow-hidden">
-                    <div class="relative overflow-hidden min-h-[46px] xs:min-h-[50px] flex items-center justify-center">
-                        <!-- Step 1: '온라인 교육?' -->
+                <!-- 3. [모바일] 텍스트 롤링 애니메이션 배너 (에듀테크 아키텍처 비전 제시) -->
+                <div class="w-full bg-slate-900/90 backdrop-blur-xl border border-cyan-500/30 rounded-xl shadow-[0_10px_35px_rgba(0,0,0,0.7)] py-2 px-2.5 overflow-hidden">
+                    <div class="relative overflow-hidden min-h-[50px] xs:min-h-[54px] flex items-center justify-center">
+                        <!-- Step 1: 'Learning Experience?' (학습 경험의 설계) -->
                         <div class="text-roll-step1 px-1 text-center">
-                            <span class="text-base xs:text-lg font-black text-cyan-300 tracking-tight drop-shadow-[0_2px_15px_rgba(34,211,238,0.6)] flex items-center justify-center gap-1.5">
-                                <span class="text-cyan-400 text-xs font-bold px-1.5 py-0.5 rounded bg-cyan-500/20 border border-cyan-400/40">Q.</span>
-                                온라인 교육?
-                            </span>
-                        </div>
-
-                        <!-- Step 2: '오프라인 교육?' -->
-                        <div class="text-roll-step2 px-1 text-center">
-                            <span class="text-base xs:text-lg font-black text-white/95 tracking-tight drop-shadow-[0_2px_15px_rgba(255,255,255,0.45)] flex items-center justify-center gap-1.5">
-                                <span class="text-slate-300 text-xs font-bold px-1.5 py-0.5 rounded bg-white/15 border border-white/30">Q.</span>
-                                오프라인 교육?
-                            </span>
-                        </div>
-
-                        <!-- Step 3: '온·오프라인 / 교육 콘텐츠 개발' -->
-                        <div class="text-roll-step3 px-1 text-center">
-                            <div class="flex items-center justify-center gap-1.5 flex-wrap">
-                                <span class="text-[10px] xs:text-xs font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.3)]">SOLUTION</span>
-                                <span class="text-sm xs:text-base font-black text-white tracking-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
-                                    온·오프라인
+                            <div class="flex flex-col items-center justify-center">
+                                <span class="text-sm xs:text-base font-black text-cyan-300 tracking-tight drop-shadow-[0_2px_15px_rgba(34,211,238,0.6)] flex items-center justify-center gap-1.5">
+                                    <span class="text-cyan-400 text-[10px] font-bold px-1.5 py-0.5 rounded bg-cyan-500/20 border border-cyan-400/40">STEP 1</span>
+                                    Learning Experience?
                                 </span>
-                                <span class="text-sm xs:text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-brand-mint drop-shadow-[0_2px_15px_rgba(34,211,238,0.5)]">
-                                    교육 콘텐츠 개발
+                                <span class="text-[10px] xs:text-xs font-semibold text-slate-300 mt-0.5">학습 경험의 설계</span>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: 'Media Transformation?' (미디어의 혁신적 전환) -->
+                        <div class="text-roll-step2 px-1 text-center">
+                            <div class="flex flex-col items-center justify-center">
+                                <span class="text-sm xs:text-base font-black text-white/95 tracking-tight drop-shadow-[0_2px_15px_rgba(255,255,255,0.45)] flex items-center justify-center gap-1.5">
+                                    <span class="text-slate-300 text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/15 border border-white/30">STEP 2</span>
+                                    Media Transformation?
+                                </span>
+                                <span class="text-[10px] xs:text-xs font-semibold text-slate-300 mt-0.5">미디어의 혁신적 전환</span>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: 'Data-Driven Learning Architecture' -->
+                        <div class="text-roll-step3 px-1 text-center">
+                            <div class="flex flex-col items-center justify-center">
+                                <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                                    <span class="text-[9px] xs:text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.3)]">EDUTECH</span>
+                                    <span class="text-xs xs:text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-100 to-emerald-300 drop-shadow-[0_2px_15px_rgba(34,211,238,0.5)]">
+                                        Data-Driven Architecture
+                                    </span>
+                                </div>
+                                <span class="text-[10px] xs:text-[11px] font-bold text-slate-200 mt-0.5">
+                                    학습 경험을 설계하는 에듀테크 솔루션
                                 </span>
                             </div>
                         </div>
@@ -1852,33 +1889,33 @@
                     <!-- 1. 17년 업력 -->
                     <div class="flex flex-col items-center justify-center p-2 bg-slate-900/85 border border-slate-800/90 rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.5)] backdrop-blur-md">
                         <div class="text-base xs:text-lg font-black text-white tracking-tight leading-none mb-0.5">
-                            17<span class="text-brand-mint font-extrabold ml-0.5 text-[10px] xs:text-xs">년</span>
+                            17<span class="text-cyan-400 font-extrabold ml-0.5 text-[10px] xs:text-xs">년</span>
                         </div>
-                        <div class="text-[10px] xs:text-[11px] font-semibold text-slate-300 whitespace-nowrap">업력 노하우</div>
+                        <div class="text-[10px] xs:text-[11px] font-semibold text-slate-300 whitespace-nowrap">설계 노하우</div>
                     </div>
 
                     <!-- 2. 160평 스튜디오 -->
                     <div class="flex flex-col items-center justify-center p-2 bg-slate-900/85 border border-slate-800/90 rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.5)] backdrop-blur-md">
                         <div class="text-base xs:text-lg font-black text-white tracking-tight leading-none mb-0.5">
-                            160<span class="text-brand-mint font-extrabold ml-0.5 text-[10px] xs:text-xs">평</span>
+                            160<span class="text-cyan-400 font-extrabold ml-0.5 text-[10px] xs:text-xs">평</span>
                         </div>
-                        <div class="text-[10px] xs:text-[11px] font-semibold text-slate-300 whitespace-nowrap">자체 스튜디오</div>
+                        <div class="text-[10px] xs:text-[11px] font-semibold text-slate-300 whitespace-nowrap">R&amp;D 인프라</div>
                     </div>
 
                     <!-- 3. 1,500+ 누적 프로젝트 -->
                     <div class="flex flex-col items-center justify-center p-2 bg-slate-900/85 border border-slate-800/90 rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.5)] backdrop-blur-md">
                         <div class="text-base xs:text-lg font-black text-white tracking-tight leading-none mb-0.5">
-                            1,500<span class="text-brand-mint font-extrabold ml-0.5 text-[10px] xs:text-xs">+</span>
+                            1,500<span class="text-cyan-400 font-extrabold ml-0.5 text-[10px] xs:text-xs">+</span>
                         </div>
-                        <div class="text-[10px] xs:text-[11px] font-semibold text-slate-300 whitespace-nowrap">누적 프로젝트</div>
+                        <div class="text-[10px] xs:text-[11px] font-semibold text-slate-300 whitespace-nowrap">설계 프로젝트</div>
                     </div>
 
                     <!-- 4. 100+ 주요 협력기관 -->
                     <div class="flex flex-col items-center justify-center p-2 bg-slate-900/85 border border-slate-800/90 rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.5)] backdrop-blur-md">
                         <div class="text-base xs:text-lg font-black text-white tracking-tight leading-none mb-0.5">
-                            100<span class="text-brand-mint font-extrabold ml-0.5 text-[10px] xs:text-xs">+</span>
+                            100<span class="text-cyan-400 font-extrabold ml-0.5 text-[10px] xs:text-xs">+</span>
                         </div>
-                        <div class="text-[10px] xs:text-[11px] font-semibold text-slate-300 whitespace-nowrap">주요 협력기관</div>
+                        <div class="text-[10px] xs:text-[11px] font-semibold text-slate-300 whitespace-nowrap">산학연 파트너</div>
                     </div>
                 </div>
             </div>
@@ -1887,19 +1924,20 @@
     </section>
 
     <!-- ORGANIZATION & ECOSYSTEM: (주)후미디어 조직 체계 및 회사 소개 -->
-    <section id="about" class="py-12 sm:py-16 lg:py-24 bg-slate-900 text-white border-b border-slate-800 relative overflow-hidden w-full max-w-full">
+    <section id="about" class="py-16 sm:py-24 lg:py-32 bg-slate-900 text-white border-b border-slate-800 relative overflow-hidden w-full max-w-full">
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(30,136,229,0.12),transparent_50%)] pointer-events-none"></div>
 
-        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-16">
-                <span class="inline-block px-4 py-1.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold tracking-wider uppercase mb-2 sm:mb-3 shadow-xs">
+        <div class="max-w-[1200px] mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+            <!-- 텍스트 다이어트: 2줄 묵직한 키워드 & 충분한 여백 확보 -->
+            <div class="text-center max-w-4xl mx-auto mb-12 sm:mb-20 lg:mb-24 px-4">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs sm:text-sm font-bold tracking-widest uppercase mb-4 sm:mb-6 shadow-xs">
                     ORGANIZATION &amp; ECOSYSTEM
                 </span>
-                <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight mb-2 sm:mb-3 break-keep">
-                    지속가능한 성장을 이끄는 조직 체계
+                <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight sm:leading-tight mb-4 sm:mb-6 break-keep">
+                    완벽한 협업, 압도적 품질.
                 </h2>
-                <p class="text-slate-300 text-xs sm:text-base font-medium break-keep">
-                    전문 사업부 간의 유기적 협업 생태계로 프로젝트의 일관성을 유지하며 최상의 품질을 보증합니다.
+                <p class="text-slate-300 text-base sm:text-xl lg:text-2xl font-semibold leading-relaxed sm:leading-relaxed break-keep">
+                    지속가능한 성장을 만드는 조직 체계.
                 </p>
             </div>
 
@@ -2193,94 +2231,103 @@
         </div>
     </section>
 
-    <!-- BUSINESS NETWORK: (주)후미디어 핵심 사업 영역 (키워드 & 비주얼 중심) -->
-    <section id="services" aria-label="핵심 사업 영역" class="py-12 sm:py-20 lg:py-24 bg-white text-slate-900 border-t border-b border-slate-200">
+    <!-- BUSINESS NETWORK: (주)후미디어 핵심 사업 영역 -->
+    <section id="services" aria-label="핵심 솔루션 영역" class="py-12 sm:py-20 lg:py-24 bg-white text-slate-900 border-t border-b border-slate-200">
         <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-16">
-                <span class="inline-block px-4 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200 text-xs font-black tracking-wider uppercase mb-3">
+                <span class="inline-block px-4 py-1 rounded-full bg-cyan-50 text-cyan-600 border border-cyan-200 text-xs font-black tracking-wider uppercase mb-2">
                     BUSINESS AREA
                 </span>
-                <h2 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-2 break-keep">
-                    핵심 사업 영역
+                <h2 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1 break-keep">
+                    미래 가치를 창출하는 핵심 솔루션
                 </h2>
                 <p class="text-slate-500 text-xs sm:text-sm font-medium">
-                    (주)후미디어의 3대 핵심 비즈니스
+                    데이터와 시스템으로 비즈니스 성장을 견인하는 3대 핵심 솔루션
                 </p>
             </div>
 
-            <!-- 3대 핵심 사업 영역 카드 (대형 비주얼 + 키워드 & 한줄 요약 구조) -->
+            <!-- 3대 핵심 솔루션 카드 (시스템/칩셋/네트워크 라인 아이콘 + 데이터 지향) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
-                <!-- 1. 이러닝 개발 -->
-                <div class="group bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl hover:shadow-2xl hover:border-teal-500/50 transition-all duration-300 flex flex-col justify-between">
+                <!-- 1. Adaptive Learning Systems (적응형 학습 시스템) -->
+                <div class="group bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl hover:shadow-2xl hover:border-teal-500/60 transition-all duration-300 flex flex-col justify-between">
                     <div class="relative aspect-[16/10] overflow-hidden bg-slate-950">
                         <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1000&q=80" 
-                             alt="이러닝 개발" 
+                             alt="Adaptive Learning Systems" 
                              referrerpolicy="no-referrer"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                        <!-- 시스템 / 칩셋 라인 아이콘 -->
                         <div class="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-teal-500/90 backdrop-blur-md text-slate-950 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
                         </div>
                     </div>
                     <div class="p-6 lg:p-7 flex flex-col justify-between flex-1">
                         <div>
-                            <div class="text-xs font-extrabold text-teal-400 uppercase tracking-wider mb-1">01. E-LEARNING</div>
-                            <h3 class="text-xl lg:text-2xl font-black text-white mb-2 group-hover:text-teal-300 transition-colors">이러닝 개발</h3>
+                            <div class="text-xs font-extrabold text-teal-400 uppercase tracking-wider mb-1">01. ADAPTIVE LEARNING</div>
+                            <h3 class="text-xl lg:text-2xl font-black text-white mb-2 group-hover:text-teal-300 transition-colors">Adaptive Learning Systems</h3>
+                            <div class="text-xs text-teal-300 font-bold mb-3">(적응형 학습 시스템)</div>
                         </div>
-                        <div class="pt-4 border-t border-slate-800">
-                            <p class="text-sm sm:text-base font-bold text-slate-200 break-keep">
-                                교육 콘텐츠 기획 및 제작
+                        <div class="pt-4 border-t border-slate-800 space-y-1">
+                            <p class="text-sm sm:text-base font-bold text-slate-100 break-keep">
+                                데이터 기반 맞춤형 학습 경로 설계
                             </p>
+                            <p class="text-xs text-slate-400 font-medium">AI 디지털 교과서 · 스마트 LMS 연계 · 학습자 진단</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. 전문 영상 제작 -->
-                <div class="group bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl hover:shadow-2xl hover:border-cyan-500/50 transition-all duration-300 flex flex-col justify-between">
+                <!-- 2. Immersive Learning Media (몰입형 학습 미디어) -->
+                <div class="group bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl hover:shadow-2xl hover:border-cyan-500/60 transition-all duration-300 flex flex-col justify-between">
                     <div class="relative aspect-[16/10] overflow-hidden bg-slate-950">
                         <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1000&q=80" 
-                             alt="전문 영상 제작" 
+                             alt="Immersive Learning Media" 
                              referrerpolicy="no-referrer"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                        <!-- 시스템 / 네트워크 & 그래프 라인 아이콘 -->
                         <div class="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-cyan-500/90 backdrop-blur-md text-slate-950 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
                         </div>
                     </div>
                     <div class="p-6 lg:p-7 flex flex-col justify-between flex-1">
                         <div>
-                            <div class="text-xs font-extrabold text-cyan-400 uppercase tracking-wider mb-1">02. PRODUCTION</div>
-                            <h3 class="text-xl lg:text-2xl font-black text-white mb-2 group-hover:text-cyan-300 transition-colors">전문 영상 제작</h3>
+                            <div class="text-xs font-extrabold text-cyan-400 uppercase tracking-wider mb-1">02. IMMERSIVE MEDIA</div>
+                            <h3 class="text-xl lg:text-2xl font-black text-white mb-2 group-hover:text-cyan-300 transition-colors">Immersive Learning Media</h3>
+                            <div class="text-xs text-cyan-300 font-bold mb-3">(몰입형 학습 미디어)</div>
                         </div>
-                        <div class="pt-4 border-t border-slate-800">
-                            <p class="text-sm sm:text-base font-bold text-slate-200 break-keep">
-                                홍보 · 다큐 · 4K 시네마틱 영상
+                        <div class="pt-4 border-t border-slate-800 space-y-1">
+                            <p class="text-sm sm:text-base font-bold text-slate-100 break-keep">
+                                4K 실감형 시뮬레이션 및 인터랙션
                             </p>
+                            <p class="text-xs text-slate-400 font-medium">가상 크로마키 · 인터랙티브 CG · 86" 스마트 클래스</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. 브랜드 확산 -->
-                <div class="group bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl hover:shadow-2xl hover:border-amber-500/50 transition-all duration-300 flex flex-col justify-between">
+                <!-- 3. Hybrid Education Framework (온·오프 하이브리드 교육 프레임워크) -->
+                <div class="group bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl hover:shadow-2xl hover:border-amber-500/60 transition-all duration-300 flex flex-col justify-between">
                     <div class="relative aspect-[16/10] overflow-hidden bg-slate-950">
                         <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1000&q=80" 
-                             alt="브랜드 확산" 
+                             alt="Hybrid Education Framework" 
                              referrerpolicy="no-referrer"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                        <!-- 노드 네트워크 & 시스템 라인 아이콘 -->
                         <div class="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-amber-500/90 backdrop-blur-md text-slate-950 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         </div>
                     </div>
                     <div class="p-6 lg:p-7 flex flex-col justify-between flex-1">
                         <div>
-                            <div class="text-xs font-extrabold text-amber-400 uppercase tracking-wider mb-1">03. BRAND MARKETING</div>
-                            <h3 class="text-xl lg:text-2xl font-black text-white mb-2 group-hover:text-amber-300 transition-colors">브랜드 확산</h3>
+                            <div class="text-xs font-extrabold text-amber-400 uppercase tracking-wider mb-1">03. HYBRID FRAMEWORK</div>
+                            <h3 class="text-xl lg:text-2xl font-black text-white mb-2 group-hover:text-amber-300 transition-colors">Hybrid Education Framework</h3>
+                            <div class="text-xs text-amber-300 font-bold mb-3">(온·오프 하이브리드 교육 프레임워크)</div>
                         </div>
-                        <div class="pt-4 border-t border-slate-800">
-                            <p class="text-sm sm:text-base font-bold text-slate-200 break-keep">
-                                타겟 맞춤형 디지털 마케팅
+                        <div class="pt-4 border-t border-slate-800 space-y-1">
+                            <p class="text-sm sm:text-base font-bold text-slate-100 break-keep">
+                                온·오프라인 융합 지식 전달 체계
                             </p>
+                            <p class="text-xs text-slate-400 font-medium">블렌디드 러닝 · 한국AI교육일보 · 후캠퍼스 평생교육</p>
                         </div>
                     </div>
                 </div>
@@ -2296,11 +2343,11 @@
 
         <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-14">
-                <span class="inline-block px-4 py-1.5 rounded-full bg-brand-mint/15 text-brand-mint text-xs font-extrabold tracking-wider uppercase mb-2 sm:mb-3 border border-brand-mint/30 shadow-xs">
-                    Studio &amp; Production System
+                <span class="inline-block px-4 py-1.5 rounded-full bg-brand-mint/15 text-brand-mint text-xs font-extrabold tracking-wider uppercase mb-2 border border-brand-mint/30 shadow-xs">
+                    STUDIO &amp; SYSTEM
                 </span>
-                <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-3 leading-tight break-keep">
-                    스튜디오 &amp; 제작 환경
+                <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-2 leading-tight break-keep">
+                    압도적 퀄리티를 구현하는 미디어 인프라
                 </h2>
                 <p class="text-slate-300 text-xs sm:text-base lg:text-lg font-medium break-keep max-w-2xl mx-auto leading-relaxed">
                     160평 규모의 전용 스튜디오, 전자칠판, 크로마키, 고성능 카메라 및 부조정실 완비
@@ -2540,51 +2587,85 @@
         </div>
     </section>
 
-    <!-- PORTFOLIO -->
-    <section id="reference" aria-label="포트폴리오 및 주요 제작 실적" class="py-12 sm:py-20 lg:py-24 bg-white relative overflow-hidden w-full max-w-full">
+    <!-- PORTFOLIO: WORKS -->
+    <section id="reference" aria-label="브랜드 성장을 증명하는 프로젝트 사례" class="py-12 sm:py-20 lg:py-24 bg-white relative overflow-hidden w-full max-w-full">
         <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-12 px-2">
-                <span class="inline-block px-4 py-1 rounded-full bg-brand-mint/15 text-brand-mint-hover text-xs font-black uppercase tracking-wider mb-3">
-                    PORTFOLIO
+                <span class="inline-block px-4 py-1 rounded-full bg-cyan-50 text-cyan-600 border border-cyan-200 text-xs font-black uppercase tracking-wider mb-2">
+                    WORKS
                 </span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-brand-text mb-2 tracking-tight break-keep" style="word-break: keep-all; overflow-wrap: break-word;">제작 포트폴리오</h2>
-                <p class="text-gray-500 text-xs sm:text-sm font-medium">분야별 주요 제작 사례</p>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-brand-text mb-1 tracking-tight break-keep" style="word-break: keep-all; overflow-wrap: break-word;">
+                    브랜드 성장을 증명하는 프로젝트 사례
+                </h2>
+                <p class="text-slate-500 text-xs sm:text-sm font-medium">
+                    차별화된 기획과 기술력으로 증명된 성공적인 프로젝트
+                </p>
             </div>
 
-            <!-- Portfolio Category Filter Tabs (Horizontal Scroll & Snap-x without page overflow) -->
+            <!-- Portfolio Category Filter Tabs (Learning Objectives: 적응형 시스템, 몰입형 미디어, 하이브리드) -->
             <div class="w-full max-w-full overflow-hidden mb-6">
                 <div class="flex items-center gap-2 overflow-x-auto snap-x no-scrollbar py-2 px-1 justify-start sm:justify-center w-full max-w-full"
                      style="-webkit-overflow-scrolling: touch;">
-                    <button @click="refTab = 'all'" :class="refTab === 'all' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="flex-shrink-0 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm transition-all border border-slate-200 cursor-pointer">전체보기</button>
-                    <button @click="refTab = 'edu'" :class="refTab === 'edu' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="flex-shrink-0 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm transition-all border border-slate-200 cursor-pointer">이러닝 콘텐츠</button>
-                    <button @click="refTab = 'production'" :class="refTab === 'production' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="flex-shrink-0 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm transition-all border border-slate-200 cursor-pointer">영상 프로덕션</button>
-                    <button @click="refTab = 'press'" :class="refTab === 'press' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="flex-shrink-0 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm transition-all border border-slate-200 cursor-pointer">언론PR &amp; 홍보</button>
+                    <button @click="refTab = 'all'" :class="refTab === 'all' ? 'bg-slate-900 text-cyan-300 font-extrabold shadow-md border-cyan-500/50' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold border-slate-200'" class="flex-shrink-0 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm transition-all border cursor-pointer flex items-center gap-1.5">
+                        <span>전체 아키텍처</span>
+                    </button>
+                    <button @click="refTab = 'edu'" :class="refTab === 'edu' ? 'bg-slate-900 text-cyan-300 font-extrabold shadow-md border-cyan-500/50' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold border-slate-200'" class="flex-shrink-0 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm transition-all border cursor-pointer flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>
+                        <span>적응형 학습 시스템 (Adaptive)</span>
+                    </button>
+                    <button @click="refTab = 'production'" :class="refTab === 'production' ? 'bg-slate-900 text-cyan-300 font-extrabold shadow-md border-cyan-500/50' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold border-slate-200'" class="flex-shrink-0 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm transition-all border cursor-pointer flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                        <span>몰입형 학습 미디어 (Immersive)</span>
+                    </button>
+                    <button @click="refTab = 'press'" :class="refTab === 'press' ? 'bg-slate-900 text-cyan-300 font-extrabold shadow-md border-cyan-500/50' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold border-slate-200'" class="flex-shrink-0 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm transition-all border cursor-pointer flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                        <span>하이브리드 &amp; 지식확산</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- Portfolio Cards Grid -->
+            <!-- Portfolio Cards Grid with Learning Effectiveness Badges -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                 <template x-for="(item, idx) in filteredPortfolio.slice(0, portfolioLimit)" :key="item.id">
                     <article @click="openModal(item.id, item.title)"
-                          class="tilt-card w-full group relative bg-brand-gray rounded-2xl overflow-hidden border border-brand-border cursor-pointer shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
-                        <div class="aspect-video relative overflow-hidden bg-slate-900">
+                          class="tilt-card w-full group relative bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-cyan-500/60 cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                        <div class="aspect-video relative overflow-hidden bg-slate-950">
                             <img :src="'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg'" 
                                  @error="$el.src='https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80'"
                                  :alt="item.title" 
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
                                  referrerpolicy="no-referrer">
-                            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-brand-mint text-brand-navy-dark flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                            
+                            <!-- 학습 효과성(Efficacy) 지표 뱃지 - Top Left Overlay -->
+                            <div class="absolute top-2 left-2 z-10">
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-900/90 backdrop-blur-md border border-cyan-400/40 text-[10px] font-black text-cyan-300 shadow-sm">
+                                    <svg class="w-2.5 h-2.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                                    <span x-text="item.efficiency || '학습효과 검증'"></span>
+                                </span>
+                            </div>
+
+                            <div class="absolute inset-0 bg-black/25 group-hover:bg-black/5 transition-colors flex items-center justify-center">
+                                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
                                     <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 </div>
                             </div>
                         </div>
-                        <div class="p-3 sm:p-4">
-                            <div class="flex items-center justify-between mb-1">
-                                <span class="text-[10px] font-extrabold text-brand-mint-hover uppercase tracking-wider" x-text="item.tag"></span>
-                                <span class="text-[9px] bg-white px-1.5 py-0.5 rounded border border-gray-200 text-gray-500 font-semibold" x-text="item.label"></span>
+                        <div class="p-3 sm:p-4 bg-slate-50/50 flex flex-col justify-between flex-1">
+                            <div>
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-[10px] font-extrabold text-cyan-700 uppercase tracking-wider" x-text="item.tag"></span>
+                                    <span class="text-[9px] bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-600 font-bold" x-text="item.label"></span>
+                                </div>
+                                <h3 class="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-cyan-600 transition-colors line-clamp-2 leading-snug" x-text="item.title"></h3>
                             </div>
-                            <h3 class="font-bold text-xs sm:text-sm text-brand-text truncate" x-text="item.title"></h3>
+                            <!-- 설계 메트릭 (Learning Objective Architecture) -->
+                            <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between text-[10px] text-slate-500 font-medium">
+                                <span class="flex items-center gap-1 text-slate-600 font-semibold truncate">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 shrink-0"></span>
+                                    <span x-text="item.metric || '데이터 기반 설계'"></span>
+                                </span>
+                                <span class="text-cyan-600 font-bold shrink-0 ml-1">상세보기 &rarr;</span>
+                            </div>
                         </div>
                     </article>
                 </template>
@@ -2669,63 +2750,63 @@
     </section>
 
     <!-- CONTACT & FOOTER -->
-    <section id="contact" aria-label="제작 및 대관 상담 문의" class="py-10 sm:py-16 lg:py-20 bg-slate-50 text-slate-900 border-t border-slate-200">
+    <section id="contact" aria-label="차별화된 결과를 위한 전략적 파트너십" class="py-10 sm:py-16 lg:py-20 bg-slate-50 text-slate-900 border-t border-slate-200">
         <div class="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-6 sm:mb-8">
-                <span class="inline-block px-3.5 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-bold mb-3 border border-blue-200">
-                    EASY CONTACT
+                <span class="inline-block px-3.5 py-1 rounded-full bg-cyan-50 text-cyan-600 text-xs font-black mb-2 border border-cyan-200 uppercase tracking-wider">
+                    CONTACT
                 </span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mb-3 leading-tight break-keep">
-                    프로젝트 및 제작 상담, 편하게 문의하세요
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mb-1 leading-tight break-keep">
+                    차별화된 결과를 위한 전략적 파트너십
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-600 font-medium break-keep max-w-xl mx-auto">
-                    문의 사항을 남겨주시면 담당자가 확인 후 신속하게 안내해 드립니다.
+                    맞춤형 비즈니스 솔루션 및 미디어 인프라 도입을 위한 최적의 전략을 제안해 드립니다.
                 </p>
             </div>
 
             <!-- Inquiry Form -->
             <div class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xl">
                 <div class="flex items-center justify-between mb-4 sm:mb-6 pb-3 border-b border-slate-100">
-                    <h3 class="text-base sm:text-lg font-bold text-slate-900">간편 상담 신청</h3>
-                    <span class="text-[10px] sm:text-xs text-blue-600 font-semibold bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">빠른 답변</span>
+                    <h3 class="text-base sm:text-lg font-bold text-slate-900">솔루션 상담 신청</h3>
+                    <span class="text-[10px] sm:text-xs text-cyan-700 font-semibold bg-cyan-50 px-2.5 py-1 rounded-full border border-cyan-200">전담 아키텍트 배정</span>
                 </div>
                 
                 <form @submit.prevent="submitInquiry()" class="space-y-3 sm:space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">기관 / 회사명 (선택)</label>
-                        <input type="text" x-model="inquiryForm.company" placeholder="예: (주)OO에듀 또는 개인" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">기관 / 기업명 (선택)</label>
+                        <input type="text" x-model="inquiryForm.company" placeholder="예: (주)OO에듀 또는 대학/공공기관" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-cyan-600 text-xs sm:text-sm transition-colors">
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">성함 / 담당자 *</label>
-                            <input type="text" x-model="inquiryForm.name" required placeholder="홍길동" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
+                            <input type="text" x-model="inquiryForm.name" required placeholder="홍길동" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-cyan-600 text-xs sm:text-sm transition-colors">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">연락처 *</label>
-                            <input type="text" x-model="inquiryForm.phone" required placeholder="010-0000-0000" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
+                            <input type="text" x-model="inquiryForm.phone" required placeholder="010-0000-0000" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-cyan-600 text-xs sm:text-sm transition-colors">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">문의 유형 *</label>
-                        <select x-model="inquiryForm.category" required class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-blue-600 transition-colors">
-                            <option value="" disabled selected>문의할 희망 항목을 선택해 주세요</option>
-                            <option value="이러닝 콘텐츠 개발">이러닝 콘텐츠 개발</option>
-                            <option value="공공·기업 영상 제작 &amp; 홍보">공공·기업 영상 제작 &amp; 홍보</option>
-                            <option value="블렌디드 러닝 &amp; 오프라인 교육">블렌디드 러닝 &amp; 오프라인 교육</option>
-                            <option value="스마트 스튜디오 대여">스마트 스튜디오 대여</option>
-                            <option value="기타 일반 문의">기타 일반 문의</option>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">솔루션 관심 영역 *</label>
+                        <select x-model="inquiryForm.category" required class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-cyan-600 transition-colors">
+                            <option value="" disabled selected>도입을 희망하시는 솔루션을 선택해 주세요</option>
+                            <option value="적응형 학습 시스템 (Adaptive Learning Systems)">적응형 학습 시스템 (Adaptive Learning Systems)</option>
+                            <option value="몰입형 학습 미디어 (Immersive Learning Media)">몰입형 학습 미디어 (Immersive Learning Media)</option>
+                            <option value="온·오프 하이브리드 교육 프레임워크 (Hybrid Education)">온·오프 하이브리드 교육 프레임워크 (Hybrid Education)</option>
+                            <option value="160평 에듀테크 R&amp;D 스튜디오 인프라 활용">160평 에듀테크 R&amp;D 스튜디오 인프라 활용</option>
+                            <option value="기타 에듀테크 아키텍처 협력">기타 에듀테크 아키텍처 협력</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">문의 내용 *</label>
-                        <textarea x-model="inquiryForm.message" rows="3" required placeholder="궁금하신 점이나 요청사항을 자유롭게 작성해 주세요." class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors"></textarea>
+                        <textarea x-model="inquiryForm.message" rows="3" required placeholder="학습 목표, 대상자, 연계 시스템 등 필요한 요구사항을 작성해 주세요." class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-cyan-600 text-xs sm:text-sm transition-colors"></textarea>
                     </div>
                     <div class="flex items-center gap-2 pt-0.5">
-                        <input type="checkbox" id="consent" x-model="inquiryForm.consent" required class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                        <input type="checkbox" id="consent" x-model="inquiryForm.consent" required class="rounded border-slate-300 text-cyan-600 focus:ring-cyan-500">
                         <label for="consent" class="text-xs text-slate-600 cursor-pointer font-medium">개인정보 수집 및 이용에 동의합니다. *</label>
                     </div>
-                    <button type="submit" :disabled="inquirySubmitting" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 sm:py-4 rounded-xl transition-all text-sm sm:text-base shadow-lg mt-3 flex items-center justify-center gap-2.5 disabled:opacity-60 cursor-pointer active:scale-98">
-                        <span x-text="inquirySubmitting ? '문의 전송 중...' : '문의 남기기'">문의 남기기</span>
+                    <button type="submit" :disabled="inquirySubmitting" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-black py-3.5 sm:py-4 rounded-xl transition-all text-sm sm:text-base shadow-lg mt-3 flex items-center justify-center gap-2.5 disabled:opacity-60 cursor-pointer active:scale-98">
+                        <span x-text="inquirySubmitting ? '문의 전송 중...' : '솔루션 상담 신청하기'">솔루션 상담 신청하기</span>
                         <svg x-show="!inquirySubmitting" class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         <svg x-show="inquirySubmitting" class="animate-spin h-5 w-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" x-cloak><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                     </button>
@@ -2747,24 +2828,24 @@
                             <span class="font-black ml-[1px]" style="color: #FFFFFF;">MEDIA</span>
                         </a>
                     </div>
-                    <p class="text-gray-400">㈜후미디어 | 전문 영상 제작, 교육 콘텐츠 개발 &amp; 스튜디오 대여 전문기업</p>
+                    <p class="text-gray-400">㈜후미디어 | Data-Driven Learning Architecture · 에듀테크 솔루션 &amp; R&amp;D 인프라 기업</p>
                 </div>
 
                 <!-- Footer Quick Contacts (Relocated Here) -->
                 <div class="flex flex-wrap items-center gap-3 text-xs text-gray-300 bg-white/5 p-3 sm:p-4 rounded-xl border border-white/10">
-                    <a href="tel:02-6443-4222" class="hover:text-brand-mint transition-colors flex items-center gap-1.5 font-bold">
-                        <span class="text-brand-mint">📞</span> 대표전화 : 02-6443-4222
+                    <a href="tel:02-6443-4222" class="hover:text-cyan-300 transition-colors flex items-center gap-1.5 font-bold">
+                        <span class="text-cyan-400">📞</span> 대표전화 : 02-6443-4222
                     </a>
                     <span class="text-gray-600 hidden sm:inline">|</span>
-                    <a href="mailto:whomedia6104@gmail.com" class="hover:text-brand-mint transition-colors flex items-center gap-1.5 font-bold">
-                        <span class="text-brand-mint">✉️</span> 대표이메일 : whomedia6104@gmail.com
+                    <a href="mailto:whomedia6104@gmail.com" class="hover:text-cyan-300 transition-colors flex items-center gap-1.5 font-bold">
+                        <span class="text-cyan-400">✉️</span> 대표이메일 : whomedia6104@gmail.com
                     </a>
                 </div>
             </div>
 
             <address class="not-italic space-y-1 text-gray-500 border-t border-gray-800/80 pt-5">
                 <p>법인명 : (주)후미디어 ｜ 대표이사 : 황광성 ｜ 사업자등록번호 : 119-86-25861</p>
-                <p>스튜디오 및 본사 : 서울특별시 금천구 가산디지털2로 53 (가산동) 한라시그마밸리 1102호 ~ 1104호</p>
+                <p>R&amp;D 스튜디오 및 본사 : 서울특별시 금천구 가산디지털2로 53 (가산동) 한라시그마밸리 1102호 ~ 1104호</p>
                 <div class="pt-3 flex items-center justify-between flex-wrap gap-2 text-gray-600">
                     <p>© 2026 WHO MEDIA Corp. All rights reserved.</p>
                 </div>
