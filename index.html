@@ -451,9 +451,10 @@
         }
 
         /* =========================================================
-           KINETIC TYPOGRAPHY 1회 시네마틱 비산 진입(Flying-in Assemble) 효과
-           초기 1회 화면 밖에서 역동적으로 회전/블러되며 날아와 안착한 뒤
-           사라지지 않고 상시 고정 유지 (Fill-mode: both / forwards)
+           KINETIC TYPOGRAPHY 15초 종합 루프 사이클
+           1) 초기 1회 비산 날아오기 및 안착 (0% ~ 10%)
+           2) 주요 키워드(비전은, 콘텐츠가, 기준이) 순차 강조 3회 반복 (10% ~ 87%)
+           3) 부드러운 아웃트로 전환 후 처음부터 자동 반복 (95% ~ 100%)
         ========================================================= */
         @keyframes kineticAssemble1 { /* Top-Left Diagonal Fly-In */
             0% {
@@ -461,177 +462,288 @@
                 transform: translate3d(-240px, -150px, 0) scale(1.35) rotate(-14deg);
                 filter: blur(16px);
             }
-            75% {
+            8% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
                 filter: blur(0);
             }
-            100% {
+            10%, 94% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
                 filter: blur(0);
+            }
+            98%, 100% {
+                opacity: 0;
+                transform: translate3d(-30px, -20px, 0) scale(0.98);
+                filter: blur(4px);
             }
         }
 
         @keyframes kineticAssemble2 { /* Top-Right Diagonal Fly-In */
-            0% {
+            0%, 1% {
                 opacity: 0;
                 transform: translate3d(260px, -160px, 0) scale(1.35) rotate(12deg);
                 filter: blur(16px);
             }
-            75% {
+            9% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
                 filter: blur(0);
             }
-            100% {
+            11%, 94% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
                 filter: blur(0);
+            }
+            98%, 100% {
+                opacity: 0;
+                transform: translate3d(30px, -20px, 0) scale(0.98);
+                filter: blur(4px);
             }
         }
 
         @keyframes kineticAssemble3 { /* Deep Left Zoom Fly-In */
-            0% {
+            0%, 2% {
                 opacity: 0;
                 transform: translate3d(-300px, 80px, 0) scale(0.65) rotate(-10deg);
                 filter: blur(16px);
             }
-            75% {
+            10% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0) scale(1.04) rotate(0deg);
                 filter: blur(0);
             }
-            100% {
+            12%, 94% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
                 filter: blur(0);
+            }
+            98%, 100% {
+                opacity: 0;
+                transform: translate3d(-40px, 10px, 0) scale(0.98);
+                filter: blur(4px);
             }
         }
 
         @keyframes kineticAssemble4 { /* Bottom-Left Diagonal Fly-In */
-            0% {
+            0%, 3% {
                 opacity: 0;
                 transform: translate3d(-220px, 200px, 0) scale(1.4) rotate(14deg);
                 filter: blur(16px);
             }
-            75% {
+            11% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
                 filter: blur(0);
             }
-            100% {
+            13%, 94% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
                 filter: blur(0);
+            }
+            98%, 100% {
+                opacity: 0;
+                transform: translate3d(-20px, 30px, 0) scale(0.98);
+                filter: blur(4px);
             }
         }
 
         @keyframes kineticAssemble5 { /* Bottom-Right Zoom Fly-In */
-            0% {
+            0%, 4% {
                 opacity: 0;
                 transform: translate3d(280px, 220px, 0) scale(0.7) rotate(-12deg);
                 filter: blur(16px);
             }
-            75% {
+            12% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0) scale(1.04) rotate(0deg);
                 filter: blur(0);
             }
-            100% {
+            14%, 94% {
                 opacity: 1;
                 transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
                 filter: blur(0);
+            }
+            98%, 100% {
+                opacity: 0;
+                transform: translate3d(30px, 30px, 0) scale(0.98);
+                filter: blur(4px);
             }
         }
 
         .kinetic-piece-1 {
             display: inline-block;
-            animation: kineticAssemble1 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+            animation: kineticAssemble1 15s ease-in-out infinite;
             will-change: transform, opacity, filter;
         }
 
         .kinetic-piece-2 {
             display: inline-block;
-            animation: kineticAssemble2 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+            animation: kineticAssemble2 15s ease-in-out infinite;
             will-change: transform, opacity, filter;
         }
 
         .kinetic-piece-3 {
             display: inline-block;
-            animation: kineticAssemble3 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+            animation: kineticAssemble3 15s ease-in-out infinite;
             will-change: transform, opacity, filter;
         }
 
         .kinetic-piece-4 {
             display: inline-block;
-            animation: kineticAssemble4 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+            animation: kineticAssemble4 15s ease-in-out infinite;
             will-change: transform, opacity, filter;
         }
 
         .kinetic-piece-5 {
             display: inline-block;
-            animation: kineticAssemble5 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
+            animation: kineticAssemble5 15s ease-in-out infinite;
             will-change: transform, opacity, filter;
         }
 
         /* =========================================================
-           KEYWORD HIGHLIGHT ANIMATIONS: 비전, 콘텐츠, 기준
-           초기 1회 진입 후 상시 유지되며, 3개 핵심 단어가 순차적으로
-           주기적 네온 펄스 & 광채 글로우로 전환되어 강조됩니다.
+           KEYWORD HIGHLIGHT 3-CYCLE ANIMATIONS (15s Loop)
+           키워드 순차 강조 (비전은 -> 콘텐츠가 -> 기준이) 총 3회 반복
         ========================================================= */
-        @keyframes highlightVision {
-            0%, 28% {
-                color: #38bdf8;
-                text-shadow: 0 0 25px rgba(56, 189, 248, 0.95), 0 0 50px rgba(14, 165, 233, 0.6);
-                transform: scale(1.08);
-                filter: brightness(1.3);
-            }
-            36%, 100% {
+        @keyframes highlightKeywordVision {
+            0%, 10% {
                 color: #7dd3fc;
-                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 12px rgba(56, 189, 248, 0.35);
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(56, 189, 248, 0.35);
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            /* 1회차 강조 */
+            12%, 17% {
+                color: #38bdf8;
+                text-shadow: 0 0 25px rgba(56, 189, 248, 0.95), 0 0 50px rgba(14, 165, 233, 0.7);
+                transform: scale(1.08);
+                filter: brightness(1.35);
+            }
+            19%, 36% {
+                color: #7dd3fc;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(56, 189, 248, 0.35);
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            /* 2회차 강조 */
+            38%, 43% {
+                color: #38bdf8;
+                text-shadow: 0 0 25px rgba(56, 189, 248, 0.95), 0 0 50px rgba(14, 165, 233, 0.7);
+                transform: scale(1.08);
+                filter: brightness(1.35);
+            }
+            45%, 62% {
+                color: #7dd3fc;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(56, 189, 248, 0.35);
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            /* 3회차 강조 */
+            64%, 69% {
+                color: #38bdf8;
+                text-shadow: 0 0 25px rgba(56, 189, 248, 0.95), 0 0 50px rgba(14, 165, 233, 0.7);
+                transform: scale(1.08);
+                filter: brightness(1.35);
+            }
+            71%, 100% {
+                color: #7dd3fc;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(56, 189, 248, 0.35);
                 transform: scale(1);
                 filter: brightness(1);
             }
         }
 
-        @keyframes highlightContent {
-            0%, 33% {
+        @keyframes highlightKeywordContent {
+            0%, 18% {
                 color: #22d3ee;
-                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 12px rgba(34, 211, 238, 0.35);
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(34, 211, 238, 0.35);
                 transform: scale(1);
                 filter: brightness(1);
             }
-            34%, 62% {
+            /* 1회차 강조 */
+            20%, 25% {
                 color: #67e8f9;
-                text-shadow: 0 0 25px rgba(34, 211, 238, 0.95), 0 0 50px rgba(6, 182, 212, 0.7);
+                text-shadow: 0 0 25px rgba(34, 211, 238, 0.95), 0 0 50px rgba(6, 182, 212, 0.75);
                 transform: scale(1.08);
-                filter: brightness(1.3);
+                filter: brightness(1.35);
             }
-            70%, 100% {
+            27%, 44% {
                 color: #22d3ee;
-                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 12px rgba(34, 211, 238, 0.35);
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(34, 211, 238, 0.35);
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            /* 2회차 강조 */
+            46%, 51% {
+                color: #67e8f9;
+                text-shadow: 0 0 25px rgba(34, 211, 238, 0.95), 0 0 50px rgba(6, 182, 212, 0.75);
+                transform: scale(1.08);
+                filter: brightness(1.35);
+            }
+            53%, 70% {
+                color: #22d3ee;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(34, 211, 238, 0.35);
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            /* 3회차 강조 */
+            72%, 77% {
+                color: #67e8f9;
+                text-shadow: 0 0 25px rgba(34, 211, 238, 0.95), 0 0 50px rgba(6, 182, 212, 0.75);
+                transform: scale(1.08);
+                filter: brightness(1.35);
+            }
+            79%, 100% {
+                color: #22d3ee;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(34, 211, 238, 0.35);
                 transform: scale(1);
                 filter: brightness(1);
             }
         }
 
-        @keyframes highlightStandard {
-            0%, 66% {
+        @keyframes highlightKeywordStandard {
+            0%, 26% {
                 color: #34d399;
-                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 12px rgba(52, 211, 153, 0.35);
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(52, 211, 153, 0.35);
                 transform: scale(1);
                 filter: brightness(1);
             }
-            67%, 95% {
+            /* 1회차 강조 */
+            28%, 33% {
                 color: #6ee7b7;
-                text-shadow: 0 0 25px rgba(52, 211, 153, 0.95), 0 0 50px rgba(16, 185, 129, 0.7);
+                text-shadow: 0 0 25px rgba(52, 211, 153, 0.95), 0 0 50px rgba(16, 185, 129, 0.75);
                 transform: scale(1.08);
-                filter: brightness(1.3);
+                filter: brightness(1.35);
             }
-            100% {
+            35%, 52% {
                 color: #34d399;
-                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 12px rgba(52, 211, 153, 0.35);
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(52, 211, 153, 0.35);
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            /* 2회차 강조 */
+            54%, 59% {
+                color: #6ee7b7;
+                text-shadow: 0 0 25px rgba(52, 211, 153, 0.95), 0 0 50px rgba(16, 185, 129, 0.75);
+                transform: scale(1.08);
+                filter: brightness(1.35);
+            }
+            61%, 78% {
+                color: #34d399;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(52, 211, 153, 0.35);
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            /* 3회차 강조 */
+            80%, 85% {
+                color: #6ee7b7;
+                text-shadow: 0 0 25px rgba(52, 211, 153, 0.95), 0 0 50px rgba(16, 185, 129, 0.75);
+                transform: scale(1.08);
+                filter: brightness(1.35);
+            }
+            87%, 100% {
+                color: #34d399;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(52, 211, 153, 0.35);
                 transform: scale(1);
                 filter: brightness(1);
             }
@@ -639,19 +751,25 @@
 
         .highlight-keyword-vision {
             display: inline-block;
-            animation: highlightVision 4.5s ease-in-out 1.9s infinite;
+            vertical-align: baseline;
+            transform-origin: center bottom;
+            animation: highlightKeywordVision 15s ease-in-out infinite;
             will-change: transform, text-shadow, filter;
         }
 
         .highlight-keyword-content {
             display: inline-block;
-            animation: highlightContent 4.5s ease-in-out 1.9s infinite;
+            vertical-align: baseline;
+            transform-origin: center bottom;
+            animation: highlightKeywordContent 15s ease-in-out infinite;
             will-change: transform, text-shadow, filter;
         }
 
         .highlight-keyword-standard {
             display: inline-block;
-            animation: highlightStandard 4.5s ease-in-out 1.9s infinite;
+            vertical-align: baseline;
+            transform-origin: center bottom;
+            animation: highlightKeywordStandard 15s ease-in-out infinite;
             will-change: transform, text-shadow, filter;
         }
 
@@ -1790,19 +1908,21 @@
             
             <!-- 1. PC 중앙: 키네틱 타이포그래피 3줄 슬로건 -->
             <div class="my-auto flex flex-col items-center justify-center text-center space-y-4 lg:space-y-6 pt-4">
-                <!-- 3줄로 변경된 메인 슬로건 (1회 키네틱 진입 후 핵심 단어 '비전', '콘텐츠', '기준' 강조 효과로 전환) -->
+                <!-- 3줄로 변경된 메인 슬로건 (1회 날아오기 + 3회 키워드 강조 후 반복) -->
                 <div class="flex flex-col items-center justify-center text-center space-y-1.5 md:space-y-2 lg:space-y-3 text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-tight text-white drop-shadow-[0_8px_35px_rgba(0,0,0,0.95)]">
                     <div class="kinetic-piece-1 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">
                         우리의 프레임 안에서
                     </div>
-                    <div class="flex items-center justify-center gap-2.5 lg:gap-3.5 flex-wrap">
+                    <div class="flex items-center justify-center gap-3 lg:gap-4 flex-wrap">
                         <span class="kinetic-piece-2 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">당신의</span>
-                        <span class="kinetic-piece-2 highlight-keyword-vision text-sky-300 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">비전</span><span class="kinetic-piece-2 text-white">은</span>
-                        <span class="kinetic-piece-3 highlight-keyword-content text-cyan-300 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">콘텐츠</span><span class="kinetic-piece-3 text-white">가 되고,</span>
+                        <span class="kinetic-piece-2 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-vision text-sky-300">비전</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">은</span></span>
+                        <span class="kinetic-piece-3 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-content text-cyan-300">콘텐츠</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">가</span></span>
+                        <span class="kinetic-piece-3 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">되고,</span>
                     </div>
-                    <div class="flex items-center justify-center gap-2.5 lg:gap-3.5 flex-wrap">
+                    <div class="flex items-center justify-center gap-3 lg:gap-4 flex-wrap">
                         <span class="kinetic-piece-4 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">세상의</span>
-                        <span class="kinetic-piece-5 highlight-keyword-standard text-brand-mint drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">기준</span><span class="kinetic-piece-5 text-white">이 됩니다</span>
+                        <span class="kinetic-piece-5 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-standard text-brand-mint">기준</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">이</span></span>
+                        <span class="kinetic-piece-5 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">됩니다</span>
                     </div>
                 </div>
 
@@ -1888,18 +2008,20 @@
         <!-- ========================================================================= -->
         <div class="md:hidden flex flex-col justify-between w-full h-full flex-1 relative z-20 space-y-3">
             
-            <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (3줄 구성 - 1회 키네틱 진입 후 핵심 단어 '비전', '콘텐츠', '기준' 강조 효과로 전환) -->
+            <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (3줄 구성 - 1회 날아오기 + 3회 키워드 강조 후 반복) -->
             <div class="w-full px-4 pt-1 pb-0.5 text-center shrink-0">
                 <div class="flex flex-col items-center justify-center text-center space-y-1 text-xl xs:text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight select-none px-1 drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
                     <div class="kinetic-piece-1 text-white">우리의 프레임 안에서</div>
                     <div class="flex items-center justify-center gap-1.5 flex-wrap">
                         <span class="kinetic-piece-2 text-white">당신의</span>
-                        <span class="kinetic-piece-2 highlight-keyword-vision text-sky-300">비전</span><span class="kinetic-piece-2 text-white">은</span>
-                        <span class="kinetic-piece-3 highlight-keyword-content text-cyan-300">콘텐츠</span><span class="kinetic-piece-3 text-white">가 되고,</span>
+                        <span class="kinetic-piece-2 text-white inline-flex items-baseline"><span class="highlight-keyword-vision text-sky-300">비전</span><span class="text-white">은</span></span>
+                        <span class="kinetic-piece-3 text-white inline-flex items-baseline"><span class="highlight-keyword-content text-cyan-300">콘텐츠</span><span class="text-white">가</span></span>
+                        <span class="kinetic-piece-3 text-white">되고,</span>
                     </div>
                     <div class="flex items-center justify-center gap-1.5 flex-wrap">
                         <span class="kinetic-piece-4 text-white">세상의</span>
-                        <span class="kinetic-piece-5 highlight-keyword-standard text-emerald-300">기준</span><span class="kinetic-piece-5 text-white">이 됩니다</span>
+                        <span class="kinetic-piece-5 text-white inline-flex items-baseline"><span class="highlight-keyword-standard text-emerald-300">기준</span><span class="text-white">이</span></span>
+                        <span class="kinetic-piece-5 text-white">됩니다</span>
                     </div>
                 </div>
             </div>
