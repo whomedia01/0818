@@ -1504,7 +1504,19 @@
 
         html, body {
             max-width: 100vw;
+            width: 100%;
             overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Anchor Link Scroll Margin Offset (Prevents fixed header overlap on page anchor navigation) */
+        section[id], div[id] {
+            scroll-margin-top: 88px;
+        }
+        @media (min-width: 768px) {
+            section[id], div[id] {
+                scroll-margin-top: 96px;
+            }
         }
     </style>
 </head>
@@ -1512,7 +1524,7 @@
       x-data="whomediaApp"
       @scroll.window="scrolled = (window.pageYOffset > 20)"
       @keydown.escape.window="closeModal()"
-      class="pb-20 md:pb-0 overflow-x-hidden w-full relative">
+      class="pb-20 md:pb-0 overflow-x-hidden w-full max-w-full relative">
 
     <!-- HEADER / NAVIGATION -->
     <header :class="scrolled ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-gray-100 py-3' : 'bg-brand-navy/80 backdrop-blur-md py-3.5 sm:py-4'"
@@ -1859,8 +1871,8 @@
         </div>
     </section>
 
-    <!-- ORGANIZATION & ECOSYSTEM: (주)후미디어 조직 체계 -->
-    <section id="organization" class="py-8 sm:py-16 lg:py-24 bg-slate-900 text-white border-b border-slate-800 relative overflow-hidden">
+    <!-- ORGANIZATION & ECOSYSTEM: (주)후미디어 조직 체계 및 회사 소개 -->
+    <section id="about" class="py-12 sm:py-16 lg:py-24 bg-slate-900 text-white border-b border-slate-800 relative overflow-hidden w-full max-w-full">
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(30,136,229,0.12),transparent_50%)] pointer-events-none"></div>
 
         <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
