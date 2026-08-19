@@ -450,6 +450,131 @@
             animation: neonNumberPulse 2.2s ease-in-out 1.4s infinite;
         }
 
+        /* =========================================================
+           KINETIC TYPOGRAPHY ASSEMBLE ANIMATIONS (5 FRAGMENTS)
+           Flying in from random directions (Top, Bottom, Left, Right, Diagonal)
+           with high-end cubic-bezier easing and staggered delays
+        ========================================================= */
+        @keyframes kineticAssemble1 { /* Top-Left Diagonal (-120px, -80px) */
+            0% {
+                opacity: 0;
+                transform: translate(-140px, -90px) scale(1.15) rotate(-6deg);
+                filter: blur(8px);
+            }
+            70% {
+                opacity: 1;
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes kineticAssemble2 { /* Top-Right Diagonal (140px, -90px) */
+            0% {
+                opacity: 0;
+                transform: translate(150px, -100px) scale(1.18) rotate(7deg);
+                filter: blur(8px);
+            }
+            70% {
+                opacity: 1;
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes kineticAssemble3 { /* Far Left (-160px, 40px) */
+            0% {
+                opacity: 0;
+                transform: translate(-170px, 50px) scale(0.85) rotate(-5deg);
+                filter: blur(8px);
+            }
+            70% {
+                opacity: 1;
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes kineticAssemble4 { /* Bottom-Left (-90px, 120px) */
+            0% {
+                opacity: 0;
+                transform: translate(-100px, 130px) scale(1.2) rotate(6deg);
+                filter: blur(8px);
+            }
+            70% {
+                opacity: 1;
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes kineticAssemble5 { /* Bottom-Right (150px, 120px) */
+            0% {
+                opacity: 0;
+                transform: translate(160px, 130px) scale(0.9) rotate(-7deg);
+                filter: blur(8px);
+            }
+            70% {
+                opacity: 1;
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+                filter: blur(0);
+            }
+        }
+
+        .kinetic-piece-1 {
+            display: inline-block;
+            animation: kineticAssemble1 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.0s forwards;
+            opacity: 0;
+            will-change: transform, opacity, filter;
+        }
+
+        .kinetic-piece-2 {
+            display: inline-block;
+            animation: kineticAssemble2 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+            opacity: 0;
+            will-change: transform, opacity, filter;
+        }
+
+        .kinetic-piece-3 {
+            display: inline-block;
+            animation: kineticAssemble3 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.30s forwards;
+            opacity: 0;
+            will-change: transform, opacity, filter;
+        }
+
+        .kinetic-piece-4 {
+            display: inline-block;
+            animation: kineticAssemble4 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+            opacity: 0;
+            will-change: transform, opacity, filter;
+        }
+
+        .kinetic-piece-5 {
+            display: inline-block;
+            animation: kineticAssemble5 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.60s forwards;
+            opacity: 0;
+            will-change: transform, opacity, filter;
+        }
+
         /* Pure CSS Cross-Slide & Glyph Expansion Animations (Left to Right / Right to Left with Tracking Expand-Retract) */
         @keyframes slideInAndExpandLeft {
             0% {
@@ -608,6 +733,81 @@
             align-items: center;
             flex-wrap: wrap;
             width: 100%;
+        }
+
+        /* =========================================================
+           APPLE-STYLE HIGH-END SHIMMER / LIGHT SWEEP ANIMATIONS
+           1. [Entrance] Smooth Floating Fade-Up (위로 부드럽게 떠오르며 안착)
+           2. [Loop] Periodic 3-Second Light Sweep along text surface (3초마다 촤르륵 빛 반사)
+        ========================================================= */
+        @keyframes appleFadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(22px);
+                filter: blur(4px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes appleLightSweep {
+            0% {
+                background-position: -200% center;
+            }
+            35% {
+                background-position: 200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .apple-shimmer-entrance {
+            animation: appleFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+            opacity: 0;
+            will-change: transform, opacity, filter;
+        }
+
+        .apple-shimmer-text {
+            display: inline-block;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.72) 0%,
+                rgba(255, 255, 255, 0.72) 30%,
+                rgba(255, 255, 255, 1.0) 46%,
+                rgba(180, 240, 255, 1.0) 50%,
+                rgba(255, 255, 255, 1.0) 54%,
+                rgba(255, 255, 255, 0.72) 70%,
+                rgba(255, 255, 255, 0.72) 100%
+            );
+            background-size: 250% 100%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: appleLightSweep 3.0s ease-in-out infinite;
+            will-change: background-position;
+        }
+
+        .apple-shimmer-mint {
+            display: inline-block;
+            background: linear-gradient(
+                90deg,
+                #34d399 0%,
+                #34d399 30%,
+                #ffffff 48%,
+                #a7f3d0 52%,
+                #34d399 70%,
+                #34d399 100%
+            );
+            background-size: 250% 100%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: appleLightSweep 3.0s ease-in-out infinite;
+            will-change: background-position;
         }
     </style>
     
@@ -1315,46 +1515,33 @@
         <canvas id="hero-particles-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-40"></canvas>
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(30,136,229,0.14),transparent_65%)] pointer-events-none z-0"></div>
 
-        <!-- 1. [상단 영역] 핵심 사업 대형 타이포그래피 (Top Typography Area) -->
-        <div class="w-full px-4 sm:px-6 lg:px-8 pt-4 sm:pt-8 md:pt-10 pb-6 sm:pb-10 md:pb-12 relative z-20 max-w-[1240px] mx-auto text-center">
+        <!-- 1. [모바일 환경 전용] 상단 독립 텍스트 영역 (Mobile: md 미만, 헤더 하단에 영상과 분리 배치) -->
+        <div class="md:hidden w-full px-4 pt-3 pb-5 relative z-20 max-w-[1240px] mx-auto text-center">
             <!-- Eyebrow Tag -->
-            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs sm:text-sm font-bold mb-4 sm:mb-6 shadow-[0_0_15px_rgba(34,211,238,0.15)]">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-bold mb-3.5 shadow-[0_0_15px_rgba(34,211,238,0.15)]">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span>지식을 성과로 만드는 스마트 교육 &amp; 미디어 솔루션</span>
+                <span>스마트 교육 &amp; 미디어 솔루션</span>
             </div>
 
-            <!-- 3 Core Slogans in Giant Bold/Black Typography with Distinct Colors, Center Alignment & Gentle Floating Words -->
-            <div class="flex flex-col items-center justify-center space-y-2 xs:space-y-3 sm:space-y-4 md:space-y-5 max-w-5xl mx-auto select-none px-2 sm:px-4">
-                <!-- Line 1: 이러닝 콘텐츠 개발 (Pure Crisp White, Centered) -->
-                <div class="hero-slide-1 w-full text-center">
-                    <div class="hero-center-row text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-none tracking-tight gap-x-2.5 xs:gap-x-3.5 sm:gap-x-5 drop-shadow-[0_4px_25px_rgba(255,255,255,0.2)]">
-                        <span class="float-word-1">이러닝</span>
-                        <span class="float-word-2">콘텐츠</span>
-                        <span class="float-word-3">개발</span>
-                    </div>
-                </div>
+            <!-- Kinetic Typography Assembled Fragments (Mobile Centered & Flow Wrapped) -->
+            <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1.5 text-2xl xs:text-[26px] sm:text-3xl font-black text-white leading-snug tracking-tight select-none px-2 break-keep drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
+                <span class="kinetic-piece-1 text-white">우리의 프레임 안에서</span>
+                <span class="kinetic-piece-2 text-cyan-300">당신의 비전은</span>
+                <span class="kinetic-piece-3 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-blue-400">콘텐츠가 되고,</span>
+                <span class="kinetic-piece-4 text-emerald-300">세상의</span>
+                <span class="kinetic-piece-5 bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 to-teal-200">기준이 됩니다</span>
+            </div>
 
-                <!-- Line 2: 영상 미디어 제작 전문 (Cyan-to-Blue Vivid Gradient, Centered) -->
-                <div class="hero-slide-2 w-full text-center">
-                    <div class="hero-center-row text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-cyan-400 to-blue-500 leading-none tracking-tight gap-x-2.5 xs:gap-x-3.5 sm:gap-x-5 drop-shadow-[0_6px_30px_rgba(34,211,238,0.35)]">
-                        <span class="float-word-4">영상</span>
-                        <span class="float-word-5">미디어</span>
-                        <span class="float-word-6">제작</span>
-                        <span class="float-word-7">전문</span>
-                    </div>
-                </div>
-
-                <!-- Line 3: B2B/B2G 교육사업 (Mint-to-Emerald Premium Gradient, Centered) -->
-                <div class="hero-slide-3 w-full text-center">
-                    <div class="hero-center-row text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-teal-300 to-brand-mint leading-none tracking-tight gap-x-2.5 xs:gap-x-3.5 sm:gap-x-5 drop-shadow-[0_6px_30px_rgba(0,210,132,0.3)]">
-                        <span class="float-word-8">B2B/B2G</span>
-                        <span class="float-word-9">교육사업</span>
-                    </div>
-                </div>
+            <!-- [모바일 하단 문구: 빛 반사 스윕] 부드럽게 떠오르며 안착 + 3초마다 촤르륵 빛이 반사되는 애플 감성 서브타이틀 -->
+            <div class="apple-shimmer-entrance pt-3">
+                <p class="text-xs xs:text-sm font-bold tracking-tight text-slate-300 flex flex-wrap items-center justify-center gap-1.5">
+                    <span class="apple-shimmer-text">기업 &amp; 공공기관이 신뢰하는</span>
+                    <span class="apple-shimmer-mint font-extrabold">No.1 스마트 미디어 파트너</span>
+                </p>
             </div>
         </div>
 
-        <!-- 2. [중단 영역] 텍스트 없는 클린 비주얼 (영상/이미지) (Middle Clean Visual Area) -->
+        <!-- 2. [비주얼 영역] 영상 컨테이너 (PC에서는 텍스트가 영상 정중앙 위에 오버레이됨) -->
         <div class="w-full px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8 md:pb-10 relative z-20 max-w-[1240px] mx-auto">
             <div class="relative w-full aspect-[16/10] sm:aspect-[21/9] md:aspect-[2.35/1] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),0_0_30px_rgba(34,211,238,0.08)] flex items-center justify-center">
                 <!-- 100% Crisp, Pure Clean Visual Video scaled up (1.3x) -->
@@ -1363,6 +1550,37 @@
                        style="object-position: center 35%;">
                     <source src="https://raw.githubusercontent.com/whomedia01/whomedia4/main/whomedia_hero.mp4" type="video/mp4" />
                 </video>
+
+                <!-- PC Overlay Gradient Scrim (for legibility) -->
+                <div class="hidden md:block absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/60 pointer-events-none z-[5]"></div>
+
+                <!-- [PC 환경 전용] 영상 정중앙 오버레이 키네틱 타이포그래피 (PC: md 이상, position: absolute; z-index: 10) -->
+                <div class="hidden md:flex absolute inset-0 z-10 items-center justify-center p-6 sm:p-8 md:p-12 text-center pointer-events-none select-none">
+                    <div class="max-w-4xl mx-auto flex flex-col items-center justify-center space-y-3 lg:space-y-4">
+                        <!-- Eyebrow Tag -->
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 text-xs lg:text-sm font-bold shadow-[0_0_20px_rgba(34,211,238,0.3)] backdrop-blur-md">
+                            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                            <span>지식을 성과로 만드는 스마트 교육 &amp; 미디어 솔루션</span>
+                        </div>
+
+                        <!-- 5 Kinetic Typography Fragments Assembled in Center (PC: pure text-white with deep cinematic text-shadow) -->
+                        <div class="flex flex-wrap items-center justify-center gap-x-3.5 lg:gap-x-5 gap-y-2 text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)]">
+                            <span class="kinetic-piece-1 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">우리의 프레임 안에서</span>
+                            <span class="kinetic-piece-2 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">당신의 비전은</span>
+                            <span class="kinetic-piece-3 text-cyan-300 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">콘텐츠가 되고,</span>
+                            <span class="kinetic-piece-4 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">세상의</span>
+                            <span class="kinetic-piece-5 text-brand-mint drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">기준이 됩니다</span>
+                        </div>
+
+                        <!-- [하단 문구: 빛 반사 스윕] 부드럽게 떠오르며 안착 + 3초마다 촤르륵 빛이 반사되는 애플 감성 서브타이틀 -->
+                        <div class="apple-shimmer-entrance pt-1 sm:pt-2">
+                            <p class="text-sm md:text-base lg:text-lg font-bold tracking-normal drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] flex items-center justify-center gap-2">
+                                <span class="apple-shimmer-text">대한민국 대표 기업 &amp; 공공기관이 신뢰하는</span>
+                                <span class="apple-shimmer-mint font-extrabold">No.1 스마트 미디어 파트너</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
