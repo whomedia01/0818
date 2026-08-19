@@ -1512,7 +1512,7 @@
       x-data="whomediaApp"
       @scroll.window="scrolled = (window.pageYOffset > 20)"
       @keydown.escape.window="closeModal()"
-      class="pb-20 md:pb-0">
+      class="pb-20 md:pb-0 overflow-x-hidden w-full relative">
 
     <!-- HEADER / NAVIGATION -->
     <header :class="scrolled ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-gray-100 py-3' : 'bg-brand-navy/80 backdrop-blur-md py-3.5 sm:py-4'"
@@ -2653,22 +2653,25 @@
     </section>
 
     <!-- PORTFOLIO -->
-    <section id="reference" aria-label="포트폴리오 및 주요 제작 실적" class="py-8 sm:py-16 lg:py-24 bg-white relative overflow-hidden">
-        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
+    <section id="reference" aria-label="포트폴리오 및 주요 제작 실적" class="py-8 sm:py-16 lg:py-24 bg-white relative overflow-hidden w-full max-w-full">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="text-center max-w-2xl mx-auto mb-6 sm:mb-8 px-2">
                 <span class="inline-block px-3 py-1 rounded-md bg-brand-mint-light text-brand-mint-hover text-xs font-semibold mb-2 sm:mb-3">
                     PORTFOLIO
                 </span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-brand-text mb-2">콘텐츠 개발 &amp; 영상 포트폴리오</h2>
-                <p class="text-gray-500 text-xs sm:text-sm">교육 컨설팅부터 미디어 영상 제작, 후캠퍼스 평생교육, 디지털 언론 홍보까지 분야별 주요 수행 사례입니다.</p>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-brand-text mb-2 tracking-tight break-keep" style="word-break: keep-all; overflow-wrap: break-word;">콘텐츠 개발 &amp; 영상 포트폴리오</h2>
+                <p class="text-gray-500 text-[13px] sm:text-sm leading-relaxed max-w-xl mx-auto break-keep" style="word-break: keep-all; overflow-wrap: break-word;">교육 컨설팅부터 미디어 영상 제작, 후캠퍼스 평생교육, 디지털 언론 홍보까지 분야별 주요 수행 사례입니다.</p>
             </div>
 
-            <!-- Portfolio Category Filter Tabs -->
-            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 mb-6 -mx-4 px-4 sm:mx-0 sm:px-0 justify-start sm:justify-center">
-                <button @click="refTab = 'all'" :class="refTab === 'all' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="px-4 py-2 rounded-xl text-xs sm:text-sm shrink-0 transition-all border border-slate-200">전체보기</button>
-                <button @click="refTab = 'edu'" :class="refTab === 'edu' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="px-4 py-2 rounded-xl text-xs sm:text-sm shrink-0 transition-all border border-slate-200">이러닝 콘텐츠</button>
-                <button @click="refTab = 'production'" :class="refTab === 'production' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="px-4 py-2 rounded-xl text-xs sm:text-sm shrink-0 transition-all border border-slate-200">영상 프로덕션</button>
-                <button @click="refTab = 'press'" :class="refTab === 'press' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="px-4 py-2 rounded-xl text-xs sm:text-sm shrink-0 transition-all border border-slate-200">언론PR &amp; 홍보</button>
+            <!-- Portfolio Category Filter Tabs (Horizontal Scroll & Snap-x without page overflow) -->
+            <div class="w-full max-w-full overflow-hidden mb-6">
+                <div class="flex items-center gap-2 overflow-x-auto snap-x no-scrollbar py-2 px-1 justify-start sm:justify-center w-full max-w-full"
+                     style="-webkit-overflow-scrolling: touch;">
+                    <button @click="refTab = 'all'" :class="refTab === 'all' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="flex-shrink-0 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm transition-all border border-slate-200 cursor-pointer">전체보기</button>
+                    <button @click="refTab = 'edu'" :class="refTab === 'edu' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="flex-shrink-0 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm transition-all border border-slate-200 cursor-pointer">이러닝 콘텐츠</button>
+                    <button @click="refTab = 'production'" :class="refTab === 'production' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="flex-shrink-0 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm transition-all border border-slate-200 cursor-pointer">영상 프로덕션</button>
+                    <button @click="refTab = 'press'" :class="refTab === 'press' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="flex-shrink-0 snap-start whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm transition-all border border-slate-200 cursor-pointer">언론PR &amp; 홍보</button>
+                </div>
             </div>
 
             <!-- Portfolio Cards Grid -->
