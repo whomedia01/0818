@@ -811,6 +811,24 @@
         }
 
         /* =========================================================
+           DIGITAL BREATHING (호흡) ANIMATION
+           Smooth Opacity Pulse (4s ease-in-out infinite)
+        ========================================================= */
+        @keyframes pulse-breath {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .text-breath {
+            animation: pulse-breath 4s ease-in-out infinite;
+            will-change: opacity;
+        }
+
+        /* =========================================================
            CARD 1 TEXT SEQUENCE ROLLING ANIMATIONS (10s Infinite Cycle)
            - Step 1 (0% ~ 15% / 0s ~ 1.5s): '온라인 교육?' (Fade & Slide Up In -> Out)
            - Step 2 (15% ~ 30% / 1.5s ~ 3.0s): '오프라인 교육?' (Fade & Slide Up In -> Out)
@@ -1702,11 +1720,10 @@
                     <span class="kinetic-piece-5 text-brand-mint drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">기준이 됩니다</span>
                 </div>
 
-                <!-- [하단 문구: 빛 반사 스윕] 부드럽게 떠오르며 안착 + 3초마다 촤르륵 빛이 반사되는 서브타이틀 -->
-                <div class="apple-shimmer-entrance pt-2">
-                    <p class="text-base md:text-lg lg:text-xl font-bold tracking-normal drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)] flex items-center justify-center gap-2">
-                        <span class="apple-shimmer-text">데이터 기반 학습 설계를 선도하는</span>
-                        <span class="apple-shimmer-mint font-extrabold">No.1 에듀테크 아키텍처 파트너</span>
+                <!-- [메인 슬로건 하단 서브 텍스트: 디지털 호흡(Breathing) 애니메이션] -->
+                <div class="pt-2">
+                    <p class="text-breath text-sm tracking-[0.2em] font-medium text-slate-200 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                        영상 제작 · 콘텐츠 개발 · 교육과정 구축
                     </p>
                 </div>
 
@@ -1820,10 +1837,10 @@
                         </div>
                     </div>
 
-                    <div class="apple-shimmer-entrance pt-1.5">
-                        <p class="text-xs xs:text-sm font-extrabold tracking-tight text-slate-300 flex flex-wrap items-center justify-center gap-1.5 break-keep">
-                            <span class="apple-shimmer-text">미래 가치를 창출하는</span>
-                            <span class="apple-shimmer-mint font-black">No.1 미디어 인프라 파트너</span>
+                    <!-- [모바일 슬로건 하단 서브 텍스트: 디지털 호흡(Breathing) 애니메이션] -->
+                    <div class="pt-1.5">
+                        <p class="text-breath text-sm tracking-[0.2em] font-medium text-slate-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] break-keep">
+                            영상 제작 · 콘텐츠 개발 · 교육과정 구축
                         </p>
                     </div>
                 </div>
