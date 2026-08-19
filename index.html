@@ -1810,15 +1810,21 @@
         <!-- ========================================================================= -->
         <div class="hidden md:flex absolute inset-0 z-10 flex-col justify-between pt-6 lg:pt-8 pb-8 px-6 lg:px-12 max-w-[1400px] mx-auto left-0 right-0 pointer-events-none select-none">
             
-            <!-- 1. PC 중앙: 키네틱 타이포그래피 슬로건 + 애플 감성 빛 반사 스윕 텍스트 -->
+            <!-- 1. PC 중앙: 키네틱 타이포그래피 슬로건 (당신이 만드는 가치 / 우리의 콘텐츠 기술로 완성됩니다) + 은은한 다크 오버레이 -->
             <div class="my-auto flex flex-col items-center justify-center text-center space-y-4 lg:space-y-6 pt-4">
-                <!-- 5 Kinetic Typography Fragments Assembled in Center -->
-                <div class="flex flex-wrap items-center justify-center gap-x-4 lg:gap-x-6 gap-y-2 text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-tight text-white drop-shadow-[0_8px_35px_rgba(0,0,0,0.95)]">
-                    <span class="kinetic-piece-1 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">우리의 프레임 안에서</span>
-                    <span class="kinetic-piece-2 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">당신의 비전은</span>
-                    <span class="kinetic-piece-3 text-cyan-300 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">콘텐츠가 되고</span>
-                    <span class="kinetic-piece-4 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">세상의</span>
-                    <span class="kinetic-piece-5 text-brand-mint drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">기준이 됩니다</span>
+                <!-- 2-Line High-End Kinetic Typography Slogan with Soft Dark Backdrop Overlay for Contrast -->
+                <div class="relative px-6 py-4 rounded-3xl bg-slate-950/45 backdrop-blur-sm border border-white/5 shadow-2xl flex flex-col items-center justify-center gap-y-2 select-none">
+                    <!-- Line 1: 당신이 만드는 가치 (Heavy Weight / High Contrast) -->
+                    <div class="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-tight text-white drop-shadow-[0_8px_35px_rgba(0,0,0,0.95)] flex items-center justify-center gap-3">
+                        <span class="kinetic-piece-1 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">당신이 만드는</span>
+                        <span class="kinetic-piece-2 text-cyan-300 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">가치,</span>
+                    </div>
+                    <!-- Line 2: 우리의 콘텐츠 기술로 완성됩니다 (Refined Weight Contrast) -->
+                    <div class="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-normal leading-tight text-slate-100 drop-shadow-[0_8px_35px_rgba(0,0,0,0.95)] flex items-center justify-center gap-2.5 flex-wrap">
+                        <span class="kinetic-piece-3 font-semibold text-slate-200">우리의</span>
+                        <span class="kinetic-piece-4 font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-brand-mint to-cyan-300 drop-shadow-[0_4px_20px_rgba(52,211,153,0.4)]">콘텐츠 기술로</span>
+                        <span class="kinetic-piece-5 font-bold text-white">완성됩니다</span>
+                    </div>
                 </div>
 
                 <!-- [하단 문구: 빛 반사 스윕] 부드럽게 떠오르며 안착 + 3초마다 촤르륵 빛이 반사되는 서브타이틀 -->
@@ -1920,29 +1926,27 @@
             
             <!-- [상단 그룹: 슬로건 + 영상] 슬로건 가로폭 극대화 및 영상 높이 15~20% 축소(h-[32vh] / aspect-[16/9] 비례) -->
             <div class="flex-1 w-full flex flex-col justify-center px-4 pb-1 min-h-0 gap-3 pt-1">
-                <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (text-3xl / text-4xl 급 볼드 폰트 + 3문장 단위 덩어리감) -->
+                <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (2행 분할 + 가로폭 꽉 차는 text-3xl/text-4xl 볼드 폰트) -->
                 <div class="w-full text-center shrink-0 px-1">
-                    <div class="flex flex-col items-center justify-center gap-y-0.5 text-[1.75rem] xs:text-3xl sm:text-4xl font-extrabold text-white leading-tight tracking-tight select-none break-keep drop-shadow-[0_6px_22px_rgba(0,0,0,0.95)]">
-                        <!-- Line 1: 우리의 프레임 안에서 -->
-                        <div class="w-full flex items-center justify-center">
-                            <span class="kinetic-piece-1 text-white">우리의 프레임 안에서</span>
-                        </div>
-                        <!-- Line 2: 당신의 비전은 콘텐츠가 되고 -->
+                    <!-- Soft Dark Blur Overlay Container for Maximum Contrast against Background -->
+                    <div class="inline-flex flex-col items-center justify-center gap-y-1.5 px-4 py-2.5 rounded-2xl bg-slate-950/45 backdrop-blur-xs border border-white/5 shadow-xl w-full">
+                        <!-- Line 1: 당신이 만드는 가치 (Heavy Weight / Contrast) -->
                         <div class="w-full flex items-center justify-center gap-1.5 flex-wrap">
-                            <span class="kinetic-piece-2 text-cyan-300">당신의 비전은</span>
-                            <span class="kinetic-piece-3 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-teal-200 to-blue-400">콘텐츠가 되고</span>
+                            <span class="kinetic-piece-1 text-[1.85rem] xs:text-3xl sm:text-4xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.95)]">당신이 만드는</span>
+                            <span class="kinetic-piece-2 text-[1.85rem] xs:text-3xl sm:text-4xl font-black text-cyan-300 tracking-tight drop-shadow-[0_4px_20px_rgba(34,211,238,0.5)]">가치,</span>
                         </div>
-                        <!-- Line 3: 세상의 기준이 됩니다. -->
+                        <!-- Line 2: 우리의 콘텐츠 기술로 완성됩니다 (Refined Weight Contrast) -->
                         <div class="w-full flex items-center justify-center gap-1.5 flex-wrap">
-                            <span class="kinetic-piece-4 text-emerald-300">세상의</span>
-                            <span class="kinetic-piece-5 bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 to-teal-200">기준이 됩니다.</span>
+                            <span class="kinetic-piece-3 text-[1.45rem] xs:text-2xl sm:text-3xl font-bold text-slate-200 tracking-tight">우리의</span>
+                            <span class="kinetic-piece-4 text-[1.45rem] xs:text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-brand-mint to-cyan-300 tracking-tight drop-shadow-[0_4px_20px_rgba(52,211,153,0.4)]">콘텐츠 기술로</span>
+                            <span class="kinetic-piece-5 text-[1.45rem] xs:text-2xl sm:text-3xl font-bold text-white tracking-tight">완성됩니다</span>
                         </div>
                     </div>
 
                     <div class="apple-shimmer-entrance pt-1.5">
                         <p class="text-xs xs:text-sm font-extrabold tracking-tight text-slate-300 flex flex-wrap items-center justify-center gap-1.5 break-keep">
-                            <span class="apple-shimmer-text">미래 가치를 창출하는</span>
-                            <span class="apple-shimmer-mint font-black">No.1 미디어 인프라 파트너</span>
+                            <span class="apple-shimmer-text">데이터 기반 학습 설계를 선도하는</span>
+                            <span class="apple-shimmer-mint font-black">No.1 에듀테크 파트너</span>
                         </p>
                     </div>
                 </div>
@@ -2365,88 +2369,88 @@
                 </p>
             </div>
 
-            <!-- 3대 핵심 솔루션 카드 (시스템/칩셋/네트워크 라인 아이콘 + 데이터 지향) -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+            <!-- 3대 핵심 솔루션 (배경 박스/테두리/그림자 삭제 - 투명 미니멀리즘 디자인) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 max-w-6xl mx-auto">
                 <!-- 1. Adaptive Learning Systems (적응형 학습 시스템) -->
-                <div class="group bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl hover:shadow-2xl hover:border-teal-500/60 transition-all duration-300 flex flex-col justify-between">
-                    <div class="relative aspect-[16/10] overflow-hidden bg-slate-950">
+                <div class="group bg-transparent text-slate-900 transition-all duration-300 flex flex-col justify-between">
+                    <div class="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100 mb-5">
                         <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1000&q=80" 
                              alt="Adaptive Learning Systems" 
                              referrerpolicy="no-referrer"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent"></div>
                         <!-- 시스템 / 칩셋 라인 아이콘 -->
-                        <div class="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-teal-500/90 backdrop-blur-md text-slate-950 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
+                        <div class="absolute top-4 left-4 w-11 h-11 rounded-xl bg-teal-500 text-slate-950 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
                         </div>
                     </div>
-                    <div class="p-6 lg:p-7 flex flex-col justify-between flex-1">
+                    <div class="flex flex-col justify-between flex-1 px-1">
                         <div>
-                            <div class="text-xs font-extrabold text-teal-400 uppercase tracking-wider mb-1">01. ADAPTIVE LEARNING</div>
-                            <h3 class="text-xl lg:text-2xl font-black text-white mb-2 group-hover:text-teal-300 transition-colors">Adaptive Learning Systems</h3>
-                            <div class="text-xs text-teal-300 font-bold mb-3">(적응형 학습 시스템)</div>
+                            <div class="text-xs font-black text-teal-600 uppercase tracking-widest mb-1.5">01. ADAPTIVE LEARNING</div>
+                            <h3 class="text-xl lg:text-2xl font-black text-slate-900 mb-1 group-hover:text-teal-600 transition-colors">Adaptive Learning Systems</h3>
+                            <div class="text-xs text-teal-700 font-bold mb-3">(적응형 학습 시스템)</div>
                         </div>
-                        <div class="pt-4 border-t border-slate-800 space-y-1">
-                            <p class="text-sm sm:text-base font-bold text-slate-100 break-keep">
+                        <div class="pt-3 border-t border-slate-200 space-y-1">
+                            <p class="text-sm sm:text-base font-bold text-slate-800 break-keep">
                                 데이터 기반 맞춤형 학습 경로 설계
                             </p>
-                            <p class="text-xs text-slate-400 font-medium">AI 디지털 교과서 · 스마트 LMS 연계 · 학습자 진단</p>
+                            <p class="text-xs text-slate-500 font-normal">AI 디지털 교과서 · 스마트 LMS 연계 · 학습자 진단</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- 2. Immersive Learning Media (몰입형 학습 미디어) -->
-                <div class="group bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl hover:shadow-2xl hover:border-cyan-500/60 transition-all duration-300 flex flex-col justify-between">
-                    <div class="relative aspect-[16/10] overflow-hidden bg-slate-950">
+                <div class="group bg-transparent text-slate-900 transition-all duration-300 flex flex-col justify-between">
+                    <div class="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100 mb-5">
                         <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1000&q=80" 
                              alt="Immersive Learning Media" 
                              referrerpolicy="no-referrer"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent"></div>
                         <!-- 시스템 / 네트워크 & 그래프 라인 아이콘 -->
-                        <div class="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-cyan-500/90 backdrop-blur-md text-slate-950 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+                        <div class="absolute top-4 left-4 w-11 h-11 rounded-xl bg-cyan-500 text-slate-950 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
                         </div>
                     </div>
-                    <div class="p-6 lg:p-7 flex flex-col justify-between flex-1">
+                    <div class="flex flex-col justify-between flex-1 px-1">
                         <div>
-                            <div class="text-xs font-extrabold text-cyan-400 uppercase tracking-wider mb-1">02. IMMERSIVE MEDIA</div>
-                            <h3 class="text-xl lg:text-2xl font-black text-white mb-2 group-hover:text-cyan-300 transition-colors">Immersive Learning Media</h3>
-                            <div class="text-xs text-cyan-300 font-bold mb-3">(몰입형 학습 미디어)</div>
+                            <div class="text-xs font-black text-cyan-600 uppercase tracking-widest mb-1.5">02. IMMERSIVE MEDIA</div>
+                            <h3 class="text-xl lg:text-2xl font-black text-slate-900 mb-1 group-hover:text-cyan-600 transition-colors">Immersive Learning Media</h3>
+                            <div class="text-xs text-cyan-700 font-bold mb-3">(몰입형 학습 미디어)</div>
                         </div>
-                        <div class="pt-4 border-t border-slate-800 space-y-1">
-                            <p class="text-sm sm:text-base font-bold text-slate-100 break-keep">
+                        <div class="pt-3 border-t border-slate-200 space-y-1">
+                            <p class="text-sm sm:text-base font-bold text-slate-800 break-keep">
                                 4K 실감형 시뮬레이션 및 인터랙션
                             </p>
-                            <p class="text-xs text-slate-400 font-medium">가상 크로마키 · 인터랙티브 CG · 86" 스마트 클래스</p>
+                            <p class="text-xs text-slate-500 font-normal">가상 크로마키 · 인터랙티브 CG · 86" 스마트 클래스</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- 3. Hybrid Education Framework (온·오프 하이브리드 교육 프레임워크) -->
-                <div class="group bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl hover:shadow-2xl hover:border-amber-500/60 transition-all duration-300 flex flex-col justify-between">
-                    <div class="relative aspect-[16/10] overflow-hidden bg-slate-950">
+                <div class="group bg-transparent text-slate-900 transition-all duration-300 flex flex-col justify-between">
+                    <div class="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100 mb-5">
                         <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1000&q=80" 
                              alt="Hybrid Education Framework" 
                              referrerpolicy="no-referrer"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent"></div>
                         <!-- 노드 네트워크 & 시스템 라인 아이콘 -->
-                        <div class="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-amber-500/90 backdrop-blur-md text-slate-950 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        <div class="absolute top-4 left-4 w-11 h-11 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         </div>
                     </div>
-                    <div class="p-6 lg:p-7 flex flex-col justify-between flex-1">
+                    <div class="flex flex-col justify-between flex-1 px-1">
                         <div>
-                            <div class="text-xs font-extrabold text-amber-400 uppercase tracking-wider mb-1">03. HYBRID FRAMEWORK</div>
-                            <h3 class="text-xl lg:text-2xl font-black text-white mb-2 group-hover:text-amber-300 transition-colors">Hybrid Education Framework</h3>
-                            <div class="text-xs text-amber-300 font-bold mb-3">(온·오프 하이브리드 교육 프레임워크)</div>
+                            <div class="text-xs font-black text-amber-600 uppercase tracking-widest mb-1.5">03. HYBRID FRAMEWORK</div>
+                            <h3 class="text-xl lg:text-2xl font-black text-slate-900 mb-1 group-hover:text-amber-600 transition-colors">Hybrid Education Framework</h3>
+                            <div class="text-xs text-amber-700 font-bold mb-3">(온·오프 하이브리드 교육 프레임워크)</div>
                         </div>
-                        <div class="pt-4 border-t border-slate-800 space-y-1">
-                            <p class="text-sm sm:text-base font-bold text-slate-100 break-keep">
+                        <div class="pt-3 border-t border-slate-200 space-y-1">
+                            <p class="text-sm sm:text-base font-bold text-slate-800 break-keep">
                                 온·오프라인 융합 지식 전달 체계
                             </p>
-                            <p class="text-xs text-slate-400 font-medium">블렌디드 러닝 · 한국AI교육일보 · 후캠퍼스 평생교육</p>
+                            <p class="text-xs text-slate-500 font-normal">블렌디드 러닝 · 한국AI교육일보 · 후캠퍼스 평생교육</p>
                         </div>
                     </div>
                 </div>
@@ -2491,38 +2495,38 @@
                 </div>
             </div>
 
-            <!-- Specs Banner with Animated Stat Counters and 3D Tilt Cards -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6 mb-8 sm:mb-12">
-                <div class="tilt-card bg-slate-900/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-slate-800 shadow-xl flex flex-col items-center text-center hover:border-brand-mint/40 hover:shadow-brand-mint/10 transition-all duration-300">
-                    <span class="inline-flex items-center justify-center px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-brand-mint/15 text-brand-mint font-black text-sm sm:text-base mb-2.5 sm:mb-3.5 border border-brand-mint/30 shadow-xs">
+            <!-- Specs Banner with Animated Stat Counters (투명 미니멀리즘 디자인) -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-10 sm:mb-16">
+                <div class="bg-transparent p-4 sm:p-5 flex flex-col items-center text-center">
+                    <span class="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full bg-brand-mint/10 text-brand-mint font-black text-sm sm:text-base mb-2 border border-brand-mint/20">
                         <span class="stat-counter font-black" data-counter-target="160" data-counter-suffix="평">0평</span>
                     </span>
                     <h3 class="text-base sm:text-lg lg:text-xl font-bold text-white mb-1 tracking-tight">대형 스튜디오</h3>
-                    <p class="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">6개 전용 스튜디오 &amp; 부대시설</p>
+                    <p class="text-xs sm:text-sm text-slate-400 font-normal leading-relaxed">6개 전용 스튜디오 &amp; 부대시설</p>
                 </div>
 
-                <div class="tilt-card bg-slate-900/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-slate-800 shadow-xl flex flex-col items-center text-center hover:border-blue-500/40 hover:shadow-blue-500/10 transition-all duration-300">
-                    <span class="inline-flex items-center justify-center px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-blue-500/15 text-blue-400 font-black text-sm sm:text-base mb-2.5 sm:mb-3.5 border border-blue-500/30 shadow-xs">
+                <div class="bg-transparent p-4 sm:p-5 flex flex-col items-center text-center">
+                    <span class="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full bg-blue-500/10 text-blue-400 font-black text-sm sm:text-base mb-2 border border-blue-500/20">
                         <span class="stat-counter font-black" data-counter-target="86" data-counter-suffix="인치">0인치</span>
                     </span>
                     <h3 class="text-base sm:text-lg lg:text-xl font-bold text-white mb-1 tracking-tight">전자칠판</h3>
-                    <p class="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">실시간 판서 시스템</p>
+                    <p class="text-xs sm:text-sm text-slate-400 font-normal leading-relaxed">실시간 판서 시스템</p>
                 </div>
 
-                <div class="tilt-card bg-slate-900/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-slate-800 shadow-xl flex flex-col items-center text-center hover:border-teal-500/40 hover:shadow-teal-500/10 transition-all duration-300">
-                    <span class="inline-flex items-center justify-center px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-teal-500/15 text-teal-300 font-black text-sm sm:text-base mb-2.5 sm:mb-3.5 border border-teal-500/30 shadow-xs">
+                <div class="bg-transparent p-4 sm:p-5 flex flex-col items-center text-center">
+                    <span class="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full bg-teal-500/10 text-teal-300 font-black text-sm sm:text-base mb-2 border border-teal-500/20">
                         <span class="stat-counter font-black" data-counter-target="6.6" data-counter-decimals="1" data-counter-suffix="m">0.0m</span>
                     </span>
                     <h3 class="text-base sm:text-lg lg:text-xl font-bold text-white mb-1 tracking-tight">대형 크로마키</h3>
-                    <p class="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">실시간 CG 가상합성 세트</p>
+                    <p class="text-xs sm:text-sm text-slate-400 font-normal leading-relaxed">실시간 CG 가상합성 세트</p>
                 </div>
 
-                <div class="tilt-card bg-slate-900/90 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-slate-800 shadow-xl flex flex-col items-center text-center hover:border-purple-500/40 hover:shadow-purple-500/10 transition-all duration-300">
-                    <span class="inline-flex items-center justify-center px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-purple-500/15 text-purple-300 font-black text-sm sm:text-base mb-2.5 sm:mb-3.5 border border-purple-500/30 shadow-xs">
+                <div class="bg-transparent p-4 sm:p-5 flex flex-col items-center text-center">
+                    <span class="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full bg-purple-500/10 text-purple-300 font-black text-sm sm:text-base mb-2 border border-purple-500/20">
                         <span class="stat-counter font-black" data-counter-target="100" data-counter-suffix="% SYSTEM">0%</span>
                     </span>
                     <h3 class="text-base sm:text-lg lg:text-xl font-bold text-white mb-1 tracking-tight">전용 부조정실</h3>
-                    <p class="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">다채널 스위쳐 &amp; 모니터링</p>
+                    <p class="text-xs sm:text-sm text-slate-400 font-normal leading-relaxed">다채널 스위쳐 &amp; 모니터링</p>
                 </div>
             </div>
 
@@ -2712,12 +2716,12 @@
                 </div>
             </div>
 
-            <!-- Bottom Info Card -->
-            <div class="bg-gradient-to-r from-slate-800 via-slate-800/90 to-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl text-center">
-                <h3 class="text-lg sm:text-2xl font-extrabold text-white mb-2">
+            <!-- Bottom Info Banner (투명 미니멀리즘 디자인) -->
+            <div class="bg-transparent py-4 text-center border-t border-slate-800/80 mt-6">
+                <h3 class="text-lg sm:text-2xl font-black text-white mb-1.5">
                     160평 전문 스튜디오 대관 및 시설
                 </h3>
-                <p class="text-xs sm:text-base text-slate-300 font-normal break-keep max-w-2xl mx-auto">
+                <p class="text-xs sm:text-sm text-slate-400 font-normal break-keep max-w-2xl mx-auto">
                     전자칠판, 고성능 카메라, 크로마키, 부조정실을 갖춘 후미디어 스튜디오에서 최상의 콘텐츠를 연출해보세요.
                 </p>
             </div>
@@ -2761,12 +2765,12 @@
                 </div>
             </div>
 
-            <!-- Portfolio Cards Grid with Learning Effectiveness Badges -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            <!-- Portfolio Cards Grid (투명 미니멀리즘 디자인 - 테두리/박스/그림자 제거) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-7">
                 <template x-for="(item, idx) in filteredPortfolio.slice(0, portfolioLimit)" :key="item.id">
                     <article @click="openModal(item.id, item.title)"
-                          class="tilt-card w-full group relative bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-cyan-500/60 cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
-                        <div class="aspect-video relative overflow-hidden bg-slate-950">
+                          class="group relative bg-transparent cursor-pointer transition-all duration-300 flex flex-col justify-between">
+                        <div class="aspect-video relative overflow-hidden rounded-2xl bg-slate-950 mb-3">
                             <img :src="'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg'" 
                                  @error="$el.src='https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80'"
                                  :alt="item.title" 
@@ -2774,8 +2778,8 @@
                                  referrerpolicy="no-referrer">
                             
                             <!-- 학습 효과성(Efficacy) 지표 뱃지 - Top Left Overlay -->
-                            <div class="absolute top-2 left-2 z-10">
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-900/90 backdrop-blur-md border border-cyan-400/40 text-[10px] font-black text-cyan-300 shadow-sm">
+                            <div class="absolute top-2.5 left-2.5 z-10">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-slate-950/80 backdrop-blur-md text-[10px] font-black text-cyan-300">
                                     <svg class="w-2.5 h-2.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
                                     <span x-text="item.efficiency || '학습효과 검증'"></span>
                                 </span>
@@ -2787,17 +2791,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="p-3 sm:p-4 bg-slate-50/50 flex flex-col justify-between flex-1">
+                        <div class="flex flex-col justify-between flex-1 px-1">
                             <div>
                                 <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-[10px] font-extrabold text-cyan-700 uppercase tracking-wider" x-text="item.tag"></span>
-                                    <span class="text-[9px] bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-600 font-bold" x-text="item.label"></span>
+                                    <span class="text-[10px] font-black text-cyan-700 uppercase tracking-widest" x-text="item.tag"></span>
+                                    <span class="text-[9px] text-slate-500 font-bold" x-text="item.label"></span>
                                 </div>
                                 <h3 class="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-cyan-600 transition-colors line-clamp-2 leading-snug" x-text="item.title"></h3>
                             </div>
                             <!-- 설계 메트릭 (Learning Objective Architecture) -->
-                            <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between text-[10px] text-slate-500 font-medium">
-                                <span class="flex items-center gap-1 text-slate-600 font-semibold truncate">
+                            <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500 font-medium">
+                                <span class="flex items-center gap-1 text-slate-600 font-medium truncate">
                                     <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 shrink-0"></span>
                                     <span x-text="item.metric || '데이터 기반 설계'"></span>
                                 </span>
@@ -2901,11 +2905,11 @@
                 </p>
             </div>
 
-            <!-- Inquiry Form -->
-            <div class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xl">
+            <!-- Inquiry Form (투명 미니멀리즘 디자인) -->
+            <div class="bg-white/80 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-100">
                 <div class="flex items-center justify-between mb-4 sm:mb-6 pb-3 border-b border-slate-100">
                     <h3 class="text-base sm:text-lg font-bold text-slate-900">솔루션 상담 신청</h3>
-                    <span class="text-[10px] sm:text-xs text-cyan-700 font-semibold bg-cyan-50 px-2.5 py-1 rounded-full border border-cyan-200">전담 아키텍트 배정</span>
+                    <span class="text-[10px] sm:text-xs text-cyan-700 font-semibold bg-cyan-50 px-2.5 py-1 rounded-full border border-cyan-100">전담 아키텍트 배정</span>
                 </div>
                 
                 <form @submit.prevent="submitInquiry()" class="space-y-3 sm:space-y-4">
