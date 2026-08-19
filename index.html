@@ -451,178 +451,208 @@
         }
 
         /* =========================================================
-           KINETIC TYPOGRAPHY PERIODIC ASSEMBLE ANIMATIONS (5 FRAGMENTS)
-           일정 시간(7.5초 주기)마다 반복되는 시네마틱 키네틱 타이포그래피 효과
-           (비산 및 안착 -> 선명한 유지 및 광채 펄스 -> 부드러운 리프레시 루프)
+           KINETIC TYPOGRAPHY 1회 시네마틱 비산 진입(Flying-in Assemble) 효과
+           초기 1회 화면 밖에서 역동적으로 회전/블러되며 날아와 안착한 뒤
+           사라지지 않고 상시 고정 유지 (Fill-mode: both / forwards)
         ========================================================= */
-        @keyframes kineticAssemble1 { /* Top-Left Diagonal */
+        @keyframes kineticAssemble1 { /* Top-Left Diagonal Fly-In */
             0% {
                 opacity: 0;
-                transform: translate(-100px, -60px) scale(1.12) rotate(-5deg);
-                filter: blur(8px);
+                transform: translate3d(-240px, -150px, 0) scale(1.35) rotate(-14deg);
+                filter: blur(16px);
             }
-            14% {
+            75% {
                 opacity: 1;
-                transform: translate(0, 0) scale(1) rotate(0deg);
+                transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
                 filter: blur(0);
             }
-            82% {
+            100% {
                 opacity: 1;
-                transform: translate(0, 0) scale(1);
-                filter: drop-shadow(0 4px 20px rgba(0,0,0,0.9));
-            }
-            88% {
-                opacity: 1;
-                transform: translateY(-2px) scale(1.01);
-                filter: drop-shadow(0 0 16px rgba(255,255,255,0.7));
-            }
-            96%, 100% {
-                opacity: 0;
-                transform: translate(-30px, -20px) scale(0.98);
-                filter: blur(4px);
+                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+                filter: blur(0);
             }
         }
 
-        @keyframes kineticAssemble2 { /* Top-Right Diagonal */
-            0%, 2% {
+        @keyframes kineticAssemble2 { /* Top-Right Diagonal Fly-In */
+            0% {
                 opacity: 0;
-                transform: translate(110px, -70px) scale(1.12) rotate(5deg);
-                filter: blur(8px);
+                transform: translate3d(260px, -160px, 0) scale(1.35) rotate(12deg);
+                filter: blur(16px);
             }
-            17% {
+            75% {
                 opacity: 1;
-                transform: translate(0, 0) scale(1) rotate(0deg);
+                transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
                 filter: blur(0);
             }
-            82% {
+            100% {
                 opacity: 1;
-                transform: translate(0, 0) scale(1);
-                filter: drop-shadow(0 4px 20px rgba(0,0,0,0.9));
-            }
-            89% {
-                opacity: 1;
-                transform: translateY(-2px) scale(1.01);
-                filter: drop-shadow(0 0 16px rgba(34,211,238,0.7));
-            }
-            96%, 100% {
-                opacity: 0;
-                transform: translate(30px, -20px) scale(0.98);
-                filter: blur(4px);
+                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+                filter: blur(0);
             }
         }
 
-        @keyframes kineticAssemble3 { /* Left Center */
-            0%, 4% {
+        @keyframes kineticAssemble3 { /* Deep Left Zoom Fly-In */
+            0% {
                 opacity: 0;
-                transform: translate(-120px, 30px) scale(0.9) rotate(-4deg);
-                filter: blur(8px);
+                transform: translate3d(-300px, 80px, 0) scale(0.65) rotate(-10deg);
+                filter: blur(16px);
             }
-            20% {
+            75% {
                 opacity: 1;
-                transform: translate(0, 0) scale(1) rotate(0deg);
+                transform: translate3d(0, 0, 0) scale(1.04) rotate(0deg);
                 filter: blur(0);
             }
-            82% {
+            100% {
                 opacity: 1;
-                transform: translate(0, 0) scale(1);
-                filter: drop-shadow(0 4px 20px rgba(0,0,0,0.9));
-            }
-            90% {
-                opacity: 1;
-                transform: translateY(-2px) scale(1.02);
-                filter: drop-shadow(0 0 20px rgba(34,211,238,0.9));
-            }
-            96%, 100% {
-                opacity: 0;
-                transform: translate(-40px, 10px) scale(0.98);
-                filter: blur(4px);
+                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+                filter: blur(0);
             }
         }
 
-        @keyframes kineticAssemble4 { /* Bottom-Left */
-            0%, 6% {
+        @keyframes kineticAssemble4 { /* Bottom-Left Diagonal Fly-In */
+            0% {
                 opacity: 0;
-                transform: translate(-80px, 80px) scale(1.15) rotate(4deg);
-                filter: blur(8px);
+                transform: translate3d(-220px, 200px, 0) scale(1.4) rotate(14deg);
+                filter: blur(16px);
             }
-            23% {
+            75% {
                 opacity: 1;
-                transform: translate(0, 0) scale(1) rotate(0deg);
+                transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
                 filter: blur(0);
             }
-            82% {
+            100% {
                 opacity: 1;
-                transform: translate(0, 0) scale(1);
-                filter: drop-shadow(0 4px 20px rgba(0,0,0,0.9));
-            }
-            91% {
-                opacity: 1;
-                transform: translateY(-2px) scale(1.01);
-                filter: drop-shadow(0 0 16px rgba(52,211,153,0.7));
-            }
-            96%, 100% {
-                opacity: 0;
-                transform: translate(-20px, 30px) scale(0.98);
-                filter: blur(4px);
+                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+                filter: blur(0);
             }
         }
 
-        @keyframes kineticAssemble5 { /* Bottom-Right */
-            0%, 8% {
+        @keyframes kineticAssemble5 { /* Bottom-Right Zoom Fly-In */
+            0% {
                 opacity: 0;
-                transform: translate(110px, 90px) scale(0.9) rotate(-5deg);
-                filter: blur(8px);
+                transform: translate3d(280px, 220px, 0) scale(0.7) rotate(-12deg);
+                filter: blur(16px);
             }
-            26% {
+            75% {
                 opacity: 1;
-                transform: translate(0, 0) scale(1) rotate(0deg);
+                transform: translate3d(0, 0, 0) scale(1.04) rotate(0deg);
                 filter: blur(0);
             }
-            82% {
+            100% {
                 opacity: 1;
-                transform: translate(0, 0) scale(1);
-                filter: drop-shadow(0 4px 20px rgba(0,0,0,0.9));
-            }
-            92% {
-                opacity: 1;
-                transform: translateY(-2px) scale(1.02);
-                filter: drop-shadow(0 0 20px rgba(52,211,153,0.9));
-            }
-            96%, 100% {
-                opacity: 0;
-                transform: translate(30px, 30px) scale(0.98);
-                filter: blur(4px);
+                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+                filter: blur(0);
             }
         }
 
         .kinetic-piece-1 {
             display: inline-block;
-            animation: kineticAssemble1 7.5s ease-in-out infinite;
+            animation: kineticAssemble1 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
             will-change: transform, opacity, filter;
         }
 
         .kinetic-piece-2 {
             display: inline-block;
-            animation: kineticAssemble2 7.5s ease-in-out infinite;
+            animation: kineticAssemble2 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
             will-change: transform, opacity, filter;
         }
 
         .kinetic-piece-3 {
             display: inline-block;
-            animation: kineticAssemble3 7.5s ease-in-out infinite;
+            animation: kineticAssemble3 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
             will-change: transform, opacity, filter;
         }
 
         .kinetic-piece-4 {
             display: inline-block;
-            animation: kineticAssemble4 7.5s ease-in-out infinite;
+            animation: kineticAssemble4 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
             will-change: transform, opacity, filter;
         }
 
         .kinetic-piece-5 {
             display: inline-block;
-            animation: kineticAssemble5 7.5s ease-in-out infinite;
+            animation: kineticAssemble5 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
             will-change: transform, opacity, filter;
+        }
+
+        /* =========================================================
+           KEYWORD HIGHLIGHT ANIMATIONS: 비전, 콘텐츠, 기준
+           초기 1회 진입 후 상시 유지되며, 3개 핵심 단어가 순차적으로
+           주기적 네온 펄스 & 광채 글로우로 전환되어 강조됩니다.
+        ========================================================= */
+        @keyframes highlightVision {
+            0%, 28% {
+                color: #38bdf8;
+                text-shadow: 0 0 25px rgba(56, 189, 248, 0.95), 0 0 50px rgba(14, 165, 233, 0.6);
+                transform: scale(1.08);
+                filter: brightness(1.3);
+            }
+            36%, 100% {
+                color: #7dd3fc;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 12px rgba(56, 189, 248, 0.35);
+                transform: scale(1);
+                filter: brightness(1);
+            }
+        }
+
+        @keyframes highlightContent {
+            0%, 33% {
+                color: #22d3ee;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 12px rgba(34, 211, 238, 0.35);
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            34%, 62% {
+                color: #67e8f9;
+                text-shadow: 0 0 25px rgba(34, 211, 238, 0.95), 0 0 50px rgba(6, 182, 212, 0.7);
+                transform: scale(1.08);
+                filter: brightness(1.3);
+            }
+            70%, 100% {
+                color: #22d3ee;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 12px rgba(34, 211, 238, 0.35);
+                transform: scale(1);
+                filter: brightness(1);
+            }
+        }
+
+        @keyframes highlightStandard {
+            0%, 66% {
+                color: #34d399;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 12px rgba(52, 211, 153, 0.35);
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            67%, 95% {
+                color: #6ee7b7;
+                text-shadow: 0 0 25px rgba(52, 211, 153, 0.95), 0 0 50px rgba(16, 185, 129, 0.7);
+                transform: scale(1.08);
+                filter: brightness(1.3);
+            }
+            100% {
+                color: #34d399;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 12px rgba(52, 211, 153, 0.35);
+                transform: scale(1);
+                filter: brightness(1);
+            }
+        }
+
+        .highlight-keyword-vision {
+            display: inline-block;
+            animation: highlightVision 4.5s ease-in-out 1.9s infinite;
+            will-change: transform, text-shadow, filter;
+        }
+
+        .highlight-keyword-content {
+            display: inline-block;
+            animation: highlightContent 4.5s ease-in-out 1.9s infinite;
+            will-change: transform, text-shadow, filter;
+        }
+
+        .highlight-keyword-standard {
+            display: inline-block;
+            animation: highlightStandard 4.5s ease-in-out 1.9s infinite;
+            will-change: transform, text-shadow, filter;
         }
 
         /* Pure CSS Cross-Slide & Glyph Expansion Animations (Left to Right / Right to Left with Tracking Expand-Retract) */
@@ -1737,8 +1767,8 @@
         <!-- [PC 전용 FULLSCREEN 백그라운드 영상 & 시네마틱 오버레이] (md:block hidden) -->
         <!-- ========================================================================= -->
         <div class="hidden md:block absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
-            <!-- 100vw 100vh Full Cover Background Video (Scale 122% - 7% 추가 확대) -->
-            <video class="absolute inset-0 w-full h-full object-cover scale-[1.22]"
+            <!-- 100vw 100vh Full Cover Background Video (Scale 132% - 10% 추가 확대) -->
+            <video class="absolute inset-0 w-full h-full object-cover scale-[1.32]"
                    autoplay loop muted playsinline aria-hidden="true"
                    style="object-position: center 30%;">
                 <source src="https://raw.githubusercontent.com/whomedia01/whomedia4/main/whomedia_hero.mp4" type="video/mp4" />
@@ -1760,18 +1790,19 @@
             
             <!-- 1. PC 중앙: 키네틱 타이포그래피 3줄 슬로건 -->
             <div class="my-auto flex flex-col items-center justify-center text-center space-y-4 lg:space-y-6 pt-4">
-                <!-- 3줄로 변경된 메인 슬로건 -->
+                <!-- 3줄로 변경된 메인 슬로건 (1회 키네틱 진입 후 핵심 단어 '비전', '콘텐츠', '기준' 강조 효과로 전환) -->
                 <div class="flex flex-col items-center justify-center text-center space-y-1.5 md:space-y-2 lg:space-y-3 text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-tight text-white drop-shadow-[0_8px_35px_rgba(0,0,0,0.95)]">
                     <div class="kinetic-piece-1 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">
                         우리의 프레임 안에서
                     </div>
-                    <div class="flex items-center justify-center gap-3 lg:gap-4 flex-wrap">
-                        <span class="kinetic-piece-2 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">당신의 비전은</span>
-                        <span class="kinetic-piece-3 text-cyan-300 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">콘텐츠가 되고,</span>
+                    <div class="flex items-center justify-center gap-2.5 lg:gap-3.5 flex-wrap">
+                        <span class="kinetic-piece-2 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">당신의</span>
+                        <span class="kinetic-piece-2 highlight-keyword-vision text-sky-300 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">비전</span><span class="kinetic-piece-2 text-white">은</span>
+                        <span class="kinetic-piece-3 highlight-keyword-content text-cyan-300 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">콘텐츠</span><span class="kinetic-piece-3 text-white">가 되고,</span>
                     </div>
-                    <div class="flex items-center justify-center gap-3 lg:gap-4 flex-wrap">
+                    <div class="flex items-center justify-center gap-2.5 lg:gap-3.5 flex-wrap">
                         <span class="kinetic-piece-4 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">세상의</span>
-                        <span class="kinetic-piece-5 text-brand-mint drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">기준이 됩니다</span>
+                        <span class="kinetic-piece-5 highlight-keyword-standard text-brand-mint drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">기준</span><span class="kinetic-piece-5 text-white">이 됩니다</span>
                     </div>
                 </div>
 
@@ -1857,25 +1888,26 @@
         <!-- ========================================================================= -->
         <div class="md:hidden flex flex-col justify-between w-full h-full flex-1 relative z-20 space-y-3">
             
-            <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (3줄 구성) -->
+            <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (3줄 구성 - 1회 키네틱 진입 후 핵심 단어 '비전', '콘텐츠', '기준' 강조 효과로 전환) -->
             <div class="w-full px-4 pt-1 pb-0.5 text-center shrink-0">
                 <div class="flex flex-col items-center justify-center text-center space-y-1 text-xl xs:text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight select-none px-1 drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
                     <div class="kinetic-piece-1 text-white">우리의 프레임 안에서</div>
-                    <div class="flex items-center justify-center gap-1.5">
-                        <span class="kinetic-piece-2 text-cyan-300">당신의 비전은</span>
-                        <span class="kinetic-piece-3 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-blue-400">콘텐츠가 되고,</span>
+                    <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                        <span class="kinetic-piece-2 text-white">당신의</span>
+                        <span class="kinetic-piece-2 highlight-keyword-vision text-sky-300">비전</span><span class="kinetic-piece-2 text-white">은</span>
+                        <span class="kinetic-piece-3 highlight-keyword-content text-cyan-300">콘텐츠</span><span class="kinetic-piece-3 text-white">가 되고,</span>
                     </div>
-                    <div class="flex items-center justify-center gap-1.5">
-                        <span class="kinetic-piece-4 text-emerald-300">세상의</span>
-                        <span class="kinetic-piece-5 bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 to-teal-200">기준이 됩니다</span>
+                    <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                        <span class="kinetic-piece-4 text-white">세상의</span>
+                        <span class="kinetic-piece-5 highlight-keyword-standard text-emerald-300">기준</span><span class="kinetic-piece-5 text-white">이 됩니다</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. [모바일] 메인 영상 (16:9 와이드 & 7% 추가 확대 적용: scale 125%) -->
+            <!-- 2. [모바일] 메인 영상 (16:9 와이드 & 10% 추가 확대 적용: scale 135%) -->
             <div class="w-full px-4 relative shrink-0">
                 <div class="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.9),0_0_25px_rgba(34,211,238,0.15)] flex items-center justify-center">
-                    <video class="w-full h-full object-cover scale-[1.25] pointer-events-none border-0"
+                    <video class="w-full h-full object-cover scale-[1.35] pointer-events-none border-0"
                            autoplay loop muted playsinline aria-hidden="true"
                            style="object-position: center 30%;">
                         <source src="https://raw.githubusercontent.com/whomedia01/whomedia4/main/whomedia_hero.mp4" type="video/mp4" />
