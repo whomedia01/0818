@@ -455,11 +455,11 @@
            Flying in from random directions (Top, Bottom, Left, Right, Diagonal)
            with high-end cubic-bezier easing and staggered delays
         ========================================================= */
-        @keyframes kineticAssemble1 { /* Top-Left Diagonal (-120px, -80px) */
+        @keyframes kineticAssemble1 { /* Top-Left Diagonal (-60px, -20px) */
             0% {
                 opacity: 0;
-                transform: translate(-140px, -90px) scale(1.15) rotate(-6deg);
-                filter: blur(8px);
+                transform: translate(-60px, -20px) scale(1.1) rotate(-4deg);
+                filter: blur(6px);
             }
             70% {
                 opacity: 1;
@@ -472,11 +472,11 @@
             }
         }
 
-        @keyframes kineticAssemble2 { /* Top-Right Diagonal (140px, -90px) */
+        @keyframes kineticAssemble2 { /* Top-Right Diagonal (60px, -20px) */
             0% {
                 opacity: 0;
-                transform: translate(150px, -100px) scale(1.18) rotate(7deg);
-                filter: blur(8px);
+                transform: translate(60px, -20px) scale(1.1) rotate(4deg);
+                filter: blur(6px);
             }
             70% {
                 opacity: 1;
@@ -489,11 +489,11 @@
             }
         }
 
-        @keyframes kineticAssemble3 { /* Far Left (-160px, 40px) */
+        @keyframes kineticAssemble3 { /* Far Left (-70px, 20px) */
             0% {
                 opacity: 0;
-                transform: translate(-170px, 50px) scale(0.85) rotate(-5deg);
-                filter: blur(8px);
+                transform: translate(-70px, 20px) scale(0.9) rotate(-3deg);
+                filter: blur(6px);
             }
             70% {
                 opacity: 1;
@@ -506,11 +506,11 @@
             }
         }
 
-        @keyframes kineticAssemble4 { /* Bottom-Left (-90px, 120px) */
+        @keyframes kineticAssemble4 { /* Bottom-Left (-60px, 40px) */
             0% {
                 opacity: 0;
-                transform: translate(-100px, 130px) scale(1.2) rotate(6deg);
-                filter: blur(8px);
+                transform: translate(-60px, 40px) scale(1.1) rotate(4deg);
+                filter: blur(6px);
             }
             70% {
                 opacity: 1;
@@ -523,11 +523,11 @@
             }
         }
 
-        @keyframes kineticAssemble5 { /* Bottom-Right (150px, 120px) */
+        @keyframes kineticAssemble5 { /* Bottom-Right (70px, 40px) */
             0% {
                 opacity: 0;
-                transform: translate(160px, 130px) scale(0.9) rotate(-7deg);
-                filter: blur(8px);
+                transform: translate(70px, 40px) scale(0.95) rotate(-4deg);
+                filter: blur(6px);
             }
             70% {
                 opacity: 1;
@@ -1502,21 +1502,36 @@
             .hero-video-bg { transform: scale(1.25); transform-origin: center top; object-fit: cover; object-position: center top; width: 100%; height: 100%; }
         }
 
-        html, body {
-            max-width: 100vw;
-            width: 100%;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
+        *, *::before, *::after {
+            box-sizing: border-box !important;
+            max-width: 100% !important;
         }
 
-        /* Anchor Link Scroll Margin Offset (Prevents fixed header overlap on page anchor navigation) */
-        section[id], div[id] {
-            scroll-margin-top: 88px;
+        html, body {
+            width: 100% !important;
+            max-width: 100vw !important;
+            overflow-x: hidden !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            scroll-behavior: smooth;
+            background-color: #0B132B;
         }
-        @media (min-width: 768px) {
-            section[id], div[id] {
-                scroll-margin-top: 96px;
-            }
+
+        /* Standardized Header Gap Wrapper: Header is fixed, main is placed transparently below header */
+        .main-content-wrapper {
+            margin-top: 80px !important;
+            padding-top: 0 !important;
+            background: transparent !important;
+            box-sizing: border-box !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            overflow-x: hidden !important;
+            position: relative;
+        }
+
+        /* Anchor Link Scroll Margin Offset */
+        section[id], div[id] {
+            scroll-margin-top: 90px !important;
         }
     </style>
 </head>
@@ -1524,7 +1539,7 @@
       x-data="whomediaApp"
       @scroll.window="scrolled = (window.pageYOffset > 20)"
       @keydown.escape.window="closeModal()"
-      class="pb-20 md:pb-0 overflow-x-hidden w-full max-w-full relative">
+      class="pb-20 md:pb-0 overflow-x-hidden w-full max-w-full relative m-0 p-0">
 
     <!-- HEADER / NAVIGATION -->
     <header :class="scrolled ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-gray-100 py-3' : 'bg-brand-navy/80 backdrop-blur-md py-3.5 sm:py-4'"
@@ -1634,12 +1649,12 @@
     </header>
 
     <!-- MAIN CONTENT LANDMARK -->
-    <main id="main-content" class="relative">
+    <main id="main-content" class="main-content-wrapper relative">
         <!-- Interactive Stage Spotlight Overlay (Follows Mouse Cursor) -->
         <div id="interactive-spotlight" class="hidden md:block"></div>
 
     <!-- HERO SECTION (DUALIZED ARCHITECTURE: PC FULLSCREEN IMMERSIVE VIDEO OVERLAY vs MOBILE STACKED FLOW WITH 2x2 SAFE AREA) -->
-    <section id="hero" aria-label="메인 솔루션 및 이러닝 영상 제작" class="relative w-full text-white bg-brand-navy-dark overflow-hidden h-[calc(100dvh-64px)] md:h-screen md:min-h-screen flex flex-col md:block justify-between pt-24 md:pt-0 pb-2 md:pb-0">
+    <section id="hero" aria-label="메인 솔루션 및 이러닝 영상 제작" class="relative w-full max-w-full text-white bg-brand-navy-dark overflow-hidden h-[calc(100dvh-80px)] md:h-[calc(100vh-80px)] md:min-h-[calc(100vh-80px)] flex flex-col md:block justify-between pt-0 pb-2 md:pb-0">
         
         <!-- ========================================================================= -->
         <!-- [PC 전용 FULLSCREEN 백그라운드 영상 & 시네마틱 오버레이] (md:block hidden) -->
@@ -1664,7 +1679,7 @@
         <!-- ========================================================================= -->
         <!-- [PC 전용 UI 레이아웃] (md:flex hidden: Absolute Layout over Fullscreen Video) -->
         <!-- ========================================================================= -->
-        <div class="hidden md:flex absolute inset-0 z-10 flex-col justify-between pt-24 lg:pt-28 pb-8 px-6 lg:px-12 max-w-[1400px] mx-auto left-0 right-0 pointer-events-none select-none">
+        <div class="hidden md:flex absolute inset-0 z-10 flex-col justify-between pt-6 lg:pt-8 pb-8 px-6 lg:px-12 max-w-[1400px] mx-auto left-0 right-0 pointer-events-none select-none">
             
             <!-- 1. PC 중앙: 키네틱 타이포그래피 슬로건 + 애플 감성 빛 반사 스윕 텍스트 -->
             <div class="my-auto flex flex-col items-center justify-center text-center space-y-4 lg:space-y-6 pt-4">
@@ -1767,9 +1782,9 @@
         <div class="md:hidden flex flex-col justify-between w-full h-full flex-1 relative z-20 overflow-hidden pb-3">
             
             <!-- [상단 그룹: 슬로건 + 영상] flex-1로 남는 화면 여백을 모두 흡수하여 영상 확대 -->
-            <div class="flex-1 w-full flex flex-col justify-between px-4 pb-2 min-h-0">
-                <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (상단 헤더 아래 안전 배치 및 영상과 적절한 여백 mb-3) -->
-                <div class="w-full text-center shrink-0 mb-3">
+            <div class="flex-1 w-full flex flex-col justify-between px-4 pb-1.5 min-h-0">
+                <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (상단 헤더 아래 바로 자연스럽게 밀착) -->
+                <div class="w-full text-center shrink-0 mb-2">
                     <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 text-lg xs:text-xl font-black text-white leading-snug tracking-tight select-none px-1 break-keep drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
                         <span class="kinetic-piece-1 text-white">우리의 프레임 안에서</span>
                         <span class="kinetic-piece-2 text-cyan-300">당신의 비전은</span>
@@ -1778,7 +1793,7 @@
                         <span class="kinetic-piece-5 bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 to-teal-200">기준이 됩니다</span>
                     </div>
 
-                    <div class="apple-shimmer-entrance pt-1">
+                    <div class="apple-shimmer-entrance pt-0.5">
                         <p class="text-[10px] xs:text-xs font-bold tracking-tight text-slate-300 flex flex-wrap items-center justify-center gap-1">
                             <span class="apple-shimmer-text">기업 &amp; 공공기관이 신뢰하는</span>
                             <span class="apple-shimmer-mint font-extrabold">No.1 스마트 미디어 파트너</span>
@@ -1787,7 +1802,7 @@
                 </div>
 
                 <!-- 2. [모바일] 블록형 삽입 비주얼 영상 박스 (flex-1로 화면 절반 이상을 시원하게 차지) -->
-                <div class="w-full flex-1 relative min-h-[160px] xs:min-h-[190px] max-h-[42vh] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.9),0_0_20px_rgba(34,211,238,0.08)] flex items-center justify-center">
+                <div class="w-full flex-1 relative min-h-[170px] xs:min-h-[200px] max-h-[46vh] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.9),0_0_20px_rgba(34,211,238,0.08)] flex items-center justify-center">
                     <video class="w-full h-full object-cover scale-[1.15] pointer-events-none border-0"
                            autoplay loop muted playsinline aria-hidden="true"
                            style="object-position: center 35%;">
@@ -2178,235 +2193,96 @@
         </div>
     </section>
 
-    <!-- BUSINESS NETWORK: (주)후미디어 핵심 사업 영역 -->
-    <section id="services" aria-label="주요 사업 영역 (이러닝 콘텐츠 개발 및 영상 제작)" class="py-8 sm:py-16 lg:py-20 bg-white text-slate-900 border-t border-b border-slate-200" @mouseenter="stopServiceAutoPlay()" @mouseleave="startServiceAutoPlay()">
+    <!-- BUSINESS NETWORK: (주)후미디어 핵심 사업 영역 (키워드 & 비주얼 중심) -->
+    <section id="services" aria-label="핵심 사업 영역" class="py-12 sm:py-20 lg:py-24 bg-white text-slate-900 border-t border-b border-slate-200">
         <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-10">
-                <span class="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200/80 text-xs font-bold tracking-wider uppercase mb-2 sm:mb-3 shadow-xs">
-                    미디어·교육 핵심 사업 영역
+            <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-16">
+                <span class="inline-block px-4 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200 text-xs font-black tracking-wider uppercase mb-3">
+                    BUSINESS AREA
                 </span>
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-2 sm:mb-3 break-keep">
-                    이러닝 개발 · 전문 영상 제작 · 블렌디드 러닝
+                <h2 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-2 break-keep">
+                    핵심 사업 영역
                 </h2>
-                <p class="text-slate-600 text-xs sm:text-base font-medium break-keep max-w-3xl mx-auto">
-                    각 사업 영역별 독립된 전문 체계와 핵심 역량을 융합하여, 클라이언트의 요구사항에 부합하는 맞춤형 서비스를 제공합니다.
+                <p class="text-slate-500 text-xs sm:text-sm font-medium">
+                    (주)후미디어의 3대 핵심 비즈니스
                 </p>
             </div>
 
-            <!-- Category Pills & Navigation Controls -->
-            <div class="flex items-center justify-between gap-2 mb-6 max-w-4xl mx-auto">
-                <button @click="prevServiceCard(); restartServiceAutoPlay(8000);" 
-                        class="hidden sm:flex p-2.5 sm:p-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all shrink-0 active:scale-95 cursor-pointer shadow-xs"
-                        aria-label="이전 사업 영역 보기">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-                </button>
-
-                <!-- Category Pills Bar -->
-                <div class="grid grid-cols-3 gap-1.5 sm:flex sm:items-center sm:gap-3 sm:overflow-x-auto no-scrollbar py-1 px-1 w-full sm:w-auto flex-1 justify-center">
-                    <button @click="selectServiceCard(0); restartServiceAutoPlay(8000);"
-                            :class="activeServiceIndex === 0 ? 'bg-teal-600 text-white font-black shadow-md border-teal-600 ring-2 ring-teal-500/30' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold border-slate-200'"
-                            class="px-2 py-2.5 sm:px-5 sm:py-2.5 rounded-xl text-[11px] xs:text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
-                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 0 ? 'bg-white animate-pulse' : 'bg-teal-500'"></span>
-                        <span class="truncate">1. 이러닝 개발</span>
-                    </button>
-
-                    <button @click="selectServiceCard(1); restartServiceAutoPlay(8000);"
-                            :class="activeServiceIndex === 1 ? 'bg-cyan-600 text-white font-black shadow-md border-cyan-600 ring-2 ring-cyan-500/30' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold border-slate-200'"
-                            class="px-2 py-2.5 sm:px-5 sm:py-2.5 rounded-xl text-[11px] xs:text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
-                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 1 ? 'bg-white animate-pulse' : 'bg-cyan-500'"></span>
-                        <span class="truncate">2. 전문 영상</span>
-                    </button>
-
-                    <button @click="selectServiceCard(2); restartServiceAutoPlay(8000);"
-                            :class="activeServiceIndex === 2 ? 'bg-amber-600 text-white font-black shadow-md border-amber-600 ring-2 ring-amber-500/30' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold border-slate-200'"
-                            class="px-2 py-2.5 sm:px-5 sm:py-2.5 rounded-xl text-[11px] xs:text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
-                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 2 ? 'bg-white animate-pulse' : 'bg-amber-500'"></span>
-                        <span class="truncate">3. 블렌디드 러닝</span>
-                    </button>
-                </div>
-
-                <button @click="nextServiceCard(); restartServiceAutoPlay(8000);" 
-                        class="hidden sm:flex p-2.5 sm:p-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all shrink-0 active:scale-95 cursor-pointer shadow-xs"
-                        aria-label="다음 사업 영역 보기">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                </button>
-            </div>
-
-            <!-- PROMINENT ANIMATED ROLLING FEATURED SLIDER -->
-            <div @touchstart="touchStartX = $event.touches[0].clientX"
-                 @touchend="touchEndX = $event.changedTouches[0].clientX; if (touchStartX - touchEndX > 30) { nextServiceCard(); restartServiceAutoPlay(8000); } else if (touchEndX - touchStartX > 30) { prevServiceCard(); restartServiceAutoPlay(8000); }"
-                 class="relative w-full max-w-5xl mx-auto rounded-3xl bg-slate-900 text-white overflow-hidden shadow-2xl border border-slate-800 mb-8 min-h-[420px] sm:min-h-[380px] flex flex-col justify-center">
-                <!-- Slide 0: 이러닝 콘텐츠 개발 -->
-                <div x-show="activeServiceIndex === 0"
-                     x-transition:enter="transition ease-out duration-600 transform opacity-0 translate-x-12 scale-98"
-                     x-transition:enter-start="opacity-0 translate-x-12 scale-98"
-                     x-transition:enter-end="opacity-100 translate-x-0 scale-100"
-                     x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
-                     x-transition:leave-start="opacity-100 translate-x-0"
-                     x-transition:leave-end="opacity-0 -translate-x-12"
-                     class="w-full h-full p-5 sm:p-8 lg:p-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                    <div class="md:col-span-5 relative aspect-[16/10] md:aspect-square rounded-2xl overflow-hidden bg-slate-950 shadow-xl border border-slate-800 group">
+            <!-- 3대 핵심 사업 영역 카드 (대형 비주얼 + 키워드 & 한줄 요약 구조) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+                <!-- 1. 이러닝 개발 -->
+                <div class="group bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl hover:shadow-2xl hover:border-teal-500/50 transition-all duration-300 flex flex-col justify-between">
+                    <div class="relative aspect-[16/10] overflow-hidden bg-slate-950">
                         <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1000&q=80" 
-                             alt="이러닝 콘텐츠 개발" 
+                             alt="이러닝 개발" 
                              referrerpolicy="no-referrer"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-                        <span class="absolute top-3 left-3 px-3 py-1 bg-teal-500 text-slate-950 text-xs font-black rounded-lg shadow-md">
-                            01. E-LEARNING
-                        </span>
-                        <div class="absolute bottom-3 left-3 right-3">
-                            <span class="text-white font-black text-lg sm:text-xl drop-shadow block">이러닝 콘텐츠 개발</span>
-                            <span class="text-teal-300 text-xs font-bold block mt-0.5">교수설계 기반 맞춤 서비스</span>
+                        <div class="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-teal-500/90 backdrop-blur-md text-slate-950 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                         </div>
                     </div>
-                    <div class="md:col-span-7 flex flex-col justify-between space-y-3 sm:space-y-4">
+                    <div class="p-6 lg:p-7 flex flex-col justify-between flex-1">
                         <div>
-                            <span class="inline-block px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-bold mb-2">
-                                공공·기업·대학 맞춤형 교수설계
-                            </span>
-                            <h3 class="text-xl sm:text-2xl lg:text-3xl font-black text-white leading-tight break-keep mb-2">
-                                맞춤형 이러닝 콘텐츠 개발
-                            </h3>
-                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal break-keep mb-3">
-                                체계적인 교수설계와 맞춤 기획으로 공공기관, 기업, 대학의 다양하고 까다로운 요구사항에 최적화된 고품질 이러닝 콘텐츠를 개발합니다.
+                            <div class="text-xs font-extrabold text-teal-400 uppercase tracking-wider mb-1">01. E-LEARNING</div>
+                            <h3 class="text-xl lg:text-2xl font-black text-white mb-2 group-hover:text-teal-300 transition-colors">이러닝 개발</h3>
+                        </div>
+                        <div class="pt-4 border-t border-slate-800">
+                            <p class="text-sm sm:text-base font-bold text-slate-200 break-keep">
+                                교육 콘텐츠 기획 및 제작
                             </p>
                         </div>
-                        <ul class="space-y-2 bg-slate-800/80 p-3.5 sm:p-4 rounded-xl border border-slate-700/70 text-xs sm:text-sm font-semibold text-slate-200">
-                            <li class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-teal-400"></span>
-                                <span class="text-teal-300 font-bold">교수설계 전담 조직의 타겟 맞춤형 커리큘럼 기획력</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-teal-400"></span>
-                                <span>86인치 전자칠판 및 무반사 특수 칠판 활용 강의</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-teal-400"></span>
-                                <span>6.6m 대형 크로마키 활용 및 모션그래픽 VFX 시각 연출</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-teal-400"></span>
-                                <span>AI 교육 기술 연동 및 반응형 웹 구축</span>
-                            </li>
-                        </ul>
                     </div>
                 </div>
 
-                <!-- Slide 1: 전문 영상 제작 -->
-                <div x-show="activeServiceIndex === 1"
-                     x-transition:enter="transition ease-out duration-600 transform opacity-0 translate-x-12 scale-98"
-                     x-transition:enter-start="opacity-0 translate-x-12 scale-98"
-                     x-transition:enter-end="opacity-100 translate-x-0 scale-100"
-                     x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
-                     x-transition:leave-start="opacity-100 translate-x-0"
-                     x-transition:leave-end="opacity-0 -translate-x-12"
-                     class="w-full h-full p-5 sm:p-8 lg:p-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                    <div class="md:col-span-5 relative aspect-[16/10] md:aspect-square rounded-2xl overflow-hidden bg-slate-950 shadow-xl border border-slate-800 group">
+                <!-- 2. 전문 영상 제작 -->
+                <div class="group bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl hover:shadow-2xl hover:border-cyan-500/50 transition-all duration-300 flex flex-col justify-between">
+                    <div class="relative aspect-[16/10] overflow-hidden bg-slate-950">
                         <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1000&q=80" 
                              alt="전문 영상 제작" 
                              referrerpolicy="no-referrer"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-                        <span class="absolute top-3 left-3 px-3 py-1 bg-cyan-500 text-slate-950 text-xs font-black rounded-lg shadow-md">
-                            02. MEDIA PRODUCTION
-                        </span>
-                        <div class="absolute bottom-3 left-3 right-3">
-                            <span class="text-white font-black text-lg sm:text-xl drop-shadow block">전문 영상 제작</span>
-                            <span class="text-cyan-300 text-xs font-bold block mt-0.5">홍보·다큐·교육 종합 스튜디오</span>
+                        <div class="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-cyan-500/90 backdrop-blur-md text-slate-950 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                         </div>
                     </div>
-                    <div class="md:col-span-7 flex flex-col justify-between space-y-3 sm:space-y-4">
+                    <div class="p-6 lg:p-7 flex flex-col justify-between flex-1">
                         <div>
-                            <span class="inline-block px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-bold mb-2">
-                                4K 고화질 시네마틱 촬영 &amp; 부조정 연출
-                            </span>
-                            <h3 class="text-xl sm:text-2xl lg:text-3xl font-black text-white leading-tight break-keep mb-2">
-                                기획부터 촬영, 후반 편집까지 풀케어
-                            </h3>
-                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal break-keep mb-3">
-                                기관 및 기업 홍보영상, 모션그래픽, 브랜디드 다큐멘터리, 고화질 강의 영상까지 전문 수석 감독진이 일대일 연출 기획을 담당합니다.
+                            <div class="text-xs font-extrabold text-cyan-400 uppercase tracking-wider mb-1">02. PRODUCTION</div>
+                            <h3 class="text-xl lg:text-2xl font-black text-white mb-2 group-hover:text-cyan-300 transition-colors">전문 영상 제작</h3>
+                        </div>
+                        <div class="pt-4 border-t border-slate-800">
+                            <p class="text-sm sm:text-base font-bold text-slate-200 break-keep">
+                                홍보 · 다큐 · 4K 시네마틱 영상
                             </p>
                         </div>
-                        <ul class="space-y-2 bg-slate-800/80 p-3.5 sm:p-4 rounded-xl border border-slate-700/70 text-xs sm:text-sm font-semibold text-slate-200">
-                            <li class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
-                                <span class="text-cyan-300 font-bold">전용 스튜디오 보유로 대관비 절감 및 시네마 카메라 완비</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
-                                <span>3D 모션그래픽, CG, 자막, 모바일 최적화 후반 편집</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
-                                <span>다채널 스위처 기반 고품질 실시간 라이브 스트리밍</span>
-                            </li>
-                        </ul>
                     </div>
                 </div>
 
-                <!-- Slide 2: 오프라인 기반 블렌디드 러닝 -->
-                <div x-show="activeServiceIndex === 2"
-                     x-transition:enter="transition ease-out duration-600 transform opacity-0 translate-x-12 scale-98"
-                     x-transition:enter-start="opacity-0 translate-x-12 scale-98"
-                     x-transition:enter-end="opacity-100 translate-x-0 scale-100"
-                     x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
-                     x-transition:leave-start="opacity-100 translate-x-0"
-                     x-transition:leave-end="opacity-0 -translate-x-12"
-                     class="w-full h-full p-5 sm:p-8 lg:p-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                    <div class="md:col-span-5 relative aspect-[16/10] md:aspect-square rounded-2xl overflow-hidden bg-slate-950 shadow-xl border border-slate-800 group">
+                <!-- 3. 브랜드 확산 -->
+                <div class="group bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-xl hover:shadow-2xl hover:border-amber-500/50 transition-all duration-300 flex flex-col justify-between">
+                    <div class="relative aspect-[16/10] overflow-hidden bg-slate-950">
                         <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1000&q=80" 
-                             alt="오프라인 기반 블렌디드 러닝" 
+                             alt="브랜드 확산" 
                              referrerpolicy="no-referrer"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-                        <span class="absolute top-3 left-3 px-3 py-1 bg-amber-500 text-slate-950 text-xs font-black rounded-lg shadow-md">
-                            03. BLENDED LEARNING
-                        </span>
-                        <div class="absolute bottom-3 left-3 right-3">
-                            <span class="text-white font-black text-lg sm:text-xl drop-shadow block">블렌디드 러닝</span>
-                            <span class="text-amber-300 text-xs font-bold block mt-0.5">오프라인 기반 현장 중심 솔루션</span>
+                        <div class="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-amber-500/90 backdrop-blur-md text-slate-950 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
                         </div>
                     </div>
-                    <div class="md:col-span-7 flex flex-col justify-between space-y-3 sm:space-y-4">
+                    <div class="p-6 lg:p-7 flex flex-col justify-between flex-1">
                         <div>
-                            <span class="inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold mb-2">
-                                오프라인 현장 실무 &amp; 온·오프라인 융합
-                            </span>
-                            <h3 class="text-xl sm:text-2xl lg:text-3xl font-black text-white leading-tight break-keep mb-2">
-                                오프라인 기반 블렌디드 러닝 &amp; 전문 특강
-                            </h3>
-                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal break-keep mb-3">
-                                오프라인 현장 강연 및 실습을 중심으로 온라인 콘텐츠와의 시너지를 극대화한 오프라인 기반 블렌디드 러닝 솔루션을 제공합니다.
+                            <div class="text-xs font-extrabold text-amber-400 uppercase tracking-wider mb-1">03. BRAND MARKETING</div>
+                            <h3 class="text-xl lg:text-2xl font-black text-white mb-2 group-hover:text-amber-300 transition-colors">브랜드 확산</h3>
+                        </div>
+                        <div class="pt-4 border-t border-slate-800">
+                            <p class="text-sm sm:text-base font-bold text-slate-200 break-keep">
+                                타겟 맞춤형 디지털 마케팅
                             </p>
                         </div>
-                        <ul class="space-y-2 bg-slate-800/80 p-3.5 sm:p-4 rounded-xl border border-slate-700/70 text-xs sm:text-sm font-semibold text-slate-200">
-                            <li class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                                <span class="text-amber-300 font-bold">오프라인 현장 직강과 온라인 연계 융합 학습(Blended Learning)</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                                <span>스마트 스튜디오 및 현장 출강 연계 오프라인 중심 밀착 교육</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                                <span>B2B·B2G 맞춤형 오프라인 기반 워크숍 및 마스터클래스</span>
-                            </li>
-                        </ul>
                     </div>
-                </div>
-
-                <!-- Controls Footer -->
-                <div class="absolute bottom-3 right-4 z-30 flex items-center gap-2 bg-slate-950/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-800 text-xs font-bold text-white shadow-lg">
-                    <span class="text-teal-400 font-mono font-black" x-text="'0' + (activeServiceIndex + 1)"></span>
-                    <span class="text-slate-600">/</span>
-                    <span class="text-slate-400 font-mono">03</span>
-                    <button @click="serviceAutoTimer ? stopServiceAutoPlay() : startServiceAutoPlay()"
-                            class="ml-1 text-slate-400 hover:text-teal-300 transition-colors cursor-pointer"
-                            :title="serviceAutoTimer ? '롤링 일시정지' : '롤링 시작'">
-                        <svg x-show="serviceAutoTimer" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                        <svg x-show="!serviceAutoTimer" class="w-3.5 h-3.5 text-teal-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    </button>
                 </div>
             </div>
         </div>
@@ -2665,14 +2541,14 @@
     </section>
 
     <!-- PORTFOLIO -->
-    <section id="reference" aria-label="포트폴리오 및 주요 제작 실적" class="py-8 sm:py-16 lg:py-24 bg-white relative overflow-hidden w-full max-w-full">
+    <section id="reference" aria-label="포트폴리오 및 주요 제작 실적" class="py-12 sm:py-20 lg:py-24 bg-white relative overflow-hidden w-full max-w-full">
         <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div class="text-center max-w-2xl mx-auto mb-6 sm:mb-8 px-2">
-                <span class="inline-block px-3 py-1 rounded-md bg-brand-mint-light text-brand-mint-hover text-xs font-semibold mb-2 sm:mb-3">
+            <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-12 px-2">
+                <span class="inline-block px-4 py-1 rounded-full bg-brand-mint/15 text-brand-mint-hover text-xs font-black uppercase tracking-wider mb-3">
                     PORTFOLIO
                 </span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-brand-text mb-2 tracking-tight break-keep" style="word-break: keep-all; overflow-wrap: break-word;">콘텐츠 개발 &amp; 영상 포트폴리오</h2>
-                <p class="text-gray-500 text-[13px] sm:text-sm leading-relaxed max-w-xl mx-auto break-keep" style="word-break: keep-all; overflow-wrap: break-word;">교육 컨설팅부터 미디어 영상 제작, 후캠퍼스 평생교육, 디지털 언론 홍보까지 분야별 주요 수행 사례입니다.</p>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-brand-text mb-2 tracking-tight break-keep" style="word-break: keep-all; overflow-wrap: break-word;">제작 포트폴리오</h2>
+                <p class="text-gray-500 text-xs sm:text-sm font-medium">분야별 주요 제작 사례</p>
             </div>
 
             <!-- Portfolio Category Filter Tabs (Horizontal Scroll & Snap-x without page overflow) -->
