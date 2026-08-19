@@ -809,6 +809,123 @@
             animation: appleLightSweep 3.0s ease-in-out infinite;
             will-change: background-position;
         }
+
+        /* =========================================================
+           CARD 1 TEXT SEQUENCE ROLLING ANIMATIONS (10s Infinite Cycle)
+           - Step 1 (0% ~ 15% / 0s ~ 1.5s): '온라인 교육?' (Fade & Slide Up In -> Out)
+           - Step 2 (15% ~ 30% / 1.5s ~ 3.0s): '오프라인 교육?' (Fade & Slide Up In -> Out)
+           - Step 3 (30% ~ 100% / 3.0s ~ 10.0s, 7s Stay): '온·오프라인 / 교육 콘텐츠 개발'
+        ========================================================= */
+        @keyframes textRollingStep1 {
+            0% {
+                opacity: 0;
+                transform: translateY(18px);
+                filter: blur(4px);
+            }
+            3% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+            12% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+            15% {
+                opacity: 0;
+                transform: translateY(-18px);
+                filter: blur(4px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-18px);
+            }
+        }
+
+        @keyframes textRollingStep2 {
+            0%, 15% {
+                opacity: 0;
+                transform: translateY(18px);
+                filter: blur(4px);
+            }
+            18% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+            27% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+            30% {
+                opacity: 0;
+                transform: translateY(-18px);
+                filter: blur(4px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-18px);
+            }
+        }
+
+        @keyframes textRollingStep3 {
+            0%, 30% {
+                opacity: 0;
+                transform: translateY(22px) scale(0.94);
+                filter: blur(4px);
+            }
+            34% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+            95% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+            98%, 100% {
+                opacity: 0;
+                transform: translateY(-18px);
+                filter: blur(3px);
+            }
+        }
+
+        .text-roll-step1 {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: textRollingStep1 10s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+            will-change: transform, opacity, filter;
+            pointer-events: none;
+        }
+
+        .text-roll-step2 {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: textRollingStep2 10s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+            will-change: transform, opacity, filter;
+            pointer-events: none;
+        }
+
+        .text-roll-step3 {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: textRollingStep3 10s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+            will-change: transform, opacity, filter;
+            pointer-events: none;
+        }
     </style>
     
     <!-- Tailwind CSS CDN -->
@@ -1510,21 +1627,16 @@
         <div id="interactive-spotlight" class="hidden md:block"></div>
 
     <!-- HERO SECTION (3-TIER RESTRUCTURED LAYOUT: 1.TOP TYPOGRAPHY / 2.CLEAN VISUAL / 3.MARQUEE TICKER) -->
-    <section id="hero" aria-label="메인 솔루션 및 이러닝 영상 제작" class="relative bg-brand-navy-dark text-white overflow-hidden flex flex-col justify-start pt-20 sm:pt-24 md:pt-28 pb-0">
+    <!-- HERO SECTION (CLEAN 100vh FOCUSED LAYOUT: 1.SLOGAN/VIDEO -> 2.STANDALONE TEXT ROLLING -> 3.RESTORED 4-GRID METRICS) -->
+    <section id="hero" aria-label="메인 솔루션 및 이러닝 영상 제작" class="relative bg-brand-navy-dark text-white overflow-hidden flex flex-col justify-between pt-16 sm:pt-20 md:pt-22 pb-4 sm:pb-6 min-h-[92vh] lg:min-h-screen">
         <!-- Ambient Particles Canvas & Radial Glow -->
-        <canvas id="hero-particles-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-40"></canvas>
+        <canvas id="hero-particles-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-35"></canvas>
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(30,136,229,0.14),transparent_65%)] pointer-events-none z-0"></div>
 
         <!-- 1. [모바일 환경 전용] 상단 독립 텍스트 영역 (Mobile: md 미만, 헤더 하단에 영상과 분리 배치) -->
-        <div class="md:hidden w-full px-4 pt-3 pb-5 relative z-20 max-w-[1240px] mx-auto text-center">
-            <!-- Eyebrow Tag -->
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-bold mb-3.5 shadow-[0_0_15px_rgba(34,211,238,0.15)]">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span>스마트 교육 &amp; 미디어 솔루션</span>
-            </div>
-
+        <div class="md:hidden w-full px-4 pt-2 pb-3 relative z-20 max-w-[1240px] mx-auto text-center">
             <!-- Kinetic Typography Assembled Fragments (Mobile Centered & Flow Wrapped) -->
-            <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1.5 text-2xl xs:text-[26px] sm:text-3xl font-black text-white leading-snug tracking-tight select-none px-2 break-keep drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
+            <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xl xs:text-2xl sm:text-3xl font-black text-white leading-snug tracking-tight select-none px-2 break-keep drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
                 <span class="kinetic-piece-1 text-white">우리의 프레임 안에서</span>
                 <span class="kinetic-piece-2 text-cyan-300">당신의 비전은</span>
                 <span class="kinetic-piece-3 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-blue-400">콘텐츠가 되고,</span>
@@ -1533,38 +1645,32 @@
             </div>
 
             <!-- [모바일 하단 문구: 빛 반사 스윕] 부드럽게 떠오르며 안착 + 3초마다 촤르륵 빛이 반사되는 애플 감성 서브타이틀 -->
-            <div class="apple-shimmer-entrance pt-3">
-                <p class="text-xs xs:text-sm font-bold tracking-tight text-slate-300 flex flex-wrap items-center justify-center gap-1.5">
+            <div class="apple-shimmer-entrance pt-1.5">
+                <p class="text-xs font-bold tracking-tight text-slate-300 flex flex-wrap items-center justify-center gap-1.5">
                     <span class="apple-shimmer-text">기업 &amp; 공공기관이 신뢰하는</span>
                     <span class="apple-shimmer-mint font-extrabold">No.1 스마트 미디어 파트너</span>
                 </p>
             </div>
         </div>
 
-        <!-- 2. [비주얼 영역] 영상 컨테이너 (PC에서는 텍스트가 영상 정중앙 위에 오버레이됨) -->
-        <div class="w-full px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8 md:pb-10 relative z-20 max-w-[1240px] mx-auto">
-            <div class="relative w-full aspect-[16/10] sm:aspect-[21/9] md:aspect-[2.35/1] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),0_0_30px_rgba(34,211,238,0.08)] flex items-center justify-center">
-                <!-- 100% Crisp, Pure Clean Visual Video scaled up (1.3x) -->
-                <video class="w-full h-full object-cover scale-[1.30] pointer-events-none border-0"
+        <!-- 2. [비주얼 영역] 영상 컨테이너 (비율을 슬림하게 조정하여 100vh에 꽉 차며 답답하지 않게 안정감 부여) -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 pb-3 sm:pb-4 relative z-20 max-w-[1240px] mx-auto">
+            <div class="relative w-full aspect-[16/9] sm:aspect-[24/9] md:aspect-[2.8/1] lg:aspect-[3.0/1] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.9),0_0_30px_rgba(34,211,238,0.08)] flex items-center justify-center">
+                <!-- 100% Crisp, Pure Clean Visual Video scaled up (1.25x) -->
+                <video class="w-full h-full object-cover scale-[1.25] pointer-events-none border-0"
                        autoplay loop muted playsinline aria-hidden="true"
                        style="object-position: center 35%;">
                     <source src="https://raw.githubusercontent.com/whomedia01/whomedia4/main/whomedia_hero.mp4" type="video/mp4" />
                 </video>
 
                 <!-- PC Overlay Gradient Scrim (for legibility) -->
-                <div class="hidden md:block absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/60 pointer-events-none z-[5]"></div>
+                <div class="hidden md:block absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/65 pointer-events-none z-[5]"></div>
 
                 <!-- [PC 환경 전용] 영상 정중앙 오버레이 키네틱 타이포그래피 (PC: md 이상, position: absolute; z-index: 10) -->
-                <div class="hidden md:flex absolute inset-0 z-10 items-center justify-center p-6 sm:p-8 md:p-12 text-center pointer-events-none select-none">
-                    <div class="max-w-4xl mx-auto flex flex-col items-center justify-center space-y-3 lg:space-y-4">
-                        <!-- Eyebrow Tag -->
-                        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 text-xs lg:text-sm font-bold shadow-[0_0_20px_rgba(34,211,238,0.3)] backdrop-blur-md">
-                            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                            <span>지식을 성과로 만드는 스마트 교육 &amp; 미디어 솔루션</span>
-                        </div>
-
+                <div class="hidden md:flex absolute inset-0 z-10 items-center justify-center p-4 sm:p-6 lg:p-8 text-center pointer-events-none select-none">
+                    <div class="max-w-4xl mx-auto flex flex-col items-center justify-center space-y-2 lg:space-y-3">
                         <!-- 5 Kinetic Typography Fragments Assembled in Center (PC: pure text-white with deep cinematic text-shadow) -->
-                        <div class="flex flex-wrap items-center justify-center gap-x-3.5 lg:gap-x-5 gap-y-2 text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)]">
+                        <div class="flex flex-wrap items-center justify-center gap-x-3.5 lg:gap-x-5 gap-y-1.5 text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tight leading-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)]">
                             <span class="kinetic-piece-1 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">우리의 프레임 안에서</span>
                             <span class="kinetic-piece-2 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">당신의 비전은</span>
                             <span class="kinetic-piece-3 text-cyan-300 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">콘텐츠가 되고,</span>
@@ -1573,8 +1679,8 @@
                         </div>
 
                         <!-- [하단 문구: 빛 반사 스윕] 부드럽게 떠오르며 안착 + 3초마다 촤르륵 빛이 반사되는 애플 감성 서브타이틀 -->
-                        <div class="apple-shimmer-entrance pt-1 sm:pt-2">
-                            <p class="text-sm md:text-base lg:text-lg font-bold tracking-normal drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] flex items-center justify-center gap-2">
+                        <div class="apple-shimmer-entrance pt-1">
+                            <p class="text-xs sm:text-sm md:text-base font-bold tracking-normal drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] flex items-center justify-center gap-2">
                                 <span class="apple-shimmer-text">대한민국 대표 기업 &amp; 공공기관이 신뢰하는</span>
                                 <span class="apple-shimmer-mint font-extrabold">No.1 스마트 미디어 파트너</span>
                             </p>
@@ -1584,176 +1690,76 @@
             </div>
         </div>
 
-        <!-- 3. [하단 영역] 압도적 인프라 증명 가로형 뱃지 전광판 (Horizontal Badge Metrics Bar) -->
-        <div class="w-full relative z-20 bg-[#070B16] border-y border-slate-800/90 py-3.5 sm:py-5 overflow-hidden shadow-inner">
-            <div class="max-w-5xl mx-auto px-3 sm:px-6 select-none">
-                <!-- Compact Horizontal Wrap Flex (1-2 lines on mobile, 1 line on tablet/desktop) -->
-                <div class="flex flex-row flex-wrap items-center justify-center gap-2 sm:gap-4 md:gap-6 text-center">
-                    <!-- Badge 1: [ 17년 업력 ] -->
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-slate-900/80 border border-cyan-500/30 shadow-[0_0_12px_rgba(34,211,238,0.15)]">
-                        <span class="animate-neon-number-1 text-base xs:text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight">17년</span>
-                        <span class="neon-glow-subtle text-xs xs:text-sm sm:text-base font-semibold text-slate-200">업력</span>
+        <!-- 3. [신규] 텍스트 롤링 애니메이션 단독 섹션 (영상 바로 아래, 와이드 & 고집중도 질문➔해답 배너) -->
+        <div class="w-full relative z-20 px-4 sm:px-6 lg:px-8 max-w-[1240px] mx-auto mb-3 sm:mb-4">
+            <div class="w-full bg-slate-900/90 backdrop-blur-xl border border-cyan-500/30 rounded-xl sm:rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.7),0_0_20px_rgba(34,211,238,0.1)] py-2.5 sm:py-3.5 px-4 overflow-hidden">
+                <div class="relative overflow-hidden min-h-[58px] sm:min-h-[64px] md:min-h-[70px] flex items-center justify-center">
+                    <!-- Step 1 (0s~1.5s): '온라인 교육?' -->
+                    <div class="text-roll-step1 px-2 text-center">
+                        <span class="text-lg xs:text-xl sm:text-2xl md:text-3xl font-black text-cyan-300 tracking-tight drop-shadow-[0_2px_15px_rgba(34,211,238,0.6)] flex items-center justify-center gap-2">
+                            <span class="text-cyan-400 text-sm sm:text-base font-bold px-2 py-0.5 rounded bg-cyan-500/20 border border-cyan-400/40">Q.</span>
+                            온라인 교육?
+                        </span>
                     </div>
 
-                    <!-- Divider Star 1 -->
-                    <span class="text-cyan-400 font-bold text-xs sm:text-sm md:text-base drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]">✦</span>
-
-                    <!-- Badge 2: [ 160평 스튜디오 ] -->
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-slate-900/80 border border-cyan-500/30 shadow-[0_0_12px_rgba(34,211,238,0.15)]">
-                        <span class="animate-neon-number-2 text-base xs:text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight">160평</span>
-                        <span class="neon-glow-subtle text-xs xs:text-sm sm:text-base font-semibold text-slate-200">스튜디오</span>
+                    <!-- Step 2 (1.5s~3s): '오프라인 교육?' -->
+                    <div class="text-roll-step2 px-2 text-center">
+                        <span class="text-lg xs:text-xl sm:text-2xl md:text-3xl font-black text-white/95 tracking-tight drop-shadow-[0_2px_15px_rgba(255,255,255,0.45)] flex items-center justify-center gap-2">
+                            <span class="text-slate-300 text-sm sm:text-base font-bold px-2 py-0.5 rounded bg-white/15 border border-white/30">Q.</span>
+                            오프라인 교육?
+                        </span>
                     </div>
 
-                    <!-- Divider Star 2 -->
-                    <span class="text-cyan-400 font-bold text-xs sm:text-sm md:text-base drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]">✦</span>
-
-                    <!-- Badge 3: [ 100+ 협력기관 ] -->
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-slate-900/80 border border-cyan-500/30 shadow-[0_0_12px_rgba(34,211,238,0.15)]">
-                        <span class="animate-neon-number-3 text-base xs:text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight">100+</span>
-                        <span class="neon-glow-subtle text-xs xs:text-sm sm:text-base font-semibold text-slate-200">협력기관</span>
+                    <!-- Step 3 (3s~10s, 7s Stay): '온·오프라인 / 교육 콘텐츠 개발' (최종 안착 및 유지) -->
+                    <div class="text-roll-step3 px-2 text-center">
+                        <div class="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
+                            <span class="text-xs sm:text-sm font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.3)]">SOLUTION</span>
+                            <span class="text-base xs:text-lg sm:text-2xl md:text-3xl font-black text-white tracking-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
+                                온·오프라인
+                            </span>
+                            <span class="text-base xs:text-lg sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-brand-mint drop-shadow-[0_2px_15px_rgba(34,211,238,0.5)]">
+                                교육 콘텐츠 개발
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Key Metrics Banner (Bottom of Hero) with Extra Bottom Padding for Fixed Mobile Dock (pb-28 sm:pb-12) -->
-        <div class="w-full relative z-20 bg-[#0A0E1A] border-b border-slate-800 shadow-2xl pt-4 sm:pt-6 pb-28 sm:pb-8">
-            <div class="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-center">
-                    <div class="flex flex-col items-center justify-center p-3 bg-slate-900/70 border border-slate-800/80 rounded-xl sm:rounded-2xl shadow-sm">
-                        <div class="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-none mb-1">
-                            <span class="stat-counter" data-counter-target="17">17</span><span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-base">년</span>
-                        </div>
-                        <div class="text-xs sm:text-sm font-medium text-slate-300">축적의 노하우</div>
+        <!-- 4. [복구] 최하단 정량적 지표 4칸 패널 (신뢰감을 주는 고정 수치형 데이터 4 Columns Grid) -->
+        <div class="w-full relative z-20 max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3.5 text-center select-none">
+                <!-- 1. 17년 업력 -->
+                <div class="flex flex-col items-center justify-center p-2.5 sm:p-3.5 bg-slate-900/80 border border-slate-800/90 rounded-xl sm:rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                    <div class="text-lg xs:text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight leading-none mb-1">
+                        17<span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-sm">년</span>
                     </div>
-                    <div class="flex flex-col items-center justify-center p-3 bg-slate-900/70 border border-slate-800/80 rounded-xl sm:rounded-2xl shadow-sm">
-                        <div class="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-none mb-1">
-                            <span class="stat-counter" data-counter-target="100">100</span><span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-base">+</span>
-                        </div>
-                        <div class="text-xs sm:text-sm font-medium text-slate-300">주요 협력기관</div>
-                    </div>
-                    <div class="flex flex-col items-center justify-center p-3 bg-slate-900/70 border border-slate-800/80 rounded-xl sm:rounded-2xl shadow-sm">
-                        <div class="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-none mb-1">
-                            <span class="stat-counter" data-counter-target="1500" data-counter-comma="true">1,500</span><span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-base">+</span>
-                        </div>
-                        <div class="text-xs sm:text-sm font-medium text-slate-300">누적 프로젝트</div>
-                    </div>
-                    <div class="flex flex-col items-center justify-center p-3 bg-slate-900/70 border border-slate-800/80 rounded-xl sm:rounded-2xl shadow-sm">
-                        <div class="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-none mb-1">
-                            <span class="stat-counter" data-counter-target="10000" data-counter-comma="true">10,000</span><span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-base">+</span>
-                        </div>
-                        <div class="text-xs sm:text-sm font-medium text-slate-300">연간 제작 콘텐츠</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- BRAND STORY & PHILOSOPHY: 회사소개 (About Us) -->
-    <section id="about" aria-label="브랜드 소개 및 회사 철학" class="py-10 sm:py-16 bg-slate-50 text-slate-900 relative overflow-hidden border-b border-slate-200" @mouseenter="stopAboutAutoPlay()" @mouseleave="startAboutAutoPlay()">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(30,136,229,0.06),transparent_50%),radial-gradient(circle_at_bottom_left,rgba(0,210,132,0.05),transparent_50%)] pointer-events-none"></div>
-
-        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
-                <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200/80 text-xs font-bold tracking-wider uppercase mb-2.5 shadow-xs">
-                    <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-                    Brand Story &amp; Philosophy
-                </span>
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-3 break-keep">
-                    스마트한 교육과 미디어를 완성하는 <span class="text-red-600 font-black">후미디어</span>
-                </h2>
-                <p class="text-xs sm:text-base font-semibold text-slate-700 break-keep max-w-2xl mx-auto bg-white rounded-xl py-2.5 px-4 border border-slate-200 shadow-xs">
-                    "철저한 기획과 전문 인프라를 바탕으로 기업과 공공기관의 교육 목표와 비즈니스 성과를 완성합니다."
-                </p>
-            </div>
-
-            <!-- Cards Carousel -->
-            <div id="about-cards-container" class="flex items-stretch gap-3 sm:gap-5 overflow-x-auto snap-x snap-mandatory pb-4 pt-1 no-scrollbar scroll-smooth">
-                <!-- Card 0: Brand Philosophy -->
-                <div id="about-card-0" @click="selectAboutCard(0)" :class="aboutActiveIndex === 0 ? 'border-blue-600 bg-white ring-2 ring-blue-500/30 shadow-xl scale-100' : 'border-slate-200 bg-white/80 hover:bg-white hover:border-slate-300 shadow-xs'" class="min-w-[80%] sm:min-w-[320px] md:min-w-[360px] max-w-[380px] snap-center rounded-2xl p-4 sm:p-5 border transition-all duration-300 flex flex-col justify-between cursor-pointer relative group">
-                    <div>
-                        <div class="flex items-center justify-between mb-2.5">
-                            <span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-extrabold uppercase tracking-wider border border-blue-200">01. PHILOSOPHY</span>
-                            <span class="text-xs text-slate-500 font-bold">브랜드 철학</span>
-                        </div>
-                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mb-2 leading-snug break-keep group-hover:text-blue-600 transition-colors">
-                            지혜로운 방향성
-                        </h3>
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed break-keep font-normal">
-                            성장과 진정성을 견인하는 교육·미디어 융합 생태계를 구축합니다.
-                        </p>
-                    </div>
+                    <div class="text-[11px] xs:text-xs sm:text-sm font-semibold text-slate-300">업력 노하우</div>
                 </div>
 
-                <!-- Card 1: Expertise -->
-                <div id="about-card-1" @click="selectAboutCard(1)" :class="aboutActiveIndex === 1 ? 'border-blue-600 bg-white ring-2 ring-blue-500/30 shadow-xl scale-100' : 'border-slate-200 bg-white/80 hover:bg-white hover:border-slate-300 shadow-xs'" class="min-w-[80%] sm:min-w-[320px] md:min-w-[360px] max-w-[380px] snap-center rounded-2xl p-4 sm:p-5 border transition-all duration-300 flex flex-col justify-between cursor-pointer relative group">
-                    <div>
-                        <div class="flex items-center justify-between mb-2.5">
-                            <span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-extrabold uppercase tracking-wider border border-blue-200">02. EXPERTISE</span>
-                            <span class="text-xs text-blue-600 font-bold">전문성</span>
-                        </div>
-                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mb-2 leading-snug break-keep group-hover:text-blue-600 transition-colors">
-                            타협 없는 디테일
-                        </h3>
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed break-keep font-normal">
-                            기획부터 제작까지 철저한 기준과 전문성으로 고품질의 결과물을 완성합니다.
-                        </p>
+                <!-- 2. 160평 스튜디오 -->
+                <div class="flex flex-col items-center justify-center p-2.5 sm:p-3.5 bg-slate-900/80 border border-slate-800/90 rounded-xl sm:rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                    <div class="text-lg xs:text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight leading-none mb-1">
+                        160<span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-sm">평</span>
                     </div>
+                    <div class="text-[11px] xs:text-xs sm:text-sm font-semibold text-slate-300">자체 스튜디오</div>
                 </div>
 
-                <!-- Card 2: Authenticity -->
-                <div id="about-card-2" @click="selectAboutCard(2)" :class="aboutActiveIndex === 2 ? 'border-teal-600 bg-white ring-2 ring-teal-500/30 shadow-xl scale-100' : 'border-slate-200 bg-white/80 hover:bg-white hover:border-slate-300 shadow-xs'" class="min-w-[80%] sm:min-w-[320px] md:min-w-[360px] max-w-[380px] snap-center rounded-2xl p-4 sm:p-5 border transition-all duration-300 flex flex-col justify-between cursor-pointer relative group">
-                    <div>
-                        <div class="flex items-center justify-between mb-2.5">
-                            <span class="px-2 py-0.5 rounded-md bg-teal-50 text-teal-700 text-[10px] font-extrabold uppercase tracking-wider border border-teal-200">03. AUTHENTICITY</span>
-                            <span class="text-xs text-teal-700 font-bold">진정성</span>
-                        </div>
-                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mb-2 leading-snug break-keep group-hover:text-teal-700 transition-colors">
-                            본질을 향한 통찰
-                        </h3>
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed break-keep font-normal">
-                            피상적인 화려함보다 메시지의 깊이와 교육적 본질을 극대화하는 콘텐츠를 설계합니다.
-                        </p>
+                <!-- 3. 1,500+ 누적 프로젝트 -->
+                <div class="flex flex-col items-center justify-center p-2.5 sm:p-3.5 bg-slate-900/80 border border-slate-800/90 rounded-xl sm:rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                    <div class="text-lg xs:text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight leading-none mb-1">
+                        1,500<span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-sm">+</span>
                     </div>
+                    <div class="text-[11px] xs:text-xs sm:text-sm font-semibold text-slate-300">누적 프로젝트</div>
                 </div>
 
-                <!-- Card 3: Innovation -->
-                <div id="about-card-3" @click="selectAboutCard(3)" :class="aboutActiveIndex === 3 ? 'border-purple-600 bg-white ring-2 ring-purple-500/30 shadow-xl scale-100' : 'border-slate-200 bg-white/80 hover:bg-white hover:border-slate-300 shadow-xs'" class="min-w-[80%] sm:min-w-[320px] md:min-w-[360px] max-w-[380px] snap-center rounded-2xl p-4 sm:p-5 border transition-all duration-300 flex flex-col justify-between cursor-pointer relative group">
-                    <div>
-                        <div class="flex items-center justify-between mb-2.5">
-                            <span class="px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 text-[10px] font-extrabold uppercase tracking-wider border border-purple-200">04. INNOVATION</span>
-                            <span class="text-xs text-purple-700 font-bold">지속 혁신</span>
-                        </div>
-                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mb-2 leading-snug break-keep group-hover:text-purple-700 transition-colors">
-                            시장을 선도하는 파트너
-                        </h3>
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed break-keep font-normal">
-                            교육 트렌드를 선도하며 고객의 비즈니스 혁신을 든든하게 지원합니다.
-                        </p>
+                <!-- 4. 100+ 주요 협력기관 -->
+                <div class="flex flex-col items-center justify-center p-2.5 sm:p-3.5 bg-slate-900/80 border border-slate-800/90 rounded-xl sm:rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                    <div class="text-lg xs:text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight leading-none mb-1">
+                        100<span class="text-brand-mint font-extrabold ml-0.5 text-xs sm:text-sm">+</span>
                     </div>
+                    <div class="text-[11px] xs:text-xs sm:text-sm font-semibold text-slate-300">주요 협력기관</div>
                 </div>
-
-                <!-- Card 4: Future Vision -->
-                <div id="about-card-4" @click="selectAboutCard(4)" :class="aboutActiveIndex === 4 ? 'border-amber-600 bg-white ring-2 ring-amber-500/30 shadow-xl scale-100' : 'border-slate-200 bg-white/80 hover:bg-white hover:border-slate-300 shadow-xs'" class="min-w-[80%] sm:min-w-[320px] md:min-w-[360px] max-w-[380px] snap-center rounded-2xl p-4 sm:p-5 border transition-all duration-300 flex flex-col justify-between cursor-pointer relative group">
-                    <div>
-                        <div class="flex items-center justify-between mb-2.5">
-                            <span class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 text-[10px] font-extrabold uppercase tracking-wider border border-amber-200">05. FUTURE VISION</span>
-                            <span class="text-xs text-amber-700 font-bold">비전</span>
-                        </div>
-                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mb-2 leading-snug break-keep group-hover:text-amber-700 transition-colors">
-                            지속가능한 성장의 기준
-                        </h3>
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed break-keep font-normal">
-                            교육과 미디어를 연결하여 사람과 기업을 위한 확실한 비전을 제시합니다.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-center gap-2 mt-4 sm:mt-6">
-                <template x-for="(dot, idx) in [0, 1, 2, 3, 4]" :key="idx">
-                    <button type="button" @click="selectAboutCard(idx)" :aria-label="(idx + 1) + '번 카드로 이동'" :class="aboutActiveIndex === idx ? 'w-7 bg-blue-600 scale-105' : 'w-2 bg-slate-300 hover:bg-slate-400'" class="h-2 rounded-full transition-all cursor-pointer"></button>
-                </template>
             </div>
         </div>
     </section>
