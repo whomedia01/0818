@@ -2783,17 +2783,17 @@
             <!-- PROMINENT ANIMATED ROLLING FEATURED SLIDER (IMAGE BACKGROUND + OVERLAID TEXT) -->
             <div @touchstart="touchStartX = $event.touches[0].clientX"
                  @touchend="touchEndX = $event.changedTouches[0].clientX; if (touchStartX - touchEndX > 30) { nextServiceCard(); restartServiceAutoPlay(8000); } else if (touchEndX - touchStartX > 30) { prevServiceCard(); restartServiceAutoPlay(8000); }"
-                 class="relative w-full max-w-5xl mx-auto rounded-3xl bg-slate-900 text-white overflow-hidden shadow-2xl border border-slate-200/80 mb-8 h-[540px] xs:h-[500px] sm:h-[480px] lg:h-[500px] min-h-[480px] grid grid-cols-1 grid-rows-1 isolate">
+                 class="relative w-full max-w-5xl mx-auto rounded-3xl bg-slate-900 text-white overflow-hidden shadow-2xl border border-slate-200/80 mb-8 h-[540px] xs:h-[500px] sm:h-[480px] lg:h-[480px]">
                 
                 <!-- Slide 0: 이러닝 개발 -->
                 <div x-show="activeServiceIndex === 0"
-                     x-transition:enter="transition ease-out duration-500 transform"
-                     x-transition:enter-start="opacity-0 translate-x-10"
+                     x-transition:enter="transition ease-out duration-400 transform opacity-0 translate-x-8"
+                     x-transition:enter-start="opacity-0 translate-x-8"
                      x-transition:enter-end="opacity-100 translate-x-0"
-                     x-transition:leave="transition ease-in duration-300 transform"
+                     x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
                      x-transition:leave-start="opacity-100 translate-x-0"
-                     x-transition:leave-end="opacity-0 -translate-x-10"
-                     class="col-start-1 row-start-1 w-full h-full relative p-6 sm:p-10 lg:p-12 flex flex-col justify-between group will-change-transform-opacity gpu-accelerated overflow-hidden">
+                     x-transition:leave-end="opacity-0 -translate-x-8"
+                     class="absolute inset-0 w-full h-full p-6 sm:p-10 lg:p-12 flex flex-col justify-between group overflow-hidden will-change-transform-opacity gpu-accelerated">
                     
                     <!-- High-Definition Background Image (Bright and Clearly Visible) -->
                     <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1400&q=85" 
@@ -2849,13 +2849,13 @@
 
                 <!-- Slide 1: 전문 영상 제작 -->
                 <div x-show="activeServiceIndex === 1"
-                     x-transition:enter="transition ease-out duration-500 transform"
-                     x-transition:enter-start="opacity-0 translate-x-10"
+                     x-transition:enter="transition ease-out duration-400 transform opacity-0 translate-x-8"
+                     x-transition:enter-start="opacity-0 translate-x-8"
                      x-transition:enter-end="opacity-100 translate-x-0"
-                     x-transition:leave="transition ease-in duration-300 transform"
+                     x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
                      x-transition:leave-start="opacity-100 translate-x-0"
-                     x-transition:leave-end="opacity-0 -translate-x-10"
-                     class="col-start-1 row-start-1 w-full h-full relative p-6 sm:p-10 lg:p-12 flex flex-col justify-between group will-change-transform-opacity gpu-accelerated overflow-hidden">
+                     x-transition:leave-end="opacity-0 -translate-x-8"
+                     class="absolute inset-0 w-full h-full p-6 sm:p-10 lg:p-12 flex flex-col justify-between group overflow-hidden will-change-transform-opacity gpu-accelerated">
                     
                     <!-- High-Definition Background Image (Bright and Clearly Visible) -->
                     <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1400&q=85" 
@@ -2911,13 +2911,13 @@
 
                 <!-- Slide 2: 블렌디드 러닝 -->
                 <div x-show="activeServiceIndex === 2"
-                     x-transition:enter="transition ease-out duration-500 transform"
-                     x-transition:enter-start="opacity-0 translate-x-10"
+                     x-transition:enter="transition ease-out duration-400 transform opacity-0 translate-x-8"
+                     x-transition:enter-start="opacity-0 translate-x-8"
                      x-transition:enter-end="opacity-100 translate-x-0"
-                     x-transition:leave="transition ease-in duration-300 transform"
+                     x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
                      x-transition:leave-start="opacity-100 translate-x-0"
-                     x-transition:leave-end="opacity-0 -translate-x-10"
-                     class="col-start-1 row-start-1 w-full h-full relative p-6 sm:p-10 lg:p-12 flex flex-col justify-between group will-change-transform-opacity gpu-accelerated overflow-hidden">
+                     x-transition:leave-end="opacity-0 -translate-x-8"
+                     class="absolute inset-0 w-full h-full p-6 sm:p-10 lg:p-12 flex flex-col justify-between group overflow-hidden will-change-transform-opacity gpu-accelerated">
                     
                     <!-- High-Definition Background Image (Bright and Clearly Visible) -->
                     <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1400&q=85" 
