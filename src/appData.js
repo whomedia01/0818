@@ -81,6 +81,7 @@ document.addEventListener('alpine:init', () => {
         scrolled: false, 
         mobileMenuOpen: false, 
         refTab: 'all',
+        searchQuery: '',
         portfolioLimit: 12,
         videoModalOpen: false,
         activeVideoId: '',
@@ -102,8 +103,89 @@ document.addEventListener('alpine:init', () => {
         organizationDataList: ORGANIZATION_DATA,
 
         get filteredPortfolio() {
-            if (this.refTab === 'all') return this.portfolioItems;
-            return this.portfolioItems.filter(item => item.cat === this.refTab);
+            let list = this.portfolioItems;
+            if (this.refTab !== 'all') {
+                list = list.filter(item => item.cat === this.refTab);
+            }
+            if (this.searchQuery && this.searchQuery.trim()) {
+                const q = this.searchQuery.trim().toLowerCase();
+                list = list.filter(item => 
+                    (item.title && item.title.toLowerCase().includes(q)) ||
+                    (item.tag && item.tag.toLowerCase().includes(q)) ||
+                    (item.label && item.label.toLowerCase().includes(q))
+                );
+            }
+            return list;
+        },
+
+        // [정교화된 구글 외부 검색 쿼리 빌더]
+        getGoogleSearchUrl(customQuery = '') {
+            const rawTerm = (customQuery || this.searchQuery || '').trim();
+            if (!rawTerm) {
+                return 'https://www.google.com/search?q=' + encodeURIComponent('(주)후미디어 이러닝 영상 제작 스튜디오 포트폴리오');
+            }
+            
+            // 1. 특수문자 정제
+            const clean = rawTerm.replace(/[^\w\s가-힣ㄱ-ㅎㅏ-ㅣ]/g, ' ').replace(/\s+/g, ' ').trim();
+            
+            // 2. 검색어 성격 분석 및 후미디어 브랜드 결합 쿼리 정밀화
+            let refinedQuery = '';
+            const hasBrand = /후미디어|whomedia|whocampus/i.test(clean);
+
+            if (hasBrand) {
+                refinedQuery = `${clean} (이러닝 OR 영상 OR 제작 OR 스튜디오 OR 포트폴리오)`;
+            } else {
+                // 키워드별 맥락 보강
+                if (/이러닝|교육|강의|교재|교수설계|학습|수업|학교|대학/i.test(clean)) {
+                    refinedQuery = `(주)후미디어 "${clean}" 이러닝 콘텐츠 개발`;
+                } else if (/영상|촬영|스튜디오|크로마키|카메라|편집|모션|그래픽|홍보/i.test(clean)) {
+                    refinedQuery = `후미디어 "${clean}" 영상 제작 스튜디오`;
+                } else if (/ebs|능률|동아|웅진|천재|신사고|미래엔/i.test(clean)) {
+                    refinedQuery = `후미디어 "${clean}" 제작 실적 포트폴리오`;
+                } else {
+                    refinedQuery = `(주)후미디어 "${clean}" (이러닝 OR 영상제작 OR 스튜디오)`;
+                }
+            }
+            return 'https://www.google.com/search?q=' + encodeURIComponent(refinedQuery);
+        },
+
+        // [사용자 검색어 기반 맞춤형 추천 구글 검색 쿼리 4종 생성]
+        getSuggestedGoogleQueries() {
+            const raw = (this.searchQuery || '').trim();
+            if (!raw) return [];
+            const clean = raw.replace(/[^\w\s가-힣ㄱ-ㅎㅏ-ㅣ]/g, ' ').replace(/\s+/g, ' ').trim();
+            if (!clean) return [];
+
+            return [
+                {
+                    title: `후미디어 "${clean}" 제작 사례`,
+                    query: `후미디어 "${clean}" 제작 사례`,
+                    desc: '공식 프로젝트 및 영상 레퍼런스 검색'
+                },
+                {
+                    title: `(주)후미디어 ${clean} 이러닝 개발`,
+                    query: `(주)후미디어 ${clean} 이러닝 콘텐츠 개발`,
+                    desc: '교수설계 및 디지털 교육 콘텐츠 실적'
+                },
+                {
+                    title: `후미디어 ${clean} 스튜디오 영상 연출`,
+                    query: `후미디어 ${clean} 스튜디오 영상 제작`,
+                    desc: '160평 전문 스튜디오 촬영 및 포트폴리오'
+                },
+                {
+                    title: `WHOMEDIA ${clean} 뉴스 및 언론PR`,
+                    query: `WHOMEDIA ${clean} 언론보도 디지털PR`,
+                    desc: '대외 공식 실적 및 보도자료 검색'
+                }
+            ];
+        },
+
+        setSearchQuery(query) {
+            this.searchQuery = query;
+        },
+
+        clearSearch() {
+            this.searchQuery = '';
         },
 
         openModal(videoId, videoTitle) {
@@ -149,6 +231,11 @@ document.addEventListener('alpine:init', () => {
                 this.startStudioAutoPlay();
                 this.loadStudioImagesFromGithub();
 
+                // [구글 검색엔진 최적화 (SEO) 본문 실시간 분석 및 메타태그 자동 업데이트 실행]
+                setTimeout(() => {
+                    this.refreshSeoKeywords();
+                }, 300);
+
                 // Periodic sync (every 60s) to reflect any additions/replacements/deletions on GitHub
                 setInterval(() => {
                     this.loadStudioImagesFromGithub();
@@ -156,6 +243,11 @@ document.addEventListener('alpine:init', () => {
             } catch(e) {
                 console.warn('Init non-blocking exception handled:', e);
             }
+        },
+
+        // [구글 SEO 최적화 메타 키워드 추출 및 동적 태그 갱신 메서드]
+        refreshSeoKeywords() {
+            return extractAndApplyDynamicSeoMetaKeywords();
         },
 
         startHeroTyping() {
@@ -197,12 +289,14 @@ document.addEventListener('alpine:init', () => {
         },
 
         async submitInquiry() {
-            if (!this.inquiryForm.company || !this.inquiryForm.name || !this.inquiryForm.phone || !this.inquiryForm.category || !this.inquiryForm.message) {
-                alert('필수 문의 항목을 모두 작성해 주세요.');
+            if (!this.inquiryForm.name || !this.inquiryForm.phone || !this.inquiryForm.category || !this.inquiryForm.message) {
+                this.inquirySuccessMessage = '필수 항목(성함, 연락처, 문의유형, 내용)을 모두 작성해 주세요.';
+                this.inquirySuccessModal = true;
                 return;
             }
             if (!this.inquiryForm.consent) {
-                alert('개인정보 수집 및 이용 동의에 체크해 주세요.');
+                this.inquirySuccessMessage = '개인정보 수집 및 이용 동의에 체크해 주세요.';
+                this.inquirySuccessModal = true;
                 return;
             }
             this.inquirySubmitting = true;
@@ -445,3 +539,198 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 });
+
+// =========================================================================
+// [Google SEO 최적화] 웹페이지 본문 실시간 분석 및 메타 태그 동적 추출/업데이트 엔진
+// =========================================================================
+function extractAndApplyDynamicSeoMetaKeywords() {
+    try {
+        // 1. 한국어 조사, 어미 및 일반 불용어(Stopwords) 정의
+        const STOPWORDS = new Set([
+            '이', '그', '저', '것', '수', '등', '들', '및', '를', '을', '가', '은', '는', '에', '의', '로', '으로', '과', '와',
+            '도', '만', '까지', '부터', '에서', '에게', '께', '보다', '처럼', '같이', '통해', '위해', '대한', '관한', '따라',
+            '함께', '우리', '있는', '없는', '하는', '되는', '위한', '통한', '매우', '가장', '더욱', '모든', '각종', '다양한',
+            '최고', '전문', '제공', '완성', '기반', '보유', '구축', '운영', '총괄', '실현', '안내', '확인', '클릭', '바로가기'
+        ]);
+
+        // 핵심 도메인 고가치 키워드 가중치 사전 (Google Search High-Value Seeds)
+        const DOMAIN_SEEDS = [
+            { term: '후미디어', weight: 15 },
+            { term: '(주)후미디어', weight: 15 },
+            { term: 'WHOMEDIA', weight: 12 },
+            { term: '이러닝 콘텐츠 개발', weight: 12 },
+            { term: '교수설계', weight: 10 },
+            { term: 'AI 디지털 교과서', weight: 10 },
+            { term: '4K 영상 제작', weight: 10 },
+            { term: '기업 홍보영상', weight: 9 },
+            { term: '160평 전문 스튜디오', weight: 10 },
+            { term: '전자칠판 강의 스튜디오', weight: 10 },
+            { term: '대형 곡면 크로마키', weight: 10 },
+            { term: '부조정실 스튜디오 대여', weight: 9 },
+            { term: '후캠퍼스 평생교육원', weight: 9 },
+            { term: '한국AI교육일보', weight: 9 },
+            { term: '마이크로러닝', weight: 8 },
+            { term: '블렌디드 러닝', weight: 8 },
+            { term: '모션그래픽', weight: 8 },
+            { term: '가산디지털단지 스튜디오', weight: 8 }
+        ];
+
+        // 2. DOM 요소별 가중치 수집
+        const scores = new Map();
+
+        // 헬퍼: 점수 누적
+        function addScore(term, weight) {
+            if (!term || typeof term !== 'string') return;
+            const cleaned = term.trim().replace(/^[^\w가-힣]+|[^\w가-힣]+$/g, '');
+            if (cleaned.length < 2) return;
+            if (STOPWORDS.has(cleaned)) return;
+            
+            const current = scores.get(cleaned) || 0;
+            scores.set(cleaned, current + weight);
+        }
+
+        // 2-1. 도메인 시드 기본 점수 부여
+        DOMAIN_SEEDS.forEach(s => addScore(s.term, s.weight));
+
+        // 2-2. 페이지 DOM 본문 계층별 텍스트 수집 및 파싱
+        const tagWeights = [
+            { selector: 'h1, [data-seo-h1]', weight: 6.0 },
+            { selector: 'h2', weight: 4.5 },
+            { selector: 'h3', weight: 3.5 },
+            { selector: 'h4, strong, b, .font-black, .font-extrabold', weight: 2.5 },
+            { selector: '.badge, .tag, span.font-bold', weight: 2.0 },
+            { selector: 'section#services, section#studio, section#reference, section#org, section#about', weight: 1.5 },
+            { selector: 'p, li', weight: 1.0 }
+        ];
+
+        tagWeights.forEach(({ selector, weight }) => {
+            document.querySelectorAll(selector).forEach(el => {
+                const text = (el.innerText || el.textContent || '').trim();
+                if (!text) return;
+
+                // N-gram 추출 (2~4 어절 복합 명사구)
+                const sentences = text.split(/[\n.!?·|,]+/);
+                sentences.forEach(sent => {
+                    const words = sent.trim().split(/\s+/).filter(w => w.length > 1);
+                    
+                    // 단일 단어 및 조사 제거 추출
+                    words.forEach(w => {
+                        const cleanW = w.replace(/(은|는|이|가|을|를|에|의|로|으로|와|과|도|만|에서|에게|까지|부터|보다)$/g, '');
+                        if (cleanW.length >= 2 && !STOPWORDS.has(cleanW)) {
+                            addScore(cleanW, weight * 0.8);
+                        }
+                    });
+
+                    // 2어절 바이그램 복합어 추출 (예: '이러닝 콘텐츠', '영상 제작', '전자칠판 강의', '크로마키 스튜디오')
+                    for (let i = 0; i < words.length - 1; i++) {
+                        const w1 = words[i].replace(/[^\w가-힣]/g, '');
+                        const w2 = words[i+1].replace(/[^\w가-힣]/g, '');
+                        if (w1.length >= 2 && w2.length >= 2 && !STOPWORDS.has(w1) && !STOPWORDS.has(w2)) {
+                            addScore(`${w1} ${w2}`, weight * 1.5);
+                        }
+                    }
+
+                    // 3어절 트라이그램 복합어 추출 (예: '이러닝 콘텐츠 개발', '160평 전문 스튜디오')
+                    for (let i = 0; i < words.length - 2; i++) {
+                        const w1 = words[i].replace(/[^\w가-힣]/g, '');
+                        const w2 = words[i+1].replace(/[^\w가-힣]/g, '');
+                        const w3 = words[i+2].replace(/[^\w가-힣]/g, '');
+                        if (w1.length >= 2 && w2.length >= 2 && w3.length >= 2) {
+                            addScore(`${w1} ${w2} ${w3}`, weight * 2.0);
+                        }
+                    }
+                });
+            });
+        });
+
+        // 2-3. PORTFOLIO_DATA 및 스튜디오 데이터 추가 반영
+        if (typeof PORTFOLIO_DATA !== 'undefined' && Array.isArray(PORTFOLIO_DATA)) {
+            PORTFOLIO_DATA.forEach(item => {
+                if (item.title) addScore(item.title, 3.0);
+                if (item.tag) addScore(item.tag, 2.5);
+                if (item.label) addScore(item.label, 2.5);
+            });
+        }
+
+        // 3. 점수 순으로 정렬 및 상위 구글 SEO 최적화 메타 키워드 추출 (상위 35~45개)
+        const sortedKeywords = Array.from(scores.entries())
+            .filter(([term, score]) => term.length >= 2 && score >= 2.5)
+            .sort((a, b) => b[1] - a[1])
+            .map(([term]) => term);
+
+        // 중복 및 불필요한 부분문자열 필터링
+        const uniqueFinalKeywords = [];
+        const seen = new Set();
+
+        for (const kw of sortedKeywords) {
+            const normalized = kw.replace(/\s+/g, ' ').trim();
+            if (!seen.has(normalized) && normalized.length <= 30) {
+                seen.add(normalized);
+                uniqueFinalKeywords.push(normalized);
+            }
+            if (uniqueFinalKeywords.length >= 40) break;
+        }
+
+        const keywordsString = uniqueFinalKeywords.join(', ');
+
+        // 4. index.html의 메타 태그 동적 업데이트
+        // 4-1. <meta name="keywords">
+        let metaKeywords = document.querySelector('meta[name="keywords"]');
+        if (!metaKeywords) {
+            metaKeywords = document.createElement('meta');
+            metaKeywords.setAttribute('name', 'keywords');
+            document.head.appendChild(metaKeywords);
+        }
+        metaKeywords.setAttribute('content', keywordsString);
+
+        // 4-2. OpenGraph & Twitter Tags
+        let ogKeywords = document.querySelector('meta[property="og:keywords"]');
+        if (!ogKeywords) {
+            ogKeywords = document.createElement('meta');
+            ogKeywords.setAttribute('property', 'og:keywords');
+            document.head.appendChild(ogKeywords);
+        }
+        ogKeywords.setAttribute('content', keywordsString);
+
+        // 4-3. Schema.org JSON-LD Structured Data Dynamic Injection
+        const ldScript = document.querySelector('script[type="application/ld+json"]');
+        if (ldScript) {
+            try {
+                const ldData = JSON.parse(ldScript.textContent || '[]');
+                const targetObj = Array.isArray(ldData) ? ldData[0] : ldData;
+                if (targetObj) {
+                    targetObj.keywords = uniqueFinalKeywords.slice(0, 25);
+                    ldScript.textContent = JSON.stringify(ldData, null, 2);
+                }
+            } catch(jsonErr) {
+                console.warn('[SEO Engine] JSON-LD sync notice:', jsonErr);
+            }
+        }
+
+        // 전역 함수 및 Custom Event 브로드캐스트
+        window.extractedSeoKeywords = uniqueFinalKeywords;
+        window.dispatchEvent(new CustomEvent('seo:keywords-updated', {
+            detail: {
+                keywords: uniqueFinalKeywords,
+                count: uniqueFinalKeywords.length,
+                keywordsString: keywordsString,
+                timestamp: new Date().toISOString()
+            }
+        }));
+
+        return uniqueFinalKeywords;
+    } catch (err) {
+        console.warn('[SEO Engine] Keyword extraction non-blocking error:', err);
+        return [];
+    }
+}
+
+// 전역 window 접근자 등록
+window.updateSeoMetaKeywords = extractAndApplyDynamicSeoMetaKeywords;
+
+// DOM 로드 즉시 자동 실행
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', extractAndApplyDynamicSeoMetaKeywords);
+} else {
+    setTimeout(extractAndApplyDynamicSeoMetaKeywords, 100);
+}
