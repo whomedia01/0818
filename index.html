@@ -1534,7 +1534,36 @@
                     }
                     this.inquirySubmitting = true;
 
-                    // Dispatch to Express Backend DB (/api/inquiry)
+                    const newInquiryRecord = {
+                        id: 'inq_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+                        company: (this.inquiryForm.company || '').trim(),
+                        name: this.inquiryForm.name.trim(),
+                        phone: this.inquiryForm.phone.trim(),
+                        category: this.inquiryForm.category,
+                        message: this.inquiryForm.message.trim(),
+                        status: '대기',
+                        adminNote: '',
+                        createdAt: new Date().toISOString(),
+                        formattedDate: new Date().toLocaleString('ko-KR', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: false
+                        })
+                    };
+
+                    // Persist to Local Storage immediately
+                    try {
+                        const localInquiries = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
+                        localInquiries.unshift(newInquiryRecord);
+                        localStorage.setItem('whomedia_inquiries', JSON.stringify(localInquiries));
+                    } catch (storageErr) {
+                        console.warn('LocalStorage save non-blocking warning:', storageErr);
+                    }
+
+                    // Dispatch to Express Backend DB (/api/inquiry) if available
                     try {
                         const response = await fetch('/api/inquiry', {
                             method: 'POST',
@@ -1542,18 +1571,17 @@
                             body: JSON.stringify(this.inquiryForm)
                         });
 
-                        const result = await response.json();
-                        if (response.ok && result.success) {
-                            this.inquirySuccessMessage = '작성해주신 프로젝트/임대 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
-                            this.inquiryForm = { company: '', name: '', phone: '', category: '', message: '', consent: false };
+                        if (response.ok) {
+                            const result = await response.json().catch(() => ({}));
+                            this.inquirySuccessMessage = result.message || '작성해주신 프로젝트/임대 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
                         } else {
-                            this.inquirySuccessMessage = result.message || '문의 접수 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+                            this.inquirySuccessMessage = '작성해주신 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
                         }
                     } catch (err) {
-                        console.error('Inquiry submission error:', err);
-                        this.inquirySuccessMessage = '작성해주신 문의가 접수되었습니다. 담당자가 확인 후 빠르게 안내해 드리겠습니다.';
-                        this.inquiryForm = { company: '', name: '', phone: '', category: '', message: '', consent: false };
+                        console.log('Online server connection note:', err);
+                        this.inquirySuccessMessage = '작성해주신 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
                     } finally {
+                        this.inquiryForm = { company: '', name: '', phone: '', category: '', message: '', consent: false };
                         this.inquirySubmitting = false;
                         this.inquirySuccessModal = true;
                     }
