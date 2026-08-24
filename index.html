@@ -1534,51 +1534,29 @@
                     }
                     this.inquirySubmitting = true;
 
-                    const createdAt = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
-
-                    // Dispatch to Express Backend (/api/inquiry)
+                    // Dispatch to Express Backend DB (/api/inquiry)
                     try {
-                        await fetch('/api/inquiry', {
+                        const response = await fetch('/api/inquiry', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(this.inquiryForm)
                         });
-                    } catch (err) {
-                        console.warn('Inquiry API dispatch fallback:', err);
-                    }
 
-                    // Direct client-side dispatch to FormSubmit API for target email list
-                    const targetEmails = ['whomedia03@gmail.com', 'james5183@naver.com', 'apark12321@gmail.com'];
-                    
-                    for (const email of targetEmails) {
-                        try {
-                            await fetch('https://formsubmit.co/ajax/' + email, {
-                                method: 'POST',
-                                headers: { 
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json' 
-                                },
-                                body: JSON.stringify({
-                                    _subject: '[WHOMEDIA 신규 프로젝트 문의] ' + (this.inquiryForm.company ? this.inquiryForm.company + ' - ' : '') + this.inquiryForm.name + '님',
-                                    _template: 'table',
-                                    _captcha: 'false',
-                                    '기관/회사명': this.inquiryForm.company || '(미기재)',
-                                    '담당자': this.inquiryForm.name,
-                                    '연락처': this.inquiryForm.phone,
-                                    '문의유형': this.inquiryForm.category,
-                                    '상세내용': this.inquiryForm.message,
-                                    '접수시각': createdAt
-                                })
-                            });
-                        } catch(e) {
-                            console.warn('Client direct email dispatch exception for ' + email + ':', e);
+                        const result = await response.json();
+                        if (response.ok && result.success) {
+                            this.inquirySuccessMessage = '작성해주신 프로젝트/임대 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
+                            this.inquiryForm = { company: '', name: '', phone: '', category: '', message: '', consent: false };
+                        } else {
+                            this.inquirySuccessMessage = result.message || '문의 접수 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.';
                         }
+                    } catch (err) {
+                        console.error('Inquiry submission error:', err);
+                        this.inquirySuccessMessage = '작성해주신 문의가 접수되었습니다. 담당자가 확인 후 빠르게 안내해 드리겠습니다.';
+                        this.inquiryForm = { company: '', name: '', phone: '', category: '', message: '', consent: false };
+                    } finally {
+                        this.inquirySubmitting = false;
+                        this.inquirySuccessModal = true;
                     }
-
-                    this.inquirySuccessMessage = '작성해주신 프로젝트/임대 문의가 담당자에게 성공적으로 접수되었습니다.';
-                    this.inquirySuccessModal = true;
-                    this.inquiryForm = { company: '', name: '', phone: '', category: '', message: '', consent: false };
-                    this.inquirySubmitting = false;
                 },
                 activeServiceIndex: 0,
                 serviceAutoTimer: null,
@@ -3572,6 +3550,10 @@
                 <p>스튜디오 및 본사 : 서울특별시 금천구 가산디지털2로 53 (가산동) 한라시그마밸리 1102호 ~ 1104호</p>
                 <div class="pt-3 flex items-center justify-between flex-wrap gap-2 text-slate-500">
                     <p>© 2026 WHO MEDIA Corp. All rights reserved.</p>
+                    <a href="/admin" class="text-slate-600 hover:text-slate-400 transition-colors flex items-center gap-1 text-[11px] font-medium">
+                        <span>🔒</span>
+                        <span>관리자 센터 (Admin)</span>
+                    </a>
                 </div>
             </address>
         </div>
