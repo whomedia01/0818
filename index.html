@@ -1021,83 +1021,83 @@
 
         /* =========================================================
            BUSINESS 3-DIVISION SEQUENCE ROLLING ANIMATIONS (9.6s Cycle)
-           - Step 1 (0% ~ 33.3% / 0s ~ 3.2s): 01. 이러닝 개발 (맞춤형 이러닝 콘텐츠 개발)
-           - Step 2 (33.3% ~ 66.6% / 3.2s ~ 6.4s): 02. 전문 영상 제작 (4K 시네마틱 & 전문 영상 제작)
-           - Step 3 (66.6% ~ 100% / 6.4s ~ 9.6s): 03. 블렌디드 러닝 (오프라인 연계 블렌디드 러닝)
+           - Step 1 (0% ~ 33.3% / 0s ~ 3.2s): 01. 이러닝 개발 (맞춤형 이러닝 콘텐츠 설계)
+           - Step 2 (33.3% ~ 66.6% / 3.2s ~ 6.4s): 02. 전문 영상 제작 (온·오프라인 통합 교육 솔루션)
+           - Step 3 (66.6% ~ 100% / 6.4s ~ 9.6s): 03. 블렌디드 러닝 (교육 및 기업 홍보 영상 All-in-one 제작)
         ========================================================= */
         @keyframes textRollingStep1 {
             0% {
                 opacity: 0;
-                transform: translateY(16px);
+                transform: translate3d(0, 16px, 0);
                 filter: blur(4px);
             }
             4% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translate3d(0, 0, 0);
                 filter: blur(0);
             }
             29% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translate3d(0, 0, 0);
                 filter: blur(0);
             }
             33.3% {
                 opacity: 0;
-                transform: translateY(-16px);
+                transform: translate3d(0, -16px, 0);
                 filter: blur(4px);
             }
             100% {
                 opacity: 0;
-                transform: translateY(-16px);
+                transform: translate3d(0, -16px, 0);
             }
         }
 
         @keyframes textRollingStep2 {
             0%, 33.3% {
                 opacity: 0;
-                transform: translateY(16px);
+                transform: translate3d(0, 16px, 0);
                 filter: blur(4px);
             }
             37.3% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translate3d(0, 0, 0);
                 filter: blur(0);
             }
             62.3% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translate3d(0, 0, 0);
                 filter: blur(0);
             }
             66.6% {
                 opacity: 0;
-                transform: translateY(-16px);
+                transform: translate3d(0, -16px, 0);
                 filter: blur(4px);
             }
             100% {
                 opacity: 0;
-                transform: translateY(-16px);
+                transform: translate3d(0, -16px, 0);
             }
         }
 
         @keyframes textRollingStep3 {
             0%, 66.6% {
                 opacity: 0;
-                transform: translateY(16px);
+                transform: translate3d(0, 16px, 0);
                 filter: blur(4px);
             }
             70.6% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translate3d(0, 0, 0);
                 filter: blur(0);
             }
             95.6% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translate3d(0, 0, 0);
                 filter: blur(0);
             }
             100% {
                 opacity: 0;
-                transform: translateY(-16px);
+                transform: translate3d(0, -16px, 0);
                 filter: blur(4px);
             }
         }
@@ -1110,6 +1110,9 @@
             justify-content: center;
             animation: textRollingStep1 9.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
             will-change: transform, opacity, filter;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: translate3d(0, 0, 0);
             pointer-events: none;
         }
 
@@ -1121,6 +1124,9 @@
             justify-content: center;
             animation: textRollingStep2 9.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
             will-change: transform, opacity, filter;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: translate3d(0, 0, 0);
             pointer-events: none;
         }
 
@@ -1132,7 +1138,25 @@
             justify-content: center;
             animation: textRollingStep3 9.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
             will-change: transform, opacity, filter;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: translate3d(0, 0, 0);
             pointer-events: none;
+        }
+
+        /* GPU Acceleration & Zero Layout Shift Utilities */
+        .gpu-accelerated {
+            transform: translate3d(0, 0, 0);
+            -webkit-transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            perspective: 1000px;
+        }
+
+        .will-change-transform-opacity {
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
     </style>
     
@@ -1412,6 +1436,7 @@
                 init() {
                     try {
                         setInterval(() => { this.currentKeywordIndex = (this.currentKeywordIndex + 1) % this.keywords.length; }, 2800);
+                        this.preloadSliderImages();
                         this.startHeroTyping();
                         this.startServiceAutoPlay();
                         this.startAboutAutoPlay();
@@ -1430,6 +1455,24 @@
                     } catch(e) {
                         console.warn('Init non-blocking exception handled:', e);
                     }
+                },
+
+                // [슬라이더 고화질 배경 이미지 사전 로딩 - CLS & 깜빡임 0.00% 보장]
+                preloadSliderImages() {
+                    const preloadList = [
+                        "https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1400&q=85",
+                        "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1400&q=85",
+                        "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1400&q=85"
+                    ];
+                    if (this.studioInfrastructure && this.studioInfrastructure.length) {
+                        this.studioInfrastructure.slice(0, 10).forEach(item => {
+                            if (item.imageUrl) preloadList.push(item.imageUrl);
+                        });
+                    }
+                    preloadList.forEach(src => {
+                        const img = new Image();
+                        img.src = src;
+                    });
                 },
 
                 // [구글 SEO 최적화 메타 키워드 추출 및 동적 태그 갱신 메서드]
@@ -2190,7 +2233,7 @@
                 <!-- PC/태블릿 중앙 하단: 와이드 롤링 애니메이션 전광판 배너 (반응형 텍스트 크기 최적화) -->
                 <div class="w-full max-w-3xl mx-auto pt-2 pointer-events-auto">
                     <div class="bg-slate-900/85 backdrop-blur-xl border border-cyan-500/35 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(34,211,238,0.15)] py-3 md:py-3.5 px-4 md:px-6 overflow-hidden">
-                        <div class="relative overflow-hidden min-h-[56px] md:min-h-[64px] flex items-center justify-center">
+                        <div class="relative overflow-hidden h-[58px] md:h-[66px] w-full flex items-center justify-center">
                             <!-- Step 1: '맞춤형 이러닝 콘텐츠 설계' -->
                             <div class="text-roll-step1 px-2 text-center">
                                 <div class="flex items-center justify-center gap-2.5 md:gap-3 flex-wrap">
@@ -2301,7 +2344,7 @@
             <!-- 3. [모바일] 영상 하단 전광판 (사업영역 주요 핵심 문장으로 변경) -->
             <div class="w-full px-4 shrink-0">
                 <div class="w-full bg-slate-900/90 backdrop-blur-xl border border-cyan-500/35 rounded-xl shadow-[0_10px_35px_rgba(0,0,0,0.7)] py-2.5 px-3 overflow-hidden">
-                    <div class="relative overflow-hidden min-h-[50px] flex items-center justify-center">
+                    <div class="relative overflow-hidden h-[52px] w-full flex items-center justify-center">
                         <!-- Step 1: '맞춤형 이러닝 콘텐츠 설계' -->
                         <div class="text-roll-step1 px-1 text-center">
                             <div class="flex items-center justify-center gap-2 flex-wrap">
@@ -2740,22 +2783,24 @@
             <!-- PROMINENT ANIMATED ROLLING FEATURED SLIDER (IMAGE BACKGROUND + OVERLAID TEXT) -->
             <div @touchstart="touchStartX = $event.touches[0].clientX"
                  @touchend="touchEndX = $event.changedTouches[0].clientX; if (touchStartX - touchEndX > 30) { nextServiceCard(); restartServiceAutoPlay(8000); } else if (touchEndX - touchStartX > 30) { prevServiceCard(); restartServiceAutoPlay(8000); }"
-                 class="relative w-full max-w-5xl mx-auto rounded-3xl bg-slate-900 text-white overflow-hidden shadow-2xl border border-slate-200/80 mb-8 min-h-[460px] sm:min-h-[480px] lg:min-h-[500px] flex flex-col justify-between">
+                 class="relative w-full max-w-5xl mx-auto rounded-3xl bg-slate-900 text-white overflow-hidden shadow-2xl border border-slate-200/80 mb-8 h-[540px] xs:h-[500px] sm:h-[480px] lg:h-[500px] min-h-[480px] grid grid-cols-1 grid-rows-1 isolate">
                 
                 <!-- Slide 0: 이러닝 개발 -->
                 <div x-show="activeServiceIndex === 0"
-                     x-transition:enter="transition ease-out duration-600 transform opacity-0 translate-x-8"
-                     x-transition:enter-start="opacity-0 translate-x-8"
+                     x-transition:enter="transition ease-out duration-500 transform"
+                     x-transition:enter-start="opacity-0 translate-x-10"
                      x-transition:enter-end="opacity-100 translate-x-0"
-                     x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
+                     x-transition:leave="transition ease-in duration-300 transform"
                      x-transition:leave-start="opacity-100 translate-x-0"
-                     x-transition:leave-end="opacity-0 -translate-x-8"
-                     class="w-full h-full min-h-[460px] sm:min-h-[480px] lg:min-h-[500px] relative p-6 sm:p-10 lg:p-12 flex flex-col justify-between group">
+                     x-transition:leave-end="opacity-0 -translate-x-10"
+                     class="col-start-1 row-start-1 w-full h-full relative p-6 sm:p-10 lg:p-12 flex flex-col justify-between group will-change-transform-opacity gpu-accelerated overflow-hidden">
                     
                     <!-- High-Definition Background Image (Bright and Clearly Visible) -->
                     <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1400&q=85" 
                          alt="이러닝 개발" 
+                         loading="eager"
                          referrerpolicy="no-referrer"
+                         style="aspect-ratio: 16/9;"
                          class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none">
                     
                     <!-- Clean Directional Scrim (Left-Side Shading for Text Readability, Right-Side Clear & Vivid Image) -->
@@ -2804,18 +2849,20 @@
 
                 <!-- Slide 1: 전문 영상 제작 -->
                 <div x-show="activeServiceIndex === 1"
-                     x-transition:enter="transition ease-out duration-600 transform opacity-0 translate-x-8"
-                     x-transition:enter-start="opacity-0 translate-x-8"
+                     x-transition:enter="transition ease-out duration-500 transform"
+                     x-transition:enter-start="opacity-0 translate-x-10"
                      x-transition:enter-end="opacity-100 translate-x-0"
-                     x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
+                     x-transition:leave="transition ease-in duration-300 transform"
                      x-transition:leave-start="opacity-100 translate-x-0"
-                     x-transition:leave-end="opacity-0 -translate-x-8"
-                     class="w-full h-full min-h-[460px] sm:min-h-[480px] lg:min-h-[500px] relative p-6 sm:p-10 lg:p-12 flex flex-col justify-between group">
+                     x-transition:leave-end="opacity-0 -translate-x-10"
+                     class="col-start-1 row-start-1 w-full h-full relative p-6 sm:p-10 lg:p-12 flex flex-col justify-between group will-change-transform-opacity gpu-accelerated overflow-hidden">
                     
                     <!-- High-Definition Background Image (Bright and Clearly Visible) -->
                     <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1400&q=85" 
                          alt="전문 영상 제작" 
+                         loading="eager"
                          referrerpolicy="no-referrer"
+                         style="aspect-ratio: 16/9;"
                          class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none">
                     
                     <!-- Clean Directional Scrim (Left-Side Shading for Text Readability, Right-Side Clear & Vivid Image) -->
@@ -2864,18 +2911,20 @@
 
                 <!-- Slide 2: 블렌디드 러닝 -->
                 <div x-show="activeServiceIndex === 2"
-                     x-transition:enter="transition ease-out duration-600 transform opacity-0 translate-x-8"
-                     x-transition:enter-start="opacity-0 translate-x-8"
+                     x-transition:enter="transition ease-out duration-500 transform"
+                     x-transition:enter-start="opacity-0 translate-x-10"
                      x-transition:enter-end="opacity-100 translate-x-0"
-                     x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
+                     x-transition:leave="transition ease-in duration-300 transform"
                      x-transition:leave-start="opacity-100 translate-x-0"
-                     x-transition:leave-end="opacity-0 -translate-x-8"
-                     class="w-full h-full min-h-[460px] sm:min-h-[480px] lg:min-h-[500px] relative p-6 sm:p-10 lg:p-12 flex flex-col justify-between group">
+                     x-transition:leave-end="opacity-0 -translate-x-10"
+                     class="col-start-1 row-start-1 w-full h-full relative p-6 sm:p-10 lg:p-12 flex flex-col justify-between group will-change-transform-opacity gpu-accelerated overflow-hidden">
                     
                     <!-- High-Definition Background Image (Bright and Clearly Visible) -->
                     <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1400&q=85" 
                          alt="블렌디드 러닝" 
+                         loading="eager"
                          referrerpolicy="no-referrer"
+                         style="aspect-ratio: 16/9;"
                          class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none">
                     
                     <!-- Clean Directional Scrim (Left-Side Shading for Text Readability, Right-Side Clear & Vivid Image) -->
@@ -2985,25 +3034,26 @@
                 <!-- Main Cinematic Slider Stage -->
                 <div @touchstart="studioTouchStartX = $event.touches[0].clientX"
                      @touchend="studioTouchEndX = $event.changedTouches[0].clientX; if (studioTouchStartX - studioTouchEndX > 40) { nextStudioSlide(); } else if (studioTouchEndX - studioTouchStartX > 40) { prevStudioSlide(); }"
-                     class="cinematic-stage-container relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9] rounded-3xl overflow-hidden bg-slate-900 shadow-2xl border border-slate-200 group cursor-pointer"
+                     class="cinematic-stage-container relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9] rounded-3xl overflow-hidden bg-slate-900 shadow-2xl border border-slate-200 group cursor-pointer isolate"
                      @click="openImageModal(studioInfrastructure[activeStudioIndex]?.imageUrl || studioInfrastructure[activeStudioIndex]?.fallbackUrl, studioInfrastructure[activeStudioIndex]?.title || '스튜디오 전경')">
 
                     <!-- Studio Slide Images Loop (Clean View - No Text Overlay) -->
                     <template x-for="(item, idx) in studioInfrastructure" :key="item.id">
                         <div x-show="activeStudioIndex === idx"
-                             x-transition:enter="transition ease-out duration-500 opacity-0"
+                             x-transition:enter="transition ease-out duration-400 opacity-0"
                              x-transition:enter-start="opacity-0"
                              x-transition:enter-end="opacity-100"
-                             x-transition:leave="transition ease-in duration-400 opacity-100 absolute inset-0"
+                             x-transition:leave="transition ease-in duration-300 opacity-100 absolute inset-0"
                              x-transition:leave-start="opacity-100"
                              x-transition:leave-end="opacity-0"
-                             class="w-full h-full relative overflow-hidden bg-slate-900 flex items-center justify-center">
+                             class="w-full h-full absolute inset-0 overflow-hidden bg-slate-900 flex items-center justify-center will-change-transform-opacity gpu-accelerated">
                             
                             <img :src="item.imageUrl"
                                  @error="if ($el.dataset.fallbackTried !== '1') { $el.dataset.fallbackTried = '1'; $el.src = item.rawUrl; }"
                                  :alt="item.title"
                                  referrerpolicy="no-referrer"
-                                 loading="lazy"
+                                 loading="eager"
+                                 style="aspect-ratio: 16/9;"
                                  class="cinematic-stage-image w-full h-full object-cover">
                         </div>
                     </template>
