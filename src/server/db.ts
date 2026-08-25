@@ -27,62 +27,7 @@ function ensureDataDir() {
   }
 }
 
-// Initial realistic seed data for instant verification
-const INITIAL_SEEDS: Inquiry[] = [
-  {
-    id: 'inq_20260310_01',
-    company: '(주)한국교육개발원',
-    name: '김태훈 팀장',
-    phone: '010-4829-1920',
-    category: '이러닝 콘텐츠 개발',
-    message: '2026년 하반기 공공기관 임직원 대상 직무역량 강화 마이크로러닝 20차시 개발 견적 및 제작 일정 문의드립니다. 표준 SCORM 패키징 및 모바일 반응형 뷰어 지원이 필요합니다.',
-    status: '대기',
-    adminNote: '',
-    createdAt: new Date(Date.now() - 1000 * 60 * 25).toISOString(), // 25 min ago
-    formattedDate: new Date(Date.now() - 1000 * 60 * 25).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-    updatedAt: new Date(Date.now() - 1000 * 60 * 25).toISOString()
-  },
-  {
-    id: 'inq_20260310_02',
-    company: '미래에듀테크',
-    name: '이지연 이사',
-    phone: '010-9938-2041',
-    category: '스마트 스튜디오 대여',
-    message: '다음 주 목요일(오전 9시 ~ 오후 6시) 대형 전자칠판 1호 스튜디오 및 4K 프롬프터 장비 대관 가능 여부와 1일 렌탈 견적 문의드립니다. 강사 2인 동시 촬영 예정입니다.',
-    status: '확인중',
-    adminNote: '3/10 14:15 1호 스튜디오 일정 확인 중. 잔여 타임 조율 후 유선 연락 예정.',
-    createdAt: new Date(Date.now() - 1000 * 60 * 180).toISOString(), // 3 hours ago
-    formattedDate: new Date(Date.now() - 1000 * 60 * 180).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-    updatedAt: new Date(Date.now() - 1000 * 60 * 90).toISOString()
-  },
-  {
-    id: 'inq_20260309_03',
-    company: '세종사이버대학교 산학협력단',
-    name: '박성준 교수',
-    phone: '010-3382-7719',
-    category: '블렌디드 러닝 & 오프라인 교육',
-    message: 'AI 융합 교육과정 온·오프라인 하이브리드 강의 콘텐츠 기획 및 160평 스튜디오 실습 촬영 연계 견적 요청드립니다.',
-    status: '답변완료',
-    adminNote: '3/9 16:30 상세 제안서 및 견적서 이메일 발송 완료. 3/12 미팅 조율 완료.',
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 day ago
-    formattedDate: new Date(Date.now() - 1000 * 60 * 60 * 24).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-    updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString()
-  },
-  {
-    id: 'inq_20260308_04',
-    company: '글로벌에듀케이션',
-    name: '최민서 대리',
-    phone: '010-7712-4091',
-    category: '공공·기업 영상 제작 & 홍보',
-    message: '창립 15주년 기업 비전 홍보영상 및 4K 시네마틱 인터뷰 영상 올인원 제작 견적 및 포트폴리오 레퍼런스 요청드립니다.',
-    status: '답변완료',
-    adminNote: '후미디어 포트폴리오 영상 링크 및 제작 단가표 전달 완료.',
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(), // 2 days ago
-    formattedDate: new Date(Date.now() - 1000 * 60 * 60 * 48).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-    updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 40).toISOString()
-  }
-];
-
+// Empty initial inquiries state - no mock or dummy data generated
 export class InquiryDatabase {
   private static instance: InquiryDatabase;
   private inquiries: Inquiry[] = [];
@@ -104,13 +49,16 @@ export class InquiryDatabase {
       try {
         const raw = fs.readFileSync(INQUIRIES_FILE, 'utf-8');
         this.inquiries = JSON.parse(raw);
+        if (!Array.isArray(this.inquiries)) {
+          this.inquiries = [];
+          this.save();
+        }
       } catch (e) {
-        console.error('Failed to parse inquiries.json, using seeds:', e);
-        this.inquiries = [...INITIAL_SEEDS];
+        this.inquiries = [];
         this.save();
       }
     } else {
-      this.inquiries = [...INITIAL_SEEDS];
+      this.inquiries = [];
       this.save();
     }
   }

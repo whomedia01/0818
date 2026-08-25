@@ -1035,14 +1035,18 @@
                     if (isManual) this.refreshing = true;
                     else this.loading = true;
 
-                    // 1. Instantly load locally saved inquiries
+                    // 1. Instantly load locally saved inquiries (filter out any legacy mock dummy data)
                     let localData = [];
                     try {
-                        localData = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
-                        if (Array.isArray(localData) && localData.length > 0) {
-                            this.inquiries = localData;
-                            this.stats = this.calculateStats(localData);
+                        const rawLocal = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
+                        if (Array.isArray(rawLocal)) {
+                            localData = rawLocal.filter(item => 
+                                item && item.id && !item.id.startsWith('inq_20260310_') && !item.id.startsWith('inq_20260309_') && !item.id.startsWith('inq_20260308_')
+                            );
+                            localStorage.setItem('whomedia_inquiries', JSON.stringify(localData));
                         }
+                        this.inquiries = localData;
+                        this.stats = this.calculateStats(localData);
                     } catch(e) {}
 
                     // 2. Try online sync with backend API if token exists

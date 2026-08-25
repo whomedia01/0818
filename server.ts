@@ -249,14 +249,14 @@ async function startServer() {
     });
     app.use(vite.middlewares);
 
-    // Development Admin route
-    app.get(/^\/admin(\/.*)?$/, async (_req, res, next) => {
+    // Development Adm route
+    app.get(/^\/adm(\/.*)?$/, async (_req, res, next) => {
       try {
-        const adminHtmlPath = path.join(process.cwd(), "admin.html");
-        if (fs.existsSync(adminHtmlPath)) {
-          const rawHtml = fs.readFileSync(adminHtmlPath, "utf-8");
+        const admHtmlPath = path.join(process.cwd(), "adm.html");
+        if (fs.existsSync(admHtmlPath)) {
+          const rawHtml = fs.readFileSync(admHtmlPath, "utf-8");
           try {
-            const html = await vite.transformIndexHtml("/admin.html", rawHtml);
+            const html = await vite.transformIndexHtml("/adm.html", rawHtml);
             return res.status(200).set({ "Content-Type": "text/html" }).end(html);
           } catch {
             return res.status(200).set({ "Content-Type": "text/html" }).end(rawHtml);
@@ -290,11 +290,11 @@ async function startServer() {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
 
-    // Production Admin route
-    app.get(/^\/admin(\/.*)?$/, (_req, res) => {
-      const adminDistPath = path.join(distPath, "admin.html");
-      if (fs.existsSync(adminDistPath)) {
-        return res.sendFile(adminDistPath);
+    // Production Adm route
+    app.get(/^\/adm(\/.*)?$/, (_req, res) => {
+      const admDistPath = path.join(distPath, "adm.html");
+      if (fs.existsSync(admDistPath)) {
+        return res.sendFile(admDistPath);
       }
       return res.sendFile(path.join(distPath, "index.html"));
     });
@@ -309,7 +309,7 @@ async function startServer() {
 
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`[WHO MEDIA] Server running on http://localhost:${PORT}`);
-    console.log(`[WHO MEDIA] Admin Dashboard available at http://localhost:${PORT}/admin`);
+    console.log(`[WHO MEDIA] Admin Center available at http://localhost:${PORT}/adm`);
   });
 }
 
