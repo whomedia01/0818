@@ -553,156 +553,10 @@
         }
 
         /* =========================================================
-           KINETIC TYPOGRAPHY 15초 종합 루프 사이클
-           1) 초기 1회 비산 날아오기 및 안착 (0% ~ 10%)
-           2) 주요 키워드(비전은, 콘텐츠가, 기준이) 순차 강조 3회 반복 (10% ~ 87%)
-           3) 부드러운 아웃트로 전환 후 처음부터 자동 반복 (95% ~ 100%)
+           MAIN HERO SLOGAN: STATIC HIGH-END TYPOGRAPHY
+           - 날아오는/이동 모션을 배제하고 정중앙에 고정
+           - 절제된 시그니처 에메랄드 원컬러 키워드 하이라이트 순환
         ========================================================= */
-        @keyframes kineticAssemble1 { /* Top-Left Diagonal Fly-In */
-            0% {
-                opacity: 0;
-                transform: translate3d(-240px, -150px, 0) scale(1.35) rotate(-14deg);
-                filter: blur(16px);
-            }
-            8% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
-                filter: blur(0);
-            }
-            10%, 94% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
-                filter: blur(0);
-            }
-            98%, 100% {
-                opacity: 0;
-                transform: translate3d(-30px, -20px, 0) scale(0.98);
-                filter: blur(4px);
-            }
-        }
-
-        @keyframes kineticAssemble2 { /* Top-Right Diagonal Fly-In */
-            0%, 1% {
-                opacity: 0;
-                transform: translate3d(260px, -160px, 0) scale(1.35) rotate(12deg);
-                filter: blur(16px);
-            }
-            9% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
-                filter: blur(0);
-            }
-            11%, 94% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
-                filter: blur(0);
-            }
-            98%, 100% {
-                opacity: 0;
-                transform: translate3d(30px, -20px, 0) scale(0.98);
-                filter: blur(4px);
-            }
-        }
-
-        @keyframes kineticAssemble3 { /* Deep Left Zoom Fly-In */
-            0%, 2% {
-                opacity: 0;
-                transform: translate3d(-300px, 80px, 0) scale(0.65) rotate(-10deg);
-                filter: blur(16px);
-            }
-            10% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0) scale(1.04) rotate(0deg);
-                filter: blur(0);
-            }
-            12%, 94% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
-                filter: blur(0);
-            }
-            98%, 100% {
-                opacity: 0;
-                transform: translate3d(-40px, 10px, 0) scale(0.98);
-                filter: blur(4px);
-            }
-        }
-
-        @keyframes kineticAssemble4 { /* Bottom-Left Diagonal Fly-In */
-            0%, 3% {
-                opacity: 0;
-                transform: translate3d(-220px, 200px, 0) scale(1.4) rotate(14deg);
-                filter: blur(16px);
-            }
-            11% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
-                filter: blur(0);
-            }
-            13%, 94% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
-                filter: blur(0);
-            }
-            98%, 100% {
-                opacity: 0;
-                transform: translate3d(-20px, 30px, 0) scale(0.98);
-                filter: blur(4px);
-            }
-        }
-
-        @keyframes kineticAssemble5 { /* Bottom-Right Zoom Fly-In */
-            0%, 4% {
-                opacity: 0;
-                transform: translate3d(280px, 220px, 0) scale(0.7) rotate(-12deg);
-                filter: blur(16px);
-            }
-            12% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0) scale(1.04) rotate(0deg);
-                filter: blur(0);
-            }
-            14%, 94% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
-                filter: blur(0);
-            }
-            98%, 100% {
-                opacity: 0;
-                transform: translate3d(30px, 30px, 0) scale(0.98);
-                filter: blur(4px);
-            }
-        }
-
-        .kinetic-piece-1 {
-            display: inline-block;
-            animation: kineticAssemble1 15s ease-in-out infinite;
-            will-change: transform, opacity, filter;
-        }
-
-        .kinetic-piece-2 {
-            display: inline-block;
-            animation: kineticAssemble2 15s ease-in-out infinite;
-            will-change: transform, opacity, filter;
-        }
-
-        .kinetic-piece-3 {
-            display: inline-block;
-            animation: kineticAssemble3 15s ease-in-out infinite;
-            will-change: transform, opacity, filter;
-        }
-
-        .kinetic-piece-4 {
-            display: inline-block;
-            animation: kineticAssemble4 15s ease-in-out infinite;
-            will-change: transform, opacity, filter;
-        }
-
-        .kinetic-piece-5 {
-            display: inline-block;
-            animation: kineticAssemble5 15s ease-in-out infinite;
-            will-change: transform, opacity, filter;
-        }
-
         /* =========================================================
            KEYWORD HIGHLIGHT 3-CYCLE ANIMATIONS (15s Loop)
            키워드 순차 강조 (비전은 -> 콘텐츠가 -> 기준이) - 시그니처 에메랄드 원컬러 통합 및 절제된 하이라이트
@@ -2244,23 +2098,23 @@
         <!-- ========================================================================= -->
         <div class="hidden md:flex absolute inset-0 z-10 flex-col justify-between pt-24 lg:pt-28 pb-8 px-6 lg:px-12 w-full max-w-[1280px] mx-auto left-0 right-0 pointer-events-none select-none">
             
-            <!-- 1. PC 중앙: 키네틱 타이포그래피 3줄 슬로건 (원컬러 에메랄드 포인트 & 절제된 하이라이트) -->
+            <!-- 1. PC 중앙: 메인 3줄 슬로건 (정중앙 고정 & 에메랄드 키워드 강조) -->
             <div class="my-auto flex flex-col items-center justify-center text-center space-y-3 md:space-y-4 lg:space-y-6 pt-2 md:pt-4">
                 <!-- 3줄 슬로건 (원컬러 시그니처 톤) -->
                 <div class="flex flex-col items-center justify-center text-center space-y-1.5 md:space-y-2 lg:space-y-3 text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-tight text-white drop-shadow-[0_8px_35px_rgba(0,0,0,0.95)]">
-                    <div class="kinetic-piece-1 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">
+                    <div class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">
                         우리의 프레임 안에서
                     </div>
                     <div class="flex items-center justify-center gap-2 md:gap-3 lg:gap-4 flex-wrap">
-                        <span class="kinetic-piece-2 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">당신의</span>
-                        <span class="kinetic-piece-2 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-vision text-emerald-400 font-black">비전</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">은</span></span>
-                        <span class="kinetic-piece-3 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-content text-emerald-400 font-black">콘텐츠</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">가</span></span>
-                        <span class="kinetic-piece-3 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">되고,</span>
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">당신의</span>
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-vision text-emerald-400 font-black">비전</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">은</span></span>
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-content text-emerald-400 font-black">콘텐츠</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">가</span></span>
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">되고,</span>
                     </div>
                     <div class="flex items-center justify-center gap-2 md:gap-3 lg:gap-4 flex-wrap">
-                        <span class="kinetic-piece-4 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">세상의</span>
-                        <span class="kinetic-piece-5 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-standard text-emerald-400 font-black">기준</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">이</span></span>
-                        <span class="kinetic-piece-5 text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">됩니다</span>
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">세상의</span>
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-standard text-emerald-400 font-black">기준</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">이</span></span>
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">됩니다</span>
                     </div>
                 </div>
 
@@ -2318,20 +2172,20 @@
         <!-- ========================================================================= -->
         <div class="md:hidden flex flex-col justify-between w-full h-full flex-1 relative z-20 space-y-3">
             
-            <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (시그니처 원컬러 에메랄드 통합) -->
+            <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (정중앙 고정 & 에메랄드 키워드 강조) -->
             <div class="w-full px-4 pt-1 pb-0.5 text-center shrink-0">
                 <div class="flex flex-col items-center justify-center text-center space-y-1 text-xl xs:text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight select-none px-1 drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
-                    <div class="kinetic-piece-1 text-white">우리의 프레임 안에서</div>
+                    <div class="text-white">우리의 프레임 안에서</div>
                     <div class="flex items-center justify-center gap-1.5 flex-wrap">
-                        <span class="kinetic-piece-2 text-white">당신의</span>
-                        <span class="kinetic-piece-2 text-white inline-flex items-baseline"><span class="highlight-keyword-vision text-emerald-400 font-black">비전</span><span class="text-white">은</span></span>
-                        <span class="kinetic-piece-3 text-white inline-flex items-baseline"><span class="highlight-keyword-content text-emerald-400 font-black">콘텐츠</span><span class="text-white">가</span></span>
-                        <span class="kinetic-piece-3 text-white">되고,</span>
+                        <span class="text-white">당신의</span>
+                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-vision text-emerald-400 font-black">비전</span><span class="text-white">은</span></span>
+                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-content text-emerald-400 font-black">콘텐츠</span><span class="text-white">가</span></span>
+                        <span class="text-white">되고,</span>
                     </div>
                     <div class="flex items-center justify-center gap-1.5 flex-wrap">
-                        <span class="kinetic-piece-4 text-white">세상의</span>
-                        <span class="kinetic-piece-5 text-white inline-flex items-baseline"><span class="highlight-keyword-standard text-emerald-400 font-black">기준</span><span class="text-white">이</span></span>
-                        <span class="kinetic-piece-5 text-white">됩니다</span>
+                        <span class="text-white">세상의</span>
+                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-standard text-emerald-400 font-black">기준</span><span class="text-white">이</span></span>
+                        <span class="text-white">됩니다</span>
                     </div>
                 </div>
             </div>
