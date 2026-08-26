@@ -555,13 +555,13 @@
         /* =========================================================
            MAIN HERO SLOGAN: STATIC HIGH-END TYPOGRAPHY
            - 날아오는/이동 모션을 배제하고 정중앙에 고정
-           - 절제된 시그니처 에메랄드 원컬러 키워드 하이라이트 순환
+           - 절제된 시그니처 에메랄드 원컬러 키워드 하이라이트 순환 (학습자 -> 시선 -> 콘텐츠)
         ========================================================= */
         /* =========================================================
            KEYWORD HIGHLIGHT 3-CYCLE ANIMATIONS (15s Loop)
-           키워드 순차 강조 (비전은 -> 콘텐츠가 -> 기준이) - 시그니처 에메랄드 원컬러 통합 및 절제된 하이라이트
+           키워드 순차 강조 (학습자 -> 시선 -> 콘텐츠) - 시그니처 에메랄드 원컬러 통합 및 절제된 하이라이트
         ========================================================= */
-        @keyframes highlightKeywordVision {
+        @keyframes highlightKeywordLearner {
             0%, 10% {
                 color: #34d399;
                 text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
@@ -602,7 +602,7 @@
             }
         }
 
-        @keyframes highlightKeywordContent {
+        @keyframes highlightKeywordSight {
             0%, 18% {
                 color: #34d399;
                 text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
@@ -643,7 +643,7 @@
             }
         }
 
-        @keyframes highlightKeywordStandard {
+        @keyframes highlightKeywordContent {
             0%, 26% {
                 color: #34d399;
                 text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
@@ -684,11 +684,19 @@
             }
         }
 
-        .highlight-keyword-vision {
+        .highlight-keyword-learner {
             display: inline-block;
             vertical-align: baseline;
             transform-origin: center bottom;
-            animation: highlightKeywordVision 15s ease-in-out infinite;
+            animation: highlightKeywordLearner 15s ease-in-out infinite;
+            will-change: transform, text-shadow, filter;
+        }
+
+        .highlight-keyword-sight {
+            display: inline-block;
+            vertical-align: baseline;
+            transform-origin: center bottom;
+            animation: highlightKeywordSight 15s ease-in-out infinite;
             will-change: transform, text-shadow, filter;
         }
 
@@ -697,14 +705,6 @@
             vertical-align: baseline;
             transform-origin: center bottom;
             animation: highlightKeywordContent 15s ease-in-out infinite;
-            will-change: transform, text-shadow, filter;
-        }
-
-        .highlight-keyword-standard {
-            display: inline-block;
-            vertical-align: baseline;
-            transform-origin: center bottom;
-            animation: highlightKeywordStandard 15s ease-in-out infinite;
             will-change: transform, text-shadow, filter;
         }
 
@@ -2102,23 +2102,19 @@
         <!-- ========================================================================= -->
         <div class="hidden md:flex absolute inset-0 z-10 flex-col justify-between pt-24 lg:pt-28 pb-8 px-6 lg:px-12 w-full max-w-[1280px] mx-auto left-0 right-0 pointer-events-none select-none">
             
-            <!-- 1. PC 중앙: 메인 3줄 슬로건 (정중앙 고정 & 에메랄드 키워드 강조) -->
+            <!-- 1. PC 중앙: 메인 슬로건 (정중앙 고정 & 에메랄드 키워드 순환 강조) -->
             <div class="my-auto flex flex-col items-center justify-center text-center space-y-3 md:space-y-4 lg:space-y-6 pt-2 md:pt-4">
-                <!-- 3줄 슬로건 (원컬러 시그니처 톤) -->
+                <!-- 메인 슬로건 (원컬러 시그니처 톤 & 에메랄드 포인트) -->
                 <div class="flex flex-col items-center justify-center text-center space-y-1.5 md:space-y-2 lg:space-y-3 text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-tight text-white drop-shadow-[0_8px_35px_rgba(0,0,0,0.95)]">
-                    <div class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">
-                        우리의 프레임 안에서
+                    <div class="flex items-center justify-center gap-2 md:gap-3 flex-wrap">
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-learner text-emerald-400 font-black">학습자</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">의</span></span>
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-sight text-emerald-400 font-black">시선</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">으로,</span></span>
                     </div>
                     <div class="flex items-center justify-center gap-2 md:gap-3 lg:gap-4 flex-wrap">
-                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">당신의</span>
-                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-vision text-emerald-400 font-black">비전</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">은</span></span>
-                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-content text-emerald-400 font-black">콘텐츠</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">가</span></span>
-                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">되고,</span>
-                    </div>
-                    <div class="flex items-center justify-center gap-2 md:gap-3 lg:gap-4 flex-wrap">
-                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">세상의</span>
-                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-standard text-emerald-400 font-black">기준</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">이</span></span>
-                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">됩니다</span>
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">압도적인</span>
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">교육</span>
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] inline-flex items-baseline"><span class="highlight-keyword-content text-emerald-400 font-black">콘텐츠</span><span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">를</span></span>
+                        <span class="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)]">설계합니다</span>
                     </div>
                 </div>
 
@@ -2176,20 +2172,18 @@
         <!-- ========================================================================= -->
         <div class="md:hidden flex flex-col justify-between w-full h-full flex-1 relative z-20 space-y-3">
             
-            <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (정중앙 고정 & 에메랄드 키워드 강조) -->
+            <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (정중앙 고정 & 에메랄드 키워드 순환 강조) -->
             <div class="w-full px-4 pt-1 pb-0.5 text-center shrink-0">
                 <div class="flex flex-col items-center justify-center text-center space-y-1 text-xl xs:text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight select-none px-1 drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
-                    <div class="text-white">우리의 프레임 안에서</div>
                     <div class="flex items-center justify-center gap-1.5 flex-wrap">
-                        <span class="text-white">당신의</span>
-                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-vision text-emerald-400 font-black">비전</span><span class="text-white">은</span></span>
-                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-content text-emerald-400 font-black">콘텐츠</span><span class="text-white">가</span></span>
-                        <span class="text-white">되고,</span>
+                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-learner text-emerald-400 font-black">학습자</span><span class="text-white">의</span></span>
+                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-sight text-emerald-400 font-black">시선</span><span class="text-white">으로,</span></span>
                     </div>
                     <div class="flex items-center justify-center gap-1.5 flex-wrap">
-                        <span class="text-white">세상의</span>
-                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-standard text-emerald-400 font-black">기준</span><span class="text-white">이</span></span>
-                        <span class="text-white">됩니다</span>
+                        <span class="text-white">압도적인</span>
+                        <span class="text-white">교육</span>
+                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-content text-emerald-400 font-black">콘텐츠</span><span class="text-white">를</span></span>
+                        <span class="text-white">설계합니다</span>
                     </div>
                 </div>
             </div>
@@ -2591,21 +2585,21 @@
                             :class="activeServiceIndex === 0 ? 'bg-teal-600 text-white font-black shadow-md border-teal-600 ring-2 ring-teal-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
                             class="px-1.5 py-1.5 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10.5px] xs:text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
                         <span class="w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 0 ? 'bg-white animate-pulse' : 'bg-teal-500'"></span>
-                        <span class="truncate">1. 이러닝 개발</span>
+                        <span class="whitespace-nowrap">1. 이러닝 개발</span>
                     </button>
 
                     <button @click="selectServiceCard(1); restartServiceAutoPlay(8000);"
                             :class="activeServiceIndex === 1 ? 'bg-blue-600 text-white font-black shadow-md border-blue-600 ring-2 ring-blue-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
                             class="px-1.5 py-1.5 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10.5px] xs:text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
                         <span class="w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 1 ? 'bg-white animate-pulse' : 'bg-blue-500'"></span>
-                        <span class="truncate">2. 전문 영상 제작</span>
+                        <span class="whitespace-nowrap">2. 전문 영상 제작</span>
                     </button>
 
                     <button @click="selectServiceCard(2); restartServiceAutoPlay(8000);"
                             :class="activeServiceIndex === 2 ? 'bg-amber-600 text-white font-black shadow-md border-amber-600 ring-2 ring-amber-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
                             class="px-1.5 py-1.5 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10.5px] xs:text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
                         <span class="w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 2 ? 'bg-white animate-pulse' : 'bg-amber-500'"></span>
-                        <span class="truncate">3. 블렌디드 러닝</span>
+                        <span class="whitespace-nowrap">3. 블렌디드 러닝</span>
                     </button>
                 </div>
 
@@ -2676,7 +2670,7 @@
                                         맞춤형 교수설계
                                     </h4>
                                 </div>
-                                <p class="text-xs sm:text-[13px] text-white/55 font-normal leading-normal whitespace-nowrap overflow-hidden text-ellipsis pl-3">
+                                <p class="text-xs sm:text-[13px] text-white/55 font-normal leading-relaxed break-keep pl-3">
                                     학습 경로 및 스토리보드 최적화
                                 </p>
                             </div>
@@ -2689,7 +2683,7 @@
                                         반응형 웹·LMS 연동
                                     </h4>
                                 </div>
-                                <p class="text-xs sm:text-[13px] text-white/55 font-normal leading-normal whitespace-nowrap overflow-hidden text-ellipsis pl-3">
+                                <p class="text-xs sm:text-[13px] text-white/55 font-normal leading-relaxed break-keep pl-3">
                                     SCORM 표준 연동 및 전 기기 100% 호환
                                 </p>
                             </div>
@@ -2702,7 +2696,7 @@
                                         인터랙티브 모듈
                                     </h4>
                                 </div>
-                                <p class="text-xs sm:text-[13px] text-white/55 font-normal leading-normal whitespace-nowrap overflow-hidden text-ellipsis pl-3">
+                                <p class="text-xs sm:text-[13px] text-white/55 font-normal leading-relaxed break-keep pl-3">
                                     시뮬레이션·퀴즈 기반 학습 몰입 극대화
                                 </p>
                             </div>
@@ -2765,7 +2759,7 @@
                                         6개 전용 스튜디오
                                     </h4>
                                 </div>
-                                <p class="text-xs sm:text-[12.5px] text-white/55 font-normal leading-normal whitespace-nowrap overflow-hidden text-ellipsis pl-3">
+                                <p class="text-xs sm:text-[12.5px] text-white/55 font-normal leading-relaxed break-keep pl-3">
                                     자체 대형 인프라로 제작비 30% 절감
                                 </p>
                             </div>
@@ -2778,7 +2772,7 @@
                                         4K K-MOOC 영상
                                     </h4>
                                 </div>
-                                <p class="text-xs sm:text-[12.5px] text-white/55 font-normal leading-normal whitespace-nowrap overflow-hidden text-ellipsis pl-3">
+                                <p class="text-xs sm:text-[12.5px] text-white/55 font-normal leading-relaxed break-keep pl-3">
                                     초고화질 멀티캠으로 학습 피로도 최소화
                                 </p>
                             </div>
@@ -2791,7 +2785,7 @@
                                         모션그래픽·VFX
                                     </h4>
                                 </div>
-                                <p class="text-xs sm:text-[12.5px] text-white/55 font-normal leading-normal whitespace-nowrap overflow-hidden text-ellipsis pl-3">
+                                <p class="text-xs sm:text-[12.5px] text-white/55 font-normal leading-relaxed break-keep pl-3">
                                     인포그래픽 시각화로 핵심 정보 직관 전달
                                 </p>
                             </div>
@@ -2804,7 +2798,7 @@
                                         학술 라이브 스트리밍
                                     </h4>
                                 </div>
-                                <p class="text-xs sm:text-[12.5px] text-white/55 font-normal leading-normal whitespace-nowrap overflow-hidden text-ellipsis pl-3">
+                                <p class="text-xs sm:text-[12.5px] text-white/55 font-normal leading-relaxed break-keep pl-3">
                                     무결점 저지연 송출로 하이브리드 포럼 진행
                                 </p>
                             </div>
@@ -2867,7 +2861,7 @@
                                         하이브리드 교육 설계
                                     </h4>
                                 </div>
-                                <p class="text-xs sm:text-[13px] text-white/55 font-normal leading-normal whitespace-nowrap overflow-hidden text-ellipsis pl-3">
+                                <p class="text-xs sm:text-[13px] text-white/55 font-normal leading-relaxed break-keep pl-3">
                                     플립러닝 모델로 시공간 제약 극복
                                 </p>
                             </div>
@@ -2880,7 +2874,7 @@
                                         실무 디지털 콘텐츠
                                     </h4>
                                 </div>
-                                <p class="text-xs sm:text-[13px] text-white/55 font-normal leading-normal whitespace-nowrap overflow-hidden text-ellipsis pl-3">
+                                <p class="text-xs sm:text-[13px] text-white/55 font-normal leading-relaxed break-keep pl-3">
                                     시뮬레이션으로 현장 즉시 투입 지원
                                 </p>
                             </div>
@@ -2893,7 +2887,7 @@
                                         맞춤형 직무 워크숍
                                     </h4>
                                 </div>
-                                <p class="text-xs sm:text-[13px] text-white/55 font-normal leading-normal whitespace-nowrap overflow-hidden text-ellipsis pl-3">
+                                <p class="text-xs sm:text-[13px] text-white/55 font-normal leading-relaxed break-keep pl-3">
                                     조직 역량 맞춤형 B2B·B2G 밀착 설계
                                 </p>
                             </div>
@@ -3464,7 +3458,7 @@
                         <label for="consent" class="text-xs text-slate-600 cursor-pointer font-medium">개인정보 수집 및 이용에 동의합니다. *</label>
                     </div>
                     <button type="submit" :disabled="inquirySubmitting" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 sm:py-4 rounded-xl transition-all text-sm sm:text-base shadow-lg mt-3 flex items-center justify-center gap-2.5 disabled:opacity-60 cursor-pointer active:scale-98">
-                        <span x-text="inquirySubmitting ? '문의 전송 중...' : '문의 남기기'">문의 남기기</span>
+                        <span x-text="inquirySubmitting ? '문의 전송 중' : '문의 남기기'">문의 남기기</span>
                         <svg x-show="!inquirySubmitting" class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         <svg x-show="inquirySubmitting" class="animate-spin h-5 w-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" x-cloak><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                     </button>
