@@ -372,25 +372,126 @@
             border: 1px solid rgba(226, 232, 240, 0.8);
         }
 
-        /* Interactive Stage Spotlight Overlay */
-        #interactive-spotlight {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 25;
-            transition: opacity 0.5s ease;
-            will-change: background;
+        /* =========================================================================
+           HIGH-PERFORMANCE SPOTLIGHT INTERACTION SYSTEM (CSS Variables + rAF)
+           ========================================================================= */
+        .spotlight-section {
+            position: relative;
+            --mouse-x: -1000px;
+            --mouse-y: -1000px;
+            --spotlight-opacity: 0;
+            --spotlight-size: 600px;
+            --spotlight-color: rgba(255, 255, 255, 0.08);
+            --spotlight-glow: rgba(34, 211, 238, 0.06);
         }
 
-        /* Cinematic Media Wall & Smooth Zoom Effect */
-        .cinematic-stage-image {
-            transform: scale(1.0);
-            transition: transform 3.5s ease-out, opacity 0.4s ease-in-out;
-            filter: contrast(1.04) brightness(0.96) saturate(1.05);
+        .spotlight-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                var(--spotlight-size) circle at var(--mouse-x) var(--mouse-y),
+                var(--spotlight-color) 0%,
+                var(--spotlight-glow) 25%,
+                transparent 55%
+            );
+            opacity: var(--spotlight-opacity);
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+            z-index: 15;
+            will-change: background, opacity;
         }
-        .cinematic-stage-container:hover .cinematic-stage-image,
-        .cinematic-stage-active .cinematic-stage-image {
-            transform: scale(1.05);
+
+        /* Subtle Reveal Highlight on Cards inside Spotlight Section */
+        .spotlight-section .spotlight-reveal-target {
+            position: relative;
+        }
+        .spotlight-section .spotlight-reveal-target::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(
+                450px circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.12) 0%,
+                rgba(34, 211, 238, 0.08) 30%,
+                transparent 60%
+            );
+            opacity: var(--spotlight-opacity);
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* =========================================================================
+           CINEMATIC STUDIO MEDIA STAGE & DEPTH (KEN BURNS) SYSTEM
+           ========================================================================= */
+        .cinematic-stage-container {
+            aspect-ratio: 16 / 9;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            contain: layout paint;
+            will-change: transform;
+        }
+
+        .studio-slide-wrapper {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            transform: translate3d(0, 0, 0);
+            -webkit-transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            will-change: transform, opacity;
+        }
+
+        /* Cinematic Dark Scrim Overlay (Unifies Exposure & Adds High-End Spatial Depth) */
+        .cinematic-dark-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(2, 6, 23, 0.20) 0%, rgba(2, 6, 23, 0.10) 40%, rgba(2, 6, 23, 0.35) 100%);
+            mix-blend-mode: multiply;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .cinematic-vignette {
+            position: absolute;
+            inset: 0;
+            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+            z-index: 11;
+        }
+
+        /* Image Filter & Ken Burns Spatial Depth Animation */
+        .cinematic-stage-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 16 / 9;
+            filter: contrast(1.05) saturate(1.1);
+            transform: scale(1.0) translate3d(0, 0, 0);
+            -webkit-transform: scale(1.0) translate3d(0, 0, 0);
+            transition: transform 5s ease-out;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            will-change: transform;
+        }
+
+        /* Ken Burns Zoom when active slide */
+        .studio-slide-active .cinematic-stage-image {
+            transform: scale(1.03) translate3d(0, 0, 0);
+            -webkit-transform: scale(1.03) translate3d(0, 0, 0);
+        }
+
+        .cinematic-stage-container:hover .studio-slide-active .cinematic-stage-image {
+            transform: scale(1.05) translate3d(0, 0, 0);
+            -webkit-transform: scale(1.05) translate3d(0, 0, 0);
         }
 
         /* Marquee Ticker Infinite Scroll */
@@ -1020,128 +1121,52 @@
         }
 
         /* =========================================================
-           BUSINESS 3-DIVISION SEQUENCE ROLLING ANIMATIONS (9.6s Cycle)
-           - Step 1 (0% ~ 33.3% / 0s ~ 3.2s): 01. 이러닝 개발 (맞춤형 이러닝 콘텐츠 설계)
-           - Step 2 (33.3% ~ 66.6% / 3.2s ~ 6.4s): 02. 전문 영상 제작 (온·오프라인 통합 교육 솔루션)
-           - Step 3 (66.6% ~ 100% / 6.4s ~ 9.6s): 03. 블렌디드 러닝 (교육 및 기업 홍보 영상 All-in-one 제작)
+           MOSAIC ASSEMBLE ANIMATION SYSTEM
+           - 롱테일 키워드 텍스트를 개별 글자(Letter) 단위로 분리(Text Splitting)
+           - 랜덤 X/Y 좌표, 회전, 블러 상태(흩어짐)에서 자석처럼 착 달라붙는 조립(Entry)
+           - 노출 시간 경과 후 미세하게 조각나며 해체(Exit) 후 다음 키워드 순환
         ========================================================= */
-        @keyframes textRollingStep1 {
-            0% {
-                opacity: 0;
-                transform: translate3d(0, 16px, 0);
-                filter: blur(4px);
-            }
-            4% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-                filter: blur(0);
-            }
-            29% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-                filter: blur(0);
-            }
-            33.3% {
-                opacity: 0;
-                transform: translate3d(0, -16px, 0);
-                filter: blur(4px);
-            }
-            100% {
-                opacity: 0;
-                transform: translate3d(0, -16px, 0);
-            }
+        .mosaic-ticker-container {
+            perspective: 1000px;
+            contain: layout paint;
         }
 
-        @keyframes textRollingStep2 {
-            0%, 33.3% {
-                opacity: 0;
-                transform: translate3d(0, 16px, 0);
-                filter: blur(4px);
-            }
-            37.3% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-                filter: blur(0);
-            }
-            62.3% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-                filter: blur(0);
-            }
-            66.6% {
-                opacity: 0;
-                transform: translate3d(0, -16px, 0);
-                filter: blur(4px);
-            }
-            100% {
-                opacity: 0;
-                transform: translate3d(0, -16px, 0);
-            }
-        }
-
-        @keyframes textRollingStep3 {
-            0%, 66.6% {
-                opacity: 0;
-                transform: translate3d(0, 16px, 0);
-                filter: blur(4px);
-            }
-            70.6% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-                filter: blur(0);
-            }
-            95.6% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-                filter: blur(0);
-            }
-            100% {
-                opacity: 0;
-                transform: translate3d(0, -16px, 0);
-                filter: blur(4px);
-            }
-        }
-
-        .text-roll-step1 {
-            position: absolute;
-            inset: 0;
-            display: flex;
+        .mosaic-word-wrapper {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            animation: textRollingStep1 9.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+            white-space: nowrap;
+            margin: 0 0.16em;
+        }
+
+        .mosaic-char {
+            display: inline-block;
             will-change: transform, opacity, filter;
+            transform-style: preserve-3d;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
-            transform: translate3d(0, 0, 0);
+            transition: transform 0.65s cubic-bezier(0.19, 1, 0.22, 1.2), 
+                        opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+                        filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mosaic-char.is-scattered {
+            opacity: 0 !important;
+            filter: blur(10px) !important;
             pointer-events: none;
         }
 
-        .text-roll-step2 {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: textRollingStep2 9.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-            will-change: transform, opacity, filter;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            transform: translate3d(0, 0, 0);
-            pointer-events: none;
+        .mosaic-char.is-assembled {
+            opacity: 1 !important;
+            transform: translate3d(0, 0, 0) rotateZ(0deg) scale(1) !important;
+            filter: blur(0px) !important;
         }
 
-        .text-roll-step3 {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: textRollingStep3 9.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-            will-change: transform, opacity, filter;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            transform: translate3d(0, 0, 0);
-            pointer-events: none;
+        .mosaic-char.is-exiting {
+            opacity: 0 !important;
+            filter: blur(8px) !important;
+            transition: transform 0.45s cubic-bezier(0.4, 0, 1, 1), 
+                        opacity 0.4s ease-in, 
+                        filter 0.4s ease-in !important;
         }
 
         /* GPU Acceleration & Zero Layout Shift Utilities */
@@ -1300,9 +1325,9 @@
                 imageModalOpen: false,
                 activeStudioImg: '',
                 activeStudioTitle: '',
-                keywords: ['맞춤형 이러닝 콘텐츠 설계', '온·오프라인 통합 교육 솔루션', '교육 및 기업 홍보 영상 All-in-one 제작', '160평 전문 스튜디오 & 고품질 영상 연출', '전문성과 시너지를 갖춘 조직 체계'],
+                keywords: ['맞춤형 이러닝 콘텐츠 설계', '온·오프라인 통합 교육 솔루션', '홍보, 고화질 강의, SNS 영상', '160평 전문 스튜디오 & 고품질 영상 연출', '전문성과 시너지를 갖춘 조직 체계'],
                 currentKeywordIndex: 0,
-                heroKeywords: ['맞춤형 이러닝 콘텐츠 설계', '온·오프라인 통합 교육 솔루션', '교육 및 기업 홍보 영상 All-in-one 제작'],
+                heroKeywords: ['맞춤형 이러닝 콘텐츠 설계', '온·오프라인 통합 교육 솔루션', '홍보, 고화질 강의, SNS 영상'],
                 heroKeywordIndex: 0,
                 heroTypedText: '맞춤형 이러닝 콘텐츠 설계',
                 isDeletingHeroText: false,
@@ -2189,7 +2214,7 @@
         <div id="interactive-spotlight" class="hidden md:block"></div>
 
     <!-- HERO SECTION (DUALIZED ARCHITECTURE: PC FULLSCREEN IMMERSIVE VIDEO OVERLAY vs MOBILE STACKED FLOW WITH 2x2 SAFE AREA) -->
-    <section id="hero" aria-label="메인 솔루션 및 이러닝 영상 제작" class="relative w-full text-white bg-brand-navy-dark overflow-y-auto md:overflow-hidden min-h-[100dvh] md:min-h-screen md:h-screen flex flex-col md:block justify-between pt-14 sm:pt-20 md:pt-0 pb-16 sm:pb-20 md:pb-0">
+    <section id="hero" aria-label="메인 솔루션 및 이러닝 영상 제작" class="spotlight-section relative w-full text-white bg-brand-navy-dark overflow-y-auto md:overflow-hidden min-h-[100dvh] md:min-h-screen md:h-screen flex flex-col md:block justify-between pt-14 sm:pt-20 md:pt-0 pb-16 sm:pb-20 md:pb-0">
         
         <!-- ========================================================================= -->
         <!-- [PC 전용 FULLSCREEN 백그라운드 영상 & 시네마틱 오버레이] (md:block hidden) -->
@@ -2236,39 +2261,11 @@
                     </div>
                 </div>
 
-                <!-- PC/태블릿 중앙 하단: 와이드 롤링 애니메이션 전광판 배너 (반응형 텍스트 크기 최적화) -->
-                <div class="w-full max-w-3xl mx-auto pt-2 pointer-events-auto">
-                    <div class="bg-slate-900/85 backdrop-blur-xl border border-cyan-500/35 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(34,211,238,0.15)] py-3 md:py-3.5 px-4 md:px-6 overflow-hidden">
-                        <div class="relative overflow-hidden h-[58px] md:h-[66px] w-full flex items-center justify-center">
-                            <!-- Step 1: '맞춤형 이러닝 콘텐츠 설계' -->
-                            <div class="text-roll-step1 px-2 text-center">
-                                <div class="flex items-center justify-center gap-2.5 md:gap-3 flex-wrap">
-                                    <span class="text-xs md:text-xs lg:text-sm font-extrabold px-2.5 md:px-3 py-1 rounded-full bg-teal-500/20 border border-teal-400/50 text-teal-300 shadow-[0_0_14px_rgba(20,184,166,0.35)] shrink-0">이러닝 개발</span>
-                                    <span class="text-sm md:text-base lg:text-xl xl:text-2xl font-black text-white tracking-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
-                                        맞춤형 이러닝 콘텐츠 설계
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- Step 2: '온·오프라인 통합 교육 솔루션' -->
-                            <div class="text-roll-step2 px-2 text-center">
-                                <div class="flex items-center justify-center gap-2.5 md:gap-3 flex-wrap">
-                                    <span class="text-xs md:text-xs lg:text-sm font-extrabold px-2.5 md:px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-[0_0_14px_rgba(6,182,212,0.35)] shrink-0">블렌디드 러닝</span>
-                                    <span class="text-sm md:text-base lg:text-xl xl:text-2xl font-black text-white tracking-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
-                                        온·오프라인 통합 교육 솔루션
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- Step 3: '교육 및 기업 홍보 영상 All-in-one 제작' -->
-                            <div class="text-roll-step3 px-2 text-center">
-                                <div class="flex items-center justify-center gap-2.5 md:gap-3 flex-wrap">
-                                    <span class="text-xs md:text-xs lg:text-sm font-extrabold px-2.5 md:px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 shadow-[0_0_14px_rgba(245,158,11,0.35)] shrink-0">전문 영상</span>
-                                    <span class="text-sm md:text-base lg:text-xl xl:text-2xl font-black text-white tracking-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
-                                        교육 및 기업 홍보 영상 All-in-one 제작
-                                    </span>
-                                </div>
-                            </div>
+                <!-- PC/태블릿 중앙 하단: 와이드 모자이크 어셈블 전광판 배너 (글자 단위 파티클 조립/해체) -->
+                <div class="w-full max-w-4xl mx-auto pt-2 pointer-events-auto">
+                    <div class="spotlight-reveal-target bg-slate-900/85 backdrop-blur-xl border border-cyan-500/35 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(34,211,238,0.15)] py-3 md:py-3.5 px-4 md:px-6 overflow-hidden">
+                        <div id="mosaic-ticker-pc" class="mosaic-ticker-container relative overflow-hidden h-[54px] md:h-[62px] w-full flex items-center justify-center">
+                            <!-- Dynamically generated & assembled by initMosaicTicker() -->
                         </div>
                     </div>
                 </div>
@@ -2278,7 +2275,7 @@
             <div class="w-full pointer-events-auto">
                 <div class="grid grid-cols-4 gap-2.5 md:gap-4 text-center select-none">
                     <!-- 1. 17년 업력 -->
-                    <div class="flex flex-col items-center justify-center py-3 md:py-4 px-2 md:px-3 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md min-h-[72px] md:min-h-[82px]">
+                    <div class="spotlight-reveal-target flex flex-col items-center justify-center py-3 md:py-4 px-2 md:px-3 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md min-h-[72px] md:min-h-[82px]">
                         <div class="flex items-baseline justify-center gap-0.5 text-xl md:text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1 md:mb-1.5">
                             <span>17</span><span class="text-brand-mint font-extrabold text-sm md:text-base lg:text-lg">년</span>
                         </div>
@@ -2286,7 +2283,7 @@
                     </div>
 
                     <!-- 2. 160평 스튜디오 -->
-                    <div class="flex flex-col items-center justify-center py-3 md:py-4 px-2 md:px-3 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md min-h-[72px] md:min-h-[82px]">
+                    <div class="spotlight-reveal-target flex flex-col items-center justify-center py-3 md:py-4 px-2 md:px-3 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md min-h-[72px] md:min-h-[82px]">
                         <div class="flex items-baseline justify-center gap-0.5 text-xl md:text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1 md:mb-1.5">
                             <span>160</span><span class="text-brand-mint font-extrabold text-sm md:text-base lg:text-lg">평</span>
                         </div>
@@ -2294,7 +2291,7 @@
                     </div>
 
                     <!-- 3. 1,500+ 누적 프로젝트 -->
-                    <div class="flex flex-col items-center justify-center py-3 md:py-4 px-2 md:px-3 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md min-h-[72px] md:min-h-[82px]">
+                    <div class="spotlight-reveal-target flex flex-col items-center justify-center py-3 md:py-4 px-2 md:px-3 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md min-h-[72px] md:min-h-[82px]">
                         <div class="flex items-baseline justify-center gap-0.5 text-xl md:text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1 md:mb-1.5">
                             <span>1,500</span><span class="text-brand-mint font-extrabold text-sm md:text-base lg:text-lg">+</span>
                         </div>
@@ -2302,7 +2299,7 @@
                     </div>
 
                     <!-- 4. 100+ 주요 협력기관 -->
-                    <div class="flex flex-col items-center justify-center py-3 md:py-4 px-2 md:px-3 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md min-h-[72px] md:min-h-[82px]">
+                    <div class="spotlight-reveal-target flex flex-col items-center justify-center py-3 md:py-4 px-2 md:px-3 bg-slate-900/80 hover:bg-slate-900/95 transition-all border border-slate-800/90 hover:border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] backdrop-blur-md min-h-[72px] md:min-h-[82px]">
                         <div class="flex items-baseline justify-center gap-0.5 text-xl md:text-2xl lg:text-3xl font-black text-white tracking-tight leading-none mb-1 md:mb-1.5">
                             <span>100</span><span class="text-brand-mint font-extrabold text-sm md:text-base lg:text-lg">+</span>
                         </div>
@@ -2347,39 +2344,11 @@
                 </div>
             </div>
 
-            <!-- 3. [모바일] 영상 하단 전광판 (사업영역 주요 핵심 문장으로 변경) -->
+            <!-- 3. [모바일] 영상 하단 전광판 (모자이크 어셈블 전광판 - 1회 1문장 단독 파티클 조립/해체) -->
             <div class="w-full px-4 shrink-0">
                 <div class="w-full bg-slate-900/90 backdrop-blur-xl border border-cyan-500/35 rounded-xl shadow-[0_10px_35px_rgba(0,0,0,0.7)] py-2.5 px-3 overflow-hidden">
-                    <div class="relative overflow-hidden h-[52px] w-full flex items-center justify-center">
-                        <!-- Step 1: '맞춤형 이러닝 콘텐츠 설계' -->
-                        <div class="text-roll-step1 px-1 text-center">
-                            <div class="flex items-center justify-center gap-2 flex-wrap">
-                                <span class="text-[11px] xs:text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-teal-500/20 border border-teal-400/50 text-teal-300 shadow-[0_0_10px_rgba(20,184,166,0.3)] shrink-0">이러닝 개발</span>
-                                <span class="text-xs xs:text-sm sm:text-base font-black text-white tracking-tight leading-snug drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
-                                    맞춤형 이러닝 콘텐츠 설계
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Step 2: '온·오프라인 통합 교육 솔루션' -->
-                        <div class="text-roll-step2 px-1 text-center">
-                            <div class="flex items-center justify-center gap-2 flex-wrap">
-                                <span class="text-[11px] xs:text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.3)] shrink-0">블렌디드 러닝</span>
-                                <span class="text-xs xs:text-sm sm:text-base font-black text-white tracking-tight leading-snug drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
-                                    온·오프라인 통합 교육 솔루션
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Step 3: '교육 및 기업 홍보 영상 All-in-one 제작' -->
-                        <div class="text-roll-step3 px-1 text-center">
-                            <div class="flex items-center justify-center gap-2 flex-wrap">
-                                <span class="text-[11px] xs:text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.3)] shrink-0">전문 영상</span>
-                                <span class="text-xs xs:text-sm sm:text-base font-black text-white tracking-tight leading-snug drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
-                                    교육 및 기업 홍보 영상 All-in-one 제작
-                                </span>
-                            </div>
-                        </div>
+                    <div id="mosaic-ticker-mobile" class="mosaic-ticker-container relative overflow-hidden h-[46px] w-full flex items-center justify-center">
+                        <!-- Dynamically generated & assembled by initMosaicTicker() -->
                     </div>
                 </div>
             </div>
@@ -2789,7 +2758,7 @@
             <!-- PROMINENT ANIMATED ROLLING FEATURED SLIDER (IMAGE BACKGROUND + OVERLAID TEXT) -->
             <div @touchstart="touchStartX = $event.touches[0].clientX"
                  @touchend="touchEndX = $event.changedTouches[0].clientX; if (touchStartX - touchEndX > 30) { nextServiceCard(); restartServiceAutoPlay(8000); } else if (touchEndX - touchStartX > 30) { prevServiceCard(); restartServiceAutoPlay(8000); }"
-                 class="relative w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl bg-slate-900 text-white overflow-hidden shadow-2xl border border-slate-200/80 mb-4 sm:mb-8 h-[370px] xs:h-[385px] sm:h-[450px] lg:h-[480px]">
+                 class="spotlight-section relative w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl bg-slate-900 text-white overflow-hidden shadow-2xl border border-slate-200/80 mb-4 sm:mb-8 h-[370px] xs:h-[385px] sm:h-[450px] lg:h-[480px]">
                 
                 <!-- Slide 0: 이러닝 개발 -->
                 <div x-show="activeServiceIndex === 0"
@@ -3040,26 +3009,30 @@
                 <!-- Main Cinematic Slider Stage -->
                 <div @touchstart="studioTouchStartX = $event.touches[0].clientX"
                      @touchend="studioTouchEndX = $event.changedTouches[0].clientX; if (studioTouchStartX - studioTouchEndX > 40) { nextStudioSlide(); } else if (studioTouchEndX - studioTouchStartX > 40) { prevStudioSlide(); }"
-                     class="cinematic-stage-container relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9] rounded-3xl overflow-hidden bg-slate-900 shadow-2xl border border-slate-200 group cursor-pointer isolate"
+                     class="cinematic-stage-container relative w-full aspect-video rounded-3xl overflow-hidden bg-slate-950 shadow-2xl border border-slate-200 group cursor-pointer isolate"
                      @click="openImageModal(studioInfrastructure[activeStudioIndex]?.imageUrl || studioInfrastructure[activeStudioIndex]?.fallbackUrl, studioInfrastructure[activeStudioIndex]?.title || '스튜디오 전경')">
 
-                    <!-- Studio Slide Images Loop (Clean View - No Text Overlay) -->
+                    <!-- Studio Slide Images Loop (Clean View - High-End Tone & Ken Burns Depth) -->
                     <template x-for="(item, idx) in studioInfrastructure" :key="item.id">
                         <div x-show="activeStudioIndex === idx"
-                             x-transition:enter="transition ease-out duration-400 opacity-0"
+                             x-transition:enter="transition-opacity ease-out duration-500"
                              x-transition:enter-start="opacity-0"
                              x-transition:enter-end="opacity-100"
-                             x-transition:leave="transition ease-in duration-300 opacity-100 absolute inset-0"
+                             x-transition:leave="transition-opacity ease-in duration-300 absolute inset-0"
                              x-transition:leave-start="opacity-100"
                              x-transition:leave-end="opacity-0"
-                             class="w-full h-full absolute inset-0 overflow-hidden bg-slate-900 flex items-center justify-center will-change-transform-opacity gpu-accelerated">
+                             :class="activeStudioIndex === idx ? 'studio-slide-active' : ''"
+                             class="studio-slide-wrapper w-full h-full absolute inset-0 overflow-hidden bg-slate-950 flex items-center justify-center will-change-transform-opacity gpu-accelerated">
                             
+                            <!-- Unified Cinematic Exposure Scrim & Vignette -->
+                            <div class="cinematic-dark-overlay"></div>
+                            <div class="cinematic-vignette"></div>
+
                             <img :src="item.imageUrl"
                                  @error="if ($el.dataset.fallbackTried !== '1') { $el.dataset.fallbackTried = '1'; $el.src = item.rawUrl; }"
                                  :alt="item.title"
                                  referrerpolicy="no-referrer"
                                  loading="eager"
-                                 style="aspect-ratio: 16/9;"
                                  class="cinematic-stage-image w-full h-full object-cover">
                         </div>
                     </template>
@@ -3097,7 +3070,7 @@
                         <button :id="'studio-thumb-' + idx"
                                 @click="selectStudioSlide(idx)"
                                 :class="activeStudioIndex === idx ? 'ring-2 ring-blue-600 scale-105 opacity-100 shadow-md' : 'opacity-60 hover:opacity-100 ring-1 ring-slate-200'"
-                                class="relative w-16 sm:w-20 aspect-[16/10] rounded-xl overflow-hidden shrink-0 transition-all duration-300 cursor-pointer bg-slate-100 border border-slate-200">
+                                class="relative w-16 sm:w-20 aspect-video rounded-xl overflow-hidden shrink-0 transition-all duration-300 cursor-pointer bg-slate-100 border border-slate-200">
                             <img :src="item.imageUrl"
                                  @error="if ($el.dataset.fallbackTried !== '1') { $el.dataset.fallbackTried = '1'; $el.src = item.rawUrl; }"
                                  :alt="item.title"
@@ -3717,8 +3690,74 @@
             }, 80);
 
             // ==========================================
-            // 1. INTERACTIVE MOUSE SPOTLIGHT (조명 트래킹)
+            // 1. INTERACTIVE MOUSE SPOTLIGHT (조명 트래킹 - CSS Variables + rAF)
             // ==========================================
+            function initSpotlightSections() {
+                const spotlightSections = document.querySelectorAll('.spotlight-section');
+                
+                spotlightSections.forEach((section) => {
+                    if (section.dataset.spotlightBound) return;
+                    section.dataset.spotlightBound = 'true';
+
+                    let targetX = -1000;
+                    let targetY = -1000;
+                    let currentX = -1000;
+                    let currentY = -1000;
+                    let isHovered = false;
+                    let rafId = null;
+
+                    function updateSectionSpotlight() {
+                        if (!isHovered) {
+                            section.style.setProperty('--spotlight-opacity', '0');
+                            rafId = null;
+                            return;
+                        }
+
+                        // Smooth interpolation without layout jank
+                        currentX += (targetX - currentX) * 0.15;
+                        currentY += (targetY - currentY) * 0.15;
+
+                        section.style.setProperty('--mouse-x', `${currentX.toFixed(1)}px`);
+                        section.style.setProperty('--mouse-y', `${currentY.toFixed(1)}px`);
+                        section.style.setProperty('--spotlight-opacity', '1');
+
+                        rafId = requestAnimationFrame(updateSectionSpotlight);
+                    }
+
+                    section.addEventListener('mousemove', (e) => {
+                        const rect = section.getBoundingClientRect();
+                        targetX = e.clientX - rect.left;
+                        targetY = e.clientY - rect.top;
+
+                        if (!isHovered) {
+                            isHovered = true;
+                            currentX = targetX;
+                            currentY = targetY;
+                            if (!rafId) {
+                                rafId = requestAnimationFrame(updateSectionSpotlight);
+                            }
+                        }
+                    });
+
+                    section.addEventListener('mouseenter', (e) => {
+                        const rect = section.getBoundingClientRect();
+                        targetX = e.clientX - rect.left;
+                        targetY = e.clientY - rect.top;
+                        currentX = targetX;
+                        currentY = targetY;
+                        isHovered = true;
+                        if (!rafId) {
+                            rafId = requestAnimationFrame(updateSectionSpotlight);
+                        }
+                    });
+
+                    section.addEventListener('mouseleave', () => {
+                        isHovered = false;
+                    });
+                });
+            }
+            initSpotlightSections();
+
             const spotlightEl = document.getElementById('interactive-spotlight');
             if (spotlightEl && window.innerWidth >= 768) {
                 let targetX = window.innerWidth / 2;
@@ -3779,6 +3818,7 @@
 
             const observer = new MutationObserver(() => {
                 setupAllTiltCards();
+                initSpotlightSections();
             });
             observer.observe(document.body, { childList: true, subtree: true });
 
@@ -3917,6 +3957,149 @@
             if (document.getElementById('studio-particles-canvas')) {
                 initParticleCanvas('studio-particles-canvas', 30);
             }
+
+            /* =========================================================
+               HERO TICKER: MOSAIC ASSEMBLE ANIMATION CONTROLLER
+               - 10개 롱테일 키워드를 1개씩 단독 노출
+               - 개별 글자(Letter) 단위 분리(DOM Splitting) 후 파티클 모자이크 조립/해체
+            ========================================================= */
+            (function initMosaicTicker() {
+                const MOSAIC_KEYWORDS = [
+                    "체계적인 교수설계 및 맞춤형 디지털 학습 구축",
+                    "반응형 웹 및 표준 LMS 연동",
+                    "AI 기반 인터랙티브 교육 모듈",
+                    "160평 규모 6개 이러닝 전용 스튜디오",
+                    "4K 멀티캠 시네마틱 영상 제작",
+                    "3D 모션그래픽 및 VFX 시각 효과",
+                    "고화질 실시간 라이브 스트리밍",
+                    "온·오프라인 융합 하이브리드 교육 설계",
+                    "현장 실무 중심 디지털 콘텐츠 결합",
+                    "B2B·B2G 맞춤형 직무 워크숍"
+                ];
+
+                let currentIndex = 0;
+                let isAnimating = false;
+
+                function renderScatteredPhrase(text, container, isMobile) {
+                    if (!container) return [];
+                    container.innerHTML = '';
+
+                    const phraseWrapper = document.createElement('div');
+                    phraseWrapper.className = 'w-full h-full flex items-center justify-center text-center overflow-hidden flex-wrap max-w-full';
+
+                    const words = text.split(' ');
+                    const allCharElements = [];
+
+                    words.forEach((word) => {
+                        const wordSpan = document.createElement('span');
+                        wordSpan.className = 'mosaic-word-wrapper';
+
+                        for (let i = 0; i < word.length; i++) {
+                            const char = word[i];
+                            const charSpan = document.createElement('span');
+                            charSpan.textContent = char;
+                            charSpan.className = isMobile
+                                ? 'mosaic-char text-xs xs:text-sm sm:text-base font-black text-emerald-300 tracking-tight leading-snug drop-shadow-[0_2px_12px_rgba(0,0,0,0.95),0_0_14px_rgba(52,211,153,0.4)]'
+                                : 'mosaic-char text-base sm:text-lg md:text-xl lg:text-2xl font-black text-emerald-300 tracking-tight drop-shadow-[0_2px_14px_rgba(0,0,0,0.95),0_0_18px_rgba(52,211,153,0.4)]';
+
+                            // Random scatter parameters
+                            const scatterX = (Math.random() - 0.5) * (isMobile ? 60 : 100);
+                            const scatterY = (Math.random() - 0.5) * (isMobile ? 40 : 60);
+                            const scatterRot = (Math.random() - 0.5) * 50;
+                            const scatterScale = 0.4 + Math.random() * 0.9;
+
+                            charSpan.style.transform = `translate3d(${scatterX.toFixed(1)}px, ${scatterY.toFixed(1)}px, 0) rotateZ(${scatterRot.toFixed(1)}deg) scale(${scatterScale.toFixed(2)})`;
+                            charSpan.classList.add('is-scattered');
+
+                            wordSpan.appendChild(charSpan);
+                            allCharElements.push(charSpan);
+                        }
+
+                        phraseWrapper.appendChild(wordSpan);
+                    });
+
+                    container.appendChild(phraseWrapper);
+                    return allCharElements;
+                }
+
+                function runAssembleCycle() {
+                    if (isAnimating) return;
+                    isAnimating = true;
+
+                    const pcContainer = document.getElementById('mosaic-ticker-pc');
+                    const mobileContainer = document.getElementById('mosaic-ticker-mobile');
+
+                    if (!pcContainer && !mobileContainer) {
+                        isAnimating = false;
+                        return;
+                    }
+
+                    const currentKeyword = MOSAIC_KEYWORDS[currentIndex];
+                    const pcChars = renderScatteredPhrase(currentKeyword, pcContainer, false);
+                    const mobileChars = renderScatteredPhrase(currentKeyword, mobileContainer, true);
+
+                    // Force browser reflow
+                    if (pcContainer) void pcContainer.offsetHeight;
+                    if (mobileContainer) void mobileContainer.offsetHeight;
+
+                    // 1. ASSEMBLE ENTRY (자석처럼 조립되는 모자이크 효과)
+                    requestAnimationFrame(() => {
+                        pcChars.forEach((char, idx) => {
+                            setTimeout(() => {
+                                char.classList.remove('is-scattered');
+                                char.classList.add('is-assembled');
+                            }, idx * 24);
+                        });
+
+                        mobileChars.forEach((char, idx) => {
+                            setTimeout(() => {
+                                char.classList.remove('is-scattered');
+                                char.classList.add('is-assembled');
+                            }, idx * 24);
+                        });
+                    });
+
+                    // 2. STAY & READING DURATION (약 2.8초 안정적 노출)
+                    const letterCount = currentKeyword.replace(/\s+/g, '').length;
+                    const totalAssembleDuration = (letterCount * 24) + 650;
+                    const stayDuration = 2800;
+
+                    setTimeout(() => {
+                        // 3. DISASSEMBLE EXIT (미세하게 파티클로 흩어지며 해체)
+                        const currentPcChars = pcContainer ? pcContainer.querySelectorAll('.mosaic-char') : [];
+                        const currentMobileChars = mobileContainer ? mobileContainer.querySelectorAll('.mosaic-char') : [];
+
+                        currentPcChars.forEach((char) => {
+                            const exitX = (Math.random() - 0.5) * 80;
+                            const exitY = (Math.random() - 0.5) * 50;
+                            const exitRot = (Math.random() - 0.5) * 40;
+                            char.classList.remove('is-assembled');
+                            char.classList.add('is-exiting');
+                            char.style.transform = `translate3d(${exitX.toFixed(1)}px, ${exitY.toFixed(1)}px, 0) rotateZ(${exitRot.toFixed(1)}deg) scale(0.6)`;
+                        });
+
+                        currentMobileChars.forEach((char) => {
+                            const exitX = (Math.random() - 0.5) * 50;
+                            const exitY = (Math.random() - 0.5) * 35;
+                            const exitRot = (Math.random() - 0.5) * 40;
+                            char.classList.remove('is-assembled');
+                            char.classList.add('is-exiting');
+                            char.style.transform = `translate3d(${exitX.toFixed(1)}px, ${exitY.toFixed(1)}px, 0) rotateZ(${exitRot.toFixed(1)}deg) scale(0.6)`;
+                        });
+
+                        // 4. NEXT KEYWORD TRANSITION
+                        setTimeout(() => {
+                            currentIndex = (currentIndex + 1) % MOSAIC_KEYWORDS.length;
+                            isAnimating = false;
+                            runAssembleCycle();
+                        }, 480);
+
+                    }, totalAssembleDuration + stayDuration);
+                }
+
+                // Initial trigger
+                setTimeout(runAssembleCycle, 200);
+            })();
         });
     </script>
 </body>
