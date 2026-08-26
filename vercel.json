@@ -1,12 +1,22 @@
 {
+  "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/adm",
+      "destination": "/adm.html"
+    },
+    {
+      "source": "/adm/(.*)",
+      "destination": "/adm.html"
+    },
+    {
       "source": "/admin",
-      "destination": "/admin.html"
+      "destination": "/adm.html"
     },
     {
       "source": "/admin/(.*)",
-      "destination": "/admin.html"
+      "destination": "/adm.html"
     }
   ]
 }
+
