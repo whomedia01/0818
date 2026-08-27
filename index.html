@@ -1644,16 +1644,16 @@
                             this.splashVisible = true;
                             this.splashFading = false;
 
-                            // 9.5초(9,500ms) 후 부드러운 페이드아웃 시작
+                            // 7.5초(7,500ms) 후 부드러운 페이드아웃 시작
                             this.splashTimerFade = setTimeout(() => {
                                 this.splashFading = true;
-                            }, 9500);
+                            }, 7500);
 
-                            // 10.0초(10,000ms) 후 스플래시 화면 완전 제거 및 본문 활성화
+                            // 8.0초(8,000ms) 후 스플래시 화면 완전 제거 및 본문 활성화
                             this.splashTimerHide = setTimeout(() => {
                                 this.splashVisible = false;
                                 this.splashFading = false;
-                            }, 10000);
+                            }, 8000);
                         }
                     } catch(e) {
                         console.warn('Splash screen init error:', e);
@@ -3129,7 +3129,7 @@
                     핵심 사업 영역
                 </h2>
                 <p class="text-slate-600 text-xs sm:text-base font-medium break-keep max-w-3xl mx-auto leading-normal sm:leading-relaxed mt-0.5 sm:mt-0">
-                    최적의 에듀테크 통합 솔루션을 제공합니다. 이러닝 설계, 교육 영상 제작, 블렌디드 러닝을 아우릅니다. 단순한 제작을 넘어서겠습니다. 학습자의 몰입을 이끌고 교육 목표를 완벽히 실현합니다.
+                    이러닝 설계부터 교육 영상 제작, 블렌디드 러닝까지 학습 몰입을 극대화하는 최적의 에듀테크 솔루션을 제공합니다.
                 </p>
             </div>
 
@@ -3195,12 +3195,11 @@
                          loading="eager"
                          referrerpolicy="no-referrer"
                          style="aspect-ratio: 16/9;"
-                         class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                         class="absolute inset-0 w-full h-full object-cover brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
                     
-                    <!-- Clean Directional Scrim -->
-                    <div class="absolute inset-0 bg-slate-950/40 z-0 pointer-events-none"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 via-60% to-slate-950/40 z-0 pointer-events-none hidden md:block"></div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/80 via-70% to-slate-950/30 z-0 pointer-events-none md:hidden"></div>
+                    <!-- Clean Light Directional Scrim (최적화된 투명도 - 이미지 화사하게 노출) -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent z-0 pointer-events-none"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/40 to-transparent z-0 pointer-events-none hidden md:block"></div>
 
                     <!-- Top Header Row -->
                     <div class="relative z-10 flex items-center justify-between">
@@ -3284,12 +3283,11 @@
                          loading="eager"
                          referrerpolicy="no-referrer"
                          style="aspect-ratio: 16/9;"
-                         class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                         class="absolute inset-0 w-full h-full object-cover brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
                     
-                    <!-- Clean Directional Scrim -->
-                    <div class="absolute inset-0 bg-slate-950/40 z-0 pointer-events-none"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 via-60% to-slate-950/40 z-0 pointer-events-none hidden md:block"></div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/80 via-70% to-slate-950/30 z-0 pointer-events-none md:hidden"></div>
+                    <!-- Clean Light Directional Scrim (화사하고 선명한 미디어 뷰) -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent z-0 pointer-events-none"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/40 to-transparent z-0 pointer-events-none hidden md:block"></div>
 
                     <!-- Top Header Row -->
                     <div class="relative z-10 flex items-center justify-between">
@@ -3367,18 +3365,18 @@
                      x-transition:leave-end="opacity-0 -translate-x-8"
                      class="absolute inset-0 w-full h-full p-4 xs:p-5 sm:p-7 lg:p-9 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated">
                     
-                    <!-- High-Definition Background Image -->
-                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1400&q=85" 
-                         alt="블렌디드 러닝" 
-                         loading="eager"
-                         referrerpolicy="no-referrer"
-                         style="aspect-ratio: 16/9;"
-                         class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <!-- High-Definition Background Video -->
+                    <video src="/blended-physical-ai.mp4" 
+                           poster="/blended-physical-ai-poster.jpg" 
+                           autoplay loop muted playsinline 
+                           aria-hidden="true"
+                           style="aspect-ratio: 16/9;"
+                           class="absolute inset-0 w-full h-full object-cover brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    </video>
                     
-                    <!-- Clean Directional Scrim -->
-                    <div class="absolute inset-0 bg-slate-950/40 z-0 pointer-events-none"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 via-60% to-slate-950/40 z-0 pointer-events-none hidden md:block"></div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/80 via-70% to-slate-950/30 z-0 pointer-events-none md:hidden"></div>
+                    <!-- Clean Light Directional Scrim (화사하고 선명한 비디오 뷰) -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/35 to-transparent z-0 pointer-events-none"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/35 to-transparent z-0 pointer-events-none hidden md:block"></div>
 
                     <!-- Top Header Row -->
                     <div class="relative z-10 flex items-center justify-between">
