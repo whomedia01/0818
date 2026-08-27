@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
-import { InquiryDatabase, AdminAuth } from "./src/server/db";
+import { InquiryDatabase, AdminAuth } from "./src/server/db.ts";
 
 async function startServer() {
   const app = express();
