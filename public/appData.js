@@ -163,10 +163,10 @@ document.addEventListener('alpine:init', () => {
 
         initMobileSplash() {
             try {
+                // 모바일 화면(폭 768px 이하)일 때 무조건 매번 실행
                 const isMobile = window.innerWidth <= 768;
-                const hasSeenSplash = sessionStorage.getItem('hasSeenSplash');
 
-                if (isMobile && !hasSeenSplash) {
+                if (isMobile) {
                     this.splashVisible = true;
                     this.splashFading = false;
 
@@ -175,10 +175,9 @@ document.addEventListener('alpine:init', () => {
                         this.splashFading = true;
                     }, 2500);
 
-                    // 3초 후 화면에서 완전 제거 및 세션 기록
+                    // 3초 후 화면에서 완전 제거
                     setTimeout(() => {
                         this.splashVisible = false;
-                        sessionStorage.setItem('hasSeenSplash', 'true');
                     }, 3000);
                 }
             } catch(e) {
@@ -188,9 +187,6 @@ document.addEventListener('alpine:init', () => {
 
         skipSplash() {
             this.splashVisible = false;
-            try {
-                sessionStorage.setItem('hasSeenSplash', 'true');
-            } catch(e) {}
         },
 
         startHeroTyping() {
