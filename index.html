@@ -1318,9 +1318,9 @@
                 mobileMenuOpen: false, 
                 refTab: 'all',
                 searchQuery: '',
-                portfolioLimit: 4,
-                portfolioPage: 1,
-                portfolioPerPage: 4,
+                portfolioIndex: 0,
+                portfolioTouchStartX: 0,
+                portfolioTouchEndX: 0,
                 partnerTab: 'all',
                 videoModalOpen: false,
                 activeVideoId: '',
@@ -1405,61 +1405,26 @@
                     });
                 },
 
-                get filteredPortfolio() {
-                    let list = this.portfolioItems;
-                    if (this.refTab !== 'all') {
-                        list = list.filter(item => item.cat === this.refTab);
-                    }
-                    if (this.searchQuery && this.searchQuery.trim()) {
-                        const q = this.searchQuery.trim().toLowerCase();
-                        list = list.filter(item => 
-                            (item.title && item.title.toLowerCase().includes(q)) ||
-                            (item.tag && item.tag.toLowerCase().includes(q)) ||
-                            (item.label && item.label.toLowerCase().includes(q))
-                        );
-                    }
-                    return list;
+                get currentPortfolioItem() {
+                    return this.portfolioItems[this.portfolioIndex] || this.portfolioItems[0];
                 },
 
-                get portfolioCategoryCounts() {
-                    return {
-                        all: this.portfolioItems.length,
-                        production: this.portfolioItems.filter(item => item.cat === 'production').length,
-                        edu: this.portfolioItems.filter(item => item.cat === 'edu').length,
-                        press: this.portfolioItems.filter(item => item.cat === 'press').length
-                    };
-                },
-
-                get totalPortfolioPages() {
-                    const total = this.filteredPortfolio.length;
-                    return Math.max(1, Math.ceil(total / this.portfolioPerPage));
-                },
-
-                get pagedPortfolio() {
-                    const start = (this.portfolioPage - 1) * this.portfolioPerPage;
-                    return this.filteredPortfolio.slice(start, start + this.portfolioPerPage);
-                },
-
-                setPortfolioTab(tab) {
-                    this.refTab = tab;
-                    this.portfolioPage = 1;
-                    this.portfolioLimit = 4;
-                },
-
-                nextPortfolioPage() {
-                    if (this.portfolioPage < this.totalPortfolioPages) {
-                        this.portfolioPage++;
+                nextPortfolioItem() {
+                    if (this.portfolioItems.length > 0) {
+                        this.portfolioIndex = (this.portfolioIndex + 1) % this.portfolioItems.length;
                     }
                 },
 
-                prevPortfolioPage() {
-                    if (this.portfolioPage > 1) {
-                        this.portfolioPage--;
+                prevPortfolioItem() {
+                    if (this.portfolioItems.length > 0) {
+                        this.portfolioIndex = (this.portfolioIndex - 1 + this.portfolioItems.length) % this.portfolioItems.length;
                     }
                 },
 
-                setPortfolioPage(p) {
-                    this.portfolioPage = Math.max(1, Math.min(p, this.totalPortfolioPages));
+                setPortfolioIndex(idx) {
+                    if (idx >= 0 && idx < this.portfolioItems.length) {
+                        this.portfolioIndex = idx;
+                    }
                 },
 
                 // [정교화된 구글 외부 검색 쿼리 빌더]
@@ -3507,153 +3472,136 @@
                 </p>
             </div>
 
-            <!-- Mobile View Switcher Tab (Only visible on mobile) -->
-            <div class="flex md:hidden items-center justify-center gap-1.5 mb-3 max-w-xs mx-auto bg-slate-200/80 p-1 rounded-xl">
-                <button @click="studioMobileTab = 'cards'"
-                        :class="studioMobileTab === 'cards' ? 'bg-white text-slate-900 shadow-xs font-black' : 'text-slate-600 font-bold hover:text-slate-900'"
-                        class="flex-1 py-1.5 px-3 rounded-lg text-xs transition-all flex items-center justify-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full" :class="studioMobileTab === 'cards' ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'"></span>
-                    <span>제작 인프라</span>
-                </button>
-                <button @click="studioMobileTab = 'photos'"
-                        :class="studioMobileTab === 'photos' ? 'bg-white text-slate-900 shadow-xs font-black' : 'text-slate-600 font-bold hover:text-slate-900'"
-                        class="flex-1 py-1.5 px-3 rounded-lg text-xs transition-all flex items-center justify-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full" :class="studioMobileTab === 'photos' ? 'bg-blue-500 animate-pulse' : 'bg-slate-400'"></span>
-                    <span>실사 갤러리</span>
-                </button>
-            </div>
-
-            <!-- Dynamic High-Tech Animated Studio Environment Cards -->
-            <div x-show="studioMobileTab === 'cards' || window.innerWidth >= 768"
-                 class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-5 mb-4 sm:mb-12">
+            <!-- Dynamic High-Tech Compact Studio Environment Cards (제작 인프라 4대 핵심) -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-3 sm:mb-8">
                 
                 <!-- Card 01: 대형 스튜디오 -->
-                <div class="tilt-card group relative bg-slate-950/95 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-slate-800 hover:border-emerald-400/80 shadow-lg hover:shadow-[0_0_30px_rgba(16,185,129,0.25)] transition-all duration-300 flex flex-col justify-between overflow-hidden hover:-translate-y-1.5 isolate">
+                <div class="tilt-card group relative bg-slate-950/95 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-slate-800 hover:border-emerald-400/80 shadow-md sm:shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden hover:-translate-y-1 isolate">
                     <!-- Animated Ambient Glow Aura -->
-                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-emerald-500/15 rounded-full blur-2xl pointer-events-none animate-studio-glow group-hover:bg-emerald-400/30 transition-all duration-500"></div>
+                    <div class="absolute -right-8 -top-8 w-24 h-24 sm:w-32 sm:h-32 bg-emerald-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-emerald-400/30 transition-all duration-500"></div>
                     <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
 
                     <!-- Top Status Bar with Live Radar & Rec Indicator -->
-                    <div class="flex items-center justify-between mb-1.5 sm:mb-3 relative z-10">
-                        <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[9px] sm:text-[11px] font-bold text-emerald-300">
-                            <span class="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
+                    <div class="flex items-center justify-between mb-1 sm:mb-3 relative z-10">
+                        <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[8.5px] sm:text-[11px] font-bold text-emerald-300">
+                            <span class="relative flex h-1.5 w-1.5">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-emerald-500"></span>
+                                <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                             </span>
                             <span>STUDIO A-F</span>
                         </div>
                         <!-- Radar Sweep Micro Icon -->
-                        <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-emerald-500/30 relative flex items-center justify-center overflow-hidden">
+                        <div class="w-4 h-4 sm:w-6 sm:h-6 rounded-full border border-emerald-500/30 relative flex items-center justify-center overflow-hidden">
                             <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500/40 to-transparent origin-bottom-left animate-studio-radar"></div>
-                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 z-10 shadow-[0_0_4px_#34d399]"></div>
+                            <div class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-400 z-10 shadow-[0_0_4px_#34d399]"></div>
                         </div>
                     </div>
 
                     <!-- Main Content -->
                     <div class="relative z-10 text-left my-auto">
-                        <h3 class="text-sm sm:text-lg lg:text-xl font-black text-white mb-0.5 sm:mb-1 tracking-tight group-hover:text-emerald-300 transition-colors drop-shadow-sm">
+                        <h3 class="text-xs sm:text-base lg:text-lg font-black text-white mb-0.5 tracking-tight group-hover:text-emerald-300 transition-colors drop-shadow-sm">
                             대형 스튜디오
                         </h3>
-                        <p class="text-[10px] sm:text-[13px] text-slate-300/85 font-normal leading-snug break-keep">
-                            6개 전용 스튜디오 &amp; 부대시설
+                        <p class="text-[9.5px] sm:text-xs text-slate-300/85 font-normal leading-snug break-keep">
+                            6개 전용 스튜디오 인프라
                         </p>
                     </div>
 
                     <!-- Bottom Specs Tag -->
-                    <div class="mt-2 sm:mt-3 pt-1.5 sm:pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-[9.5px] sm:text-[11px] text-slate-400 font-mono relative z-10">
+                    <div class="mt-1.5 sm:mt-2.5 pt-1 sm:pt-2 border-t border-slate-800/80 flex items-center justify-between text-[8.5px] sm:text-[10.5px] text-slate-400 font-mono relative z-10">
                         <span class="text-emerald-400 font-bold">160평 인프라</span>
-                        <span class="text-[9px] sm:text-[10px] text-slate-500 group-hover:text-slate-300 transition-colors">4K MULTI-CAM</span>
+                        <span class="text-[8px] sm:text-[9.5px] text-slate-500 group-hover:text-slate-300 transition-colors">4K MULTI-CAM</span>
                     </div>
                 </div>
 
                 <!-- Card 02: 전자칠판 -->
-                <div class="tilt-card group relative bg-slate-950/95 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-slate-800 hover:border-blue-400/80 shadow-lg hover:shadow-[0_0_30px_rgba(59,130,246,0.25)] transition-all duration-300 flex flex-col justify-between overflow-hidden hover:-translate-y-1.5 isolate">
+                <div class="tilt-card group relative bg-slate-950/95 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-slate-800 hover:border-blue-400/80 shadow-md sm:shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden hover:-translate-y-1 isolate">
                     <!-- Animated Ambient Glow Aura -->
-                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-500/15 rounded-full blur-2xl pointer-events-none animate-studio-glow group-hover:bg-blue-400/30 transition-all duration-500"></div>
+                    <div class="absolute -right-8 -top-8 w-24 h-24 sm:w-32 sm:h-32 bg-blue-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-blue-400/30 transition-all duration-500"></div>
                     <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
 
                     <!-- Top Status Bar with Interactive Touch Pulse -->
-                    <div class="flex items-center justify-between mb-1.5 sm:mb-3 relative z-10">
-                        <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full bg-blue-950/80 border border-blue-500/40 text-[9px] sm:text-[11px] font-bold text-blue-300">
+                    <div class="flex items-center justify-between mb-1 sm:mb-3 relative z-10">
+                        <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 rounded-full bg-blue-950/80 border border-blue-500/40 text-[8.5px] sm:text-[11px] font-bold text-blue-300">
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_6px_#60a5fa]"></span>
                             <span>SMART BOARD</span>
                         </div>
                         <!-- Stylus / Touch Wave Icon -->
-                        <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-blue-950/60 border border-blue-500/30 flex items-center justify-center relative">
-                            <span class="animate-studio-touch w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border border-blue-400/80 bg-blue-400/20"></span>
+                        <div class="w-4 h-4 sm:w-6 sm:h-6 rounded-lg bg-blue-950/60 border border-blue-500/30 flex items-center justify-center relative">
+                            <span class="animate-studio-touch w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 rounded-full border border-blue-400/80 bg-blue-400/20"></span>
                         </div>
                     </div>
 
                     <!-- Main Content -->
                     <div class="relative z-10 text-left my-auto">
-                        <h3 class="text-sm sm:text-lg lg:text-xl font-black text-white mb-0.5 sm:mb-1 tracking-tight group-hover:text-blue-300 transition-colors drop-shadow-sm">
+                        <h3 class="text-xs sm:text-base lg:text-lg font-black text-white mb-0.5 tracking-tight group-hover:text-blue-300 transition-colors drop-shadow-sm">
                             전자칠판
                         </h3>
-                        <p class="text-[10px] sm:text-[13px] text-slate-300/85 font-normal leading-snug break-keep">
-                            실시간 판서 시스템
+                        <p class="text-[9.5px] sm:text-xs text-slate-300/85 font-normal leading-snug break-keep">
+                            실시간 판서 이러닝 시스템
                         </p>
                     </div>
 
                     <!-- Bottom Specs Tag -->
-                    <div class="mt-2 sm:mt-3 pt-1.5 sm:pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-[9.5px] sm:text-[11px] text-slate-400 font-mono relative z-10">
+                    <div class="mt-1.5 sm:mt-2.5 pt-1 sm:pt-2 border-t border-slate-800/80 flex items-center justify-between text-[8.5px] sm:text-[10.5px] text-slate-400 font-mono relative z-10">
                         <span class="text-blue-400 font-bold">86" 4K UHD</span>
-                        <span class="text-[9px] sm:text-[10px] text-slate-500 group-hover:text-slate-300 transition-colors">ZERO DELAY</span>
+                        <span class="text-[8px] sm:text-[9.5px] text-slate-500 group-hover:text-slate-300 transition-colors">ZERO DELAY</span>
                     </div>
                 </div>
 
                 <!-- Card 03: 대형 크로마키 -->
-                <div class="tilt-card group relative bg-slate-950/95 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-slate-800 hover:border-teal-400/80 shadow-lg hover:shadow-[0_0_30px_rgba(20,184,166,0.25)] transition-all duration-300 flex flex-col justify-between overflow-hidden hover:-translate-y-1.5 isolate">
+                <div class="tilt-card group relative bg-slate-950/95 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-slate-800 hover:border-teal-400/80 shadow-md sm:shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden hover:-translate-y-1 isolate">
                     <!-- Animated Ambient Glow Aura -->
-                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-teal-500/15 rounded-full blur-2xl pointer-events-none animate-studio-glow group-hover:bg-teal-400/30 transition-all duration-500"></div>
+                    <div class="absolute -right-8 -top-8 w-24 h-24 sm:w-32 sm:h-32 bg-teal-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-teal-400/30 transition-all duration-500"></div>
                     <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
 
                     <!-- Top Status Bar with Chroma Virtual Grid Pulse -->
-                    <div class="flex items-center justify-between mb-1.5 sm:mb-3 relative z-10">
-                        <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full bg-teal-950/80 border border-teal-500/40 text-[9px] sm:text-[11px] font-bold text-teal-300">
+                    <div class="flex items-center justify-between mb-1 sm:mb-3 relative z-10">
+                        <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 rounded-full bg-teal-950/80 border border-teal-500/40 text-[8.5px] sm:text-[11px] font-bold text-teal-300">
                             <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shadow-[0_0_6px_#2dd4bf]"></span>
                             <span>VIRTUAL SET</span>
                         </div>
                         <!-- Chroma 3D Layers Micro Icon -->
-                        <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-teal-950/60 border border-teal-500/30 flex items-center justify-center">
+                        <div class="w-4 h-4 sm:w-6 sm:h-6 rounded-lg bg-teal-950/60 border border-teal-500/30 flex items-center justify-center">
                             <div class="animate-studio-chroma flex flex-col gap-0.5 items-center justify-center">
-                                <span class="w-3 sm:w-3.5 h-0.5 bg-teal-400 rounded-full"></span>
-                                <span class="w-2 sm:w-2.5 h-0.5 bg-teal-300 rounded-full"></span>
-                                <span class="w-1.5 h-0.5 bg-teal-200 rounded-full"></span>
+                                <span class="w-2.5 sm:w-3.5 h-0.5 bg-teal-400 rounded-full"></span>
+                                <span class="w-1.5 sm:w-2.5 h-0.5 bg-teal-300 rounded-full"></span>
+                                <span class="w-1 sm:w-1.5 h-0.5 bg-teal-200 rounded-full"></span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Main Content -->
                     <div class="relative z-10 text-left my-auto">
-                        <h3 class="text-sm sm:text-lg lg:text-xl font-black text-white mb-0.5 sm:mb-1 tracking-tight group-hover:text-teal-300 transition-colors drop-shadow-sm">
+                        <h3 class="text-xs sm:text-base lg:text-lg font-black text-white mb-0.5 tracking-tight group-hover:text-teal-300 transition-colors drop-shadow-sm">
                             대형 크로마키
                         </h3>
-                        <p class="text-[10px] sm:text-[13px] text-slate-300/85 font-normal leading-snug break-keep">
+                        <p class="text-[9.5px] sm:text-xs text-slate-300/85 font-normal leading-snug break-keep">
                             실시간 CG 가상합성 세트
                         </p>
                     </div>
 
                     <!-- Bottom Specs Tag -->
-                    <div class="mt-2 sm:mt-3 pt-1.5 sm:pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-[9.5px] sm:text-[11px] text-slate-400 font-mono relative z-10">
+                    <div class="mt-1.5 sm:mt-2.5 pt-1 sm:pt-2 border-t border-slate-800/80 flex items-center justify-between text-[8.5px] sm:text-[10.5px] text-slate-400 font-mono relative z-10">
                         <span class="text-teal-400 font-bold">6.6m CURVED</span>
-                        <span class="text-[9px] sm:text-[10px] text-slate-500 group-hover:text-slate-300 transition-colors">REALTIME CG</span>
+                        <span class="text-[8px] sm:text-[9.5px] text-slate-500 group-hover:text-slate-300 transition-colors">REALTIME CG</span>
                     </div>
                 </div>
 
                 <!-- Card 04: 전용 부조정실 -->
-                <div class="tilt-card group relative bg-slate-950/95 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-slate-800 hover:border-purple-400/80 shadow-lg hover:shadow-[0_0_30px_rgba(168,85,247,0.25)] transition-all duration-300 flex flex-col justify-between overflow-hidden hover:-translate-y-1.5 isolate">
+                <div class="tilt-card group relative bg-slate-950/95 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-slate-800 hover:border-purple-400/80 shadow-md sm:shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden hover:-translate-y-1 isolate">
                     <!-- Animated Ambient Glow Aura -->
-                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-purple-500/15 rounded-full blur-2xl pointer-events-none animate-studio-glow group-hover:bg-purple-400/30 transition-all duration-500"></div>
+                    <div class="absolute -right-8 -top-8 w-24 h-24 sm:w-32 sm:h-32 bg-purple-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-purple-400/30 transition-all duration-500"></div>
                     <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
 
                     <!-- Top Status Bar with Realtime Bouncing Equalizer Bars -->
-                    <div class="flex items-center justify-between mb-1.5 sm:mb-3 relative z-10">
-                        <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full bg-purple-950/80 border border-purple-500/40 text-[9px] sm:text-[11px] font-bold text-purple-300">
+                    <div class="flex items-center justify-between mb-1 sm:mb-3 relative z-10">
+                        <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 rounded-full bg-purple-950/80 border border-purple-500/40 text-[8.5px] sm:text-[11px] font-bold text-purple-300">
                             <span class="w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_6px_#c084fc]"></span>
                             <span>MASTER DCR</span>
                         </div>
                         <!-- Equalizer Graphic -->
-                        <div class="flex items-end gap-0.5 h-4 sm:h-5 px-1 sm:px-1.5 py-0.5 bg-purple-950/60 rounded border border-purple-500/30">
+                        <div class="flex items-end gap-0.5 h-3.5 sm:h-5 px-1 sm:px-1.5 py-0.5 bg-purple-950/60 rounded border border-purple-500/30">
                             <span class="w-0.5 sm:w-1 bg-purple-400 rounded-xs animate-studio-eq-1"></span>
                             <span class="w-0.5 sm:w-1 bg-purple-300 rounded-xs animate-studio-eq-2"></span>
                             <span class="w-0.5 sm:w-1 bg-purple-400 rounded-xs animate-studio-eq-3"></span>
@@ -3663,25 +3611,24 @@
 
                     <!-- Main Content -->
                     <div class="relative z-10 text-left my-auto">
-                        <h3 class="text-sm sm:text-lg lg:text-xl font-black text-white mb-0.5 sm:mb-1 tracking-tight group-hover:text-purple-300 transition-colors drop-shadow-sm">
+                        <h3 class="text-xs sm:text-base lg:text-lg font-black text-white mb-0.5 tracking-tight group-hover:text-purple-300 transition-colors drop-shadow-sm">
                             전용 부조정실
                         </h3>
-                        <p class="text-[10px] sm:text-[13px] text-slate-300/85 font-normal leading-snug break-keep">
+                        <p class="text-[9.5px] sm:text-xs text-slate-300/85 font-normal leading-snug break-keep">
                             다채널 스위쳐 &amp; 모니터링
                         </p>
                     </div>
 
                     <!-- Bottom Specs Tag -->
-                    <div class="mt-2 sm:mt-3 pt-1.5 sm:pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-[9.5px] sm:text-[11px] text-slate-400 font-mono relative z-10">
+                    <div class="mt-1.5 sm:mt-2.5 pt-1 sm:pt-2 border-t border-slate-800/80 flex items-center justify-between text-[8.5px] sm:text-[10.5px] text-slate-400 font-mono relative z-10">
                         <span class="text-purple-400 font-bold">MULTI-CH 4K</span>
-                        <span class="text-[9px] sm:text-[10px] text-slate-500 group-hover:text-slate-300 transition-colors">AUDIO/VIDEO DCR</span>
+                        <span class="text-[8px] sm:text-[9.5px] text-slate-500 group-hover:text-slate-300 transition-colors">AUDIO/VIDEO DCR</span>
                     </div>
                 </div>
             </div>
 
-            <!-- CLEAN VISUAL SHOWCASE SLIDER (100% Pure Studio Photography - No Text Overlays) -->
-            <div x-show="studioMobileTab === 'photos' || window.innerWidth >= 768"
-                 class="relative w-full max-w-5xl mx-auto mb-4 sm:mb-12">
+            <!-- CLEAN VISUAL SHOWCASE SLIDER (100% Pure Studio Photography - 실사 갤러리 상시 노출) -->
+            <div class="relative w-full max-w-5xl mx-auto mb-4 sm:mb-12">
                 <!-- Main Cinematic Slider Stage -->
                 <div @touchstart="studioTouchStartX = $event.touches[0].clientX"
                      @touchend="studioTouchEndX = $event.changedTouches[0].clientX; if (studioTouchStartX - studioTouchEndX > 40) { nextStudioSlide(); } else if (studioTouchEndX - studioTouchStartX > 40) { prevStudioSlide(); }"
@@ -3892,201 +3839,109 @@
                 <p class="text-slate-600 text-xs sm:text-base font-medium break-keep">교육 컨설팅부터 미디어 영상 제작, 이러닝, 평생교육, 디지털 홍보까지 분야별 주요 수행 사례입니다.</p>
             </div>
 
-            <!-- Category Filter Tabs & Search Bar -->
-            <div class="max-w-4xl mx-auto mb-6 sm:mb-8">
-                <!-- 1. Category Filter Tabs -->
-                <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-4">
-                    <button @click="setPortfolioTab('all')" 
-                            :class="refTab === 'all' ? 'bg-slate-900 text-white shadow-sm font-black' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold'"
-                            class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm transition-all flex items-center gap-1.5 cursor-pointer">
-                        <span>전체</span>
-                        <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="refTab === 'all' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'" x-text="portfolioCategoryCounts.all"></span>
-                    </button>
-                    <button @click="setPortfolioTab('production')" 
-                            :class="refTab === 'production' ? 'bg-blue-600 text-white shadow-sm font-black' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold'"
-                            class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm transition-all flex items-center gap-1.5 cursor-pointer">
-                        <span>영상제작·크로마키</span>
-                        <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="refTab === 'production' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'" x-text="portfolioCategoryCounts.production"></span>
-                    </button>
-                    <button @click="setPortfolioTab('edu')" 
-                            :class="refTab === 'edu' ? 'bg-teal-600 text-white shadow-sm font-black' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold'"
-                            class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm transition-all flex items-center gap-1.5 cursor-pointer">
-                        <span>이러닝·교재</span>
-                        <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="refTab === 'edu' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'" x-text="portfolioCategoryCounts.edu"></span>
-                    </button>
-                    <button @click="setPortfolioTab('press')" 
-                            :class="refTab === 'press' ? 'bg-orange-600 text-white shadow-sm font-black' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold'"
-                            class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm transition-all flex items-center gap-1.5 cursor-pointer">
-                        <span>후캠퍼스·언론</span>
-                        <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="refTab === 'press' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'" x-text="portfolioCategoryCounts.press"></span>
-                    </button>
-                </div>
-
-                <!-- 2. Search & Compact Pagination Bar (한눈에 스크롤 없이 확인 가능) -->
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50 border border-slate-200 p-2.5 sm:p-3 rounded-2xl">
-                    <!-- Search Input -->
-                    <div class="relative w-full sm:w-72">
-                        <input type="text" 
-                               x-model="searchQuery" 
-                               @input="portfolioPage = 1"
-                               placeholder="포트폴리오 검색 (예: EBS, 웅진, AI...)" 
-                               class="w-full bg-white border border-slate-300 rounded-xl pl-8 pr-7 py-1.5 text-xs text-slate-800 focus:outline-hidden focus:border-blue-500 shadow-2xs">
-                        <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                        <button x-show="searchQuery" @click="searchQuery = ''; portfolioPage = 1;" class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs cursor-pointer">&times;</button>
-                    </div>
-
-                    <!-- Page Nav Controls (드래그 없이 한 번의 터치로 넘김) -->
-                    <div x-show="filteredPortfolio.length > 0" class="flex items-center gap-2 text-xs font-bold text-slate-700">
-                        <span class="text-[11px] text-slate-500 font-medium">
-                            총 <strong class="text-blue-600 font-black" x-text="filteredPortfolio.length"></strong>건
-                        </span>
-                        <div class="flex items-center gap-1 bg-white border border-slate-200 rounded-xl p-1 shadow-2xs">
-                            <button @click="prevPortfolioPage()" 
-                                    :disabled="portfolioPage <= 1"
-                                    :class="portfolioPage <= 1 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-100 active:scale-95 cursor-pointer text-slate-900'"
-                                    class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-0.5">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-                                <span>이전</span>
-                            </button>
-                            <span class="px-2 py-0.5 text-xs font-mono font-black text-slate-800 bg-slate-100 rounded-md">
-                                <span x-text="portfolioPage"></span> / <span x-text="totalPortfolioPages"></span>
-                            </span>
-                            <button @click="nextPortfolioPage()" 
-                                    :disabled="portfolioPage >= totalPortfolioPages"
-                                    :class="portfolioPage >= totalPortfolioPages ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-100 active:scale-95 cursor-pointer text-slate-900'"
-                                    class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-0.5">
-                                <span>다음</span>
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Portfolio Cards Grid (컴팩트 4개 노출 - 긴 스크롤 완전 방지) -->
-            <div x-show="filteredPortfolio.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6">
-                <template x-for="(item, idx) in pagedPortfolio" :key="item.id">
-                    <article @click="openModal(item.id, item.title)"
-                          :style="'--entrance-delay: ' + ((idx % 4) * 65) + 'ms;'"
-                          class="portfolio-card-item tilt-card w-full group relative bg-slate-50 hover:bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-blue-400 cursor-pointer shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
-                        <div class="aspect-video relative overflow-hidden bg-slate-900">
-                            <img :src="'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg'" 
-                                 @error="$el.src='https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80'"
-                                 :alt="item.title" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
-                                 referrerpolicy="no-referrer">
-                            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
-                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-3 sm:p-4">
-                            <div class="flex items-center justify-between mb-1">
-                                <span class="text-[10px] font-extrabold text-blue-600 uppercase tracking-wider bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100" x-text="item.tag"></span>
-                                <span class="text-[10px] font-bold text-slate-400 font-mono">HD/4K</span>
-                            </div>
-                            <h3 class="font-bold text-xs sm:text-sm text-slate-900 line-clamp-1 group-hover:text-blue-600 transition-colors" x-text="item.title"></h3>
-                        </div>
-                    </article>
-                </template>
-            </div>
-
-            <!-- SMART GOOGLE EXTERNAL SEARCH EMPTY STATE CARD (When no search results found) -->
-            <div x-show="filteredPortfolio.length === 0" 
-                 class="w-full max-w-3xl mx-auto my-6 bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-10 text-center shadow-sm">
+            <!-- SINGLE VIDEO SHOWCASE (1번에 1개 영상 노출 & 클릭으로 다음 영상 전환) -->
+            <div class="w-full max-w-3xl mx-auto"
+                 @touchstart="portfolioTouchStartX = $event.touches[0].clientX"
+                 @touchend="portfolioTouchEndX = $event.changedTouches[0].clientX; if (portfolioTouchStartX - portfolioTouchEndX > 40) { nextPortfolioItem(); } else if (portfolioTouchEndX - portfolioTouchStartX > 40) { prevPortfolioItem(); }">
                 
-                <!-- Icon & Status -->
-                <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-3xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 mb-4 shadow-xs">
-                    <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
-                    </svg>
-                </div>
+                <!-- Main Showcase Card -->
+                <div class="group relative bg-slate-900 rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-800 shadow-xl transition-all duration-300">
+                    
+                    <!-- Video Stage / 16:9 Thumbnail -->
+                    <div class="relative aspect-video w-full bg-slate-950 overflow-hidden cursor-pointer"
+                         @click="openModal(currentPortfolioItem.id, currentPortfolioItem.title)">
+                        <img :src="'https://img.youtube.com/vi/' + currentPortfolioItem.id + '/maxresdefault.jpg'" 
+                             @error="$el.src='https://img.youtube.com/vi/' + currentPortfolioItem.id + '/hqdefault.jpg'"
+                             :alt="currentPortfolioItem.title" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
+                             referrerpolicy="no-referrer">
+                        
+                        <!-- Ambient gradient overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-black/30 to-transparent"></div>
 
-                <h3 class="text-lg sm:text-2xl font-black text-slate-900 mb-2">
-                    '<span class="text-blue-600 font-extrabold" x-text="searchQuery"></span>' 일치하는 내부 포트폴리오를 찾지 못했습니다
-                </h3>
-                <p class="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto mb-6 leading-relaxed">
-                    내부 등록 건 외에도 <strong>(주)후미디어</strong>가 수행한 다양한 공공기관·대기업 이러닝 및 방송 영상 제작 실적을 구글 외부 검색을 통해 바로 확인하실 수 있습니다.
-                </p>
-
-                <!-- Prominent Google External Search Launcher Card -->
-                <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 mb-6 shadow-xs text-left">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center gap-2">
-                            <!-- Google Multi-color G Icon -->
-                            <div class="w-6 h-6 rounded-full bg-white shadow-xs border border-slate-100 flex items-center justify-center font-bold text-xs">
-                                <span class="text-blue-500 font-black">G</span>
-                            </div>
-                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">구글 스마트 맞춤 검색</span>
+                        <!-- Top Status & Index Counter -->
+                        <div class="absolute top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between pointer-events-none z-10">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-600/90 backdrop-blur-md text-white text-[11px] sm:text-xs font-black shadow-md border border-blue-400/30"
+                                  x-text="currentPortfolioItem.tag">
+                            </span>
+                            <span class="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white/90 font-mono text-[11px] sm:text-xs font-bold border border-white/10">
+                                <span class="text-blue-400 font-black" x-text="String(portfolioIndex + 1).padStart(2, '0')"></span> / <span x-text="String(portfolioItems.length).padStart(2, '0')"></span>
+                            </span>
                         </div>
-                        <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">정교화된 쿼리 매칭</span>
+
+                        <!-- Center Play Button (Click to Play Video) -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="w-14 h-14 sm:w-18 sm:h-18 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.5)] transform group-hover:scale-110 transition-all duration-300 pointer-events-auto cursor-pointer"
+                                 @click.stop="openModal(currentPortfolioItem.id, currentPortfolioItem.title)"
+                                 title="영상 재생">
+                                <svg class="w-6 h-6 sm:w-8 sm:h-8 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+
+                        <!-- Left / Right Quick Arrow Navigation Overlays -->
+                        <button @click.stop="prevPortfolioItem()"
+                                class="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-blue-600 backdrop-blur-md text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg border border-white/10"
+                                title="이전 영상">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                        </button>
+
+                        <button @click.stop="nextPortfolioItem()"
+                                class="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-blue-600 backdrop-blur-md text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg border border-white/10"
+                                title="다음 영상">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                        </button>
                     </div>
 
-                    <!-- Direct Search Action Button -->
-                    <a :href="getGoogleSearchUrl()" 
-                       target="_blank" 
-                       rel="noopener noreferrer" 
-                       class="w-full flex items-center justify-between bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-5 rounded-xl transition-all shadow-md active:scale-[0.99] group">
-                        <div class="flex items-center gap-2.5 truncate">
-                            <svg class="w-5 h-5 text-blue-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                            </svg>
-                            <span class="text-sm sm:text-base truncate">구글에서 '<strong x-text="searchQuery"></strong>' 관련 후미디어 전체 실적 검색</span>
+                    <!-- Video Title & Interactive Bottom Bar -->
+                    <div class="p-4 sm:p-5 bg-slate-900 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <div class="flex-1 min-w-0 pr-2">
+                            <h3 class="text-base sm:text-lg font-black text-white truncate group-hover:text-blue-300 transition-colors"
+                                x-text="currentPortfolioItem.title"></h3>
+                            <p class="text-xs text-slate-400 mt-0.5 flex items-center gap-2">
+                                <span>(주)후미디어 제작 실적</span>
+                                <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+                                <span class="text-emerald-400 font-mono">4K UHD / Full HD</span>
+                            </p>
                         </div>
-                        <span class="text-xs font-bold bg-white/20 px-2.5 py-1 rounded-lg shrink-0 ml-2 group-hover:bg-white/30 transition-colors">바로가기 &rarr;</span>
-                    </a>
+
+                        <!-- Click To Next / Play Controls (클릭해서 다음으로 넘어가게) -->
+                        <div class="flex items-center gap-2 w-full sm:w-auto shrink-0">
+                            <button @click="prevPortfolioItem()" 
+                                    class="p-2.5 sm:px-3 sm:py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border border-slate-700 active:scale-95"
+                                    title="이전 영상">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                                <span class="hidden sm:inline">이전</span>
+                            </button>
+
+                            <button @click="openModal(currentPortfolioItem.id, currentPortfolioItem.title)"
+                                    class="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-xl bg-red-600/90 hover:bg-red-600 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                <span>영상 재생</span>
+                            </button>
+
+                            <!-- Prominent "다음 영상 보기 (클릭)" Button -->
+                            <button @click="nextPortfolioItem()" 
+                                    class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md active:scale-95 border border-blue-400/40">
+                                <span>다음 영상</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Suggested Query Options Grid -->
-                <div class="text-left mb-6">
-                    <h4 class="text-xs sm:text-sm font-bold text-slate-700 mb-3 flex items-center gap-1.5">
-                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        <span>추천 구글 검색 쿼리 (클릭 시 새 창에서 즉시 검색)</span>
-                    </h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        <template x-for="(sq, sIdx) in getSuggestedGoogleQueries()" :key="'sq-' + sIdx">
-                            <a :href="getGoogleSearchUrl(sq.query)"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="flex items-center justify-between p-3 rounded-xl bg-white hover:bg-blue-50/60 border border-slate-200 hover:border-blue-300 transition-all group shadow-2xs">
-                                <div class="truncate pr-2">
-                                    <div class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-blue-600 truncate" x-text="sq.title"></div>
-                                    <div class="text-[11px] text-slate-600 truncate mt-0.5" x-text="sq.desc"></div>
-                                </div>
-                                <svg class="w-4 h-4 text-slate-400 group-hover:text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                            </a>
+                <!-- Progress Indicator Bar & Counter -->
+                <div class="mt-4 flex items-center justify-between text-xs text-slate-500 px-1">
+                    <span class="text-[11px] font-medium">클릭하거나 좌우 화살표를 눌러 다음 영상으로 이동할 수 있습니다.</span>
+                    <div class="flex items-center gap-1">
+                        <template x-for="(item, idx) in portfolioItems" :key="'dot-' + item.id">
+                            <button @click="setPortfolioIndex(idx)"
+                                    :title="item.title"
+                                    class="h-1.5 rounded-full transition-all duration-300 cursor-pointer"
+                                    :class="portfolioIndex === idx ? 'w-6 bg-blue-600' : 'w-1.5 bg-slate-300 hover:bg-slate-400'">
+                            </button>
                         </template>
                     </div>
                 </div>
-
-                <!-- Reset Search Button -->
-                <button @click="clearSearch(); refTab = 'all'; portfolioPage = 1;" 
-                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs sm:text-sm transition-colors cursor-pointer">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                    <span>검색어 초기화 및 전체 포트폴리오 보기</span>
-                </button>
-            </div>
-
-            <!-- Page Number Indicator Dots / Numbers (Bottom Nav) -->
-            <div x-show="totalPortfolioPages > 1" class="mt-6 sm:mt-8 flex items-center justify-center gap-1.5">
-                <button @click="prevPortfolioPage()" 
-                        :disabled="portfolioPage <= 1"
-                        class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-                </button>
-                <template x-for="p in totalPortfolioPages" :key="'page-btn-' + p">
-                    <button @click="setPortfolioPage(p)"
-                            :class="portfolioPage === p ? 'bg-blue-600 text-white font-black shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold'"
-                            class="w-8 h-8 rounded-lg text-xs font-mono transition-all flex items-center justify-center cursor-pointer"
-                            x-text="p">
-                    </button>
-                </template>
-                <button @click="nextPortfolioPage()" 
-                        :disabled="portfolioPage >= totalPortfolioPages"
-                        class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                </button>
             </div>
         </div>
     </section>
