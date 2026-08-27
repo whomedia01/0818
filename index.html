@@ -2394,7 +2394,7 @@
       @keydown.escape.window="closeModal(); if (mobileMenuOpen) mobileMenuOpen = false;"
       :class="{ 'overflow-hidden': mobileMenuOpen || splashVisible, 'pb-20 md:pb-0': true }">
 
-    <!-- MOBILE SPLASH SCREEN (세션당 1회 모바일 진입 시 3초간 노출) -->
+    <!-- MOBILE SPLASH SCREEN (모바일 진입 시 인트로 스플래시 노출) -->
     <div x-show="splashVisible"
          x-cloak
          :class="splashFading ? 'opacity-0 pointer-events-none' : 'opacity-100'"
@@ -2402,27 +2402,39 @@
          style="background-image: url('/splash-mobile.jpg'); background-size: cover; background-position: center;">
         
         <!-- 우측 상단 건너뛰기(SKIP) 버튼 -->
-        <div class="w-full flex justify-end pt-safe">
+        <div class="w-full flex justify-end pt-safe shrink-0 z-10">
             <button @click="skipSplash()"
                     type="button"
-                    class="bg-black/60 text-white/80 hover:text-white px-3.5 py-1.5 rounded-full text-xs backdrop-blur-md border border-white/20 tracking-wider font-semibold active:scale-95 transition-all shadow-lg">
+                    class="bg-black/60 text-white/90 hover:text-white px-4 py-1.5 rounded-full text-xs backdrop-blur-md border border-white/20 tracking-wider font-semibold active:scale-95 transition-all shadow-lg">
                 SKIP ✕
             </button>
         </div>
 
-        <!-- 중앙 브랜드 비주얼 (배경 이미지 로딩 중에도 심미성 유지) -->
-        <div class="my-auto flex flex-col items-center justify-center text-center px-4">
-            <div class="inline-flex items-center text-3xl sm:text-4xl font-black brand-logo-font tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
+        <!-- 중앙 메인 브랜드 로고 & 슬로건 통합 배치 (사이즈 업 및 시각적 조화 극대화) -->
+        <div class="my-auto flex flex-col items-center justify-center text-center px-4 w-full max-w-sm mx-auto">
+            <!-- 브랜드 로고 -->
+            <div class="inline-flex items-center text-4xl xs:text-[42px] sm:text-5xl font-black brand-logo-font tracking-tight drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">
                 <span class="font-black text-[#FF0000]">WHO</span>
-                <span class="font-black text-white ml-[1px]">MEDIA</span>
+                <span class="font-black text-white ml-[2px]">MEDIA</span>
+            </div>
+
+            <!-- 서브 브랜드 영문 타이틀 -->
+            <div class="mt-4 sm:mt-5">
+                <p class="text-[#00F5D4] text-sm xs:text-[15px] sm:text-base tracking-[0.22em] uppercase font-extrabold drop-shadow-[0_0_12px_rgba(0,245,212,0.5)]">
+                    WHOMEDIA EDUTECH
+                </p>
+            </div>
+
+            <!-- 메인 슬로건 문구 (사이즈 확대 & 선명한 가독성) -->
+            <div class="mt-2 sm:mt-2.5">
+                <p class="text-white text-lg xs:text-[20px] sm:text-2xl font-bold tracking-tight leading-snug drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)] break-keep">
+                    최적의 교육 경험을 설계합니다
+                </p>
             </div>
         </div>
 
-        <!-- 하단 브랜드 텍스트 -->
-        <div class="w-full text-center pb-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent pt-12 -mx-6 px-6 pb-safe">
-            <p class="text-[#00F5D4] text-xs tracking-widest uppercase font-bold mb-1">Whomedia Edutech</p>
-            <p class="text-white text-sm font-medium">최적의 교육 경험을 설계합니다</p>
-        </div>
+        <!-- 하단 영역 밸런스 여백 (Optically Centered Balance) -->
+        <div class="w-full pb-safe shrink-0 h-8 opacity-0 pointer-events-none"></div>
     </div>
 
     <!-- HEADER / NAVIGATION (TRANSPARENT INTEGRATED GNB) -->
