@@ -1346,6 +1346,8 @@
                 inquirySuccessModal: false,
                 inquirySuccessMessage: '',
                 inquirySubmitting: false,
+                companyHistory: [],
+                companyFocused: false,
                 inquiryForm: {
                     company: '',
                     name: '',
@@ -1355,8 +1357,80 @@
                     consent: false
                 },
 
+                loadCompanyHistory() {
+                    try {
+                        const stored = localStorage.getItem('whomedia_company_history');
+                        if (stored) {
+                            const parsed = JSON.parse(stored);
+                            if (Array.isArray(parsed) && parsed.length > 0) {
+                                this.companyHistory = parsed.filter(item => typeof item === 'string' && item.trim().length > 0);
+                                return;
+                            }
+                        }
+                        // Fallback: extract any past companies from saved inquiries
+                        const inqStored = localStorage.getItem('whomedia_inquiries');
+                        if (inqStored) {
+                            const inqs = JSON.parse(inqStored);
+                            if (Array.isArray(inqs)) {
+                                const extracted = [...new Set(inqs.map(i => (i && i.company ? i.company.trim() : '')).filter(c => c.length > 0))];
+                                if (extracted.length > 0) {
+                                    this.companyHistory = extracted.slice(0, 10);
+                                    localStorage.setItem('whomedia_company_history', JSON.stringify(this.companyHistory));
+                                }
+                            }
+                        }
+                    } catch(e) {
+                        console.warn('Company history load error:', e);
+                    }
+                },
+
+                get filteredCompanyHistory() {
+                    if (!this.companyHistory || this.companyHistory.length === 0) return [];
+                    const query = (this.inquiryForm.company || '').trim().toLowerCase();
+                    if (!query) {
+                        return this.companyHistory.slice(0, 8);
+                    }
+                    return this.companyHistory.filter(item => item.toLowerCase().includes(query)).slice(0, 8);
+                },
+
+                selectCompanyHistory(name) {
+                    this.inquiryForm.company = name;
+                    this.companyFocused = false;
+                },
+
+                saveCompanyToHistory(companyName) {
+                    if (!companyName || !companyName.trim()) return;
+                    const clean = companyName.trim();
+                    let history = this.companyHistory.filter(item => item.toLowerCase() !== clean.toLowerCase());
+                    history.unshift(clean);
+                    if (history.length > 15) history = history.slice(0, 15);
+                    this.companyHistory = history;
+                    try {
+                        localStorage.setItem('whomedia_company_history', JSON.stringify(history));
+                    } catch(e) {
+                        console.warn('LocalStorage company history save error:', e);
+                    }
+                },
+
+                deleteCompanyHistoryItem(itemToDelete) {
+                    this.companyHistory = this.companyHistory.filter(item => item !== itemToDelete);
+                    try {
+                        localStorage.setItem('whomedia_company_history', JSON.stringify(this.companyHistory));
+                    } catch(e) {
+                        console.warn('Company history delete error:', e);
+                    }
+                },
+
+                clearAllCompanyHistory() {
+                    this.companyHistory = [];
+                    try {
+                        localStorage.removeItem('whomedia_company_history');
+                    } catch(e) {}
+                },
+
                 init() {
                     try {
+                        this.loadCompanyHistory();
                         setInterval(() => { this.currentKeywordIndex = (this.currentKeywordIndex + 1) % this.keywords.length; }, 2800);
                         this.preloadSliderImages();
                         this.startHeroTyping();
@@ -1454,6 +1528,12 @@
                         this.inquirySuccessModal = true;
                         return;
                     }
+
+                    // Save company name to local history if entered
+                    if (this.inquiryForm.company && this.inquiryForm.company.trim()) {
+                        this.saveCompanyToHistory(this.inquiryForm.company.trim());
+                    }
+
                     this.inquirySubmitting = true;
 
                     const newInquiryRecord = {
@@ -2457,9 +2537,6 @@
 
                                 <!-- 하단 우측: 교육사업본부 (Orange) -->
                                 <div class="bg-gradient-to-b from-orange-50/50 to-white border-2 border-orange-200 hover:border-orange-400 text-slate-900 p-6 lg:p-7 rounded-3xl shadow-lg transition-all duration-300 group flex flex-col justify-between relative">
-                                    <!-- Top Right Sparkle Icon from Image -->
-                                    <svg class="w-6 h-6 text-slate-300 absolute top-4 right-4 pointer-events-none" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/></svg>
-
                                     <div class="absolute -top-3.5 left-6 px-3 py-1 bg-orange-500 text-white text-[11px] font-black tracking-wider uppercase rounded-full shadow-md flex items-center gap-1.5">
                                         <span class="w-2 h-2 rounded-full bg-white"></span>
                                         MAIN DIVISION 02
@@ -2504,7 +2581,7 @@
 
                     <!-- ========================================================= -->
                     <!-- 2. MOBILE STACKED STRUCTURE (md:hidden) -->
-                    <!-- Sequence: Representative -> Support -> R&D -> 2 Main Divisions -->
+                    <!-- Sequence: Representative -> Support -> R&D -> Main Division -->
                     <!-- ========================================================= -->
                     <div class="flex flex-col items-center md:hidden w-full space-y-0">
                         
@@ -3476,9 +3553,98 @@
                 </div>
                 
                 <form @submit.prevent="submitInquiry()" class="space-y-3 sm:space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">기관 / 회사명 (선택)</label>
-                        <input type="text" x-model="inquiryForm.company" placeholder="예: (주)OO에듀 또는 개인" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
+                    <!-- 기관/회사명 (로컬스토리지 히스토리 저장 및 자동완성 지원) -->
+                    <div class="relative" @click.outside="companyFocused = false">
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-xs font-bold text-slate-700">기관 / 회사명 (선택)</label>
+                            <span x-show="companyHistory.length > 0" 
+                                  @click="companyFocused = !companyFocused; if(companyFocused) loadCompanyHistory();" 
+                                  class="text-[11px] text-blue-600 font-medium cursor-pointer hover:underline flex items-center gap-1 select-none">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span x-text="companyFocused ? '닫기' : '최근 기록 (' + companyHistory.length + ')'"></span>
+                            </span>
+                        </div>
+                        <div class="relative">
+                            <input type="text" 
+                                   x-model="inquiryForm.company" 
+                                   @focus="companyFocused = true; loadCompanyHistory()"
+                                   @input="companyFocused = true"
+                                   @keydown.escape="companyFocused = false"
+                                   placeholder="예: (주)OO에듀 또는 개인" 
+                                   autocomplete="off"
+                                   class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 pr-16 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
+                            
+                            <!-- Input Action Icons -->
+                            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-slate-400">
+                                <button type="button" 
+                                        x-show="inquiryForm.company && inquiryForm.company.length > 0" 
+                                        @click="inquiryForm.company = ''; companyFocused = true"
+                                        class="p-1 hover:text-slate-600 transition-colors rounded-full hover:bg-slate-200/60" 
+                                        title="입력 내용 지우기"
+                                        tabindex="-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                                <button type="button" 
+                                        @click="companyFocused = !companyFocused; if(companyFocused) loadCompanyHistory();"
+                                        class="p-1 hover:text-blue-600 transition-colors rounded-full hover:bg-blue-50" 
+                                        :class="companyFocused ? 'text-blue-600 bg-blue-50' : ''"
+                                        title="기존 입력 히스토리 보기"
+                                        tabindex="-1">
+                                    <svg class="w-4 h-4 transition-transform duration-200" :class="companyFocused ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Autocomplete Dropdown Menu -->
+                        <div x-show="companyFocused && filteredCompanyHistory.length > 0" 
+                             x-transition:enter="transition ease-out duration-150"
+                             x-transition:enter-start="opacity-0 translate-y-1 scale-98"
+                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                             x-transition:leave="transition ease-in duration-100"
+                             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                             x-transition:leave-end="opacity-0 translate-y-1 scale-98"
+                             class="absolute z-30 left-0 right-0 mt-1.5 bg-white rounded-xl border border-slate-200 shadow-2xl overflow-hidden"
+                             style="display: none;">
+                            
+                            <!-- Dropdown Header -->
+                            <div class="flex items-center justify-between px-3.5 py-2 bg-slate-50/90 border-b border-slate-100 text-[11px] text-slate-500 font-semibold select-none">
+                                <span class="flex items-center gap-1.5 text-slate-700">
+                                    <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <span x-text="inquiryForm.company && inquiryForm.company.trim() ? '자동완성 검색 결과' : '최근 입력한 기관/회사명'"></span>
+                                </span>
+                                <button type="button" 
+                                        @click.stop="clearAllCompanyHistory()" 
+                                        class="text-slate-400 hover:text-red-500 transition-colors font-medium text-[10px]">
+                                    전체 삭제
+                                </button>
+                            </div>
+
+                            <!-- History Item List -->
+                            <ul class="max-h-52 overflow-y-auto divide-y divide-slate-100 text-xs sm:text-sm">
+                                <template x-for="item in filteredCompanyHistory" :key="item">
+                                    <li class="flex items-center justify-between px-3.5 py-2.5 hover:bg-blue-50/70 cursor-pointer transition-colors group select-none"
+                                        @mousedown.prevent="selectCompanyHistory(item)">
+                                        <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                                            <span class="p-1.5 rounded-lg bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors shrink-0">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                            </span>
+                                            <span class="truncate font-medium text-slate-800 group-hover:text-blue-700" x-text="item"></span>
+                                        </div>
+                                        <button type="button" 
+                                                @mousedown.stop.prevent="deleteCompanyHistoryItem(item)" 
+                                                class="text-slate-300 hover:text-red-500 p-1 rounded-md hover:bg-red-50 transition-colors shrink-0" 
+                                                title="이 기록 삭제">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        </button>
+                                    </li>
+                                </template>
+                            </ul>
+                            
+                            <div class="px-3.5 py-1.5 bg-slate-50 border-t border-slate-100 text-[10px] text-slate-400 text-right flex items-center justify-between">
+                                <span>선택 시 자동 완성</span>
+                                <span>ESC 키를 눌러 닫기</span>
+                            </div>
+                        </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         <div>
