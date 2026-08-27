@@ -131,6 +131,8 @@ document.addEventListener('alpine:init', () => {
         inquirySuccessModal: false,
         inquirySuccessMessage: '',
         inquirySubmitting: false,
+        splashVisible: false,
+        splashFading: false,
         inquiryForm: {
             company: '',
             name: '',
@@ -142,6 +144,7 @@ document.addEventListener('alpine:init', () => {
 
         init() {
             try {
+                this.initMobileSplash();
                 setInterval(() => { this.currentKeywordIndex = (this.currentKeywordIndex + 1) % this.keywords.length; }, 2800);
                 this.startHeroTyping();
                 this.startServiceAutoPlay();
@@ -156,6 +159,38 @@ document.addEventListener('alpine:init', () => {
             } catch(e) {
                 console.warn('Init non-blocking exception handled:', e);
             }
+        },
+
+        initMobileSplash() {
+            try {
+                const isMobile = window.innerWidth <= 768;
+                const hasSeenSplash = sessionStorage.getItem('hasSeenSplash');
+
+                if (isMobile && !hasSeenSplash) {
+                    this.splashVisible = true;
+                    this.splashFading = false;
+
+                    // 2.5초 후 페이드아웃 시작
+                    setTimeout(() => {
+                        this.splashFading = true;
+                    }, 2500);
+
+                    // 3초 후 화면에서 완전 제거 및 세션 기록
+                    setTimeout(() => {
+                        this.splashVisible = false;
+                        sessionStorage.setItem('hasSeenSplash', 'true');
+                    }, 3000);
+                }
+            } catch(e) {
+                console.warn('Splash screen init error:', e);
+            }
+        },
+
+        skipSplash() {
+            this.splashVisible = false;
+            try {
+                sessionStorage.setItem('hasSeenSplash', 'true');
+            } catch(e) {}
         },
 
         startHeroTyping() {
