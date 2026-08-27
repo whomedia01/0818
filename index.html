@@ -1125,13 +1125,10 @@
 
         @media (max-width: 767px) {
             .mobile-screen-section {
-                min-height: 100dvh;
+                min-height: auto;
                 height: auto;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                padding-top: 3.75rem;
-                padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+                padding-top: 1.5rem;
+                padding-bottom: 2rem;
                 box-sizing: border-box;
             }
 
@@ -1321,7 +1318,9 @@
                 mobileMenuOpen: false, 
                 refTab: 'all',
                 searchQuery: '',
-                portfolioLimit: 12,
+                portfolioLimit: 4,
+                portfolioPage: 1,
+                portfolioPerPage: 4,
                 partnerTab: 'all',
                 videoModalOpen: false,
                 activeVideoId: '',
@@ -1329,7 +1328,7 @@
                 imageModalOpen: false,
                 activeStudioImg: '',
                 activeStudioTitle: '',
-                studioMobileTab: 'specs',
+                studioMobileTab: 'cards',
                 keywords: ['맞춤형 이러닝 콘텐츠 설계', '온·오프라인 통합 교육 솔루션', '홍보, 고화질 강의, SNS 영상', '160평 전문 스튜디오 & 고품질 영상 연출', '전문성과 시너지를 갖춘 조직 체계'],
                 currentKeywordIndex: 0,
                 heroKeywords: ['맞춤형 이러닝 콘텐츠 설계', '온·오프라인 통합 교육 솔루션', '홍보, 고화질 강의, SNS 영상'],
@@ -1420,6 +1419,47 @@
                         );
                     }
                     return list;
+                },
+
+                get portfolioCategoryCounts() {
+                    return {
+                        all: this.portfolioItems.length,
+                        production: this.portfolioItems.filter(item => item.cat === 'production').length,
+                        edu: this.portfolioItems.filter(item => item.cat === 'edu').length,
+                        press: this.portfolioItems.filter(item => item.cat === 'press').length
+                    };
+                },
+
+                get totalPortfolioPages() {
+                    const total = this.filteredPortfolio.length;
+                    return Math.max(1, Math.ceil(total / this.portfolioPerPage));
+                },
+
+                get pagedPortfolio() {
+                    const start = (this.portfolioPage - 1) * this.portfolioPerPage;
+                    return this.filteredPortfolio.slice(start, start + this.portfolioPerPage);
+                },
+
+                setPortfolioTab(tab) {
+                    this.refTab = tab;
+                    this.portfolioPage = 1;
+                    this.portfolioLimit = 4;
+                },
+
+                nextPortfolioPage() {
+                    if (this.portfolioPage < this.totalPortfolioPages) {
+                        this.portfolioPage++;
+                    }
+                },
+
+                prevPortfolioPage() {
+                    if (this.portfolioPage > 1) {
+                        this.portfolioPage--;
+                    }
+                },
+
+                setPortfolioPage(p) {
+                    this.portfolioPage = Math.max(1, Math.min(p, this.totalPortfolioPages));
                 },
 
                 // [정교화된 구글 외부 검색 쿼리 빌더]
@@ -1984,7 +2024,10 @@
                     }
                 },
                 loadMore() {
-                    this.portfolioLimit += 8;
+                    this.portfolioLimit += 4;
+                },
+                resetPortfolioLimit() {
+                    this.portfolioLimit = 4;
                 }
             }));
         });
@@ -2817,7 +2860,7 @@
     </section>
 
     <!-- ORGANIZATION & ECOSYSTEM: (주)후미디어 조직 체계 (회사소개 조직도로 연결) -->
-    <section id="organization" class="scroll-mt-14 mobile-screen-section py-4 sm:py-16 lg:py-24 bg-slate-50 text-slate-900 border-b border-slate-200 relative overflow-hidden">
+    <section id="organization" class="scroll-mt-14 py-8 sm:py-16 lg:py-24 bg-slate-50 text-slate-900 border-b border-slate-200 relative overflow-hidden">
         <div id="about" class="scroll-mt-24"></div>
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(30,136,229,0.06),transparent_50%)] pointer-events-none"></div>
 
@@ -3104,7 +3147,7 @@
     </section>
 
     <!-- BUSINESS NETWORK: (주)후미디어 핵심 사업 영역 -->
-    <section id="services" aria-label="주요 사업 영역 (에듀테크 및 K-MOOC 전문화 솔루션)" class="scroll-mt-14 mobile-screen-section py-4 sm:py-14 lg:py-20 bg-white text-slate-900 border-t border-b border-slate-200" @mouseenter="stopServiceAutoPlay()" @mouseleave="startServiceAutoPlay()">
+    <section id="services" aria-label="주요 사업 영역 (에듀테크 및 K-MOOC 전문화 솔루션)" class="scroll-mt-14 py-8 sm:py-16 lg:py-20 bg-white text-slate-900 border-t border-b border-slate-200" @mouseenter="stopServiceAutoPlay()" @mouseleave="startServiceAutoPlay()">
         <div class="w-full max-w-[1280px] mx-auto px-3.5 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-2 sm:mb-8">
                 <span class="inline-block px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200 text-[11px] sm:text-xs font-bold tracking-wider uppercase mb-1 sm:mb-3 shadow-xs">
@@ -3446,7 +3489,7 @@
     </section>
 
     <!-- STUDIO & INFRASTRUCTURE GALLERY -->
-    <section id="studio" aria-label="160평 최첨단 스튜디오 및 제작 인프라" class="scroll-mt-14 mobile-screen-section py-4 sm:py-16 lg:py-24 bg-slate-50 text-slate-900 relative overflow-hidden border-t border-b border-slate-200">
+    <section id="studio" aria-label="160평 최첨단 스튜디오 및 제작 인프라" class="scroll-mt-14 py-8 sm:py-16 lg:py-24 bg-slate-50 text-slate-900 relative overflow-hidden border-t border-b border-slate-200">
         <!-- Ambient Particles Canvas -->
         <canvas id="studio-particles-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-30"></canvas>
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,210,132,0.06),transparent_50%),radial-gradient(circle_at_80%_80%,rgba(59,130,246,0.06),transparent_50%)] pointer-events-none"></div>
@@ -3841,20 +3884,91 @@
     <!-- PORTFOLIO -->
     <section id="reference" aria-label="포트폴리오 및 주요 제작 실적" class="py-8 sm:py-16 lg:py-24 bg-white relative overflow-hidden">
         <div class="w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
-                <span class="inline-block px-3 py-1 rounded-md bg-brand-mint-light text-brand-mint-hover text-xs font-semibold mb-2 sm:mb-3">
-                    PORTFOLIO
+            <div class="text-center max-w-2xl mx-auto mb-5 sm:mb-8">
+                <span class="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200 text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3 shadow-2xs">
+                    PORTFOLIO &amp; ARCHIVE
                 </span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-brand-text mb-2">콘텐츠 개발 &amp; 영상 포트폴리오</h2>
-                <p class="text-gray-500 text-xs sm:text-sm">교육 컨설팅부터 미디어 영상 제작, 후캠퍼스 평생교육, 디지털 언론 홍보까지 분야별 주요 수행 사례입니다.</p>
+                <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mb-2 tracking-tight">콘텐츠 개발 &amp; 영상 포트폴리오</h2>
+                <p class="text-slate-600 text-xs sm:text-base font-medium break-keep">교육 컨설팅부터 미디어 영상 제작, 이러닝, 평생교육, 디지털 홍보까지 분야별 주요 수행 사례입니다.</p>
             </div>
 
-            <!-- Portfolio Cards Grid (When results exist) -->
-            <div x-show="filteredPortfolio.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                <template x-for="(item, idx) in filteredPortfolio.slice(0, portfolioLimit)" :key="item.id">
+            <!-- Category Filter Tabs & Search Bar -->
+            <div class="max-w-4xl mx-auto mb-6 sm:mb-8">
+                <!-- 1. Category Filter Tabs -->
+                <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-4">
+                    <button @click="setPortfolioTab('all')" 
+                            :class="refTab === 'all' ? 'bg-slate-900 text-white shadow-sm font-black' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold'"
+                            class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm transition-all flex items-center gap-1.5 cursor-pointer">
+                        <span>전체</span>
+                        <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="refTab === 'all' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'" x-text="portfolioCategoryCounts.all"></span>
+                    </button>
+                    <button @click="setPortfolioTab('production')" 
+                            :class="refTab === 'production' ? 'bg-blue-600 text-white shadow-sm font-black' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold'"
+                            class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm transition-all flex items-center gap-1.5 cursor-pointer">
+                        <span>영상제작·크로마키</span>
+                        <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="refTab === 'production' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'" x-text="portfolioCategoryCounts.production"></span>
+                    </button>
+                    <button @click="setPortfolioTab('edu')" 
+                            :class="refTab === 'edu' ? 'bg-teal-600 text-white shadow-sm font-black' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold'"
+                            class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm transition-all flex items-center gap-1.5 cursor-pointer">
+                        <span>이러닝·교재</span>
+                        <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="refTab === 'edu' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'" x-text="portfolioCategoryCounts.edu"></span>
+                    </button>
+                    <button @click="setPortfolioTab('press')" 
+                            :class="refTab === 'press' ? 'bg-orange-600 text-white shadow-sm font-black' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold'"
+                            class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm transition-all flex items-center gap-1.5 cursor-pointer">
+                        <span>후캠퍼스·언론</span>
+                        <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="refTab === 'press' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'" x-text="portfolioCategoryCounts.press"></span>
+                    </button>
+                </div>
+
+                <!-- 2. Search & Compact Pagination Bar (한눈에 스크롤 없이 확인 가능) -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50 border border-slate-200 p-2.5 sm:p-3 rounded-2xl">
+                    <!-- Search Input -->
+                    <div class="relative w-full sm:w-72">
+                        <input type="text" 
+                               x-model="searchQuery" 
+                               @input="portfolioPage = 1"
+                               placeholder="포트폴리오 검색 (예: EBS, 웅진, AI...)" 
+                               class="w-full bg-white border border-slate-300 rounded-xl pl-8 pr-7 py-1.5 text-xs text-slate-800 focus:outline-hidden focus:border-blue-500 shadow-2xs">
+                        <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <button x-show="searchQuery" @click="searchQuery = ''; portfolioPage = 1;" class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs cursor-pointer">&times;</button>
+                    </div>
+
+                    <!-- Page Nav Controls (드래그 없이 한 번의 터치로 넘김) -->
+                    <div x-show="filteredPortfolio.length > 0" class="flex items-center gap-2 text-xs font-bold text-slate-700">
+                        <span class="text-[11px] text-slate-500 font-medium">
+                            총 <strong class="text-blue-600 font-black" x-text="filteredPortfolio.length"></strong>건
+                        </span>
+                        <div class="flex items-center gap-1 bg-white border border-slate-200 rounded-xl p-1 shadow-2xs">
+                            <button @click="prevPortfolioPage()" 
+                                    :disabled="portfolioPage <= 1"
+                                    :class="portfolioPage <= 1 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-100 active:scale-95 cursor-pointer text-slate-900'"
+                                    class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-0.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                                <span>이전</span>
+                            </button>
+                            <span class="px-2 py-0.5 text-xs font-mono font-black text-slate-800 bg-slate-100 rounded-md">
+                                <span x-text="portfolioPage"></span> / <span x-text="totalPortfolioPages"></span>
+                            </span>
+                            <button @click="nextPortfolioPage()" 
+                                    :disabled="portfolioPage >= totalPortfolioPages"
+                                    :class="portfolioPage >= totalPortfolioPages ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-100 active:scale-95 cursor-pointer text-slate-900'"
+                                    class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-0.5">
+                                <span>다음</span>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio Cards Grid (컴팩트 4개 노출 - 긴 스크롤 완전 방지) -->
+            <div x-show="filteredPortfolio.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6">
+                <template x-for="(item, idx) in pagedPortfolio" :key="item.id">
                     <article @click="openModal(item.id, item.title)"
                           :style="'--entrance-delay: ' + ((idx % 4) * 65) + 'ms;'"
-                          class="portfolio-card-item tilt-card w-full group relative bg-brand-gray rounded-2xl overflow-hidden border border-brand-border cursor-pointer shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                          class="portfolio-card-item tilt-card w-full group relative bg-slate-50 hover:bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-blue-400 cursor-pointer shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
                         <div class="aspect-video relative overflow-hidden bg-slate-900">
                             <img :src="'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg'" 
                                  @error="$el.src='https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80'"
@@ -3862,16 +3976,17 @@
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
                                  referrerpolicy="no-referrer">
                             <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-brand-mint text-brand-navy-dark flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
                                     <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 </div>
                             </div>
                         </div>
                         <div class="p-3 sm:p-4">
-                            <div class="flex items-center mb-1">
-                                <span class="text-[10px] font-extrabold text-brand-mint-hover uppercase tracking-wider" x-text="item.tag"></span>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[10px] font-extrabold text-blue-600 uppercase tracking-wider bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100" x-text="item.tag"></span>
+                                <span class="text-[10px] font-bold text-slate-400 font-mono">HD/4K</span>
                             </div>
-                            <h3 class="font-bold text-xs sm:text-sm text-brand-text truncate" x-text="item.title"></h3>
+                            <h3 class="font-bold text-xs sm:text-sm text-slate-900 line-clamp-1 group-hover:text-blue-600 transition-colors" x-text="item.title"></h3>
                         </div>
                     </article>
                 </template>
@@ -3946,20 +4061,31 @@
                 </div>
 
                 <!-- Reset Search Button -->
-                <button @click="clearSearch(); refTab = 'all'" 
+                <button @click="clearSearch(); refTab = 'all'; portfolioPage = 1;" 
                         class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs sm:text-sm transition-colors cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                     <span>검색어 초기화 및 전체 포트폴리오 보기</span>
                 </button>
             </div>
 
-            <!-- Action Button -->
-            <div class="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button x-show="portfolioLimit < filteredPortfolio.length"
-                        @click="loadMore()" 
-                        class="px-8 py-3 bg-white hover:bg-gray-50 text-gray-800 font-semibold text-sm rounded-full border border-gray-300 shadow-xs hover:shadow-md transition-all duration-200 flex items-center gap-2">
-                    <span>더보기</span>
-                    <span class="text-gray-400 font-bold">+</span>
+            <!-- Page Number Indicator Dots / Numbers (Bottom Nav) -->
+            <div x-show="totalPortfolioPages > 1" class="mt-6 sm:mt-8 flex items-center justify-center gap-1.5">
+                <button @click="prevPortfolioPage()" 
+                        :disabled="portfolioPage <= 1"
+                        class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <template x-for="p in totalPortfolioPages" :key="'page-btn-' + p">
+                    <button @click="setPortfolioPage(p)"
+                            :class="portfolioPage === p ? 'bg-blue-600 text-white font-black shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold'"
+                            class="w-8 h-8 rounded-lg text-xs font-mono transition-all flex items-center justify-center cursor-pointer"
+                            x-text="p">
+                    </button>
+                </template>
+                <button @click="nextPortfolioPage()" 
+                        :disabled="portfolioPage >= totalPortfolioPages"
+                        class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                 </button>
             </div>
         </div>
