@@ -1323,6 +1323,14 @@
                 organizationDataList: ORGANIZATION_DATA,
                 partnersList: PARTNERS_DATA,
 
+                get partnersRow1() {
+                    return this.partnersList.slice(0, Math.ceil(this.partnersList.length / 2));
+                },
+
+                get partnersRow2() {
+                    return this.partnersList.slice(Math.ceil(this.partnersList.length / 2));
+                },
+
                 get filteredPartners() {
                     if (this.partnerTab === 'all') return this.partnersList;
                     return this.partnersList.filter(p => p.cat === this.partnerTab);
@@ -2135,7 +2143,18 @@
             width: max-content;
             animation: scrollReverse 22s linear infinite;
         }
-        .animate-marquee:hover, .animate-marquee-reverse:hover {
+        .animate-marquee-slow {
+            display: flex;
+            width: max-content;
+            animation: scroll 32s linear infinite;
+        }
+        .animate-marquee-slow-reverse {
+            display: flex;
+            width: max-content;
+            animation: scrollReverse 32s linear infinite;
+        }
+        .animate-marquee:hover, .animate-marquee-reverse:hover,
+        .animate-marquee-slow:hover, .animate-marquee-slow-reverse:hover {
             animation-play-state: paused;
         }
 
@@ -2317,11 +2336,11 @@
         }
     </style>
 </head>
-<body x-cloak
+    <body x-cloak
       x-data="whomediaApp"
       @scroll.window="scrolled = (window.pageYOffset > 20)"
-      @keydown.escape.window="closeModal()"
-      class="pb-20 md:pb-0">
+      @keydown.escape.window="closeModal(); if (mobileMenuOpen) mobileMenuOpen = false;"
+      :class="{ 'overflow-hidden': mobileMenuOpen, 'pb-20 md:pb-0': true }">
 
     <!-- HEADER / NAVIGATION (TRANSPARENT INTEGRATED GNB) -->
     <header :class="scrolled ? 'bg-slate-950/85 backdrop-blur-xl shadow-lg border-b border-white/10 py-2 sm:py-3.5' : 'bg-gradient-to-b from-slate-950/70 via-slate-950/30 to-transparent border-b border-transparent py-3 sm:py-5'"
@@ -2362,63 +2381,160 @@
             <!-- Mobile Hamburger Button (44px min touch target) -->
             <button @click="mobileMenuOpen = !mobileMenuOpen" 
                     aria-label="모바일 메뉴 열기"
-                    class="md:hidden p-2 rounded-xl border border-white/20 bg-white/10 backdrop-blur-md text-white transition-all focus:outline-none flex items-center justify-center">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="md:hidden p-2.5 rounded-xl border border-white/20 bg-white/10 backdrop-blur-md text-white transition-all focus:outline-none flex items-center justify-center cursor-pointer active:scale-95">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
                     <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
         </div>
 
-        <!-- Mobile Menu Drawer -->
+        <!-- FULL-SCREEN OPAQUE MOBILE MENU OVERLAY -->
         <div x-show="mobileMenuOpen" 
              x-transition:enter="transition ease-out duration-250"
-             x-transition:enter-start="opacity-0 -translate-y-4"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             x-transition:leave="transition ease-in duration-150"
-             x-transition:leave-start="opacity-100 translate-y-0"
-             x-transition:leave-end="opacity-0 -translate-y-4"
-             class="md:hidden bg-slate-950/95 backdrop-blur-2xl border-b border-white/10 px-5 py-5 space-y-3 shadow-2xl text-white">
-            <div class="grid grid-cols-2 gap-2 pb-2 border-b border-white/10">
-                <a @click="mobileMenuOpen = false" href="#" class="bg-white/5 border border-white/10 rounded-xl p-3 text-white/90 font-bold text-sm flex items-center gap-2 hover:border-emerald-400 hover:text-emerald-300 transition-colors">
-                    <span>🏠</span> <span>홈</span>
+             x-transition:enter-start="opacity-0 scale-[0.98]"
+             x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 scale-100"
+             x-transition:leave-end="opacity-0 scale-[0.98]"
+             class="fixed inset-0 w-full h-[100dvh] bg-slate-950 z-[100] md:hidden overflow-y-auto flex flex-col justify-between p-4 sm:p-6 text-white isolate"
+             style="display: none;">
+            
+            <!-- Top Bar with Brand Logo and Close Button -->
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800 shrink-0">
+                <a href="#" @click="mobileMenuOpen = false" class="flex flex-col select-none" title="(주)후미디어">
+                    <div class="flex items-center text-xl font-black brand-logo-font tracking-tight">
+                        <span class="font-black text-[#FF0000]">WHO</span>
+                        <span class="font-black text-white ml-[1px]">MEDIA</span>
+                    </div>
+                    <span class="text-[10px] font-semibold text-slate-400 mt-0.5">교육의 미래를 완성하는 전문가 그룹</span>
                 </a>
-                <a @click="mobileMenuOpen = false; showMobileOrgModal = true" href="#organization" class="bg-white/5 border border-white/10 rounded-xl p-3 text-white/90 font-bold text-sm flex items-center gap-2 hover:border-emerald-400 hover:text-emerald-300 transition-colors">
-                    <span>ℹ️</span> <span>회사소개</span>
-                </a>
-                <a @click="mobileMenuOpen = false" href="#services" class="bg-white/5 border border-white/10 rounded-xl p-3 text-white/90 font-bold text-sm flex items-center gap-2 hover:border-emerald-400 hover:text-emerald-300 transition-colors">
-                    <span>💼</span> <span>사업영역</span>
-                </a>
-                <a @click="mobileMenuOpen = false" href="#studio" class="bg-white/5 border border-white/10 rounded-xl p-3 text-white/90 font-bold text-sm flex items-center gap-2 hover:border-emerald-400 hover:text-emerald-300 transition-colors">
-                    <span>🎬</span> <span>스튜디오</span>
+                
+                <button @click="mobileMenuOpen = false" 
+                        aria-label="메뉴 닫기"
+                        class="w-11 h-11 rounded-full bg-slate-900 border border-slate-700 text-white hover:bg-slate-800 hover:text-emerald-400 active:scale-90 transition-all flex items-center justify-center cursor-pointer shadow-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Navigation Grid (Full Opaque Cards) -->
+            <div class="my-auto py-4 space-y-3 shrink-0">
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">전체 메뉴</div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <!-- Home -->
+                    <a @click="mobileMenuOpen = false" href="#" 
+                       class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xl">🏠</span>
+                            <span class="text-[9px] font-bold text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">MAIN</span>
+                        </div>
+                        <div>
+                            <div class="font-black text-sm text-white">홈</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">후미디어 메인 비전</div>
+                        </div>
+                    </a>
+
+                    <!-- About / Organization -->
+                    <a @click="mobileMenuOpen = false" href="#organization" 
+                       class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xl">🏢</span>
+                            <span class="text-[9px] font-bold text-blue-400 bg-blue-950/60 px-1.5 py-0.5 rounded border border-blue-800/50">ABOUT</span>
+                        </div>
+                        <div>
+                            <div class="font-black text-sm text-white">회사소개</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">조직 체계 &amp; 역량</div>
+                        </div>
+                    </a>
+
+                    <!-- Services -->
+                    <a @click="mobileMenuOpen = false" href="#services" 
+                       class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xl">💼</span>
+                            <span class="text-[9px] font-bold text-emerald-400 bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-800/50">SERVICES</span>
+                        </div>
+                        <div>
+                            <div class="font-black text-sm text-white">사업영역</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">에듀테크 &amp; 영상 솔루션</div>
+                        </div>
+                    </a>
+
+                    <!-- Studio -->
+                    <a @click="mobileMenuOpen = false" href="#studio" 
+                       class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xl">🎬</span>
+                            <span class="text-[9px] font-bold text-amber-400 bg-amber-950/60 px-1.5 py-0.5 rounded border border-amber-800/50">STUDIO</span>
+                        </div>
+                        <div>
+                            <div class="font-black text-sm text-white">스튜디오</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">160평 최첨단 촬영 환경</div>
+                        </div>
+                    </a>
+
+                    <!-- Reference -->
+                    <a @click="mobileMenuOpen = false" href="#reference" 
+                       class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xl">📁</span>
+                            <span class="text-[9px] font-bold text-purple-400 bg-purple-950/60 px-1.5 py-0.5 rounded border border-purple-800/50">WORKS</span>
+                        </div>
+                        <div>
+                            <div class="font-black text-sm text-white">포트폴리오</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">K-MOOC·공공·기업 실적</div>
+                        </div>
+                    </a>
+
+                    <!-- Location / Naver Map -->
+                    <a @click="mobileMenuOpen = false" 
+                       :href="naverMapUrl" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xl">📍</span>
+                            <span class="text-[9px] font-bold text-teal-400 bg-teal-950/60 px-1.5 py-0.5 rounded border border-teal-800/50">MAP ↗</span>
+                        </div>
+                        <div>
+                            <div class="font-black text-sm text-white">오시는 길</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">JNK디지털타워 1506호</div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Direct Call & Email Quick Row -->
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                    <a href="tel:02-6443-4222" 
+                       class="flex items-center justify-center gap-2 bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 font-black py-3 rounded-xl text-xs active:scale-95 transition-all">
+                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                        <span>전화 02-6443-4222</span>
+                    </a>
+                    <a href="mailto:whomedia6104@gmail.com" 
+                       class="flex items-center justify-center gap-2 bg-slate-900 border border-slate-700 text-slate-200 font-bold py-3 rounded-xl text-xs active:scale-95 transition-all">
+                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span>이메일 문의하기</span>
+                    </a>
+                </div>
+
+                <!-- Primary CTA Consultation Button -->
+                <a @click="mobileMenuOpen = false" href="#contact" 
+                   class="block w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-center text-sm shadow-xl border border-blue-400/30 active:scale-95 transition-all">
+                    <span>✨ 프로젝트 제작 &amp; 대관 문의하기</span>
                 </a>
             </div>
-            <div class="space-y-2 pt-1">
-                <a @click="mobileMenuOpen = false" href="#reference" class="block bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white/90 font-bold text-sm hover:border-emerald-400 hover:text-emerald-300 transition-colors">
-                    📁 포트폴리오
-                </a>
-                <a @click="mobileMenuOpen = false" 
-                   :href="naverMapUrl" 
-                   target="_blank" 
-                   rel="noopener noreferrer" 
-                   class="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white/90 font-bold text-sm hover:border-emerald-400 hover:text-emerald-300 transition-colors flex items-center justify-between">
-                    <span>📍 오시는 길</span>
-                    <span class="text-[10px] text-emerald-300 font-bold bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-500/30">네이버 지도 ↗</span>
-                </a>
+
+            <!-- Bottom Company Info & Copyright -->
+            <div class="pt-3 border-t border-slate-800/80 text-center shrink-0 space-y-1">
+                <div class="text-[10px] text-slate-400 font-medium break-keep">
+                    (주)후미디어 | 대표전화: 02-6443-4222 | 서울시 구로구 디지털로26길 111, JNK디지털타워 1506호
+                </div>
+                <div class="text-[9.5px] text-slate-500 font-mono">
+                    © WHO MEDIA Co., Ltd. All Rights Reserved.
+                </div>
             </div>
-            <div class="border-t border-white/10 pt-3 space-y-2">
-                <a href="tel:02-6443-4222" class="flex items-center justify-center gap-2 bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 font-extrabold py-2.5 rounded-xl text-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                    <span>전화 바로 연결 (02-6443-4222)</span>
-                </a>
-                <a href="mailto:whomedia6104@gmail.com" class="flex items-center justify-center gap-2 bg-white/5 border border-white/10 text-white/90 font-bold py-2.5 rounded-xl text-sm">
-                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    <span>이메일 문의 작성</span>
-                </a>
-            </div>
-            <a @click="mobileMenuOpen = false" href="#contact" class="block border border-white/40 bg-white/10 hover:bg-emerald-500/20 text-white hover:text-emerald-300 font-extrabold text-center py-3 rounded-xl text-sm shadow-md transition-colors">
-                <span>문의/상담 신청하기</span>
-            </a>
         </div>
     </header>
 
@@ -3634,60 +3750,6 @@
                 <p class="text-gray-500 text-xs sm:text-sm">교육 컨설팅부터 미디어 영상 제작, 후캠퍼스 평생교육, 디지털 언론 홍보까지 분야별 주요 수행 사례입니다.</p>
             </div>
 
-            <!-- Portfolio Search & Filter Controls Bar -->
-            <div class="max-w-3xl mx-auto mb-6 sm:mb-8 space-y-3">
-                <!-- Search Input Box -->
-                <div class="relative w-full">
-                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                        </svg>
-                    </div>
-                    <input type="text" 
-                           x-model="searchQuery" 
-                           placeholder="프로젝트명, 기관명, 제작 기술 검색 (예: EBS, 전자칠판, 크로마키, NE능률, AI)"
-                           class="w-full pl-11 pr-10 py-3 sm:py-3.5 bg-slate-50 hover:bg-white focus:bg-white text-slate-900 placeholder-slate-400 text-sm sm:text-base font-medium rounded-2xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none shadow-xs">
-                    <button x-show="searchQuery" 
-                            @click="clearSearch()" 
-                            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
-                            aria-label="검색어 지우기">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Quick Keyword Tag Pills -->
-                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
-                    <span class="text-[11px] font-bold text-slate-400 shrink-0 mr-1">추천 검색:</span>
-                    <button @click="setSearchQuery('EBS')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors shrink-0">#EBS</button>
-                    <button @click="setSearchQuery('전자칠판')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors shrink-0">#전자칠판</button>
-                    <button @click="setSearchQuery('크로마키')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors shrink-0">#크로마키</button>
-                    <button @click="setSearchQuery('AI 디지털 교과서')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors shrink-0">#AI디지털교과서</button>
-                    <button @click="setSearchQuery('NE능률')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors shrink-0">#NE능률</button>
-                    <button @click="setSearchQuery('웅진')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors shrink-0">#웅진씽크빅</button>
-                    <button @click="setSearchQuery('모션그래픽')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors shrink-0">#모션그래픽</button>
-                </div>
-            </div>
-
-            <!-- Portfolio Category Filter Tabs -->
-            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 mb-6 -mx-4 px-4 sm:mx-0 sm:px-0 justify-start sm:justify-center">
-                <button @click="refTab = 'all'" :class="refTab === 'all' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="px-4 py-2 rounded-xl text-xs sm:text-sm shrink-0 transition-all border border-slate-200">전체보기</button>
-                <button @click="refTab = 'edu'" :class="refTab === 'edu' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="px-4 py-2 rounded-xl text-xs sm:text-sm shrink-0 transition-all border border-slate-200">이러닝 콘텐츠</button>
-                <button @click="refTab = 'production'" :class="refTab === 'production' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="px-4 py-2 rounded-xl text-xs sm:text-sm shrink-0 transition-all border border-slate-200">영상 프로덕션</button>
-                <button @click="refTab = 'press'" :class="refTab === 'press' ? 'bg-brand-navy text-white font-extrabold shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold'" class="px-4 py-2 rounded-xl text-xs sm:text-sm shrink-0 transition-all border border-slate-200">언론PR &amp; 홍보</button>
-            </div>
-
-            <!-- Active Search Badge & Count Indicator -->
-            <div x-show="searchQuery" class="flex items-center justify-between bg-blue-50/80 border border-blue-200/80 rounded-xl px-4 py-2.5 mb-6 max-w-2xl mx-auto">
-                <div class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-blue-900">
-                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                    <span>'<strong class="text-blue-700" x-text="searchQuery"></strong>' 검색 결과:</span>
-                    <span class="font-extrabold text-blue-800" x-text="filteredPortfolio.length + '건'"></span>
-                </div>
-                <button @click="clearSearch()" class="text-xs font-bold text-blue-600 hover:text-blue-800 underline">초기화</button>
-            </div>
-
             <!-- Portfolio Cards Grid (When results exist) -->
             <div x-show="filteredPortfolio.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                 <template x-for="(item, idx) in filteredPortfolio.slice(0, portfolioLimit)" :key="item.id">
@@ -3804,54 +3866,67 @@
         </div>
     </section>
 
-    <!-- PARTNERS & CLIENTS (High-End Radial Spotlight Grid - Compact High-Density) -->
-    <section class="py-8 sm:py-10 lg:py-12 bg-slate-950 text-white border-t border-b border-zinc-800/80 relative overflow-hidden" aria-label="주요 파트너사">
-        <!-- Ambient Background Glow & Decorative Elements -->
-        <div class="absolute inset-0 pointer-events-none opacity-25 bg-[radial-gradient(ellipse_70%_50%_at_50%_15%,rgba(0,245,212,0.1),transparent)]"></div>
-        <div class="absolute -top-24 -left-24 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- PARTNERS & CLIENTS (Compact Digital LED Marquee Ticker Board) -->
+    <section class="py-6 sm:py-8 bg-slate-950 text-white border-t border-b border-zinc-800/80 relative overflow-hidden" aria-label="주요 파트너사">
+        <!-- Ambient Background Glow -->
+        <div class="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(ellipse_70%_50%_at_50%_15%,rgba(0,245,212,0.12),transparent)]"></div>
 
         <div class="w-full max-w-[1280px] mx-auto px-4 sm:px-6 relative z-10">
-            <!-- Header Section (Compact) -->
-            <div class="text-center mb-5 sm:mb-6">
-                <div class="inline-flex items-center gap-1.5 text-xs font-bold text-[#00F5D4] tracking-wider uppercase bg-[#00F5D4]/10 px-3 py-0.5 rounded-full border border-[#00F5D4]/30 shadow-xs mb-2">
+            <!-- Header Section (Ultra-Compact) -->
+            <div class="text-center mb-4 sm:mb-5">
+                <div class="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#00F5D4] tracking-wider uppercase bg-[#00F5D4]/10 px-2.5 py-0.5 rounded-full border border-[#00F5D4]/30 shadow-xs mb-1.5">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#00F5D4] animate-pulse"></span>
                     CLIENTS &amp; PARTNERS
                 </div>
-                <h3 class="text-lg sm:text-2xl font-extrabold text-white tracking-tight">
+                <h3 class="text-base sm:text-xl font-extrabold text-white tracking-tight">
                     함께하는 주요 파트너사
                 </h3>
-                <p class="text-xs text-zinc-400 mt-1 max-w-lg mx-auto">
-                    공공기관, 대학, 교육기업과 함께 최상의 교육 미디어 콘텐츠를 구축해 나갑니다.
+                <p class="text-[11px] sm:text-xs text-zinc-400 mt-0.5 max-w-md mx-auto">
+                    공공기관·대학·교육기업과 함께 최상의 교육 미디어 콘텐츠를 구축해 나갑니다.
                 </p>
             </div>
 
-            <!-- Spotlight Grid Container (High-Density 7 Columns on Desktop) -->
-            <div x-ref="partnerSpotlightGrid"
-                 @mousemove="updatePartnerSpotlight($event)"
-                 @mouseleave="clearPartnerSpotlight()"
-                 class="spotlight-grid-container relative grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-2.5 p-2.5 sm:p-4 rounded-2xl bg-zinc-950/70 border border-white/5 backdrop-blur-md">
-                
-                <!-- 250px Radial Spotlight Cursor Tracking Light Layer -->
-                <div class="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300 z-0"
-                     style="background: radial-gradient(280px circle at var(--spotlight-x, -999px) var(--spotlight-y, -999px), rgba(0, 245, 212, 0.15), transparent 80%); opacity: var(--spotlight-opacity, 0);">
+            <!-- Digital Marquee Ticker Board Container -->
+            <div class="relative w-full overflow-hidden py-1">
+                <!-- Left & Right Fade Masks for Smooth Infinite Scrolling -->
+                <div class="absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent z-20 pointer-events-none"></div>
+                <div class="absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-slate-950 via-slate-950/80 to-transparent z-20 pointer-events-none"></div>
+
+                <!-- Row 1: Forward Marquee (Left Scroll) -->
+                <div class="animate-marquee-slow flex items-center gap-2.5 sm:gap-3 py-1 whitespace-nowrap">
+                    <!-- First Set -->
+                    <template x-for="partner in partnersRow1" :key="'r1-a-' + (partner.name || partner)">
+                        <div class="group relative px-3.5 sm:px-4 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-white/10 hover:border-[#00F5D4]/60 transition-all duration-300 flex items-center gap-2 shrink-0 select-none shadow-xs hover:shadow-[0_0_16px_rgba(0,245,212,0.2)] cursor-default">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#00F5D4]/70 group-hover:bg-[#00F5D4] group-hover:shadow-[0_0_6px_#00F5D4] transition-all"></span>
+                            <span class="text-xs sm:text-[13px] font-bold text-slate-200 group-hover:text-white transition-colors" x-text="partner.name || partner"></span>
+                        </div>
+                    </template>
+                    <!-- Second Set (for Seamless Infinite Loop) -->
+                    <template x-for="partner in partnersRow1" :key="'r1-b-' + (partner.name || partner)">
+                        <div class="group relative px-3.5 sm:px-4 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-white/10 hover:border-[#00F5D4]/60 transition-all duration-300 flex items-center gap-2 shrink-0 select-none shadow-xs hover:shadow-[0_0_16px_rgba(0,245,212,0.2)] cursor-default">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#00F5D4]/70 group-hover:bg-[#00F5D4] group-hover:shadow-[0_0_6px_#00F5D4] transition-all"></span>
+                            <span class="text-xs sm:text-[13px] font-bold text-slate-200 group-hover:text-white transition-colors" x-text="partner.name || partner"></span>
+                        </div>
+                    </template>
                 </div>
 
-                <!-- Partner Badges (High-Density Compact Grid) -->
-                <template x-for="(partner, idx) in partnersList" :key="'partner-' + (partner.name || partner)">
-                    <div class="spotlight-badge group relative h-10 sm:h-11 flex items-center justify-center px-2.5 sm:px-3 py-1 text-center cursor-default select-none z-10"
-                         :style="`--badge-index: ${idx};`">
-                        <!-- Border Spotlight Glow Mask Layer -->
-                        <div class="spotlight-badge-border-glow"></div>
-                        
-                        <!-- Ambient Shimmer Beam (Idle State 4.5s cycle with staggered wave delay) -->
-                        <div class="ambient-badge-shimmer" :style="`animation-delay: ${(idx % 8) * 0.4}s;`"></div>
-
-                        <!-- Partner Name (White bold, centered text) -->
-                        <span class="relative z-10 text-xs sm:text-[13px] font-bold text-white tracking-tight group-hover:text-[#00F5D4] transition-colors duration-300 text-center break-keep line-clamp-1"
-                              x-text="partner.name || partner"></span>
-                    </div>
-                </template>
+                <!-- Row 2: Reverse Marquee (Right Scroll) -->
+                <div class="animate-marquee-slow-reverse flex items-center gap-2.5 sm:gap-3 py-1 whitespace-nowrap mt-1.5 sm:mt-2">
+                    <!-- First Set -->
+                    <template x-for="partner in partnersRow2" :key="'r2-a-' + (partner.name || partner)">
+                        <div class="group relative px-3.5 sm:px-4 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-white/10 hover:border-sky-400/60 transition-all duration-300 flex items-center gap-2 shrink-0 select-none shadow-xs hover:shadow-[0_0_16px_rgba(56,189,248,0.2)] cursor-default">
+                            <span class="w-1.5 h-1.5 rounded-full bg-sky-400/70 group-hover:bg-sky-400 group-hover:shadow-[0_0_6px_#38bdf8] transition-all"></span>
+                            <span class="text-xs sm:text-[13px] font-bold text-slate-200 group-hover:text-white transition-colors" x-text="partner.name || partner"></span>
+                        </div>
+                    </template>
+                    <!-- Second Set (for Seamless Infinite Loop) -->
+                    <template x-for="partner in partnersRow2" :key="'r2-b-' + (partner.name || partner)">
+                        <div class="group relative px-3.5 sm:px-4 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-white/10 hover:border-sky-400/60 transition-all duration-300 flex items-center gap-2 shrink-0 select-none shadow-xs hover:shadow-[0_0_16px_rgba(56,189,248,0.2)] cursor-default">
+                            <span class="w-1.5 h-1.5 rounded-full bg-sky-400/70 group-hover:bg-sky-400 group-hover:shadow-[0_0_6px_#38bdf8] transition-all"></span>
+                            <span class="text-xs sm:text-[13px] font-bold text-slate-200 group-hover:text-white transition-colors" x-text="partner.name || partner"></span>
+                        </div>
+                    </template>
+                </div>
             </div>
         </div>
     </section>
