@@ -1632,6 +1632,9 @@
                     }
                 },
 
+                splashTimerFade: null,
+                splashTimerHide: null,
+
                 initMobileSplash() {
                     try {
                         // 모바일 화면(폭 768px 이하)일 때 무조건 매번 실행
@@ -1641,15 +1644,16 @@
                             this.splashVisible = true;
                             this.splashFading = false;
 
-                            // 2.5초 후 페이드아웃 시작
-                            setTimeout(() => {
+                            // 9.5초(9,500ms) 후 부드러운 페이드아웃 시작
+                            this.splashTimerFade = setTimeout(() => {
                                 this.splashFading = true;
-                            }, 2500);
+                            }, 9500);
 
-                            // 3초 후 화면에서 완전 제거
-                            setTimeout(() => {
+                            // 10.0초(10,000ms) 후 스플래시 화면 완전 제거 및 본문 활성화
+                            this.splashTimerHide = setTimeout(() => {
                                 this.splashVisible = false;
-                            }, 3000);
+                                this.splashFading = false;
+                            }, 10000);
                         }
                     } catch(e) {
                         console.warn('Splash screen init error:', e);
@@ -1657,6 +1661,9 @@
                 },
 
                 skipSplash() {
+                    if (this.splashTimerFade) clearTimeout(this.splashTimerFade);
+                    if (this.splashTimerHide) clearTimeout(this.splashTimerHide);
+                    this.splashFading = false;
                     this.splashVisible = false;
                 },
 
