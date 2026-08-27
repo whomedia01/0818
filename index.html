@@ -1209,6 +1209,44 @@
             { id: 'div-4', code: 'STAFF / SUPPORT', name: '경영지원팀', desc: '경영 기획, 재무, 인사 총괄' }
         ];
 
+        const PARTNERS_DATA = [
+            { name: 'EBS', cat: 'edu' },
+            { name: 'EBS 중학프리미엄', cat: 'edu' },
+            { name: '천재교육', cat: 'edu' },
+            { name: '웅진씽크빅', cat: 'edu' },
+            { name: '동아출판', cat: 'edu' },
+            { name: '좋은책 신사고', cat: 'edu' },
+            { name: '미래엔', cat: 'edu' },
+            { name: '비상교육', cat: 'edu' },
+            { name: 'NE능률', cat: 'edu' },
+            { name: '대교', cat: 'edu' },
+            { name: '아이스크림 홈런', cat: 'edu' },
+            { name: 'YBM', cat: 'edu' },
+            { name: '에듀윌', cat: 'edu' },
+            { name: '교원', cat: 'edu' },
+            { name: '경희사이버대학교', cat: 'univ' },
+            { name: '세종사이버대학교', cat: 'univ' },
+            { name: '한국방송통신대학교', cat: 'univ' },
+            { name: '삼육대학교', cat: 'univ' },
+            { name: '한양사이버대학교', cat: 'univ' },
+            { name: '서울사이버대학교', cat: 'univ' },
+            { name: '고려사이버대학교', cat: 'univ' },
+            { name: '질병관리청', cat: 'public' },
+            { name: '한국가스기술공사', cat: 'public' },
+            { name: '한국콘텐츠진흥원', cat: 'public' },
+            { name: '한국원자력연구원', cat: 'public' },
+            { name: '국가평생교육진흥원', cat: 'public' },
+            { name: '한국고용정보원', cat: 'public' },
+            { name: '한국장학재단', cat: 'public' },
+            { name: '소상공인시장진흥공단', cat: 'public' },
+            { name: '한국산업인력공단', cat: 'public' },
+            { name: '멀티캠퍼스', cat: 'corp' },
+            { name: '한국생산성본부 (KPC)', cat: 'corp' },
+            { name: '모두의교육', cat: 'corp' },
+            { name: '한겨레교육', cat: 'corp' },
+            { name: '한국관세사회', cat: 'corp' }
+        ];
+
         document.addEventListener('alpine:init', () => {
             Alpine.data('whomediaApp', () => ({
                 scrolled: false, 
@@ -1216,6 +1254,7 @@
                 refTab: 'all',
                 searchQuery: '',
                 portfolioLimit: 12,
+                partnerTab: 'all',
                 videoModalOpen: false,
                 activeVideoId: '',
                 activeVideoTitle: '',
@@ -1234,6 +1273,61 @@
                 portfolioItems: PORTFOLIO_DATA,
                 studioImagesList: STUDIO_IMAGES,
                 organizationDataList: ORGANIZATION_DATA,
+                partnersList: PARTNERS_DATA,
+
+                get filteredPartners() {
+                    if (this.partnerTab === 'all') return this.partnersList;
+                    return this.partnersList.filter(p => p.cat === this.partnerTab);
+                },
+
+                get partnerCategoryCounts() {
+                    return {
+                        all: this.partnersList.length,
+                        edu: this.partnersList.filter(p => p.cat === 'edu').length,
+                        univ: this.partnersList.filter(p => p.cat === 'univ').length,
+                        public: this.partnersList.filter(p => p.cat === 'public').length,
+                        corp: this.partnersList.filter(p => p.cat === 'corp').length
+                    };
+                },
+
+                // [파트너사 뱃지 마우스 반응형 스포트라이트 광원 추적]
+                updatePartnerSpotlight(e) {
+                    const container = this.$refs.partnerSpotlightGrid || (e && e.currentTarget);
+                    if (!container) return;
+                    const rect = container.getBoundingClientRect();
+                    const clientX = e.clientX;
+                    const clientY = e.clientY;
+                    
+                    container.style.setProperty('--spotlight-x', `${clientX - rect.left}px`);
+                    container.style.setProperty('--spotlight-y', `${clientY - rect.top}px`);
+                    container.style.setProperty('--spotlight-opacity', '1');
+                    
+                    const badges = container.querySelectorAll('.spotlight-badge');
+                    badges.forEach(badge => {
+                        const bRect = badge.getBoundingClientRect();
+                        const bx = clientX - bRect.left;
+                        const by = clientY - bRect.top;
+                        badge.style.setProperty('--mouse-x', `${bx}px`);
+                        badge.style.setProperty('--mouse-y', `${by}px`);
+                        
+                        const centerX = bRect.left + bRect.width / 2;
+                        const centerY = bRect.top + bRect.height / 2;
+                        const dist = Math.hypot(clientX - centerX, clientY - centerY);
+                        const radius = 250;
+                        const intensity = Math.max(0, 1 - dist / radius);
+                        badge.style.setProperty('--spotlight-intensity', intensity.toFixed(3));
+                    });
+                },
+
+                clearPartnerSpotlight() {
+                    const container = this.$refs.partnerSpotlightGrid;
+                    if (!container) return;
+                    container.style.setProperty('--spotlight-opacity', '0');
+                    const badges = container.querySelectorAll('.spotlight-badge');
+                    badges.forEach(badge => {
+                        badge.style.setProperty('--spotlight-intensity', '0');
+                    });
+                },
 
                 get filteredPortfolio() {
                     let list = this.portfolioItems;
@@ -2006,6 +2100,97 @@
             display: flex;
             width: max-content;
             animation: tvTickerScroll 22s linear infinite;
+        }
+
+        /* ========================================================= */
+        /* PARTNER BADGES: RADIAL SPOTLIGHT GRID & AMBIENT SHIMMER  */
+        /* ========================================================= */
+        .spotlight-grid-container {
+            --spotlight-x: -999px;
+            --spotlight-y: -999px;
+            --spotlight-opacity: 0;
+        }
+
+        .spotlight-badge {
+            position: relative;
+            border-radius: 0.75rem; /* rounded-xl */
+            background-color: rgba(24, 24, 27, 0.6); /* bg-zinc-900/60 */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* 1px base border */
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                        border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                        box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                        background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, box-shadow;
+            overflow: hidden;
+        }
+
+        /* 2. Individual Hover Motion (요구사항 정의) */
+        .spotlight-badge:hover {
+            transform: translateY(-4px) scale(1.03);
+            border-color: #00F5D4;
+            box-shadow: 0 0 20px rgba(0, 245, 212, 0.35), 0 8px 18px -4px rgba(0, 0, 0, 0.6);
+            background-color: rgba(24, 24, 27, 0.88);
+            z-index: 20;
+        }
+
+        /* 1. Cursor Tracking Radial Light over Badge Surface */
+        .spotlight-badge::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(250px circle at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(0, 245, 212, 0.16), transparent 75%);
+            opacity: var(--spotlight-intensity, 0);
+            transition: opacity 0.15s ease-out;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Border Spotlight Glow Layer */
+        .spotlight-badge-border-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(250px circle at var(--mouse-x, -999px) var(--mouse-y, -999px), #00F5D4, transparent 70%);
+            opacity: var(--spotlight-intensity, 0);
+            transition: opacity 0.15s ease-out;
+            pointer-events: none;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            padding: 1px;
+            z-index: 2;
+        }
+
+        /* 3. Background Ambient Loop (Idle State Shimmer - 4.5s cycle) */
+        @keyframes ambientBadgeShimmer {
+            0% {
+                transform: translateX(-150%) skewX(-20deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.35;
+            }
+            25% {
+                transform: translateX(250%) skewX(-20deg);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(250%) skewX(-20deg);
+                opacity: 0;
+            }
+        }
+
+        .ambient-badge-shimmer {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 60%;
+            background: linear-gradient(90deg, transparent, rgba(0, 245, 212, 0.15), rgba(255, 255, 255, 0.28), rgba(0, 245, 212, 0.15), transparent);
+            animation: ambientBadgeShimmer 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            pointer-events: none;
+            z-index: 1;
         }
 
         .brand-logo-font {
@@ -3464,68 +3649,54 @@
         </div>
     </section>
 
-    <!-- PARTNERS & CLIENTS -->
-    <section class="py-8 sm:py-12 bg-white text-slate-900 border-t border-b border-slate-200 overflow-hidden">
-        <div class="w-full max-w-[1280px] mx-auto px-4 mb-4 sm:mb-6 text-center">
-            <span class="text-xs font-bold text-blue-600 tracking-wider uppercase bg-blue-50 px-3 py-1 rounded-full border border-blue-200">CLIENTS &amp; PARTNERS</span>
-            <h3 class="text-lg sm:text-2xl font-extrabold text-slate-900 mt-2">함께하는 주요 파트너사</h3>
-        </div>
+    <!-- PARTNERS & CLIENTS (High-End Radial Spotlight Grid - Compact High-Density) -->
+    <section class="py-8 sm:py-10 lg:py-12 bg-slate-950 text-white border-t border-b border-zinc-800/80 relative overflow-hidden" aria-label="주요 파트너사">
+        <!-- Ambient Background Glow & Decorative Elements -->
+        <div class="absolute inset-0 pointer-events-none opacity-25 bg-[radial-gradient(ellipse_70%_50%_at_50%_15%,rgba(0,245,212,0.1),transparent)]"></div>
+        <div class="absolute -top-24 -left-24 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="space-y-3 sm:space-y-4">
-            <!-- Row 1: Forward Sliding Marquee -->
-            <div class="relative w-full overflow-hidden py-1">
-                <div class="animate-marquee flex items-center gap-3 sm:gap-4 whitespace-nowrap">
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">EBS</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">천재교육</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">EBS 중학프리미엄</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">웅진씽크빅</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">동아출판</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">좋은책 신사고</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">미래엔</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">멀티캠퍼스</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">아이스크림 홈런</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">세종사이버대학교</span></div>
-
-                    <!-- Repeat Row 1 -->
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">EBS</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">천재교육</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">EBS 중학프리미엄</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">웅진씽크빅</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">동아출판</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">좋은책 신사고</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">미래엔</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">멀티캠퍼스</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">아이스크림 홈런</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">세종사이버대학교</span></div>
+        <div class="w-full max-w-[1280px] mx-auto px-4 sm:px-6 relative z-10">
+            <!-- Header Section (Compact) -->
+            <div class="text-center mb-5 sm:mb-6">
+                <div class="inline-flex items-center gap-1.5 text-xs font-bold text-[#00F5D4] tracking-wider uppercase bg-[#00F5D4]/10 px-3 py-0.5 rounded-full border border-[#00F5D4]/30 shadow-xs mb-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#00F5D4] animate-pulse"></span>
+                    CLIENTS &amp; PARTNERS
                 </div>
+                <h3 class="text-lg sm:text-2xl font-extrabold text-white tracking-tight">
+                    함께하는 주요 파트너사
+                </h3>
+                <p class="text-xs text-zinc-400 mt-1 max-w-lg mx-auto">
+                    공공기관, 대학, 교육기업과 함께 최상의 교육 미디어 콘텐츠를 구축해 나갑니다.
+                </p>
             </div>
 
-            <!-- Row 2: Reverse Sliding Marquee -->
-            <div class="relative w-full overflow-hidden py-1">
-                <div class="animate-marquee-reverse flex items-center gap-3 sm:gap-4 whitespace-nowrap">
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">경희사이버대학교</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">모두의교육</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">한국방송통신대학교</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">삼육대학교</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">한국관세사회</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">한겨레교육</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">한국생산성본부 (KPC)</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">한국가스기술공사</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">질병관리청</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">NE능률</span></div>
-
-                    <!-- Repeat Row 2 -->
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">경희사이버대학교</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">모두의교육</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">한국방송통신대학교</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">삼육대학교</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">한국관세사회</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">한겨레교육</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">한국생산성본부 (KPC)</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">한국가스기술공사</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">질병관리청</span></div>
-                    <div class="h-11 sm:h-13 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-5 flex items-center justify-center shadow-xs hover:border-blue-500 hover:bg-blue-50/50 transition-all"><span class="text-xs sm:text-sm font-extrabold text-slate-800">NE능률</span></div>
+            <!-- Spotlight Grid Container (High-Density 7 Columns on Desktop) -->
+            <div x-ref="partnerSpotlightGrid"
+                 @mousemove="updatePartnerSpotlight($event)"
+                 @mouseleave="clearPartnerSpotlight()"
+                 class="spotlight-grid-container relative grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-2.5 p-2.5 sm:p-4 rounded-2xl bg-zinc-950/70 border border-white/5 backdrop-blur-md">
+                
+                <!-- 250px Radial Spotlight Cursor Tracking Light Layer -->
+                <div class="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300 z-0"
+                     style="background: radial-gradient(280px circle at var(--spotlight-x, -999px) var(--spotlight-y, -999px), rgba(0, 245, 212, 0.15), transparent 80%); opacity: var(--spotlight-opacity, 0);">
                 </div>
+
+                <!-- Partner Badges (High-Density Compact Grid) -->
+                <template x-for="(partner, idx) in partnersList" :key="'partner-' + (partner.name || partner)">
+                    <div class="spotlight-badge group relative h-10 sm:h-11 flex items-center justify-center px-2.5 sm:px-3 py-1 text-center cursor-default select-none z-10"
+                         :style="`--badge-index: ${idx};`">
+                        <!-- Border Spotlight Glow Mask Layer -->
+                        <div class="spotlight-badge-border-glow"></div>
+                        
+                        <!-- Ambient Shimmer Beam (Idle State 4.5s cycle with staggered wave delay) -->
+                        <div class="ambient-badge-shimmer" :style="`animation-delay: ${(idx % 8) * 0.4}s;`"></div>
+
+                        <!-- Partner Name (White bold, centered text) -->
+                        <span class="relative z-10 text-xs sm:text-[13px] font-bold text-white tracking-tight group-hover:text-[#00F5D4] transition-colors duration-300 text-center break-keep line-clamp-1"
+                              x-text="partner.name || partner"></span>
+                    </div>
+                </template>
             </div>
         </div>
     </section>
