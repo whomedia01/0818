@@ -358,6 +358,31 @@
             opacity: 1;
         }
 
+        /* Portfolio Grid Entrance Animation (Slide-up & Fade-in with Stagger Delay) */
+        .portfolio-card-item {
+            opacity: 0;
+            transform: translateY(28px) scale(0.97);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease;
+            transition-delay: var(--entrance-delay, 0ms);
+            will-change: opacity, transform;
+        }
+
+        .portfolio-card-item.is-revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .portfolio-card-item {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+        }
+
         /* Glassmorphism Utility Classes */
         .glass-panel-dark {
             background: rgba(13, 20, 36, 0.75);
@@ -3223,7 +3248,8 @@
             <div x-show="filteredPortfolio.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                 <template x-for="(item, idx) in filteredPortfolio.slice(0, portfolioLimit)" :key="item.id">
                     <article @click="openModal(item.id, item.title)"
-                          class="tilt-card w-full group relative bg-brand-gray rounded-2xl overflow-hidden border border-brand-border cursor-pointer shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                          :style="'--entrance-delay: ' + ((idx % 4) * 65) + 'ms;'"
+                          class="portfolio-card-item tilt-card w-full group relative bg-brand-gray rounded-2xl overflow-hidden border border-brand-border cursor-pointer shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
                         <div class="aspect-video relative overflow-hidden bg-slate-900">
                             <img :src="'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg'" 
                                  @error="$el.src='https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80'"
@@ -3756,7 +3782,7 @@
                 });
 
                 card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+                    card.style.transform = '';
                 });
             }
 
@@ -3765,9 +3791,32 @@
             }
             setupAllTiltCards();
 
+            // ==========================================
+            // 2-B. PORTFOLIO GRID ENTRANCE REVEAL ANIMATION
+            // ==========================================
+            const portfolioEntranceObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-revealed');
+                        portfolioEntranceObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -40px 0px',
+                threshold: 0.08
+            });
+
+            function initPortfolioEntrance() {
+                document.querySelectorAll('.portfolio-card-item:not(.is-revealed)').forEach(el => {
+                    portfolioEntranceObserver.observe(el);
+                });
+            }
+            initPortfolioEntrance();
+
             const observer = new MutationObserver(() => {
                 setupAllTiltCards();
                 initSpotlightSections();
+                initPortfolioEntrance();
             });
             observer.observe(document.body, { childList: true, subtree: true });
 
