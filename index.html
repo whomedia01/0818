@@ -2401,40 +2401,38 @@
          class="fixed inset-0 z-[9999] w-full h-[100dvh] bg-black transition-opacity duration-500 md:hidden flex flex-col justify-between p-6 select-none"
          style="background-image: url('/splash-mobile.jpg'); background-size: cover; background-position: center;">
         
-        <!-- 우측 상단 건너뛰기(SKIP) 버튼 -->
-        <div class="w-full flex justify-end pt-safe shrink-0 z-10">
+        <!-- 1. 이미지 가독성 확보용 딤 레이어 (Dark Overlay) -->
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-[1px] pointer-events-none"></div>
+
+        <!-- 2. 상단 영역: 건너뛰기 버튼 -->
+        <div class="relative z-10 w-full flex justify-end pt-safe">
             <button @click="skipSplash()"
                     type="button"
-                    class="bg-black/60 text-white/90 hover:text-white px-4 py-1.5 rounded-full text-xs backdrop-blur-md border border-white/20 tracking-wider font-semibold active:scale-95 transition-all shadow-lg">
+                    class="bg-black/60 text-white/80 hover:text-white px-3.5 py-1.5 rounded-full text-xs backdrop-blur-md border border-white/20 tracking-wider font-semibold active:scale-95 transition-all shadow-lg">
                 SKIP ✕
             </button>
         </div>
 
-        <!-- 중앙 메인 브랜드 로고 & 슬로건 통합 배치 (사이즈 업 및 시각적 조화 극대화) -->
-        <div class="my-auto flex flex-col items-center justify-center text-center px-4 w-full max-w-sm mx-auto">
-            <!-- 브랜드 로고 -->
-            <div class="inline-flex items-center text-4xl xs:text-[42px] sm:text-5xl font-black brand-logo-font tracking-tight drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">
-                <span class="font-black text-[#FF0000]">WHO</span>
-                <span class="font-black text-white ml-[2px]">MEDIA</span>
+        <!-- 3. 중앙 영역: 후미디어(WHOMEDIA) 로고 & 핵심 슬로건 -->
+        <div class="relative z-10 w-full flex flex-col items-center justify-center text-center px-4 my-auto">
+            <div class="inline-block px-4 py-1.5 rounded-full bg-[#00F5D4]/10 border border-[#00F5D4]/30 text-[#00F5D4] text-xs font-bold tracking-widest uppercase mb-3 shadow-[0_0_15px_rgba(0,245,212,0.2)]">
+                EDUTECH &amp; PRODUCTION
             </div>
-
-            <!-- 서브 브랜드 영문 타이틀 -->
-            <div class="mt-4 sm:mt-5">
-                <p class="text-[#00F5D4] text-sm xs:text-[15px] sm:text-base tracking-[0.22em] uppercase font-extrabold drop-shadow-[0_0_12px_rgba(0,245,212,0.5)]">
-                    WHOMEDIA EDUTECH
-                </p>
-            </div>
-
-            <!-- 메인 슬로건 문구 (사이즈 확대 & 선명한 가독성) -->
-            <div class="mt-2 sm:mt-2.5">
-                <p class="text-white text-lg xs:text-[20px] sm:text-2xl font-bold tracking-tight leading-snug drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)] break-keep">
-                    최적의 교육 경험을 설계합니다
-                </p>
-            </div>
+            
+            <h1 class="text-3xl sm:text-4xl font-black brand-logo-font tracking-wider mb-2 drop-shadow-[0_4px_20px_rgba(0,0,0,0.95)]">
+                <span class="text-[#FF0000]">WHO</span><span class="text-white ml-[2px]">MEDIA</span>
+            </h1>
+            <p class="text-sm sm:text-base font-medium text-zinc-200 drop-shadow-md break-keep">
+                학습자의 시선으로, 최적의 교육 경험을 설계합니다
+            </p>
         </div>
 
-        <!-- 하단 영역 밸런스 여백 (Optically Centered Balance) -->
-        <div class="w-full pb-safe shrink-0 h-8 opacity-0 pointer-events-none"></div>
+        <!-- 4. 하단 영역: 은은한 인프라 수치 요약 -->
+        <div class="relative z-10 w-full text-center pb-4 pb-safe">
+            <p class="text-[11px] text-zinc-300 font-light tracking-wide bg-black/40 py-1.5 px-4 rounded-full inline-block backdrop-blur-sm border border-white/10 shadow-md">
+                17년 기획 노하우 · 160평 자체 스튜디오 인프라
+            </p>
+        </div>
     </div>
 
     <!-- HEADER / NAVIGATION (TRANSPARENT INTEGRATED GNB) -->
