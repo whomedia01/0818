@@ -2639,77 +2639,77 @@
         <!-- ========================================================================= -->
         <!-- [모바일 전용 순차적 세로 배치(Stacked Flow) 레이아웃] (md:hidden flex flex-col) -->
         <!-- ========================================================================= -->
-        <div class="md:hidden flex flex-col justify-between w-full h-full flex-1 relative z-20 space-y-3">
+        <div class="md:hidden flex flex-col justify-between w-full h-full flex-1 relative z-20 space-y-2 sm:space-y-3">
             
-            <!-- 1. [모바일] 상단 슬로건 텍스트 영역 (정중앙 고정 & 에메랄드 키워드 순환 강조) -->
-            <div class="w-full px-4 pt-1 pb-0.5 text-center shrink-0">
-                <div class="flex flex-col items-center justify-center text-center space-y-1 text-xl xs:text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight select-none px-1 drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
+            <!-- 1. [모바일] 상단 메인 슬로건 (상단 메뉴바와 히어로 영상 사이의 세로 중앙에 균형 잡힌 상하 여백 배치) -->
+            <div class="w-full px-4 py-3.5 xs:py-4.5 sm:py-6 my-auto flex flex-col items-center justify-center text-center shrink-0">
+                <div class="flex flex-col items-center justify-center text-center space-y-1.5 text-[22px] xs:text-[25px] sm:text-3xl font-black text-white leading-[1.28] tracking-tight select-none px-1 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">
                     <div class="flex items-center justify-center gap-1.5 flex-wrap">
-                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-learner text-emerald-400 font-black">학습자</span><span class="text-white">의</span></span>
-                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-sight text-emerald-400 font-black">시선</span><span class="text-white">으로,</span></span>
+                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-learner text-emerald-400 font-black drop-shadow-[0_0_12px_rgba(52,211,153,0.4)]">학습자</span><span class="text-white">의</span></span>
+                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-sight text-emerald-400 font-black drop-shadow-[0_0_12px_rgba(52,211,153,0.4)]">시선</span><span class="text-white">으로,</span></span>
                     </div>
                     <div class="flex items-center justify-center gap-1.5 flex-wrap">
                         <span class="text-white">압도적인</span>
                         <span class="text-white">교육</span>
-                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-content text-emerald-400 font-black">콘텐츠</span><span class="text-white">를</span></span>
+                        <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-content text-emerald-400 font-black drop-shadow-[0_0_12px_rgba(52,211,153,0.4)]">콘텐츠</span><span class="text-white">를</span></span>
                         <span class="text-white">설계합니다</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. [모바일] 메인 영상 (16:9 와이드 & 10% 추가 확대 및 명도/채도 최적화) -->
-            <div class="w-full px-4 relative shrink-0">
-                <div class="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-slate-950 border border-white/10 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.9)] flex items-center justify-center">
+            <!-- 2. [모바일] 메인 영상 (3번 영역: 시네마틱 프레임 & 입체감 부각) -->
+            <div class="w-full px-3.5 relative shrink-0">
+                <div class="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-slate-950 border border-white/20 ring-1 ring-emerald-500/30 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.95)] flex items-center justify-center">
                     <video class="w-full h-full object-cover scale-[1.35] pointer-events-none border-0"
                            autoplay loop muted playsinline aria-hidden="true"
-                           style="object-position: center 30%; filter: brightness(1.18) saturate(1.35) contrast(1.08);">
+                           style="object-position: center 30%; filter: brightness(1.2) saturate(1.35) contrast(1.08);">
                         <source src="https://raw.githubusercontent.com/whomedia01/whomedia4/main/whomedia_hero.mp4" type="video/mp4" />
                     </video>
                 </div>
             </div>
 
-            <!-- 3. [모바일] 영상 하단 전광판 (텍스트 길이에 맞춰 백판 최소화 & 컴팩트 배너) -->
-            <div class="w-full px-4 flex justify-center shrink-0">
-                <div class="inline-flex items-center justify-center bg-black/35 backdrop-blur-md border border-white/20 rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.45)] py-1.5 px-4 max-w-full">
-                    <div id="mosaic-ticker-mobile" class="mosaic-ticker-container relative overflow-hidden min-h-[30px] sm:min-h-[34px] flex items-center justify-center">
+            <!-- 3. [모바일] 영상 하단 전광판 (4번 영역: 에메랄드 네온 뱃지로 선명하게 부각) -->
+            <div class="w-full px-4 pt-1 flex justify-center shrink-0">
+                <div class="inline-flex items-center justify-center bg-slate-950/80 backdrop-blur-md border border-emerald-500/40 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.25)] py-2 px-5 max-w-full ring-1 ring-emerald-400/20">
+                    <div id="mosaic-ticker-mobile" class="mosaic-ticker-container relative overflow-hidden min-h-[32px] sm:min-h-[36px] flex items-center justify-center font-bold text-xs sm:text-sm text-white">
                         <!-- Dynamically generated & assembled by initMosaicTicker() -->
                     </div>
                 </div>
             </div>
 
-            <!-- 4. [모바일] 영상 하단 탈(脫) 박스화 정량적 지표 (초슬림 디바이더 선 구분) -->
-            <div class="w-full px-4 pb-4 shrink-0">
-                <div class="grid grid-cols-2 gap-y-3 text-center select-none py-1">
+            <!-- 4. [모바일] 영상 하단 통계 지표 (5번 영역: 콤팩트한 마이크로 스펙 바로 사이즈 축소) -->
+            <div class="w-full px-5 pt-1 pb-2 shrink-0">
+                <div class="grid grid-cols-2 gap-y-1.5 text-center select-none py-0.5 max-w-xs mx-auto">
                     <!-- 1. 17년 업력 -->
-                    <div class="flex flex-col items-center justify-center py-1.5 px-2 border-r border-white/20">
-                        <div class="flex items-baseline justify-center gap-0.5 text-xl xs:text-2xl font-black text-white tracking-tight leading-none mb-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                            <span>17</span><span class="text-emerald-400 font-extrabold text-sm">년</span>
+                    <div class="flex flex-col items-center justify-center py-0.5 px-1 border-r border-white/15">
+                        <div class="flex items-baseline justify-center gap-0.5 text-base xs:text-lg font-black text-white tracking-tight leading-none mb-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                            <span>17</span><span class="text-emerald-400 font-extrabold text-xs">년</span>
                         </div>
-                        <div class="text-xs font-medium text-white/75 whitespace-nowrap">업력 노하우</div>
+                        <div class="text-[10px] xs:text-[11px] font-medium text-white/65 whitespace-nowrap">업력 노하우</div>
                     </div>
 
                     <!-- 2. 160평 스튜디오 -->
-                    <div class="flex flex-col items-center justify-center py-1.5 px-2">
-                        <div class="flex items-baseline justify-center gap-0.5 text-xl xs:text-2xl font-black text-white tracking-tight leading-none mb-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                            <span>160</span><span class="text-emerald-400 font-extrabold text-sm">평</span>
+                    <div class="flex flex-col items-center justify-center py-0.5 px-1">
+                        <div class="flex items-baseline justify-center gap-0.5 text-base xs:text-lg font-black text-white tracking-tight leading-none mb-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                            <span>160</span><span class="text-emerald-400 font-extrabold text-xs">평</span>
                         </div>
-                        <div class="text-xs font-medium text-white/75 whitespace-nowrap">자체 스튜디오</div>
+                        <div class="text-[10px] xs:text-[11px] font-medium text-white/65 whitespace-nowrap">자체 스튜디오</div>
                     </div>
 
                     <!-- 3. 1,500+ 누적 프로젝트 -->
-                    <div class="flex flex-col items-center justify-center py-1.5 px-2 border-r border-white/20 pt-2 border-t border-t-white/10">
-                        <div class="flex items-baseline justify-center gap-0.5 text-xl xs:text-2xl font-black text-white tracking-tight leading-none mb-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                            <span>1,500</span><span class="text-emerald-400 font-extrabold text-sm">+</span>
+                    <div class="flex flex-col items-center justify-center py-0.5 px-1 border-r border-white/15 pt-1 border-t border-t-white/10">
+                        <div class="flex items-baseline justify-center gap-0.5 text-base xs:text-lg font-black text-white tracking-tight leading-none mb-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                            <span>1,500</span><span class="text-emerald-400 font-extrabold text-xs">+</span>
                         </div>
-                        <div class="text-xs font-medium text-white/75 whitespace-nowrap">누적 프로젝트</div>
+                        <div class="text-[10px] xs:text-[11px] font-medium text-white/65 whitespace-nowrap">누적 프로젝트</div>
                     </div>
 
                     <!-- 4. 100+ 주요 협력기관 -->
-                    <div class="flex flex-col items-center justify-center py-1.5 px-2 pt-2 border-t border-t-white/10">
-                        <div class="flex items-baseline justify-center gap-0.5 text-xl xs:text-2xl font-black text-white tracking-tight leading-none mb-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                            <span>100</span><span class="text-emerald-400 font-extrabold text-sm">+</span>
+                    <div class="flex flex-col items-center justify-center py-0.5 px-1 pt-1 border-t border-t-white/10">
+                        <div class="flex items-baseline justify-center gap-0.5 text-base xs:text-lg font-black text-white tracking-tight leading-none mb-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                            <span>100</span><span class="text-emerald-400 font-extrabold text-xs">+</span>
                         </div>
-                        <div class="text-xs font-medium text-white/75 whitespace-nowrap">주요 협력기관</div>
+                        <div class="text-[10px] xs:text-[11px] font-medium text-white/65 whitespace-nowrap">주요 협력기관</div>
                     </div>
                 </div>
             </div>
