@@ -199,8 +199,8 @@
           {
             "@type": "ListItem",
             "position": 2,
-            "name": "회사소개",
-            "item": "https://whomedia.co.kr/#about"
+            "name": "조직도",
+            "item": "https://whomedia.co.kr/#organization"
           },
           {
             "@type": "ListItem",
@@ -1325,6 +1325,7 @@
                 videoModalOpen: false,
                 activeVideoId: '',
                 activeVideoTitle: '',
+                orgChartExpanded: false,
                 imageModalOpen: false,
                 activeStudioImg: '',
                 activeStudioTitle: '',
@@ -1549,6 +1550,19 @@
                     this.imageModalOpen = false;
                     this.activeStudioImg = '';
                     this.activeStudioTitle = '';
+                },
+                toggleOrgChart() {
+                    this.orgChartExpanded = !this.orgChartExpanded;
+                },
+                openOrgChart() {
+                    this.orgChartExpanded = true;
+                    this.mobileMenuOpen = false;
+                    setTimeout(() => {
+                        const el = document.getElementById('organization');
+                        if (el) {
+                            el.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }, 50);
                 },
                 naverMapUrl: 'https://map.naver.com/p/search/%ED%9B%84%EB%AF%B8%EB%94%94%EC%96%B4/place/13314547',
                 showMobileOrgModal: false,
@@ -2481,11 +2495,15 @@
             </p>
         </div>
 
-        <!-- 4. 하단 영역: 은은한 인프라 수치 요약 -->
+        <!-- 4. 하단 영역: 사업영역 핵심 키워드 -->
         <div class="relative z-10 w-full text-center pb-4 pb-safe">
-            <p class="text-[11px] text-zinc-300 font-light tracking-wide bg-black/40 py-1.5 px-4 rounded-full inline-block backdrop-blur-sm border border-white/10 shadow-md">
-                17년 기획 노하우 · 160평 자체 스튜디오 인프라
-            </p>
+            <div class="inline-flex items-center justify-center flex-wrap gap-1.5 bg-black/55 py-2 px-4 rounded-full backdrop-blur-md border border-white/15 shadow-xl">
+                <span class="text-[11.5px] font-bold text-teal-300">이러닝 개발</span>
+                <span class="text-white/40 text-[10px]">·</span>
+                <span class="text-[11.5px] font-bold text-blue-300">전문 영상 제작</span>
+                <span class="text-white/40 text-[10px]">·</span>
+                <span class="text-[11.5px] font-bold text-amber-300">블렌디드 러닝</span>
+            </div>
         </div>
     </div>
 
@@ -2508,7 +2526,7 @@
             <!-- Desktop Menu Links -->
             <nav class="hidden md:flex items-center gap-7">
                 <a href="#" class="font-semibold text-[15px] text-white/90 hover:text-emerald-300 transition-colors">홈</a>
-                <a href="#organization" class="font-semibold text-[15px] text-white/90 hover:text-emerald-300 transition-colors">회사소개</a>
+                <a href="#organization" @click="orgChartExpanded = true" class="font-semibold text-[15px] text-white/90 hover:text-emerald-300 transition-colors">조직도</a>
                 <a href="#services" class="font-semibold text-[15px] text-white/90 hover:text-emerald-300 transition-colors">사업영역</a>
                 <a href="#studio" class="font-semibold text-[15px] text-white/90 hover:text-emerald-300 transition-colors">스튜디오</a>
                 <a href="#reference" class="font-semibold text-[15px] text-white/90 hover:text-emerald-300 transition-colors">포트폴리오</a>
@@ -2584,15 +2602,15 @@
                     </a>
 
                     <!-- About / Organization -->
-                    <a @click="mobileMenuOpen = false" href="#organization" 
+                    <a @click="openOrgChart()" href="#organization" 
                        class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-xl">🏢</span>
-                            <span class="text-[9px] font-bold text-blue-400 bg-blue-950/60 px-1.5 py-0.5 rounded border border-blue-800/50">ABOUT</span>
+                            <span class="text-xl">👥</span>
+                            <span class="text-[9px] font-bold text-blue-400 bg-blue-950/60 px-1.5 py-0.5 rounded border border-blue-800/50">ORGANIZATION</span>
                         </div>
                         <div>
-                            <div class="font-black text-sm text-white">회사소개</div>
-                            <div class="text-[10px] text-slate-400 mt-0.5">조직 체계 &amp; 역량</div>
+                            <div class="font-black text-sm text-white">조직도</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">전문 조직 체계 &amp; 연구소</div>
                         </div>
                     </a>
 
@@ -2864,26 +2882,48 @@
         </div>
     </section>
 
-    <!-- ORGANIZATION & ECOSYSTEM: (주)후미디어 조직 체계 (회사소개 조직도로 연결) -->
-    <section id="organization" class="scroll-mt-14 py-8 sm:py-16 lg:py-24 bg-slate-50 text-slate-900 border-b border-slate-200 relative overflow-hidden">
+    <!-- ORGANIZATION & ECOSYSTEM: (주)후미디어 조직 체계 (기본 접힘 & 클릭 시 펼쳐지는 최적화 아코디언) -->
+    <section id="organization" class="scroll-mt-14 py-6 sm:py-10 lg:py-14 bg-slate-50 text-slate-900 border-b border-slate-200 relative overflow-hidden">
         <div id="about" class="scroll-mt-24"></div>
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(30,136,229,0.06),transparent_50%)] pointer-events-none"></div>
 
         <div class="w-full max-w-[1280px] mx-auto px-3.5 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center max-w-3xl mx-auto mb-3 sm:mb-12">
-                <span class="inline-block px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1 sm:mb-3 shadow-xs">
+            <div class="text-center max-w-3xl mx-auto mb-4 sm:mb-6">
+                <span class="inline-block px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1 sm:mb-2 shadow-xs">
                     ORGANIZATION &amp; ECOSYSTEM
                 </span>
-                <h2 class="text-xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1 sm:mb-3 break-keep">
-                    조직 체계
+                <h2 class="text-xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1 sm:mb-2 break-keep">
+                    조직도
                 </h2>
-                <p class="text-slate-600 text-xs sm:text-base font-medium break-keep">
+                <p class="text-slate-600 text-xs sm:text-sm md:text-base font-medium break-keep">
                     각 분야 전문 인력이 유기적으로 협업하여 신뢰할 수 있는 품질을 완성합니다.
                 </p>
             </div>
 
+            <div class="max-w-5xl mx-auto flex justify-center">
+                <!-- 1. FOLDED PREVIEW ACCORDION TRIGGER (조직도 펼치기/접기 버튼) -->
+                <button type="button"
+                        @click="toggleOrgChart()"
+                        class="px-6 py-3.5 rounded-2xl text-sm sm:text-base font-black transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center gap-2 select-none border"
+                        :class="orgChartExpanded ? 'bg-slate-800 hover:bg-slate-900 text-white border-slate-700' : 'bg-blue-600 hover:bg-blue-700 text-white border-blue-500 shadow-blue-500/20'">
+                    <span x-text="orgChartExpanded ? '조직도 접기' : '조직도 펼치기'">조직도 펼치기</span>
+                    <svg class="w-5 h-5 transition-transform duration-300" :class="orgChartExpanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+            </div>
+
             <div class="max-w-5xl mx-auto">
-                <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-8 lg:p-10 border border-slate-200 shadow-xl overflow-hidden">
+                <!-- 2. EXPANDED FULL ORGANIZATIONAL TREE DIAGRAM (펼쳐졌을 때 노출되는 조직도 상세 트리) -->
+                <div x-show="orgChartExpanded"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 -translate-y-3"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 translate-y-0"
+                     x-transition:leave-end="opacity-0 -translate-y-3"
+                     class="mt-4 sm:mt-6 bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-8 lg:p-10 border border-slate-200 shadow-xl overflow-hidden"
+                     style="display: none;">
                     
                     <!-- ========================================================= -->
                     <!-- 1. DESKTOP TREE STRUCTURE (md:flex) -->
@@ -3145,6 +3185,16 @@
                             </div>
                         </div>
 
+                    </div>
+
+                    <!-- Bottom Collapse Action Button -->
+                    <div class="mt-6 sm:mt-8 pt-4 border-t border-slate-100 flex justify-center">
+                        <button type="button"
+                                @click="toggleOrgChart()"
+                                class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-xs sm:text-sm font-bold transition-all flex items-center gap-2 cursor-pointer shadow-xs active:scale-95">
+                            <span>조직도 접기</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -3743,7 +3793,7 @@
             </div>
 
             <!-- INFINITE ROLLING MARQUEE TICKER (스튜디오 1~6 상세 스펙 롤링 티커) - Hidden on mobile to preserve single-screen height, shown on md:block -->
-            <div class="hidden md:block relative w-full rounded-3xl bg-white border border-slate-200 overflow-hidden py-5 sm:py-6 shadow-sm mb-8">
+            <div class="hidden md:block relative w-full rounded-3xl bg-white border border-slate-200 overflow-hidden py-5 sm:py-6 shadow-sm mt-6 sm:mt-8 mb-0">
                 <div class="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
                 <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
                 
@@ -3852,16 +3902,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Bottom Info Card -->
-            <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 p-6 sm:p-8 rounded-3xl border border-blue-500/30 shadow-xl text-center text-white">
-                <h3 class="text-lg sm:text-2xl font-extrabold text-white mb-2">
-                    160평 전문 스튜디오 대관 및 시설
-                </h3>
-                <p class="text-xs sm:text-base text-blue-100 font-normal break-keep max-w-2xl mx-auto">
-                    전자칠판, 고성능 카메라, 크로마키, 부조정실을 갖춘 후미디어 스튜디오에서 최상의 콘텐츠를 연출해보세요.
-                </p>
             </div>
         </div>
     </section>
