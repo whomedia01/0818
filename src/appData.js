@@ -80,6 +80,16 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('whomediaApp', () => ({
         scrolled: false, 
         mobileMenuOpen: false, 
+        splashVisible: true,
+        splashFading: false,
+        skipSplash() {
+            if (!this.splashVisible || this.splashFading) return;
+            this.splashFading = true;
+            setTimeout(() => {
+                this.splashVisible = false;
+                this.splashFading = false;
+            }, 450);
+        },
         refTab: 'all',
         searchQuery: '',
         portfolioLimit: 12,
