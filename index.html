@@ -1316,6 +1316,53 @@
             Alpine.data('whomediaApp', () => ({
                 scrolled: false, 
                 mobileMenuOpen: false, 
+                splashVisible: true,
+                splashFading: false,
+                isCinematicTransition: false,
+                splashFlashActive: false,
+                splashAutoTimer: null,
+                splashTimerFade: null,
+                splashTimerHide: null,
+
+                startCinematicTransition() {
+                    if (!this.splashVisible || this.isCinematicTransition) return;
+                    if (this.splashAutoTimer) {
+                        clearTimeout(this.splashAutoTimer);
+                        this.splashAutoTimer = null;
+                    }
+                    if (this.splashTimerFade) {
+                        clearTimeout(this.splashTimerFade);
+                        this.splashTimerFade = null;
+                    }
+                    if (this.splashTimerHide) {
+                        clearTimeout(this.splashTimerHide);
+                        this.splashTimerHide = null;
+                    }
+                    this.isCinematicTransition = true;
+
+                    // 1. Trigger cinematic anamorphic flash & optic bloom
+                    setTimeout(() => {
+                        this.splashFlashActive = true;
+                    }, 450);
+
+                    // 2. Smoothly start fading splash screen to reveal main hero video
+                    setTimeout(() => {
+                        this.splashFading = true;
+                    }, 600);
+
+                    // 3. Complete transition, unmount splash overlay and reset flags cleanly
+                    setTimeout(() => {
+                        this.splashVisible = false;
+                        this.isCinematicTransition = false;
+                        this.splashFlashActive = false;
+                        this.splashFading = false;
+                    }, 880);
+                },
+
+                skipSplash() {
+                    this.startCinematicTransition();
+                },
+
                 refTab: 'all',
                 searchQuery: '',
                 portfolioIndex: 0,
@@ -1679,39 +1726,25 @@
                     }
                 },
 
-                splashTimerFade: null,
-                splashTimerHide: null,
-
                 initMobileSplash() {
                     try {
-                        // 모바일 화면(폭 768px 이하)일 때 무조건 매번 실행
                         const isMobile = window.innerWidth <= 768;
-
                         if (isMobile) {
                             this.splashVisible = true;
                             this.splashFading = false;
+                            this.isCinematicTransition = false;
+                            this.splashFlashActive = false;
 
-                            // 7.5초(7,500ms) 후 부드러운 페이드아웃 시작
-                            this.splashTimerFade = setTimeout(() => {
-                                this.splashFading = true;
-                            }, 7500);
-
-                            // 8.0초(8,000ms) 후 스플래시 화면 완전 제거 및 본문 활성화
-                            this.splashTimerHide = setTimeout(() => {
-                                this.splashVisible = false;
-                                this.splashFading = false;
-                            }, 8000);
+                            // 5.5초 후 자동 시네마틱 트랜지션 실행
+                            this.splashAutoTimer = setTimeout(() => {
+                                this.startCinematicTransition();
+                            }, 5500);
+                        } else {
+                            this.splashVisible = false;
                         }
                     } catch(e) {
                         console.warn('Splash screen init error:', e);
                     }
-                },
-
-                skipSplash() {
-                    if (this.splashTimerFade) clearTimeout(this.splashTimerFade);
-                    if (this.splashTimerHide) clearTimeout(this.splashTimerHide);
-                    this.splashFading = false;
-                    this.splashVisible = false;
                 },
 
                 // [슬라이더 고화질 배경 이미지 사전 로딩 - CLS & 깜빡임 0.00% 보장]
@@ -3061,13 +3094,13 @@
             </div>
 
             <div class="max-w-5xl mx-auto flex justify-center">
-                <!-- 1. FOLDED PREVIEW ACCORDION TRIGGER (조직도 펼치기/접기 버튼) -->
+                <!-- 1. FOLDED PREVIEW ACCORDION TRIGGER (펼쳐보기/접기 컴팩트 버튼) -->
                 <button type="button"
                         @click="toggleOrgChart()"
-                        class="px-6 py-3.5 rounded-2xl text-sm sm:text-base font-black transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center gap-2 select-none border"
-                        :class="orgChartExpanded ? 'bg-slate-800 hover:bg-slate-900 text-white border-slate-700' : 'bg-blue-600 hover:bg-blue-700 text-white border-blue-500 shadow-blue-500/20'">
-                    <span x-text="orgChartExpanded ? '조직도 접기' : '조직도 펼치기'">조직도 펼치기</span>
-                    <svg class="w-5 h-5 transition-transform duration-300" :class="orgChartExpanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="px-4 py-1.5 sm:px-4.5 sm:py-2 rounded-full text-xs sm:text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 select-none border"
+                        :class="orgChartExpanded ? 'bg-slate-700 hover:bg-slate-800 text-white border-slate-600' : 'bg-blue-600 hover:bg-blue-700 text-white border-blue-500 shadow-blue-500/20'">
+                    <span x-text="orgChartExpanded ? '접기' : '펼쳐보기'">펼쳐보기</span>
+                    <svg class="w-3.5 h-3.5 transition-transform duration-300" :class="orgChartExpanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
                     </svg>
                 </button>
