@@ -1123,7 +1123,24 @@
             touch-action: manipulation;
         }
 
+        /* Mobile 1-Screen (100dvh) Viewport Fit & Snap Styles */
         @media (max-width: 767px) {
+            html, body {
+                scroll-snap-type: y mandatory;
+                scroll-padding-top: 3.5rem;
+                scroll-padding-bottom: 4.2rem;
+            }
+
+            .mobile-snap-section {
+                height: 100dvh !important;
+                min-height: 100dvh !important;
+                max-height: 100dvh !important;
+                scroll-snap-align: start !important;
+                scroll-snap-stop: always !important;
+                overflow: hidden !important;
+                box-sizing: border-box !important;
+            }
+
             .mobile-screen-section {
                 min-height: auto;
                 height: auto;
@@ -1372,6 +1389,11 @@
                 videoModalOpen: false,
                 activeVideoId: '',
                 activeVideoTitle: '',
+                ytPlayer: null,
+                ytIsMuted: true,
+                ytVolume: 50,
+                ytIsPlaying: true,
+                ytIsReady: false,
                 orgChartExpanded: false,
                 imageModalOpen: false,
                 activeStudioImg: '',
@@ -1555,8 +1577,16 @@
                     this.activeVideoId = videoId || this.currentPortfolioItem.id;
                     this.activeVideoTitle = videoTitle || this.currentPortfolioItem.title;
                     this.videoModalOpen = true;
+                    this.ytIsMuted = true;
+                    this.ytVolume = 50;
+                    this.ytIsPlaying = true;
+                    this.ytIsReady = false;
+                    this.$nextTick(() => {
+                        this.initYouTubePlayer();
+                    });
                 },
                 closeModal() {
+                    this.destroyYouTubePlayer();
                     this.videoModalOpen = false;
                     this.activeVideoId = '';
                     this.activeVideoTitle = '';
@@ -1568,11 +1598,131 @@
                     this.nextPortfolioItem();
                     this.activeVideoId = this.currentPortfolioItem.id;
                     this.activeVideoTitle = this.currentPortfolioItem.title;
+                    this.loadYouTubeVideo(this.activeVideoId);
                 },
                 prevModalVideo() {
                     this.prevPortfolioItem();
                     this.activeVideoId = this.currentPortfolioItem.id;
                     this.activeVideoTitle = this.currentPortfolioItem.title;
+                    this.loadYouTubeVideo(this.activeVideoId);
+                },
+                initYouTubePlayer() {
+                    const container = document.getElementById('custom-yt-player-target');
+                    if (!container) return;
+                    
+                    this.destroyYouTubePlayer();
+
+                    const createPlayer = () => {
+                        if (window.YT && window.YT.Player) {
+                            this.ytPlayer = new window.YT.Player('custom-yt-player-target', {
+                                videoId: this.activeVideoId,
+                                playerVars: {
+                                    autoplay: 1,
+                                    mute: 1,
+                                    controls: 0,
+                                    rel: 0,
+                                    modestbranding: 1,
+                                    playsinline: 1,
+                                    disablekb: 1,
+                                    fs: 0,
+                                    iv_load_policy: 3
+                                },
+                                events: {
+                                    onReady: (event) => {
+                                        this.ytIsReady = true;
+                                        try {
+                                            event.target.mute();
+                                            this.ytIsMuted = true;
+                                            event.target.playVideo();
+                                            this.ytIsPlaying = true;
+                                        } catch (e) {}
+                                    },
+                                    onStateChange: (event) => {
+                                        if (window.YT && window.YT.PlayerState) {
+                                            if (event.data === window.YT.PlayerState.PLAYING) {
+                                                this.ytIsPlaying = true;
+                                            } else if (event.data === window.YT.PlayerState.PAUSED) {
+                                                this.ytIsPlaying = false;
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        } else {
+                            setTimeout(createPlayer, 100);
+                        }
+                    };
+
+                    createPlayer();
+                },
+                loadYouTubeVideo(videoId) {
+                    if (this.ytPlayer && typeof this.ytPlayer.loadVideoById === 'function') {
+                        try {
+                            this.ytPlayer.loadVideoById({
+                                videoId: videoId,
+                                startSeconds: 0
+                            });
+                            this.ytPlayer.mute();
+                            this.ytIsMuted = true;
+                            this.ytIsPlaying = true;
+                        } catch (e) {
+                            this.initYouTubePlayer();
+                        }
+                    } else {
+                        this.initYouTubePlayer();
+                    }
+                },
+                destroyYouTubePlayer() {
+                    if (this.ytPlayer && typeof this.ytPlayer.destroy === 'function') {
+                        try {
+                            this.ytPlayer.destroy();
+                        } catch (e) {}
+                    }
+                    this.ytPlayer = null;
+                    this.ytIsReady = false;
+                },
+                toggleYtMute() {
+                    if (!this.ytPlayer) return;
+                    try {
+                        if (this.ytIsMuted) {
+                            this.ytPlayer.unMute();
+                            const vol = this.ytVolume > 0 ? this.ytVolume : 50;
+                            this.ytPlayer.setVolume(vol);
+                            this.ytVolume = vol;
+                            this.ytIsMuted = false;
+                        } else {
+                            this.ytPlayer.mute();
+                            this.ytIsMuted = true;
+                        }
+                    } catch (e) {}
+                },
+                setYtVolume(val) {
+                    this.ytVolume = parseInt(val, 10);
+                    if (!this.ytPlayer) return;
+                    try {
+                        if (this.ytVolume === 0) {
+                            this.ytPlayer.mute();
+                            this.ytIsMuted = true;
+                        } else {
+                            if (this.ytIsMuted) {
+                                this.ytPlayer.unMute();
+                                this.ytIsMuted = false;
+                            }
+                            this.ytPlayer.setVolume(this.ytVolume);
+                        }
+                    } catch (e) {}
+                },
+                toggleYtPlay() {
+                    if (!this.ytPlayer) return;
+                    try {
+                        if (this.ytIsPlaying) {
+                            this.ytPlayer.pauseVideo();
+                            this.ytIsPlaying = false;
+                        } else {
+                            this.ytPlayer.playVideo();
+                            this.ytIsPlaying = true;
+                        }
+                    } catch (e) {}
                 },
                 toggleFullScreen() {
                     const elem = this.$refs.videoModalContainer || document.documentElement;
@@ -2245,6 +2395,8 @@
             setTimeout(extractAndApplyDynamicSeoMetaKeywords, 100);
         }
     </script>
+    <!-- YouTube IFrame Player API for Custom Controls -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js" crossorigin="anonymous"></script>
 
     <style>
@@ -3432,44 +3584,48 @@
     </section>
 
     <!-- BUSINESS NETWORK: (주)후미디어 핵심 사업 영역 -->
-    <section id="services" aria-label="주요 사업 영역 (에듀테크 및 K-MOOC 전문화 솔루션)" class="scroll-mt-16 sm:scroll-mt-20 py-4 sm:py-12 lg:py-16 bg-white text-slate-900 border-t border-b border-slate-200" @mouseenter="stopServiceAutoPlay()" @mouseleave="startServiceAutoPlay()">
-        <div class="w-full max-w-[1280px] mx-auto px-3 sm:px-6 lg:px-8">
-            <div class="w-full text-center mb-3 sm:mb-6 flex flex-col items-center">
-                <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight mb-1.5 break-keep">
+    <section id="services" aria-label="주요 사업 영역 (에듀테크 및 K-MOOC 전문화 솔루션)" 
+             class="scroll-mt-16 sm:scroll-mt-20 py-4 sm:py-12 lg:py-16 bg-white text-slate-900 border-t border-b border-slate-200 mobile-snap-section flex flex-col justify-between pt-[calc(3.5rem+env(safe-area-inset-top))] pb-[calc(4.2rem+env(safe-area-inset-bottom))] px-3 sm:px-6 lg:px-8 overflow-hidden" 
+             @mouseenter="stopServiceAutoPlay()" @mouseleave="startServiceAutoPlay()">
+        <div class="w-full max-w-[1280px] mx-auto flex-1 flex flex-col justify-between min-h-0">
+            <!-- Header (Mobile Compact) -->
+            <div class="w-full text-center mb-1.5 sm:mb-6 flex flex-col items-center shrink-0">
+                <span class="text-[10px] md:text-xs font-bold tracking-widest text-teal-600 uppercase mb-0.5">CORE CAPABILITIES</span>
+                <h2 class="text-lg md:text-3xl font-extrabold text-slate-900 tracking-tight mb-0.5 sm:mb-1.5 break-keep">
                     핵심 사업 영역
                 </h2>
-                <p class="text-xs md:text-sm text-slate-600 font-normal leading-relaxed max-w-lg mx-auto break-keep">
-                    이러닝 설계부터 교육 영상 제작, 교육과정 기획 및 운영까지 맞춤형 에듀테크 솔루션을 제공합니다.
+                <p class="text-[11px] md:text-sm text-slate-600 font-normal leading-tight md:leading-relaxed max-w-lg mx-auto break-keep">
+                    이러닝 설계부터 영상 제작, 교육과정 기획 및 운영까지 맞춤형 에듀테크 솔루션을 제공합니다.
                 </p>
             </div>
 
             <!-- Category Pills & Navigation Controls -->
-            <div class="flex items-center justify-between gap-1.5 sm:gap-2 mb-2.5 sm:mb-5 max-w-4xl mx-auto">
+            <div class="flex items-center justify-between gap-1.5 sm:gap-2 mb-1.5 sm:mb-5 max-w-4xl mx-auto w-full shrink-0">
                 <button @click="prevServiceCard(); restartServiceAutoPlay(8000);" 
                         class="hidden sm:flex p-2.5 sm:p-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-all shrink-0 active:scale-95 cursor-pointer shadow-xs"
                         aria-label="이전 사업 영역 보기">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
                 </button>
 
-                <!-- Category Pills Bar (텍스트 넘침 방지 및 반응형 콤팩트 패딩) -->
+                <!-- Category Pills Bar (Slimmer padding for mobile fit) -->
                 <div class="grid grid-cols-3 gap-1 xs:gap-1.5 sm:flex sm:items-center sm:gap-3 sm:overflow-x-auto no-scrollbar py-0.5 px-0.5 w-full sm:w-auto flex-1 justify-center">
                     <button @click="selectServiceCard(0); restartServiceAutoPlay(8000);"
                             :class="activeServiceIndex === 0 ? 'bg-teal-600 text-white font-black shadow-md border-teal-600 ring-2 ring-teal-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
-                            class="min-w-0 px-1 py-1.5 xs:px-2 xs:py-2 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10.5px] xs:text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
+                            class="min-w-0 px-1 py-1 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] xs:text-[11px] sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
                         <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0" :class="activeServiceIndex === 0 ? 'bg-white animate-pulse' : 'bg-teal-500'"></span>
                         <span class="break-keep leading-tight font-bold">이러닝 콘텐츠 개발</span>
                     </button>
 
                     <button @click="selectServiceCard(1); restartServiceAutoPlay(8000);"
                             :class="activeServiceIndex === 1 ? 'bg-amber-600 text-white font-black shadow-md border-amber-600 ring-2 ring-amber-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
-                            class="min-w-0 px-1 py-1.5 xs:px-2 xs:py-2 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10.5px] xs:text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
+                            class="min-w-0 px-1 py-1 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] xs:text-[11px] sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
                         <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0" :class="activeServiceIndex === 1 ? 'bg-white animate-pulse' : 'bg-amber-500'"></span>
                         <span class="break-keep leading-tight font-bold">교육과정 기획/운영</span>
                     </button>
 
                     <button @click="selectServiceCard(2); restartServiceAutoPlay(8000);"
                             :class="activeServiceIndex === 2 ? 'bg-blue-600 text-white font-black shadow-md border-blue-600 ring-2 ring-blue-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
-                            class="min-w-0 px-1 py-1.5 xs:px-2 xs:py-2 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10.5px] xs:text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
+                            class="min-w-0 px-1 py-1 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] xs:text-[11px] sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
                         <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0" :class="activeServiceIndex === 2 ? 'bg-white animate-pulse' : 'bg-blue-500'"></span>
                         <span class="break-keep leading-tight font-bold">전문 영상 제작</span>
                     </button>
@@ -3485,7 +3641,7 @@
             <!-- PROMINENT ANIMATED ROLLING FEATURED SLIDER (IMAGE BACKGROUND + OVERLAID TEXT + INTERACTIVE SOLUTIONS) -->
             <div @touchstart="touchStartX = $event.touches[0].clientX"
                  @touchend="touchEndX = $event.changedTouches[0].clientX; if (touchStartX - touchEndX > 30) { nextServiceCard(); restartServiceAutoPlay(8000); } else if (touchEndX - touchStartX > 30) { prevServiceCard(); restartServiceAutoPlay(8000); }"
-                 class="spotlight-section relative w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl bg-slate-900 text-white overflow-hidden shadow-xl sm:shadow-2xl border border-slate-200/80 mb-2 sm:mb-6 min-h-[290px] xs:min-h-[310px] sm:min-h-[420px] lg:min-h-[480px]">
+                 class="spotlight-section relative w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl bg-slate-900 text-white overflow-hidden shadow-xl sm:shadow-2xl border border-slate-200/80 flex-1 min-h-0 h-[48vh] max-h-[380px] sm:h-auto sm:max-h-none sm:min-h-[420px] lg:min-h-[480px]">
                 
                 <!-- ========================================================= -->
                 <!-- Slide 0: 이러닝 콘텐츠 개발 -->
@@ -3749,43 +3905,43 @@
     </section>
 
     <!-- STUDIO & INFRASTRUCTURE GALLERY -->
-    <section id="studio" aria-label="160평 최첨단 스튜디오 및 제작 인프라" class="scroll-mt-16 sm:scroll-mt-20 py-8 sm:py-16 lg:py-24 bg-slate-50 text-slate-900 relative overflow-hidden border-t border-b border-slate-200">
+    <section id="studio" aria-label="160평 최첨단 스튜디오 및 제작 인프라" 
+             class="scroll-mt-16 sm:scroll-mt-20 py-3 sm:py-16 lg:py-24 bg-slate-50 text-slate-900 relative overflow-hidden border-t border-b border-slate-200 mobile-snap-section flex flex-col justify-between pt-[calc(3.5rem+env(safe-area-inset-top))] pb-[calc(4.2rem+env(safe-area-inset-bottom))] px-3.5 sm:px-6 lg:px-8">
         <!-- Ambient Particles Canvas -->
         <canvas id="studio-particles-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-30"></canvas>
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,210,132,0.06),transparent_50%),radial-gradient(circle_at_80%_80%,rgba(59,130,246,0.06),transparent_50%)] pointer-events-none"></div>
 
-        <div class="w-full max-w-[1280px] mx-auto px-3.5 sm:px-6 lg:px-8 relative z-10">
-            <div class="w-full text-center mb-3 sm:mb-6 flex flex-col items-center">
-                <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight mb-1.5 break-keep">
+        <div class="w-full max-w-[1280px] mx-auto flex-1 flex flex-col justify-between min-h-0 relative z-10">
+            <!-- Header (Mobile Compact) -->
+            <div class="w-full text-center mb-1.5 sm:mb-6 flex flex-col items-center shrink-0">
+                <span class="text-[10px] md:text-xs font-bold tracking-widest text-teal-600 uppercase mb-0.5">STUDIO &amp; INFRASTRUCTURE</span>
+                <h2 class="text-lg md:text-3xl font-extrabold text-slate-900 tracking-tight mb-0.5 sm:mb-1.5 break-keep">
                     스튜디오 &amp; 제작 환경
                 </h2>
-                <p class="text-xs md:text-sm text-slate-600 font-normal leading-relaxed max-w-lg mx-auto break-keep">
+                <p class="text-[11px] md:text-sm text-slate-600 font-normal leading-tight md:leading-relaxed max-w-lg mx-auto break-keep">
                     160평 규모의 전용 스튜디오, 전자칠판, 크로마키, 고성능 카메라 및 부조정실 완비
                 </p>
             </div>
 
             <!-- Dynamic High-Tech Compact Studio Environment Cards (제작 인프라 4대 핵심) -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3.5 mb-3 sm:mb-6">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-1.5 sm:gap-3.5 mb-1.5 sm:mb-6 shrink-0">
                 
                 <!-- Card 01: 대형 스튜디오 -->
-                <div class="tilt-card group relative bg-slate-950/95 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 border border-slate-800 hover:border-emerald-400/80 shadow-md sm:shadow-lg transition-all duration-300 overflow-hidden hover:-translate-y-0.5 isolate">
-                    <!-- Animated Ambient Glow Aura -->
-                    <div class="absolute -right-6 -bottom-6 w-20 h-20 sm:w-28 sm:h-28 bg-emerald-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-emerald-400/30 transition-all duration-500"></div>
+                <div class="tilt-card group relative bg-slate-950/95 rounded-xl px-2.5 sm:px-4 py-1.5 sm:py-3 border border-slate-800 hover:border-emerald-400/80 shadow-xs sm:shadow-lg transition-all duration-300 overflow-hidden isolate">
+                    <div class="absolute -right-6 -bottom-6 w-16 h-16 sm:w-28 sm:h-28 bg-emerald-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-emerald-400/30 transition-all duration-500"></div>
                     <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
 
-                    <!-- Left Text Area with right padding for icon -->
-                    <div class="relative z-10 text-left pr-7 sm:pr-8">
-                        <h3 class="text-xs sm:text-sm font-bold text-white mb-0.5 tracking-tight group-hover:text-emerald-300 transition-colors drop-shadow-sm truncate">
+                    <div class="relative z-10 text-left pr-6 sm:pr-8">
+                        <h3 class="text-[11px] sm:text-sm font-bold text-white mb-0.5 tracking-tight group-hover:text-emerald-300 transition-colors drop-shadow-sm truncate">
                             대형 스튜디오
                         </h3>
-                        <p class="text-[10px] sm:text-xs text-slate-300/80 font-normal leading-snug break-keep">
+                        <p class="text-[9.5px] sm:text-xs text-slate-300/80 font-normal leading-tight break-keep">
                             6개 전용 스튜디오 인프라
                         </p>
                     </div>
 
-                    <!-- Bottom Right Micro Icon -->
-                    <div class="absolute bottom-2.5 right-3 z-10 text-emerald-400">
-                        <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-full border border-emerald-500/40 relative flex items-center justify-center overflow-hidden bg-emerald-950/40">
+                    <div class="absolute bottom-2 right-2.5 z-10 text-emerald-400">
+                        <div class="w-3.5 h-3.5 sm:w-5 sm:h-5 rounded-full border border-emerald-500/40 relative flex items-center justify-center overflow-hidden bg-emerald-950/40">
                             <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500/40 to-transparent origin-bottom-left animate-studio-radar"></div>
                             <div class="w-1 h-1 rounded-full bg-emerald-400 z-10 shadow-[0_0_4px_#34d399]"></div>
                         </div>
@@ -3793,76 +3949,67 @@
                 </div>
 
                 <!-- Card 02: 전자칠판 -->
-                <div class="tilt-card group relative bg-slate-950/95 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 border border-slate-800 hover:border-blue-400/80 shadow-md sm:shadow-lg transition-all duration-300 overflow-hidden hover:-translate-y-0.5 isolate">
-                    <!-- Animated Ambient Glow Aura -->
-                    <div class="absolute -right-6 -bottom-6 w-20 h-20 sm:w-28 sm:h-28 bg-blue-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-blue-400/30 transition-all duration-500"></div>
+                <div class="tilt-card group relative bg-slate-950/95 rounded-xl px-2.5 sm:px-4 py-1.5 sm:py-3 border border-slate-800 hover:border-blue-400/80 shadow-xs sm:shadow-lg transition-all duration-300 overflow-hidden isolate">
+                    <div class="absolute -right-6 -bottom-6 w-16 h-16 sm:w-28 sm:h-28 bg-blue-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-blue-400/30 transition-all duration-500"></div>
                     <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
 
-                    <!-- Left Text Area with right padding for icon -->
-                    <div class="relative z-10 text-left pr-7 sm:pr-8">
-                        <h3 class="text-xs sm:text-sm font-bold text-white mb-0.5 tracking-tight group-hover:text-blue-300 transition-colors drop-shadow-sm truncate">
+                    <div class="relative z-10 text-left pr-6 sm:pr-8">
+                        <h3 class="text-[11px] sm:text-sm font-bold text-white mb-0.5 tracking-tight group-hover:text-blue-300 transition-colors drop-shadow-sm truncate">
                             전자칠판
                         </h3>
-                        <p class="text-[10px] sm:text-xs text-slate-300/80 font-normal leading-snug break-keep">
+                        <p class="text-[9.5px] sm:text-xs text-slate-300/80 font-normal leading-tight break-keep">
                             실시간 판서 이러닝 시스템
                         </p>
                     </div>
 
-                    <!-- Bottom Right Micro Icon -->
-                    <div class="absolute bottom-2.5 right-3 z-10 text-blue-400">
-                        <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-lg bg-blue-950/60 border border-blue-500/40 flex items-center justify-center relative">
-                            <span class="animate-studio-touch w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full border border-blue-400/80 bg-blue-400/20"></span>
+                    <div class="absolute bottom-2 right-2.5 z-10 text-blue-400">
+                        <div class="w-3.5 h-3.5 sm:w-5 sm:h-5 rounded-lg bg-blue-950/60 border border-blue-500/40 flex items-center justify-center relative">
+                            <span class="animate-studio-touch w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full border border-blue-400/80 bg-blue-400/20"></span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Card 03: 대형 크로마키 -->
-                <div class="tilt-card group relative bg-slate-950/95 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 border border-slate-800 hover:border-teal-400/80 shadow-md sm:shadow-lg transition-all duration-300 overflow-hidden hover:-translate-y-0.5 isolate">
-                    <!-- Animated Ambient Glow Aura -->
-                    <div class="absolute -right-6 -bottom-6 w-20 h-20 sm:w-28 sm:h-28 bg-teal-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-teal-400/30 transition-all duration-500"></div>
+                <div class="tilt-card group relative bg-slate-950/95 rounded-xl px-2.5 sm:px-4 py-1.5 sm:py-3 border border-slate-800 hover:border-teal-400/80 shadow-xs sm:shadow-lg transition-all duration-300 overflow-hidden isolate">
+                    <div class="absolute -right-6 -bottom-6 w-16 h-16 sm:w-28 sm:h-28 bg-teal-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-teal-400/30 transition-all duration-500"></div>
                     <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
 
-                    <!-- Left Text Area with right padding for icon -->
-                    <div class="relative z-10 text-left pr-7 sm:pr-8">
-                        <h3 class="text-xs sm:text-sm font-bold text-white mb-0.5 tracking-tight group-hover:text-teal-300 transition-colors drop-shadow-sm truncate">
+                    <div class="relative z-10 text-left pr-6 sm:pr-8">
+                        <h3 class="text-[11px] sm:text-sm font-bold text-white mb-0.5 tracking-tight group-hover:text-teal-300 transition-colors drop-shadow-sm truncate">
                             대형 크로마키
                         </h3>
-                        <p class="text-[10px] sm:text-xs text-slate-300/80 font-normal leading-snug break-keep">
+                        <p class="text-[9.5px] sm:text-xs text-slate-300/80 font-normal leading-tight break-keep">
                             실시간 CG 가상합성 세트
                         </p>
                     </div>
 
-                    <!-- Bottom Right Micro Icon -->
-                    <div class="absolute bottom-2.5 right-3 z-10 text-teal-400">
-                        <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-lg bg-teal-950/60 border border-teal-500/40 flex items-center justify-center">
+                    <div class="absolute bottom-2 right-2.5 z-10 text-teal-400">
+                        <div class="w-3.5 h-3.5 sm:w-5 sm:h-5 rounded-lg bg-teal-950/60 border border-teal-500/40 flex items-center justify-center">
                             <div class="animate-studio-chroma flex flex-col gap-0.5 items-center justify-center">
-                                <span class="w-2.5 h-0.5 bg-teal-400 rounded-full"></span>
-                                <span class="w-2 h-0.5 bg-teal-300 rounded-full"></span>
-                                <span class="w-1.5 h-0.5 bg-teal-200 rounded-full"></span>
+                                <span class="w-2 sm:w-2.5 h-0.5 bg-teal-400 rounded-full"></span>
+                                <span class="w-1.5 sm:w-2 h-0.5 bg-teal-300 rounded-full"></span>
+                                <span class="w-1 sm:w-1.5 h-0.5 bg-teal-200 rounded-full"></span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Card 04: 전용 부조정실 -->
-                <div class="tilt-card group relative bg-slate-950/95 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 border border-slate-800 hover:border-purple-400/80 shadow-md sm:shadow-lg transition-all duration-300 overflow-hidden hover:-translate-y-0.5 isolate">
-                    <!-- Animated Ambient Glow Aura -->
-                    <div class="absolute -right-6 -bottom-6 w-20 h-20 sm:w-28 sm:h-28 bg-purple-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-purple-400/30 transition-all duration-500"></div>
+                <div class="tilt-card group relative bg-slate-950/95 rounded-xl px-2.5 sm:px-4 py-1.5 sm:py-3 border border-slate-800 hover:border-purple-400/80 shadow-xs sm:shadow-lg transition-all duration-300 overflow-hidden isolate">
+                    <div class="absolute -right-6 -bottom-6 w-16 h-16 sm:w-28 sm:h-28 bg-purple-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-purple-400/30 transition-all duration-500"></div>
                     <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
 
-                    <!-- Left Text Area with right padding for icon -->
-                    <div class="relative z-10 text-left pr-7 sm:pr-8">
-                        <h3 class="text-xs sm:text-sm font-bold text-white mb-0.5 tracking-tight group-hover:text-purple-300 transition-colors drop-shadow-sm truncate">
+                    <div class="relative z-10 text-left pr-6 sm:pr-8">
+                        <h3 class="text-[11px] sm:text-sm font-bold text-white mb-0.5 tracking-tight group-hover:text-purple-300 transition-colors drop-shadow-sm truncate">
                             전용 부조정실
                         </h3>
-                        <p class="text-[10px] sm:text-xs text-slate-300/80 font-normal leading-snug break-keep">
+                        <p class="text-[9.5px] sm:text-xs text-slate-300/80 font-normal leading-tight break-keep">
                             다채널 스위쳐 &amp; 모니터링
                         </p>
                     </div>
 
-                    <!-- Bottom Right Micro Icon -->
-                    <div class="absolute bottom-2.5 right-3 z-10 text-purple-400">
-                        <div class="flex items-end gap-0.5 h-3.5 sm:h-4 px-1 py-0.5 bg-purple-950/60 rounded border border-purple-500/40">
+                    <div class="absolute bottom-2 right-2.5 z-10 text-purple-400">
+                        <div class="flex items-end gap-0.5 h-3 sm:h-4 px-1 py-0.5 bg-purple-950/60 rounded border border-purple-500/40">
                             <span class="w-0.5 bg-purple-400 rounded-xs animate-studio-eq-1"></span>
                             <span class="w-0.5 bg-purple-300 rounded-xs animate-studio-eq-2"></span>
                             <span class="w-0.5 bg-purple-400 rounded-xs animate-studio-eq-3"></span>
@@ -3873,11 +4020,11 @@
             </div>
 
             <!-- CLEAN VISUAL SHOWCASE SLIDER (100% Pure Studio Photography - 실사 갤러리 상시 노출) -->
-            <div class="relative w-full max-w-5xl mx-auto mb-4 sm:mb-12">
+            <div class="relative w-full max-w-5xl mx-auto flex-1 min-h-0 flex flex-col justify-center">
                 <!-- Main Cinematic Slider Stage -->
                 <div @touchstart="studioTouchStartX = $event.touches[0].clientX"
                      @touchend="studioTouchEndX = $event.changedTouches[0].clientX; if (studioTouchStartX - studioTouchEndX > 40) { nextStudioSlide(); } else if (studioTouchEndX - studioTouchStartX > 40) { prevStudioSlide(); }"
-                     class="cinematic-stage-container relative w-full aspect-video rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 shadow-2xl border border-slate-200 group cursor-pointer isolate"
+                     class="cinematic-stage-container relative w-full aspect-[16/9] max-h-[36vh] sm:max-h-none rounded-xl sm:rounded-3xl overflow-hidden bg-slate-950 shadow-xl border border-slate-200 group cursor-pointer isolate shrink-0">
                      @click="openImageModal(studioInfrastructure[activeStudioIndex]?.imageUrl || studioInfrastructure[activeStudioIndex]?.fallbackUrl, studioInfrastructure[activeStudioIndex]?.title || '스튜디오 전경')">
 
                     <!-- Studio Slide Images Loop (Clean View - High-End Tone & Ken Burns Depth) -->
@@ -4053,27 +4200,30 @@
     </section>
 
     <!-- PORTFOLIO -->
-    <section id="reference" aria-label="포트폴리오 및 주요 제작 실적" class="scroll-mt-16 sm:scroll-mt-20 py-8 sm:py-16 lg:py-24 bg-white relative overflow-hidden">
-        <div class="w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="w-full text-center mb-4 sm:mb-6 flex flex-col items-center">
-                <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight mb-1.5 break-keep">
+    <section id="reference" aria-label="포트폴리오 및 주요 제작 실적" 
+             class="scroll-mt-16 sm:scroll-mt-20 py-4 sm:py-16 lg:py-24 bg-white relative overflow-hidden mobile-snap-section flex flex-col justify-between pt-[calc(3.5rem+env(safe-area-inset-top))] pb-[calc(4.2rem+env(safe-area-inset-bottom))] px-3 sm:px-6 lg:px-8">
+        <div class="w-full max-w-[1280px] mx-auto flex-1 flex flex-col justify-between min-h-0">
+            <!-- Header (Mobile Compact) -->
+            <div class="w-full text-center mb-1.5 sm:mb-6 flex flex-col items-center shrink-0">
+                <span class="text-[10px] md:text-xs font-bold tracking-widest text-teal-600 uppercase mb-0.5">PORTFOLIO</span>
+                <h2 class="text-lg md:text-3xl font-extrabold text-slate-900 tracking-tight mb-0.5 sm:mb-1.5 break-keep">
                     콘텐츠 개발 &amp; 영상 포트폴리오
                 </h2>
-                <p class="text-xs md:text-sm text-slate-600 font-normal leading-relaxed max-w-lg mx-auto break-keep">
-                    교육 컨설팅부터 미디어 영상 제작, 이러닝, 평생교육, 디지털 홍보까지 분야별 주요 수행 사례입니다.
+                <p class="text-[11px] md:text-sm text-slate-600 font-normal leading-tight md:leading-relaxed max-w-lg mx-auto break-keep">
+                    교육 컨설팅부터 미디어 영상 제작, 이러닝, 평생교육, 디지털 홍보까지 주요 수행 사례입니다.
                 </p>
             </div>
 
             <!-- SINGLE VIDEO SHOWCASE (1번에 1개 영상 노출 & 클릭으로 다음 영상 전환) -->
-            <div class="w-full max-w-3xl mx-auto"
+            <div class="w-full max-w-3xl mx-auto flex-1 min-h-0 flex flex-col justify-center"
                  @touchstart="portfolioTouchStartX = $event.touches[0].clientX"
                  @touchend="portfolioTouchEndX = $event.changedTouches[0].clientX; if (portfolioTouchStartX - portfolioTouchEndX > 40) { nextPortfolioItem(); } else if (portfolioTouchEndX - portfolioTouchStartX > 40) { prevPortfolioItem(); }">
                 
                 <!-- Main Showcase Card -->
-                <div class="group relative bg-slate-900 rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-800 shadow-xl transition-all duration-300">
+                <div class="group relative bg-slate-900 rounded-xl sm:rounded-3xl overflow-hidden border border-slate-800 shadow-xl transition-all duration-300 flex flex-col justify-between">
                     
                     <!-- Video Stage / 16:9 Thumbnail -->
-                    <div class="relative aspect-video w-full bg-slate-950 overflow-hidden cursor-pointer"
+                    <div class="relative aspect-video max-h-[42vh] sm:max-h-none w-full bg-slate-950 overflow-hidden cursor-pointer"
                          @click="openModal(currentPortfolioItem.id, currentPortfolioItem.title)">
                         <img :src="'https://img.youtube.com/vi/' + currentPortfolioItem.id + '/maxresdefault.jpg'" 
                              @error="$el.src='https://img.youtube.com/vi/' + currentPortfolioItem.id + '/hqdefault.jpg'"
@@ -4085,53 +4235,53 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-black/30 to-transparent"></div>
 
                         <!-- Top Tag Badge -->
-                        <div class="absolute top-3 sm:top-4 left-3 sm:left-4 z-10 pointer-events-none">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-slate-100 text-[11px] sm:text-xs font-bold shadow-md border border-white/20"
+                        <div class="absolute top-2.5 sm:top-4 left-2.5 sm:left-4 z-10 pointer-events-none">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-slate-100 text-[10px] sm:text-xs font-bold shadow-md border border-white/20"
                                   x-text="currentPortfolioItem.tag">
                             </span>
                         </div>
 
                         <!-- Left / Right Quick Arrow Navigation Overlays -->
                         <button @click.stop="prevPortfolioItem()"
-                                class="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-slate-800 hover:text-teal-300 backdrop-blur-md text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg border border-white/10"
+                                class="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-slate-800 hover:text-teal-300 backdrop-blur-md text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg border border-white/10"
                                 title="이전 영상">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
                         </button>
 
                         <button @click.stop="nextPortfolioItem()"
-                                class="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-slate-800 hover:text-teal-300 backdrop-blur-md text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg border border-white/10"
+                                class="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-slate-800 hover:text-teal-300 backdrop-blur-md text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg border border-white/10"
                                 title="다음 영상">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                         </button>
                     </div>
 
                     <!-- Video Title & Interactive Bottom Bar -->
-                    <div class="p-4 sm:p-5 bg-slate-900 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                        <div class="flex-1 min-w-0 pr-2">
-                            <h3 class="text-base sm:text-lg font-black text-white truncate group-hover:text-teal-300 transition-colors"
+                    <div class="p-2.5 sm:p-5 bg-slate-900 border-t border-slate-800 flex items-center justify-between gap-2">
+                        <div class="flex-1 min-w-0 pr-1">
+                            <h3 class="text-xs sm:text-lg font-bold sm:font-black text-white truncate group-hover:text-teal-300 transition-colors"
                                 x-text="currentPortfolioItem.title"></h3>
                         </div>
 
-                        <!-- Click To Next / Play Controls (클릭해서 다음으로 넘어가게) -->
-                        <div class="flex items-center gap-2 w-full sm:w-auto shrink-0">
+                        <!-- Click To Next / Play Controls -->
+                        <div class="flex items-center gap-1.5 shrink-0">
                             <button @click="prevPortfolioItem()" 
-                                    class="p-2.5 sm:px-3 sm:py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border border-slate-700 active:scale-95"
+                                    class="p-1.5 sm:px-3 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border border-slate-700 active:scale-95"
                                     title="이전 영상">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                                 <span class="hidden sm:inline">이전</span>
                             </button>
 
                             <button @click="openModal(currentPortfolioItem.id, currentPortfolioItem.title)"
-                                    class="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95 border border-slate-700 hover:border-slate-600">
-                                <svg class="w-4 h-4 text-teal-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                <span>영상 재생</span>
+                                    class="px-2.5 py-1.5 sm:px-3.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 hover:text-white text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer shadow-sm active:scale-95 border border-slate-700 hover:border-slate-600">
+                                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                <span>재생</span>
                             </button>
 
                             <!-- Harmonious "다음 영상" Button -->
                             <button @click="nextPortfolioItem()" 
-                                    class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95 border border-teal-500/40 hover:border-teal-400/70">
-                                <span>다음 영상</span>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                                    class="px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 text-[11px] sm:text-sm font-bold transition-all flex items-center justify-center gap-1 cursor-pointer shadow-sm active:scale-95 border border-teal-500/40 hover:border-teal-400/70">
+                                <span>다음</span>
+                                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                             </button>
                         </div>
                     </div>
@@ -4204,13 +4354,16 @@
     </section>
 
     <!-- CONTACT & FOOTER -->
-    <section id="contact" aria-label="제작 및 대관 상담 문의" class="scroll-mt-16 sm:scroll-mt-20 py-10 sm:py-16 lg:py-20 bg-slate-50 text-slate-900 border-t border-slate-200">
-        <div class="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="w-full text-center mb-5 sm:mb-8 flex flex-col items-center">
-                <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight mb-1.5 leading-tight break-keep">
-                    이러닝 콘텐츠 및 교육과정 개발 / 영상 제작 문의
+    <section id="contact" aria-label="제작 및 대관 상담 문의" 
+             class="scroll-mt-16 sm:scroll-mt-20 py-3 sm:py-16 lg:py-20 bg-slate-50 text-slate-900 border-t border-slate-200 mobile-snap-section flex flex-col justify-between pt-[calc(3.5rem+env(safe-area-inset-top))] pb-[calc(4.2rem+env(safe-area-inset-bottom))] px-3.5 sm:px-6 lg:px-8 overflow-hidden">
+        <div class="max-w-[800px] w-full mx-auto flex-1 flex flex-col justify-between min-h-0">
+            <!-- Header (Mobile Compact) -->
+            <div class="w-full text-center mb-1 sm:mb-6 flex flex-col items-center shrink-0">
+                <span class="text-[10px] md:text-xs font-bold tracking-widest text-blue-600 uppercase mb-0.5">CONTACT US</span>
+                <h2 class="text-base sm:text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight mb-0.5 sm:mb-1.5 leading-tight break-keep">
+                    이러닝 콘텐츠 개발 / 교육과정 기획 운영 / 영상 제작 문의
                 </h2>
-                <p class="text-xs md:text-sm text-slate-600 font-normal leading-relaxed max-w-lg mx-auto break-keep">
+                <p class="text-[11px] md:text-sm text-slate-600 font-normal leading-tight md:leading-relaxed max-w-lg mx-auto break-keep">
                     문의 사항을 남겨주시면 담당자가 확인 후 신속하게 안내해 드립니다.
                 </p>
             </div>
@@ -4220,128 +4373,135 @@
                  x-data="{ formRevealed: false }"
                  x-init="const formObs = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { formRevealed = true; formObs.disconnect(); } }, { threshold: 0.1 }); formObs.observe($el);"
                  :class="formRevealed ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-[0.98]'"
-                 class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xl transition-all duration-700 ease-out will-change-transform">
+                 class="bg-white p-3.5 sm:p-7 rounded-xl sm:rounded-3xl border border-slate-200 shadow-lg sm:shadow-xl transition-all duration-700 ease-out will-change-transform flex-1 min-h-0 flex flex-col justify-between">
                 
-                <form @submit.prevent="submitInquiry()" class="space-y-3 sm:space-y-4">
-                    <!-- 기관/회사명 (로컬스토리지 히스토리 저장 및 자동완성 지원) -->
-                    <div class="relative" @click.outside="companyFocused = false">
-                        <label class="block text-xs font-bold text-slate-700 mb-1">기관 / 회사명 (선택)</label>
-                        <div class="relative">
-                            <input type="text" 
-                                   x-model="inquiryForm.company" 
-                                   @focus="companyFocused = true; loadCompanyHistory()"
-                                   @input="companyFocused = true"
-                                   @keydown.escape="companyFocused = false"
-                                   placeholder="예: (주)OO에듀 또는 개인" 
-                                   autocomplete="off"
-                                   class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 pr-16 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
-                            
-                            <!-- Input Action Icons -->
-                            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-slate-400">
-                                <button type="button" 
-                                        x-show="inquiryForm.company && inquiryForm.company.length > 0" 
-                                        @click="inquiryForm.company = ''; companyFocused = true"
-                                        class="p-1 hover:text-slate-600 transition-colors rounded-full hover:bg-slate-200/60" 
-                                        title="입력 내용 지우기"
-                                        tabindex="-1">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                </button>
-                                <button type="button" 
-                                        @click="companyFocused = !companyFocused; if(companyFocused) loadCompanyHistory();"
-                                        class="p-1 hover:text-blue-600 transition-colors rounded-full hover:bg-blue-50" 
-                                        :class="companyFocused ? 'text-blue-600 bg-blue-50' : ''"
-                                        title="기존 입력 히스토리 보기"
-                                        tabindex="-1">
-                                    <svg class="w-4 h-4 transition-transform duration-200" :class="companyFocused ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                                </button>
+                <form @submit.prevent="submitInquiry()" class="space-y-2 sm:space-y-3.5 flex-1 flex flex-col justify-between min-h-0">
+                    <div class="space-y-2 sm:space-y-3 overflow-y-auto no-scrollbar pr-0.5 flex-1">
+                        <!-- 기관/회사명 (로컬스토리지 히스토리 저장 및 자동완성 지원) -->
+                        <div class="relative" @click.outside="companyFocused = false">
+                            <label class="block text-[11px] sm:text-xs font-bold text-slate-700 mb-0.5 sm:mb-1">기관 / 회사명 (선택)</label>
+                            <div class="relative">
+                                <input type="text" 
+                                       x-model="inquiryForm.company" 
+                                       @focus="companyFocused = true; loadCompanyHistory()"
+                                       @input="companyFocused = true"
+                                       @keydown.escape="companyFocused = false"
+                                       placeholder="예: (주)OO에듀 또는 개인" 
+                                       autocomplete="off"
+                                       class="w-full px-3 py-1.5 sm:px-4 sm:py-2.5 pr-14 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
+                                
+                                <!-- Input Action Icons -->
+                                <div class="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1 text-slate-400">
+                                    <button type="button" 
+                                            x-show="inquiryForm.company && inquiryForm.company.length > 0" 
+                                            @click="inquiryForm.company = ''; companyFocused = true"
+                                            class="p-0.5 hover:text-slate-600 transition-colors rounded-full hover:bg-slate-200/60" 
+                                            title="입력 내용 지우기"
+                                            tabindex="-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                    <button type="button" 
+                                            @click="companyFocused = !companyFocused; if(companyFocused) loadCompanyHistory();"
+                                            class="p-0.5 hover:text-blue-600 transition-colors rounded-full hover:bg-blue-50" 
+                                            :class="companyFocused ? 'text-blue-600 bg-blue-50' : ''"
+                                            title="기존 입력 히스토리 보기"
+                                            tabindex="-1">
+                                        <svg class="w-3.5 h-3.5 transition-transform duration-200" :class="companyFocused ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Autocomplete Dropdown Menu -->
+                            <div x-show="companyFocused && filteredCompanyHistory.length > 0" 
+                                 x-transition:enter="transition ease-out duration-150"
+                                 x-transition:enter-start="opacity-0 translate-y-1 scale-98"
+                                 x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                                 x-transition:leave="transition ease-in duration-100"
+                                 x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                                 x-transition:leave-end="opacity-0 translate-y-1 scale-98"
+                                 class="absolute z-30 left-0 right-0 mt-1 bg-white rounded-xl border border-slate-200 shadow-2xl overflow-hidden"
+                                 style="display: none;">
+                                
+                                <!-- Dropdown Header -->
+                                <div class="flex items-center justify-between px-3 py-1.5 bg-slate-50/90 border-b border-slate-100 text-[10px] text-slate-500 font-semibold select-none">
+                                    <span class="flex items-center gap-1.5 text-slate-700">
+                                        <svg class="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <span x-text="inquiryForm.company && inquiryForm.company.trim() ? '자동완성 결과' : '최근 입력 히스토리'"></span>
+                                    </span>
+                                    <button type="button" 
+                                            @click.stop="clearAllCompanyHistory()" 
+                                            class="text-slate-400 hover:text-red-500 transition-colors font-medium text-[9.5px]">
+                                        전체 삭제
+                                    </button>
+                                </div>
+
+                                <!-- History Item List -->
+                                <ul class="max-h-40 overflow-y-auto divide-y divide-slate-100 text-xs">
+                                    <template x-for="item in filteredCompanyHistory" :key="item">
+                                        <li class="flex items-center justify-between px-3 py-2 hover:bg-blue-50/70 cursor-pointer transition-colors group select-none"
+                                            @mousedown.prevent="selectCompanyHistory(item)">
+                                            <div class="flex items-center gap-2 min-w-0 pr-2">
+                                                <span class="p-1 rounded-md bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors shrink-0">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                                </span>
+                                                <span class="truncate font-medium text-slate-800 group-hover:text-blue-700" x-text="item"></span>
+                                            </div>
+                                            <button type="button" 
+                                                    @mousedown.stop.prevent="deleteCompanyHistoryItem(item)" 
+                                                    class="text-slate-300 hover:text-red-500 p-1 rounded-md hover:bg-red-50 transition-colors shrink-0" 
+                                                    title="이 기록 삭제">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                            </button>
+                                        </li>
+                                    </template>
+                                </ul>
                             </div>
                         </div>
 
-                        <!-- Autocomplete Dropdown Menu -->
-                        <div x-show="companyFocused && filteredCompanyHistory.length > 0" 
-                             x-transition:enter="transition ease-out duration-150"
-                             x-transition:enter-start="opacity-0 translate-y-1 scale-98"
-                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                             x-transition:leave="transition ease-in duration-100"
-                             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                             x-transition:leave-end="opacity-0 translate-y-1 scale-98"
-                             class="absolute z-30 left-0 right-0 mt-1.5 bg-white rounded-xl border border-slate-200 shadow-2xl overflow-hidden"
-                             style="display: none;">
-                            
-                            <!-- Dropdown Header -->
-                            <div class="flex items-center justify-between px-3.5 py-2 bg-slate-50/90 border-b border-slate-100 text-[11px] text-slate-500 font-semibold select-none">
-                                <span class="flex items-center gap-1.5 text-slate-700">
-                                    <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                    <span x-text="inquiryForm.company && inquiryForm.company.trim() ? '자동완성 검색 결과' : '최근 입력한 기관/회사명'"></span>
-                                </span>
-                                <button type="button" 
-                                        @click.stop="clearAllCompanyHistory()" 
-                                        class="text-slate-400 hover:text-red-500 transition-colors font-medium text-[10px]">
-                                    전체 삭제
-                                </button>
+                        <!-- 2-Col inputs (성함 / 연락처) -->
+                        <div class="grid grid-cols-2 gap-2 sm:gap-3.5">
+                            <div>
+                                <label class="block text-[11px] sm:text-xs font-bold text-slate-700 mb-0.5 sm:mb-1">성함 / 담당자 *</label>
+                                <input type="text" x-model="inquiryForm.name" required placeholder="홍길동" class="w-full px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
                             </div>
+                            <div>
+                                <label class="block text-[11px] sm:text-xs font-bold text-slate-700 mb-0.5 sm:mb-1">연락처 *</label>
+                                <input type="text" x-model="inquiryForm.phone" required placeholder="010-0000-0000" class="w-full px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
+                            </div>
+                        </div>
 
-                            <!-- History Item List -->
-                            <ul class="max-h-52 overflow-y-auto divide-y divide-slate-100 text-xs sm:text-sm">
-                                <template x-for="item in filteredCompanyHistory" :key="item">
-                                    <li class="flex items-center justify-between px-3.5 py-2.5 hover:bg-blue-50/70 cursor-pointer transition-colors group select-none"
-                                        @mousedown.prevent="selectCompanyHistory(item)">
-                                        <div class="flex items-center gap-2.5 min-w-0 pr-2">
-                                            <span class="p-1.5 rounded-lg bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors shrink-0">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                                            </span>
-                                            <span class="truncate font-medium text-slate-800 group-hover:text-blue-700" x-text="item"></span>
-                                        </div>
-                                        <button type="button" 
-                                                @mousedown.stop.prevent="deleteCompanyHistoryItem(item)" 
-                                                class="text-slate-300 hover:text-red-500 p-1 rounded-md hover:bg-red-50 transition-colors shrink-0" 
-                                                title="이 기록 삭제">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                        </button>
-                                    </li>
-                                </template>
-                            </ul>
-                            
-                            <div class="px-3.5 py-1.5 bg-slate-50 border-t border-slate-100 text-[10px] text-slate-400 text-right flex items-center justify-between">
-                                <span>선택 시 자동 완성</span>
-                                <span>ESC 키를 눌러 닫기</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <!-- 문의 유형 -->
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1">성함 / 담당자 *</label>
-                            <input type="text" x-model="inquiryForm.name" required placeholder="홍길동" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
+                            <label class="block text-[11px] sm:text-xs font-bold text-slate-700 mb-0.5 sm:mb-1">문의 유형 *</label>
+                            <select x-model="inquiryForm.category" required class="w-full px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-blue-600 transition-colors">
+                                <option value="" disabled selected>문의할 희망 항목을 선택해 주세요</option>
+                                <option value="이러닝 콘텐츠 개발">이러닝 콘텐츠 개발</option>
+                                <option value="공공·기업 영상 제작 &amp; 홍보">공공·기업 영상 제작 &amp; 홍보</option>
+                                <option value="교육과정 기획 및 운영">교육과정 기획 및 운영</option>
+                                <option value="스마트 스튜디오 대여">스마트 스튜디오 대여</option>
+                                <option value="기타 일반 문의">기타 일반 문의</option>
+                            </select>
                         </div>
+
+                        <!-- 문의 내용 -->
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1">연락처 *</label>
-                            <input type="text" x-model="inquiryForm.phone" required placeholder="010-0000-0000" class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
+                            <label class="block text-[11px] sm:text-xs font-bold text-slate-700 mb-0.5 sm:mb-1">문의 내용 *</label>
+                            <textarea x-model="inquiryForm.message" rows="2" required placeholder="궁금하신 점이나 요청사항을 자유롭게 작성해 주세요." class="w-full px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors resize-none"></textarea>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">문의 유형 *</label>
-                        <select x-model="inquiryForm.category" required class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-blue-600 transition-colors">
-                            <option value="" disabled selected>문의할 희망 항목을 선택해 주세요</option>
-                            <option value="이러닝 콘텐츠 개발">이러닝 콘텐츠 개발</option>
-                            <option value="공공·기업 영상 제작 &amp; 홍보">공공·기업 영상 제작 &amp; 홍보</option>
-                            <option value="교육과정 기획 및 운영">교육과정 기획 및 운영</option>
-                            <option value="스마트 스튜디오 대여">스마트 스튜디오 대여</option>
-                            <option value="기타 일반 문의">기타 일반 문의</option>
-                        </select>
+
+                    <!-- Bottom Consent & Submit CTA (Always visible & compact) -->
+                    <div class="pt-1 shrink-0 space-y-1.5 sm:space-y-2.5 border-t border-slate-100">
+                        <div class="flex items-center gap-1.5">
+                            <input type="checkbox" id="consent" x-model="inquiryForm.consent" required class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5">
+                            <label for="consent" class="text-[10.5px] sm:text-xs text-slate-600 cursor-pointer font-medium select-none">개인정보 수집 및 이용 동의 *</label>
+                        </div>
+                        <button type="submit" :disabled="inquirySubmitting" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl transition-all text-xs sm:text-base shadow-md flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer active:scale-98">
+                            <span x-text="inquirySubmitting ? '문의 전송 중...' : '문의 남기기'">문의 남기기</span>
+                            <svg x-show="!inquirySubmitting" class="w-3.5 h-3.5 sm:w-5 sm:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            <svg x-show="inquirySubmitting" class="animate-spin h-4 w-4 text-white shrink-0" fill="none" viewBox="0 0 24 24" x-cloak><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        </button>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">문의 내용 *</label>
-                        <textarea x-model="inquiryForm.message" rows="3" required placeholder="궁금하신 점이나 요청사항을 자유롭게 작성해 주세요." class="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors"></textarea>
-                    </div>
-                    <div class="flex items-center gap-2 pt-0.5">
-                        <input type="checkbox" id="consent" x-model="inquiryForm.consent" required class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
-                        <label for="consent" class="text-xs text-slate-600 cursor-pointer font-medium">개인정보 수집 및 이용에 동의합니다. *</label>
-                    </div>
-                    <button type="submit" :disabled="inquirySubmitting" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 sm:py-4 rounded-xl transition-all text-sm sm:text-base shadow-lg mt-3 flex items-center justify-center gap-2.5 disabled:opacity-60 cursor-pointer active:scale-98">
-                        <span x-text="inquirySubmitting ? '문의 전송 중' : '문의 남기기'">문의 남기기</span>
-                        <svg x-show="!inquirySubmitting" class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                        <svg x-show="inquirySubmitting" class="animate-spin h-5 w-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" x-cloak><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    </button>
                 </form>
             </div>
         </div>
@@ -4470,14 +4630,12 @@
         <!-- Main Full-Screen Player Stage -->
         <div class="relative flex-1 w-full max-w-6xl mx-auto flex items-center justify-center my-auto min-h-0 py-2 sm:py-4">
             
-            <!-- Video Container -->
-            <div class="relative w-full aspect-video max-h-[82vh] bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.9)] border border-white/15 flex items-center justify-center">
-                <template x-if="activeVideoId">
-                    <iframe :src="'https://www.youtube.com/embed/' + activeVideoId + '?autoplay=1&enablejsapi=1&rel=0&modestbranding=1'" 
-                            class="w-full h-full border-0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" 
-                            allowfullscreen></iframe>
-                </template>
+            <!-- Video Container with Custom Controls -->
+            <div class="group/player relative w-full aspect-video max-h-[82vh] bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.9)] border border-white/15 flex items-center justify-center">
+                <!-- YouTube IFrame Container Target -->
+                <div class="w-full h-full relative">
+                    <div id="custom-yt-player-target" class="w-full h-full"></div>
+                </div>
 
                 <!-- Floating Prev / Next Controls Over Video (모달 내 이전/다음 영상 바로 넘김) -->
                 <button @click="prevModalVideo()"
@@ -4491,6 +4649,63 @@
                         title="다음 영상">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                 </button>
+
+                <!-- Custom Bottom Control Bar (Volume Slider, Mute, Fullscreen, Play/Pause) -->
+                <div class="absolute bottom-0 left-0 right-0 z-30 bg-black/75 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-2.5 flex items-center justify-between border-t border-white/10 transition-opacity duration-300">
+                    <!-- Left: Play/Pause, Mute toggle, Volume slider -->
+                    <div class="flex items-center gap-2 sm:gap-3">
+                        <!-- 재생 / 일시정지 버튼 -->
+                        <button @click="toggleYtPlay()" 
+                                class="p-1.5 sm:p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-all active:scale-95 cursor-pointer"
+                                :title="ytIsPlaying ? '일시정지' : '재생'">
+                            <template x-if="ytIsPlaying">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>
+                            </template>
+                            <template x-if="!ytIsPlaying">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </template>
+                        </button>
+
+                        <!-- 음소거 토글 버튼 -->
+                        <button @click="toggleYtMute()" 
+                                class="p-1.5 sm:p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer"
+                                :title="ytIsMuted ? '음소거 해제' : '음소거'">
+                            <template x-if="ytIsMuted || ytVolume === 0">
+                                <div class="flex items-center gap-1">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
+                                    <span class="text-[10px] sm:text-xs text-red-300 font-bold hidden xs:inline">음소거됨</span>
+                                </div>
+                            </template>
+                            <template x-if="!ytIsMuted && ytVolume > 0">
+                                <div class="flex items-center gap-1">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                                    <span class="text-[10px] sm:text-xs text-emerald-300 font-bold hidden xs:inline" x-text="ytVolume + '%'"></span>
+                                </div>
+                            </template>
+                        </button>
+
+                        <!-- 볼륨 슬라이더 -->
+                        <div class="flex items-center gap-1.5 w-20 sm:w-28">
+                            <input type="range" 
+                                   min="0" 
+                                   max="100" 
+                                   :value="ytIsMuted ? 0 : ytVolume" 
+                                   @input="setYtVolume($event.target.value)" 
+                                   class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-teal-400 focus:outline-none"
+                                   title="볼륨 조절">
+                        </div>
+                    </div>
+
+                    <!-- Right: Fullscreen Button -->
+                    <div class="flex items-center gap-2">
+                        <button @click="toggleFullScreen()" 
+                                class="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                                title="전체화면 전환">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                            <span class="hidden sm:inline">전체화면</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
