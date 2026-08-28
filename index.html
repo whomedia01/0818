@@ -3116,7 +3116,7 @@
     </section>
 
     <!-- ORGANIZATION & ECOSYSTEM: (주)후미디어 조직 체계 (기본 접힘 & 클릭 시 펼쳐지는 최적화 아코디언) -->
-    <section id="organization" class="scroll-mt-14 py-6 sm:py-10 lg:py-14 bg-slate-50 text-slate-900 border-b border-slate-200 relative overflow-hidden">
+    <section id="organization" class="scroll-mt-16 sm:scroll-mt-20 py-6 sm:py-10 lg:py-14 bg-slate-50 text-slate-900 border-b border-slate-200 relative overflow-hidden">
         <div id="about" class="scroll-mt-24"></div>
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(30,136,229,0.06),transparent_50%)] pointer-events-none"></div>
 
@@ -3432,7 +3432,7 @@
     </section>
 
     <!-- BUSINESS NETWORK: (주)후미디어 핵심 사업 영역 -->
-    <section id="services" aria-label="주요 사업 영역 (에듀테크 및 K-MOOC 전문화 솔루션)" class="scroll-mt-14 py-4 sm:py-12 lg:py-16 bg-white text-slate-900 border-t border-b border-slate-200" @mouseenter="stopServiceAutoPlay()" @mouseleave="startServiceAutoPlay()">
+    <section id="services" aria-label="주요 사업 영역 (에듀테크 및 K-MOOC 전문화 솔루션)" class="scroll-mt-16 sm:scroll-mt-20 py-4 sm:py-12 lg:py-16 bg-white text-slate-900 border-t border-b border-slate-200" @mouseenter="stopServiceAutoPlay()" @mouseleave="startServiceAutoPlay()">
         <div class="w-full max-w-[1280px] mx-auto px-3 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-2.5 sm:mb-6">
                 <h2 class="text-xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1 sm:mb-2 break-keep">
@@ -3743,24 +3743,13 @@
                     </div>
                 </div>
 
-                <!-- Controls Footer -->
-                <div class="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 z-30 flex items-center gap-1 sm:gap-2 bg-slate-950/90 backdrop-blur-md px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-slate-700 text-xs font-bold text-white shadow-lg">
-                    <span class="text-teal-400 font-mono font-black" x-text="'0' + (activeServiceIndex + 1)"></span>
-                    <span class="text-slate-500">/</span>
-                    <span class="text-slate-300 font-mono">03</span>
-                    <button @click="serviceAutoTimer ? stopServiceAutoPlay() : startServiceAutoPlay()"
-                            class="ml-1 text-slate-300 hover:text-teal-300 transition-colors cursor-pointer"
-                            :title="serviceAutoTimer ? '롤링 일시정지' : '롤링 시작'">
-                        <svg x-show="serviceAutoTimer" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                        <svg x-show="!serviceAutoTimer" class="w-3.5 h-3.5 text-teal-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    </button>
-                </div>
+
             </div>
         </div>
     </section>
 
     <!-- STUDIO & INFRASTRUCTURE GALLERY -->
-    <section id="studio" aria-label="160평 최첨단 스튜디오 및 제작 인프라" class="scroll-mt-14 py-8 sm:py-16 lg:py-24 bg-slate-50 text-slate-900 relative overflow-hidden border-t border-b border-slate-200">
+    <section id="studio" aria-label="160평 최첨단 스튜디오 및 제작 인프라" class="scroll-mt-16 sm:scroll-mt-20 py-8 sm:py-16 lg:py-24 bg-slate-50 text-slate-900 relative overflow-hidden border-t border-b border-slate-200">
         <!-- Ambient Particles Canvas -->
         <canvas id="studio-particles-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-30"></canvas>
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,210,132,0.06),transparent_50%),radial-gradient(circle_at_80%_80%,rgba(59,130,246,0.06),transparent_50%)] pointer-events-none"></div>
@@ -3785,14 +3774,7 @@
                     <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
 
                     <!-- Top Status Bar with Live Radar & Rec Indicator -->
-                    <div class="flex items-center justify-between mb-1 sm:mb-3 relative z-10">
-                        <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[8.5px] sm:text-[11px] font-bold text-emerald-300">
-                            <span class="relative flex h-1.5 w-1.5">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                            </span>
-                            <span>STUDIO A-F</span>
-                        </div>
+                    <div class="flex items-center justify-end mb-1 sm:mb-3 relative z-10">
                         <!-- Radar Sweep Micro Icon -->
                         <div class="w-4 h-4 sm:w-6 sm:h-6 rounded-full border border-emerald-500/30 relative flex items-center justify-center overflow-hidden">
                             <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500/40 to-transparent origin-bottom-left animate-studio-radar"></div>
@@ -3824,11 +3806,7 @@
                     <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
 
                     <!-- Top Status Bar with Interactive Touch Pulse -->
-                    <div class="flex items-center justify-between mb-1 sm:mb-3 relative z-10">
-                        <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 rounded-full bg-blue-950/80 border border-blue-500/40 text-[8.5px] sm:text-[11px] font-bold text-blue-300">
-                            <span class="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_6px_#60a5fa]"></span>
-                            <span>SMART BOARD</span>
-                        </div>
+                    <div class="flex items-center justify-end mb-1 sm:mb-3 relative z-10">
                         <!-- Stylus / Touch Wave Icon -->
                         <div class="w-4 h-4 sm:w-6 sm:h-6 rounded-lg bg-blue-950/60 border border-blue-500/30 flex items-center justify-center relative">
                             <span class="animate-studio-touch w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 rounded-full border border-blue-400/80 bg-blue-400/20"></span>
@@ -3859,11 +3837,7 @@
                     <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
 
                     <!-- Top Status Bar with Chroma Virtual Grid Pulse -->
-                    <div class="flex items-center justify-between mb-1 sm:mb-3 relative z-10">
-                        <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 rounded-full bg-teal-950/80 border border-teal-500/40 text-[8.5px] sm:text-[11px] font-bold text-teal-300">
-                            <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shadow-[0_0_6px_#2dd4bf]"></span>
-                            <span>VIRTUAL SET</span>
-                        </div>
+                    <div class="flex items-center justify-end mb-1 sm:mb-3 relative z-10">
                         <!-- Chroma 3D Layers Micro Icon -->
                         <div class="w-4 h-4 sm:w-6 sm:h-6 rounded-lg bg-teal-950/60 border border-teal-500/30 flex items-center justify-center">
                             <div class="animate-studio-chroma flex flex-col gap-0.5 items-center justify-center">
@@ -3898,11 +3872,7 @@
                     <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
 
                     <!-- Top Status Bar with Realtime Bouncing Equalizer Bars -->
-                    <div class="flex items-center justify-between mb-1 sm:mb-3 relative z-10">
-                        <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 py-0.5 rounded-full bg-purple-950/80 border border-purple-500/40 text-[8.5px] sm:text-[11px] font-bold text-purple-300">
-                            <span class="w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_6px_#c084fc]"></span>
-                            <span>MASTER DCR</span>
-                        </div>
+                    <div class="flex items-center justify-end mb-1 sm:mb-3 relative z-10">
                         <!-- Equalizer Graphic -->
                         <div class="flex items-end gap-0.5 h-3.5 sm:h-5 px-1 sm:px-1.5 py-0.5 bg-purple-950/60 rounded border border-purple-500/30">
                             <span class="w-0.5 sm:w-1 bg-purple-400 rounded-xs animate-studio-eq-1"></span>
@@ -3976,18 +3946,7 @@
                         <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
 
-                    <!-- Floating Indicator & Auto-Play Controls (Bottom-Right Minimalist Pill) -->
-                    <div class="absolute bottom-2.5 right-2.5 sm:bottom-4 sm:right-4 z-20 flex items-center gap-1.5 sm:gap-2 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-white/10 text-[10px] sm:text-xs font-bold text-white shadow-xl pointer-events-auto">
-                        <span class="text-teal-400 font-mono font-black" x-text="String(activeStudioIndex + 1).padStart(2, '0')"></span>
-                        <span class="text-slate-500">/</span>
-                        <span class="text-slate-300 font-mono" x-text="String(studioInfrastructure.length).padStart(2, '0')"></span>
-                        <button @click.stop="studioAutoTimer ? stopStudioAutoPlay() : startStudioAutoPlay()"
-                                class="ml-1 text-slate-300 hover:text-teal-300 transition-colors cursor-pointer"
-                                :title="studioAutoTimer ? '슬라이드 일시정지' : '슬라이드 자동 재생'">
-                            <svg x-show="studioAutoTimer" class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                            <svg x-show="!studioAutoTimer" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-teal-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                        </button>
-                    </div>
+
                 </div>
 
                 <!-- Clean Thumbnail Selector Bar -->
@@ -4122,7 +4081,7 @@
     </section>
 
     <!-- PORTFOLIO -->
-    <section id="reference" aria-label="포트폴리오 및 주요 제작 실적" class="py-8 sm:py-16 lg:py-24 bg-white relative overflow-hidden">
+    <section id="reference" aria-label="포트폴리오 및 주요 제작 실적" class="scroll-mt-16 sm:scroll-mt-20 py-8 sm:py-16 lg:py-24 bg-white relative overflow-hidden">
         <div class="w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-5 sm:mb-8">
                 <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mb-2 tracking-tight">콘텐츠 개발 &amp; 영상 포트폴리오</h2>
@@ -4149,25 +4108,22 @@
                         <!-- Ambient gradient overlay -->
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-black/30 to-transparent"></div>
 
-                        <!-- Top Status & Index Counter -->
-                        <div class="absolute top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between pointer-events-none z-10">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-600/90 backdrop-blur-md text-white text-[11px] sm:text-xs font-black shadow-md border border-blue-400/30"
+                        <!-- Top Tag Badge -->
+                        <div class="absolute top-3 sm:top-4 left-3 sm:left-4 z-10 pointer-events-none">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-slate-100 text-[11px] sm:text-xs font-bold shadow-md border border-white/20"
                                   x-text="currentPortfolioItem.tag">
-                            </span>
-                            <span class="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white/90 font-mono text-[11px] sm:text-xs font-bold border border-white/10">
-                                <span class="text-blue-400 font-black" x-text="String(portfolioIndex + 1).padStart(2, '0')"></span> / <span x-text="String(portfolioItems.length).padStart(2, '0')"></span>
                             </span>
                         </div>
 
                         <!-- Left / Right Quick Arrow Navigation Overlays -->
                         <button @click.stop="prevPortfolioItem()"
-                                class="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-blue-600 backdrop-blur-md text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg border border-white/10"
+                                class="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-slate-800 hover:text-teal-300 backdrop-blur-md text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg border border-white/10"
                                 title="이전 영상">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
                         </button>
 
                         <button @click.stop="nextPortfolioItem()"
-                                class="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-blue-600 backdrop-blur-md text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg border border-white/10"
+                                class="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-slate-800 hover:text-teal-300 backdrop-blur-md text-white flex items-center justify-center transition-all opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg border border-white/10"
                                 title="다음 영상">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                         </button>
@@ -4176,13 +4132,8 @@
                     <!-- Video Title & Interactive Bottom Bar -->
                     <div class="p-4 sm:p-5 bg-slate-900 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                         <div class="flex-1 min-w-0 pr-2">
-                            <h3 class="text-base sm:text-lg font-black text-white truncate group-hover:text-blue-300 transition-colors"
+                            <h3 class="text-base sm:text-lg font-black text-white truncate group-hover:text-teal-300 transition-colors"
                                 x-text="currentPortfolioItem.title"></h3>
-                            <p class="text-xs text-slate-400 mt-0.5 flex items-center gap-2">
-                                <span>(주)후미디어 제작 실적</span>
-                                <span class="w-1 h-1 rounded-full bg-slate-600"></span>
-                                <span class="text-emerald-400 font-mono">4K UHD / Full HD</span>
-                            </p>
                         </div>
 
                         <!-- Click To Next / Play Controls (클릭해서 다음으로 넘어가게) -->
@@ -4195,14 +4146,14 @@
                             </button>
 
                             <button @click="openModal(currentPortfolioItem.id, currentPortfolioItem.title)"
-                                    class="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-xl bg-red-600/90 hover:bg-red-600 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    class="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95 border border-slate-700 hover:border-slate-600">
+                                <svg class="w-4 h-4 text-teal-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 <span>영상 재생</span>
                             </button>
 
-                            <!-- Prominent "다음 영상 보기 (클릭)" Button -->
+                            <!-- Harmonious "다음 영상" Button -->
                             <button @click="nextPortfolioItem()" 
-                                    class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md active:scale-95 border border-blue-400/40">
+                                    class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95 border border-teal-500/40 hover:border-teal-400/70">
                                 <span>다음 영상</span>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                             </button>
@@ -4210,19 +4161,7 @@
                     </div>
                 </div>
 
-                <!-- Progress Indicator Bar & Counter -->
-                <div class="mt-4 flex items-center justify-between text-xs text-slate-500 px-1">
-                    <span class="text-[11px] font-medium">클릭하거나 좌우 화살표를 눌러 다음 영상으로 이동할 수 있습니다.</span>
-                    <div class="flex items-center gap-1">
-                        <template x-for="(item, idx) in portfolioItems" :key="'dot-' + item.id">
-                            <button @click="setPortfolioIndex(idx)"
-                                    :title="item.title"
-                                    class="h-1.5 rounded-full transition-all duration-300 cursor-pointer"
-                                    :class="portfolioIndex === idx ? 'w-6 bg-blue-600' : 'w-1.5 bg-slate-300 hover:bg-slate-400'">
-                            </button>
-                        </template>
-                    </div>
-                </div>
+
             </div>
         </div>
     </section>
@@ -4289,7 +4228,7 @@
     </section>
 
     <!-- CONTACT & FOOTER -->
-    <section id="contact" aria-label="제작 및 대관 상담 문의" class="py-10 sm:py-16 lg:py-20 bg-slate-50 text-slate-900 border-t border-slate-200">
+    <section id="contact" aria-label="제작 및 대관 상담 문의" class="scroll-mt-16 sm:scroll-mt-20 py-10 sm:py-16 lg:py-20 bg-slate-50 text-slate-900 border-t border-slate-200">
         <div class="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-6 sm:mb-8">
                 <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mb-3 leading-tight break-keep">
@@ -4478,45 +4417,44 @@
         </div>
     </footer>
 
-    <!-- MOBILE QUICK FLOATING APP DOCK NAVIGATION (컴팩트 슬림 세로폭 & 고시인성 네온/글로우 효과) -->
-    <div id="mobile-dock-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-2xl border-t border-slate-200/95 px-2 pt-1 pb-safe flex items-center justify-around shadow-[0_-6px_25px_rgba(0,0,0,0.12)] select-none" style="padding-bottom: max(0.35rem, env(safe-area-inset-bottom, 0.35rem));">
+    <!-- MOBILE QUICK FLOATING APP DOCK NAVIGATION (자연스럽고 조화로운 톤 & 슬림 바) -->
+    <div id="mobile-dock-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-2xl border-t border-slate-200/95 px-2 pt-1 pb-safe flex items-center justify-around shadow-[0_-6px_25px_rgba(0,0,0,0.08)] select-none" style="padding-bottom: max(0.35rem, env(safe-area-inset-bottom, 0.35rem));">
         <!-- 1. 사업영역 -->
-        <a href="#services" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-blue-600 active:scale-95 transition-all group">
-            <div class="p-1 rounded-lg group-hover:bg-blue-50 transition-colors">
-                <svg class="w-[18px] h-[18px] text-blue-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <a href="#services" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-teal-600 active:scale-95 transition-all group">
+            <div class="p-1 rounded-lg group-hover:bg-slate-100 transition-colors">
+                <svg class="w-[18px] h-[18px] text-slate-600 group-hover:text-teal-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </div>
-            <span class="text-[9.5px] font-black tracking-tight text-slate-800 group-hover:text-blue-600">사업영역</span>
+            <span class="text-[9.5px] font-bold tracking-tight text-slate-700 group-hover:text-teal-600">사업영역</span>
         </a>
 
         <!-- 2. 스튜디오 -->
-        <a href="#studio" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-amber-600 active:scale-95 transition-all group">
-            <div class="p-1 rounded-lg group-hover:bg-amber-50 transition-colors">
-                <svg class="w-[18px] h-[18px] text-amber-500 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        <a href="#studio" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-teal-600 active:scale-95 transition-all group">
+            <div class="p-1 rounded-lg group-hover:bg-slate-100 transition-colors">
+                <svg class="w-[18px] h-[18px] text-slate-600 group-hover:text-teal-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
             </div>
-            <span class="text-[9.5px] font-black tracking-tight text-slate-800 group-hover:text-amber-600">스튜디오</span>
+            <span class="text-[9.5px] font-bold tracking-tight text-slate-700 group-hover:text-teal-600">스튜디오</span>
         </a>
 
         <!-- 3. 포트폴리오 -->
-        <a href="#reference" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-purple-600 active:scale-95 transition-all group">
-            <div class="p-1 rounded-lg group-hover:bg-purple-50 transition-colors">
-                <svg class="w-[18px] h-[18px] text-purple-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 012-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+        <a href="#reference" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-teal-600 active:scale-95 transition-all group">
+            <div class="p-1 rounded-lg group-hover:bg-slate-100 transition-colors">
+                <svg class="w-[18px] h-[18px] text-slate-600 group-hover:text-teal-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 012-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
             </div>
-            <span class="text-[9.5px] font-black tracking-tight text-slate-800 group-hover:text-purple-600">포트폴리오</span>
+            <span class="text-[9.5px] font-bold tracking-tight text-slate-700 group-hover:text-teal-600">포트폴리오</span>
         </a>
 
         <!-- 4. 오시는길 -->
-        <a :href="naverMapUrl" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-emerald-600 active:scale-95 transition-all group">
-            <div class="p-1 rounded-lg group-hover:bg-emerald-50 transition-colors">
-                <svg class="w-[18px] h-[18px] text-emerald-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <a :href="naverMapUrl" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-teal-600 active:scale-95 transition-all group">
+            <div class="p-1 rounded-lg group-hover:bg-slate-100 transition-colors">
+                <svg class="w-[18px] h-[18px] text-slate-600 group-hover:text-teal-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             </div>
-            <span class="text-[9.5px] font-black tracking-tight text-slate-800 group-hover:text-emerald-600">오시는길</span>
+            <span class="text-[9.5px] font-bold tracking-tight text-slate-700 group-hover:text-teal-600">오시는길</span>
         </a>
 
-        <!-- 5. 문의하기 (눈에 확 띄는 비비드 블루 그라데이션 + 발광 섀도우) -->
-        <a href="#contact" class="flex flex-col items-center justify-center min-w-[62px] min-h-[36px] py-1 px-3 bg-gradient-to-r from-blue-600 via-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-black shadow-[0_2px_12px_rgba(37,99,235,0.45)] border border-blue-400/30 active:scale-95 transition-all cursor-pointer relative overflow-hidden">
-            <div class="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition-opacity"></div>
-            <svg class="w-[17px] h-[17px] relative z-10 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-            <span class="text-[10px] font-black tracking-tight mt-[1px] relative z-10">문의하기</span>
+        <!-- 5. 문의하기 (차분하고 세련된 다크 슬레이트 & 틸 포인트) -->
+        <a href="#contact" class="flex flex-col items-center justify-center min-w-[62px] min-h-[36px] py-1 px-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold shadow-sm border border-slate-700/60 active:scale-95 transition-all cursor-pointer relative overflow-hidden">
+            <svg class="w-[16px] h-[16px] text-teal-400 relative z-10 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+            <span class="text-[9.5px] font-bold tracking-tight mt-[1px] relative z-10 text-slate-100">문의하기</span>
         </a>
     </div>
 
@@ -4538,9 +4476,6 @@
             <div class="flex items-center gap-2 sm:gap-3 min-w-0 pr-2">
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600/90 text-white text-[10.5px] sm:text-xs font-black shadow-sm shrink-0"
                       x-text="currentPortfolioItem.tag || 'PORTFOLIO'">
-                </span>
-                <span class="text-white/60 font-mono text-xs font-bold shrink-0 hidden sm:inline">
-                    <span class="text-blue-400 font-black" x-text="String(portfolioIndex + 1).padStart(2, '0')"></span> / <span x-text="String(portfolioItems.length).padStart(2, '0')"></span>
                 </span>
                 <h3 x-text="activeVideoTitle" class="text-white font-bold text-xs sm:text-base truncate"></h3>
             </div>
@@ -4578,13 +4513,13 @@
 
                 <!-- Floating Prev / Next Controls Over Video (모달 내 이전/다음 영상 바로 넘김) -->
                 <button @click="prevModalVideo()"
-                        class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-blue-600 text-white flex items-center justify-center transition-all opacity-70 hover:opacity-100 cursor-pointer shadow-2xl border border-white/20 z-20 active:scale-95"
+                        class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-slate-800 hover:text-teal-300 text-white flex items-center justify-center transition-all opacity-70 hover:opacity-100 cursor-pointer shadow-2xl border border-white/20 z-20 active:scale-95"
                         title="이전 영상">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
                 </button>
 
                 <button @click="nextModalVideo()"
-                        class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-blue-600 text-white flex items-center justify-center transition-all opacity-70 hover:opacity-100 cursor-pointer shadow-2xl border border-white/20 z-20 active:scale-95"
+                        class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-slate-800 hover:text-teal-300 text-white flex items-center justify-center transition-all opacity-70 hover:opacity-100 cursor-pointer shadow-2xl border border-white/20 z-20 active:scale-95"
                         title="다음 영상">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                 </button>
@@ -4599,13 +4534,10 @@
                 <span>이전 영상</span>
             </button>
 
-            <!-- Video Progress Indicator -->
-            <div class="text-xs text-slate-400 font-medium text-center truncate px-2">
-                <span class="text-white font-bold" x-text="portfolioIndex + 1"></span>번째 영상 / 총 <span x-text="portfolioItems.length"></span>개
-            </div>
+
 
             <button @click="nextModalVideo()" 
-                    class="px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95">
+                    class="px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95 border border-teal-500/40 hover:border-teal-400/70">
                 <span>다음 영상</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
             </button>
