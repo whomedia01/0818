@@ -85,6 +85,8 @@ document.addEventListener('alpine:init', () => {
         isCinematicTransition: false,
         splashFlashActive: false,
         splashAutoTimer: null,
+        splashTimerFade: null,
+        splashTimerHide: null,
         
         startCinematicTransition() {
             if (!this.splashVisible || this.isCinematicTransition) return;
@@ -92,25 +94,33 @@ document.addEventListener('alpine:init', () => {
                 clearTimeout(this.splashAutoTimer);
                 this.splashAutoTimer = null;
             }
+            if (this.splashTimerFade) {
+                clearTimeout(this.splashTimerFade);
+                this.splashTimerFade = null;
+            }
+            if (this.splashTimerHide) {
+                clearTimeout(this.splashTimerHide);
+                this.splashTimerHide = null;
+            }
             this.isCinematicTransition = true;
 
-            // 1. Trigger cinematic anamorphic flash & optic bloom
-            setTimeout(() => {
+            // 1. Trigger cinematic anamorphic flash & optic bloom (650ms)
+            this.splashTimerFade = setTimeout(() => {
                 this.splashFlashActive = true;
-            }, 450);
+            }, 650);
 
-            // 2. Smoothly start fading splash screen to reveal main hero video
+            // 2. Smoothly start fading splash screen to reveal main hero video (1000ms)
             setTimeout(() => {
                 this.splashFading = true;
-            }, 600);
+            }, 1000);
 
-            // 3. Complete transition, unmount splash overlay and reset flags cleanly
-            setTimeout(() => {
+            // 3. Complete transition, unmount splash overlay and reset flags cleanly (1600ms)
+            this.splashTimerHide = setTimeout(() => {
                 this.splashVisible = false;
                 this.isCinematicTransition = false;
                 this.splashFlashActive = false;
                 this.splashFading = false;
-            }, 880);
+            }, 1600);
         },
 
         skipSplash() {
@@ -125,9 +135,9 @@ document.addEventListener('alpine:init', () => {
         imageModalOpen: false,
         activeStudioImg: '',
         activeStudioTitle: '',
-        keywords: ['맞춤형 이러닝 콘텐츠 설계', '온·오프라인 통합 교육 솔루션', '교육 및 기업 홍보 영상 All-in-one 제작', '160평 전문 스튜디오 & 고품질 영상 연출', '지속가능한 성장을 이끄는 조직 체계'],
+        keywords: ['이러닝 콘텐츠 개발', '교육과정 기획 및 운영', '전문 영상 제작', '160평 전문 스튜디오 인프라', '지속가능한 에듀테크 솔루션'],
         currentKeywordIndex: 0,
-        heroKeywords: ['맞춤형 이러닝 콘텐츠 설계', '온·오프라인 통합 교육 솔루션', '교육 및 기업 홍보 영상 All-in-one 제작'],
+        heroKeywords: ['이러닝 콘텐츠 개발', '교육과정 기획/운영', '전문 영상 제작'],
         heroKeywordIndex: 0,
         heroTypedText: '맞춤형 이러닝 콘텐츠 설계',
         isDeletingHeroText: false,
@@ -606,7 +616,7 @@ function extractAndApplyDynamicSeoMetaKeywords() {
             { term: '후캠퍼스 평생교육원', weight: 9 },
             { term: '한국AI교육일보', weight: 9 },
             { term: '마이크로러닝', weight: 8 },
-            { term: '블렌디드 러닝', weight: 8 },
+            { term: '교육과정 기획 및 운영', weight: 8 },
             { term: '모션그래픽', weight: 8 },
             { term: '가산디지털단지 스튜디오', weight: 8 }
         ];

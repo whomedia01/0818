@@ -7,7 +7,7 @@
     
     <!-- SEO & Basic Meta Tags -->
     <meta name="description" content="체계적인 교수설계 기반 온/오프라인 교육 콘텐츠 개발, 방송 홍보 영상 제작, 160평 첨단 스튜디오 대관 전문 솔루션">
-    <meta name="keywords" content="이러닝, 이러닝제작, 이러닝콘텐츠개발, 교육콘텐츠, 교수설계, 마이크로러닝, 블렌디드러닝, 온라인강의제작, 직무교육, 영상제작, 홍보영상제작, 기업홍보영상, 공공기관영상, 다큐멘터리제작, 4K촬영, 영상프로덕션, 웹드라마, 미디어프로덕션, 모션그래픽, VFX, 스튜디오대여, 4K스튜디오, 전자칠판스튜디오, 크로마키스튜디오, 서울스튜디오대관, 160평스튜디오, 부조정실, 프롬프터, 촬영스튜디오, 후캠퍼스, 평생교육원, 한국AI교육신문, 한국AI교육일보, 언론홍보, PR솔루션">
+    <meta name="keywords" content="이러닝, 이러닝제작, 이러닝콘텐츠개발, 교육콘텐츠, 교수설계, 마이크로러닝, 교육과정기획, 교육과정운영, 온라인강의제작, 직무교육, 영상제작, 홍보영상제작, 기업홍보영상, 공공기관영상, 다큐멘터리제작, 4K촬영, 영상프로덕션, 웹드라마, 미디어프로덕션, 모션그래픽, VFX, 스튜디오대여, 4K스튜디오, 전자칠판스튜디오, 크로마키스튜디오, 서울스튜디오대관, 160평스튜디오, 부조정실, 프롬프터, 촬영스튜디오, 후캠퍼스, 평생교육원, 한국AI교육신문, 한국AI교육일보, 언론홍보, PR솔루션">
     <meta name="author" content="(주)후미디어">
     <link rel="canonical" href="https://whomedia.co.kr/">
 
@@ -32,7 +32,7 @@
     <meta property="og:url" content="https://whomedia.co.kr/">
     <meta property="og:title" content="온/오프라인 교육 콘텐츠 개발 | 방송 홍보 영상 제작 | 스튜디오 대관">
     <meta property="og:description" content="체계적인 교수설계 기반 온/오프라인 교육 콘텐츠 개발, 방송 홍보 영상 제작, 160평 첨단 스튜디오 대관 전문 솔루션">
-    <meta property="og:keywords" content="이러닝, 이러닝제작, 이러닝콘텐츠개발, 교육콘텐츠, 교수설계, 마이크로러닝, 블렌디드러닝, 온라인강의제작, 영상제작, 홍보영상제작, 기업홍보영상, 스튜디오대여, 스튜디오대관, 전자칠판스튜디오, 크로마키스튜디오, 160평스튜디오, 후캠퍼스, 한국AI교육일보">
+    <meta property="og:keywords" content="이러닝, 이러닝제작, 이러닝콘텐츠개발, 교육콘텐츠, 교수설계, 마이크로러닝, 교육과정기획및운영, 온라인강의제작, 영상제작, 홍보영상제작, 기업홍보영상, 스튜디오대여, 스튜디오대관, 전자칠판스튜디오, 크로마키스튜디오, 160평스튜디오, 후캠퍼스, 한국AI교육일보">
     <meta property="og:site_name" content="(주)후미디어">
     <meta property="og:image" content="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1200&h=630&q=85">
     <meta property="og:image:width" content="1200">
@@ -1340,23 +1340,23 @@
                     }
                     this.isCinematicTransition = true;
 
-                    // 1. Trigger cinematic anamorphic flash & optic bloom
-                    setTimeout(() => {
+                    // 1. Trigger cinematic anamorphic flash & optic bloom (600ms 후 피크 플래시)
+                    this.splashTimerFade = setTimeout(() => {
                         this.splashFlashActive = true;
-                    }, 450);
+                    }, 650);
 
-                    // 2. Smoothly start fading splash screen to reveal main hero video
+                    // 2. Smoothly start fading splash screen to reveal main hero video (1000ms 후 부드러운 오버랩 전환)
                     setTimeout(() => {
                         this.splashFading = true;
-                    }, 600);
+                    }, 1000);
 
-                    // 3. Complete transition, unmount splash overlay and reset flags cleanly
-                    setTimeout(() => {
+                    // 3. Complete transition, unmount splash overlay and reset flags cleanly (1600ms에 완결)
+                    this.splashTimerHide = setTimeout(() => {
                         this.splashVisible = false;
                         this.isCinematicTransition = false;
                         this.splashFlashActive = false;
                         this.splashFading = false;
-                    }, 880);
+                    }, 1600);
                 },
 
                 skipSplash() {
@@ -1377,11 +1377,11 @@
                 activeStudioImg: '',
                 activeStudioTitle: '',
                 studioMobileTab: 'cards',
-                keywords: ['맞춤형 이러닝 콘텐츠 설계', '온·오프라인 통합 교육 솔루션', '홍보, 고화질 강의, SNS 영상', '160평 전문 스튜디오 & 고품질 영상 연출', '전문성과 시너지를 갖춘 조직 체계'],
+                keywords: ['이러닝 콘텐츠 개발', '교육과정 기획 및 운영', '전문 영상 제작', '160평 전문 스튜디오 & 고품질 영상 연출', '전문성과 시너지를 갖춘 조직 체계'],
                 currentKeywordIndex: 0,
-                heroKeywords: ['맞춤형 이러닝 콘텐츠 설계', '온·오프라인 통합 교육 솔루션', '홍보, 고화질 강의, SNS 영상'],
+                heroKeywords: ['이러닝 콘텐츠 개발', '교육과정 기획/운영', '전문 영상 제작'],
                 heroKeywordIndex: 0,
-                heroTypedText: '맞춤형 이러닝 콘텐츠 설계',
+                heroTypedText: '이러닝 콘텐츠 개발',
                 isDeletingHeroText: false,
                 heroCharIndex: 0,
 
@@ -2112,7 +2112,7 @@
                     { term: '후캠퍼스 평생교육원', weight: 9 },
                     { term: '한국AI교육일보', weight: 9 },
                     { term: '마이크로러닝', weight: 8 },
-                    { term: '블렌디드 러닝', weight: 8 },
+                    { term: '교육과정 기획 및 운영', weight: 8 },
                     { term: '모션그래픽', weight: 8 },
                     { term: '가산디지털단지 스튜디오', weight: 8 }
                 ];
@@ -2488,48 +2488,54 @@
         @keyframes anamorphicStreak {
             0% {
                 opacity: 0;
-                transform: scaleX(0.05) scaleY(0.3);
-                filter: blur(8px) brightness(1.2);
+                transform: scaleX(0.02) scaleY(0.2);
+                filter: blur(12px) brightness(1.2);
             }
-            35% {
+            25% {
                 opacity: 1;
-                transform: scaleX(1.8) scaleY(1.5);
-                filter: blur(1.5px) brightness(3.2);
+                transform: scaleX(1.4) scaleY(1.8);
+                filter: blur(2px) brightness(4.0);
             }
-            70% {
-                opacity: 0.85;
-                transform: scaleX(2.6) scaleY(0.8);
-                filter: blur(4px) brightness(2);
+            55% {
+                opacity: 0.95;
+                transform: scaleX(2.8) scaleY(1.2);
+                filter: blur(3px) brightness(3.0);
+            }
+            80% {
+                opacity: 0.7;
+                transform: scaleX(3.8) scaleY(0.6);
+                filter: blur(6px) brightness(2.0);
             }
             100% {
                 opacity: 0;
-                transform: scaleX(3.5) scaleY(0.05);
-                filter: blur(14px) brightness(1);
+                transform: scaleX(4.8) scaleY(0.02);
+                filter: blur(16px) brightness(1);
             }
         }
 
         @keyframes filmLetterboxTop {
             0% { transform: translateY(-100%); }
-            35% { transform: translateY(0); }
-            65% { transform: translateY(0); }
+            25% { transform: translateY(0); }
+            75% { transform: translateY(0); }
             100% { transform: translateY(-100%); }
         }
 
         @keyframes filmLetterboxBottom {
             0% { transform: translateY(100%); }
-            35% { transform: translateY(0); }
-            65% { transform: translateY(0); }
+            25% { transform: translateY(0); }
+            75% { transform: translateY(0); }
             100% { transform: translateY(100%); }
         }
 
         @keyframes cameraHudPulse {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.35; transform: scale(0.92); }
+            50% { opacity: 0.25; transform: scale(0.9); }
         }
 
         @keyframes opticBloomFlash {
             0% { opacity: 0; }
-            45% { opacity: 0.92; }
+            30% { opacity: 0.95; }
+            70% { opacity: 0.6; }
             100% { opacity: 0; }
         }
 
@@ -2540,24 +2546,48 @@
             80% { width: 95%; }
         }
 
+        @keyframes focusRingScan {
+            0% { transform: scale(0.6) rotate(0deg); opacity: 0; }
+            25% { transform: scale(1.05) rotate(45deg); opacity: 1; }
+            60% { transform: scale(1.0) rotate(90deg); opacity: 0.9; }
+            85% { transform: scale(1.15) rotate(135deg); opacity: 0.7; }
+            100% { transform: scale(1.4) rotate(180deg); opacity: 0; }
+        }
+
+        @keyframes cinematicShutterFlash {
+            0% { opacity: 0; }
+            20% { opacity: 0.85; }
+            40% { opacity: 0.2; }
+            60% { opacity: 0.95; }
+            100% { opacity: 0; }
+        }
+
         .animate-anamorphic-streak {
-            animation: anamorphicStreak 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: anamorphicStreak 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .animate-film-top {
-            animation: filmLetterboxTop 0.88s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: filmLetterboxTop 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         .animate-film-bottom {
-            animation: filmLetterboxBottom 0.88s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: filmLetterboxBottom 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         .animate-optic-flash {
-            animation: opticBloomFlash 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: opticBloomFlash 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .animate-rec-blink {
-            animation: cameraHudPulse 0.65s infinite ease-in-out;
+            animation: cameraHudPulse 0.5s infinite ease-in-out;
+        }
+
+        .animate-focus-scan {
+            animation: focusRingScan 1.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-shutter-flash {
+            animation: cinematicShutterFlash 0.9s ease-out forwards;
         }
 
         .animate-audio-bar-1 {
@@ -2580,43 +2610,44 @@
          @click="skipSplash()"
          @touchstart.passive="skipSplash()"
          :class="splashFading ? 'opacity-0 pointer-events-none' : 'opacity-100'"
-         class="fixed inset-0 z-[9999] w-full h-[100dvh] bg-black transition-opacity duration-300 md:hidden flex flex-col justify-between p-6 select-none overflow-hidden cursor-pointer"
+         class="fixed inset-0 z-[9999] w-full h-[100dvh] bg-black transition-opacity duration-600 ease-out md:hidden flex flex-col justify-between p-6 select-none overflow-hidden cursor-pointer"
          style="background-image: url('/splash-mobile.jpg'); background-size: cover; background-position: center;"
          title="화면을 터치하면 메인으로 이동합니다">
         
         <!-- 1. Splash Background Video (시네마틱 랙포커스 & 줌인 인터랙션) -->
-        <video class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 transition-transform duration-700 ease-out"
-               :class="isCinematicTransition ? 'scale-[1.12] blur-[3px] brightness-[1.25]' : 'scale-100 blur-0'"
+        <video class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 transition-all duration-1000 ease-out"
+               :class="isCinematicTransition ? 'scale-[1.18] blur-[6px] brightness-[1.35] contrast-[1.15]' : 'scale-100 blur-0 brightness-100 contrast-100'"
                autoplay loop muted playsinline poster="/splash-mobile.jpg" aria-hidden="true">
             <source src="/who-main.mp4" type="video/mp4" />
         </video>
 
         <!-- 2. 기본 가독성 딤 레이어 (Dark Overlay) -->
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px] pointer-events-none z-[1]"></div>
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px] pointer-events-none z-[1] transition-opacity duration-700"
+             :class="isCinematicTransition ? 'opacity-30' : 'opacity-100'"></div>
 
-        <!-- 3. 시네마틱 영상 프로덕션 카메라 HUD 뷰파인더 (터치 시 순간 활성화) -->
+        <!-- 3. 시네마틱 영상 프로덕션 카메라 HUD 뷰파인더 (터치 시 화려하게 활성화) -->
         <div x-show="isCinematicTransition" 
-             x-transition:enter="transition ease-out duration-150"
-             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-90"
              x-transition:enter-end="opacity-100 scale-100"
              class="absolute inset-0 z-[15] pointer-events-none p-4 flex flex-col justify-between font-mono text-[10px] text-white/90">
             
             <!-- Top HUD Bar -->
             <div class="flex items-center justify-between pt-safe">
-                <div class="flex items-center gap-2 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded border border-white/20">
-                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-600 shadow-[0_0_8px_#ef4444] animate-rec-blink"></span>
-                    <span class="font-black tracking-wider text-red-500">REC</span>
+                <div class="flex items-center gap-2 bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-lg border border-red-500/40 shadow-[0_0_15px_rgba(239,68,68,0.25)]">
+                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-600 shadow-[0_0_10px_#ef4444] animate-rec-blink"></span>
+                    <span class="font-black tracking-wider text-red-500 text-[11px]">● REC</span>
                     <span class="text-white/40">|</span>
                     <span class="text-emerald-400 font-bold">4K UHD 60P</span>
                     <span class="text-white/40">|</span>
                     <span class="text-cyan-300 font-bold">LOG 3</span>
                 </div>
-                <div class="flex items-center gap-2 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded border border-white/20">
-                    <div class="flex flex-col gap-0.5 w-10">
-                        <div class="h-1 bg-white/20 rounded-full overflow-hidden">
+                <div class="flex items-center gap-2 bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-lg border border-teal-500/40 shadow-[0_0_15px_rgba(45,212,191,0.2)]">
+                    <div class="flex flex-col gap-0.5 w-12">
+                        <div class="h-1.5 bg-white/20 rounded-full overflow-hidden">
                             <div class="h-full bg-emerald-400 rounded-full animate-audio-bar-1"></div>
                         </div>
-                        <div class="h-1 bg-white/20 rounded-full overflow-hidden">
+                        <div class="h-1.5 bg-white/20 rounded-full overflow-hidden">
                             <div class="h-full bg-cyan-400 rounded-full animate-audio-bar-2"></div>
                         </div>
                     </div>
@@ -2624,50 +2655,59 @@
                 </div>
             </div>
 
-            <!-- Center Viewfinder Crosshair & AF Focus Target Box -->
+            <!-- Center Viewfinder Crosshair & AF Focus Target Box (회전 스캔 링 & AF 록 온) -->
             <div class="relative flex items-center justify-center my-auto">
-                <div class="w-24 h-24 border border-white/40 rounded-lg relative flex items-center justify-center shadow-[0_0_15px_rgba(0,245,212,0.3)]">
-                    <div class="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-[#00F5D4]"></div>
-                    <div class="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-[#00F5D4]"></div>
-                    <div class="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-[#00F5D4]"></div>
-                    <div class="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-[#00F5D4]"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-[#00F5D4] shadow-[0_0_8px_#00F5D4]"></div>
-                    <span class="absolute -bottom-5 text-[8.5px] font-bold text-[#00F5D4] tracking-widest uppercase">AF-LOCK · 0.85m</span>
+                <div class="absolute w-36 h-36 rounded-full border border-dashed border-[#00F5D4]/60 animate-focus-scan shadow-[0_0_25px_rgba(0,245,212,0.4)]"></div>
+                <div class="w-28 h-28 border-2 border-white/60 rounded-xl relative flex items-center justify-center shadow-[0_0_25px_rgba(0,245,212,0.5)] backdrop-blur-[2px]">
+                    <div class="absolute -top-1.5 -left-1.5 w-3.5 h-3.5 border-t-2 border-l-2 border-[#00F5D4]"></div>
+                    <div class="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 border-t-2 border-r-2 border-[#00F5D4]"></div>
+                    <div class="absolute -bottom-1.5 -left-1.5 w-3.5 h-3.5 border-b-2 border-l-2 border-[#00F5D4]"></div>
+                    <div class="absolute -bottom-1.5 -right-1.5 w-3.5 h-3.5 border-b-2 border-r-2 border-[#00F5D4]"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-[#00F5D4] shadow-[0_0_12px_#00F5D4] animate-ping"></div>
+                    <div class="w-2 h-2 rounded-full bg-white shadow-[0_0_6px_#fff]"></div>
+                    <span class="absolute -bottom-6 text-[9px] font-black text-[#00F5D4] tracking-widest uppercase bg-black/70 px-2 py-0.5 rounded border border-[#00F5D4]/40 shadow-sm">AF-LOCK · 0.85m · TRACKING</span>
                 </div>
             </div>
 
             <!-- Bottom HUD Bar -->
             <div class="flex items-center justify-between pb-safe">
-                <div class="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded border border-white/20 flex items-center gap-2">
-                    <span class="text-white/60">TC</span>
-                    <span class="text-amber-300 font-bold tracking-widest">00:00:01:24</span>
+                <div class="bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20 flex items-center gap-2">
+                    <span class="text-white/60 text-[9px]">TC</span>
+                    <span class="text-amber-300 font-bold tracking-widest font-mono">00:00:01:24</span>
                 </div>
-                <div class="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded border border-white/20 flex items-center gap-2 text-zinc-300">
+                <div class="bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20 flex items-center gap-2 text-zinc-200">
                     <span>1/120s</span>
                     <span class="text-white/40">·</span>
                     <span>f/1.8</span>
                     <span class="text-white/40">·</span>
                     <span class="text-blue-300 font-bold">5600K</span>
+                    <span class="text-white/40">·</span>
+                    <span class="text-emerald-300 font-bold">ISO 800</span>
                 </div>
             </div>
         </div>
 
-        <!-- 4. 아나모픽 렌즈 플레어 광선 (Anamorphic Streak Light Flare) -->
+        <!-- 4. 아나모픽 렌즈 플레어 광선 (Anamorphic Multi-Spectrum Streak Light Flares) -->
         <div x-show="isCinematicTransition"
              class="absolute inset-0 z-[20] flex items-center justify-center pointer-events-none overflow-hidden">
-            <div class="w-[200vw] h-[6px] bg-gradient-to-r from-transparent via-[#00F5D4] via-white via-[#FFAA00] to-transparent animate-anamorphic-streak shadow-[0_0_35px_#00F5D4,0_0_60px_#FFAA00]"></div>
-            <div class="absolute w-40 h-40 rounded-full bg-white/40 blur-2xl animate-optic-flash"></div>
+            <!-- Main Horizontal Cyan-Amber Streak -->
+            <div class="w-[240vw] h-[8px] bg-gradient-to-r from-transparent via-[#00F5D4] via-white via-[#FFAA00] to-transparent animate-anamorphic-streak shadow-[0_0_45px_#00F5D4,0_0_75px_#FFAA00,0_0_100px_#fff]"></div>
+            <!-- Secondary Soft Flare Bloom -->
+            <div class="absolute w-[180vw] h-[3px] bg-gradient-to-r from-transparent via-cyan-400 via-white to-transparent opacity-80 blur-xs animate-anamorphic-streak"></div>
+            <!-- Central Optic Core Glow -->
+            <div class="absolute w-56 h-56 rounded-full bg-cyan-400/30 blur-3xl animate-optic-flash"></div>
+            <div class="absolute w-24 h-24 rounded-full bg-white/70 blur-xl animate-optic-flash"></div>
         </div>
 
         <!-- 5. 2.39:1 시네마스코프 셔터 레터박스 매트 (CinemaScope Matte Bars) -->
         <div x-show="isCinematicTransition"
-             class="absolute top-0 left-0 right-0 h-16 bg-black z-[25] pointer-events-none animate-film-top"></div>
+             class="absolute top-0 left-0 right-0 h-20 bg-black z-[25] pointer-events-none animate-film-top shadow-[0_10px_25px_rgba(0,0,0,0.8)]"></div>
         <div x-show="isCinematicTransition"
-             class="absolute bottom-0 left-0 right-0 h-16 bg-black z-[25] pointer-events-none animate-film-bottom"></div>
+             class="absolute bottom-0 left-0 right-0 h-20 bg-black z-[25] pointer-events-none animate-film-bottom shadow-[0_-10px_25px_rgba(0,0,0,0.8)]"></div>
 
-        <!-- 6. 옵틱 블룸 플래시 (White Optical Flash) -->
+        <!-- 6. 옵틱 블룸 및 시네마틱 셔터 플래시 (Optic Bloom Flash) -->
         <div x-show="splashFlashActive"
-             class="absolute inset-0 bg-white z-[30] pointer-events-none animate-optic-flash"></div>
+             class="absolute inset-0 bg-white z-[30] pointer-events-none animate-shutter-flash"></div>
 
         <!-- 상단 안전 영역 여백 -->
         <div class="relative z-10 w-full pt-safe pointer-events-none"></div>
@@ -2691,11 +2731,11 @@
         <div class="relative z-10 w-full text-center pb-4 pb-safe pointer-events-none transition-all duration-300"
              :class="isCinematicTransition ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'">
             <div class="inline-flex items-center justify-center flex-wrap gap-1.5 bg-black/55 py-2 px-4 rounded-full backdrop-blur-md border border-white/15 shadow-xl">
-                <span class="text-[11.5px] font-bold text-teal-300">이러닝 개발</span>
+                <span class="text-[11.5px] font-bold text-teal-300">이러닝 콘텐츠 개발</span>
+                <span class="text-white/40 text-[10px]">·</span>
+                <span class="text-[11.5px] font-bold text-amber-300">교육과정 기획/운영</span>
                 <span class="text-white/40 text-[10px]">·</span>
                 <span class="text-[11.5px] font-bold text-blue-300">전문 영상 제작</span>
-                <span class="text-white/40 text-[10px]">·</span>
-                <span class="text-[11.5px] font-bold text-amber-300">블렌디드 러닝</span>
             </div>
         </div>
     </div>
@@ -3405,7 +3445,7 @@
                     핵심 사업 영역
                 </h2>
                 <p class="text-slate-600 text-xs sm:text-base font-medium break-keep max-w-3xl mx-auto leading-relaxed">
-                    이러닝 설계부터 교육 영상 제작, 블렌디드 러닝까지 맞춤형 에듀테크 솔루션을 제공합니다.
+                    이러닝 설계부터 교육 영상 제작, 교육과정 기획 및 운영까지 맞춤형 에듀테크 솔루션을 제공합니다.
                 </p>
             </div>
 
@@ -3423,21 +3463,21 @@
                             :class="activeServiceIndex === 0 ? 'bg-teal-600 text-white font-black shadow-md border-teal-600 ring-2 ring-teal-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
                             class="px-2 py-1.5 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
                         <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 0 ? 'bg-white animate-pulse' : 'bg-teal-500'"></span>
-                        <span class="whitespace-nowrap font-bold">1. 이러닝 개발</span>
+                        <span class="whitespace-nowrap font-bold">1. 이러닝 콘텐츠 개발</span>
                     </button>
 
                     <button @click="selectServiceCard(1); restartServiceAutoPlay(8000);"
-                            :class="activeServiceIndex === 1 ? 'bg-blue-600 text-white font-black shadow-md border-blue-600 ring-2 ring-blue-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
+                            :class="activeServiceIndex === 1 ? 'bg-amber-600 text-white font-black shadow-md border-amber-600 ring-2 ring-amber-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
                             class="px-2 py-1.5 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
-                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 1 ? 'bg-white animate-pulse' : 'bg-blue-500'"></span>
-                        <span class="whitespace-nowrap font-bold">2. 전문 영상 제작</span>
+                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 1 ? 'bg-white animate-pulse' : 'bg-amber-500'"></span>
+                        <span class="whitespace-nowrap font-bold">2. 교육과정 기획/운영</span>
                     </button>
 
                     <button @click="selectServiceCard(2); restartServiceAutoPlay(8000);"
-                            :class="activeServiceIndex === 2 ? 'bg-amber-600 text-white font-black shadow-md border-amber-600 ring-2 ring-amber-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
+                            :class="activeServiceIndex === 2 ? 'bg-blue-600 text-white font-black shadow-md border-blue-600 ring-2 ring-blue-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
                             class="px-2 py-1.5 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
-                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 2 ? 'bg-white animate-pulse' : 'bg-amber-500'"></span>
-                        <span class="whitespace-nowrap font-bold">3. 블렌디드 러닝</span>
+                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 2 ? 'bg-white animate-pulse' : 'bg-blue-500'"></span>
+                        <span class="whitespace-nowrap font-bold">3. 전문 영상 제작</span>
                     </button>
                 </div>
 
@@ -3454,7 +3494,7 @@
                  class="spotlight-section relative w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl bg-slate-900 text-white overflow-hidden shadow-xl sm:shadow-2xl border border-slate-200/80 mb-2 sm:mb-6 min-h-[290px] xs:min-h-[310px] sm:min-h-[420px] lg:min-h-[480px]">
                 
                 <!-- ========================================================= -->
-                <!-- Slide 0: 01. 이러닝 개발 (E-LEARNING) -->
+                <!-- Slide 0: 01. 이러닝 콘텐츠 개발 (E-LEARNING) -->
                 <!-- ========================================================= -->
                 <div x-show="activeServiceIndex === 0"
                      x-transition:enter="transition ease-out duration-400 transform opacity-0 translate-x-8"
@@ -3467,7 +3507,7 @@
                     
                     <!-- High-Definition Background Image -->
                     <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1400&q=85" 
-                         alt="이러닝 개발" 
+                         alt="이러닝 콘텐츠 개발" 
                          loading="eager"
                          referrerpolicy="no-referrer"
                          style="aspect-ratio: 16/9;"
@@ -3481,7 +3521,7 @@
                     <div class="relative z-10 flex items-center justify-between">
                         <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-950/90 text-teal-300 border border-teal-400/50 text-[11px] xs:text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-md">
                             <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
-                            01 · 이러닝 개발 (E-LEARNING)
+                            01 · 이러닝 콘텐츠 개발 (E-LEARNING)
                         </span>
                     </div>
 
@@ -3539,7 +3579,7 @@
                 </div>
 
                 <!-- ========================================================= -->
-                <!-- Slide 1: 02. 전문 교육 영상 제작 (MEDIA PRODUCTION) -->
+                <!-- Slide 1: 02. 교육과정 기획/운영 (CURRICULUM PLANNING & OPERATIONS) -->
                 <!-- ========================================================= -->
                 <div x-show="activeServiceIndex === 1"
                      x-transition:enter="transition ease-out duration-400 transform opacity-0 translate-x-8"
@@ -3550,9 +3590,95 @@
                      x-transition:leave-end="opacity-0 -translate-x-8"
                      class="absolute inset-0 w-full h-full p-3 xs:p-4 sm:p-7 lg:p-9 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated">
                     
+                    <!-- High-Definition Background Video -->
+                    <video src="/blended-physical-ai.mp4" 
+                           poster="/blended-physical-ai-poster.jpg" 
+                           autoplay loop muted playsinline 
+                           aria-hidden="true"
+                           style="aspect-ratio: 16/9;"
+                           class="absolute inset-0 w-full h-full object-cover brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    </video>
+                    
+                    <!-- Clean Light Directional Scrim (화사하고 선명한 비디오 뷰) -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-transparent z-0 pointer-events-none"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/35 to-transparent z-0 pointer-events-none hidden md:block"></div>
+
+                    <!-- Top Header Row -->
+                    <div class="relative z-10 flex items-center justify-between">
+                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-950/90 text-amber-300 border border-amber-400/50 text-[11px] xs:text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-md">
+                            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                            02 · 교육과정 기획/운영 (CURRICULUM PLANNING &amp; OPERATIONS)
+                        </span>
+                    </div>
+
+                    <!-- Bottom Content Overlay -->
+                    <div class="relative z-10 max-w-3xl space-y-1.5 sm:space-y-2.5 mt-auto">
+                        <div>
+                            <h3 class="text-base xs:text-lg sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] break-keep">
+                                맞춤형 교육과정 설계 및 체계적 운영
+                            </h3>
+                        </div>
+
+                        <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 폰트 사이즈 업) -->
+                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 pt-1">
+                            
+                            <!-- Solution 1 -->
+                            <div class="bg-slate-950/90 border border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
+                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
+                                    <h4 class="text-[11.5px] xs:text-xs sm:text-base font-bold text-amber-300 tracking-tight leading-tight break-keep">
+                                        커리큘럼 기획
+                                    </h4>
+                                </div>
+                                <p class="text-[10px] xs:text-[11px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
+                                    체계적 교육 설계
+                                </p>
+                            </div>
+
+                            <!-- Solution 2 -->
+                            <div class="bg-slate-950/90 border border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
+                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
+                                    <h4 class="text-[11.5px] xs:text-xs sm:text-base font-bold text-amber-300 tracking-tight leading-tight break-keep">
+                                        전문 운영 관리
+                                    </h4>
+                                </div>
+                                <p class="text-[10px] xs:text-[11px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
+                                    학습자 밀착 케어
+                                </p>
+                            </div>
+
+                            <!-- Solution 3 -->
+                            <div class="bg-slate-950/90 border border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
+                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
+                                    <h4 class="text-[11.5px] xs:text-xs sm:text-base font-bold text-amber-300 tracking-tight leading-tight break-keep">
+                                        맞춤형 직무 워크숍
+                                    </h4>
+                                </div>
+                                <p class="text-[10px] xs:text-[11px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
+                                    B2B·B2G 밀착 운영
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- Slide 2: 03. 전문 영상 제작 (MEDIA PRODUCTION) -->
+                <!-- ========================================================= -->
+                <div x-show="activeServiceIndex === 2"
+                     x-transition:enter="transition ease-out duration-400 transform opacity-0 translate-x-8"
+                     x-transition:enter-start="opacity-0 translate-x-8"
+                     x-transition:enter-end="opacity-100 translate-x-0"
+                     x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
+                     x-transition:leave-start="opacity-100 translate-x-0"
+                     x-transition:leave-end="opacity-0 -translate-x-8"
+                     class="absolute inset-0 w-full h-full p-3 xs:p-4 sm:p-7 lg:p-9 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated">
+                    
                     <!-- High-Definition Background Image -->
                     <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1400&q=85" 
-                         alt="전문 교육 영상 제작" 
+                         alt="전문 영상 제작" 
                          loading="eager"
                          referrerpolicy="no-referrer"
                          style="aspect-ratio: 16/9;"
@@ -3566,7 +3692,7 @@
                     <div class="relative z-10 flex items-center justify-between">
                         <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-950/90 text-cyan-300 border border-cyan-400/50 text-[11px] xs:text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-md">
                             <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                            02 · 전문 교육 영상 제작 (MEDIA PRODUCTION)
+                            03 · 전문 영상 제작 (MEDIA PRODUCTION)
                         </span>
                     </div>
 
@@ -3617,92 +3743,6 @@
                                 </div>
                                 <p class="text-[10px] xs:text-[11px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
                                     무결점 저지연 송출
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ========================================================= -->
-                <!-- Slide 2: 03. 블렌디드 러닝 (BLENDED LEARNING) -->
-                <!-- ========================================================= -->
-                <div x-show="activeServiceIndex === 2"
-                     x-transition:enter="transition ease-out duration-400 transform opacity-0 translate-x-8"
-                     x-transition:enter-start="opacity-0 translate-x-8"
-                     x-transition:enter-end="opacity-100 translate-x-0"
-                     x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
-                     x-transition:leave-start="opacity-100 translate-x-0"
-                     x-transition:leave-end="opacity-0 -translate-x-8"
-                     class="absolute inset-0 w-full h-full p-3 xs:p-4 sm:p-7 lg:p-9 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated">
-                    
-                    <!-- High-Definition Background Video -->
-                    <video src="/blended-physical-ai.mp4" 
-                           poster="/blended-physical-ai-poster.jpg" 
-                           autoplay loop muted playsinline 
-                           aria-hidden="true"
-                           style="aspect-ratio: 16/9;"
-                           class="absolute inset-0 w-full h-full object-cover brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
-                    </video>
-                    
-                    <!-- Clean Light Directional Scrim (화사하고 선명한 비디오 뷰) -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-transparent z-0 pointer-events-none"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/35 to-transparent z-0 pointer-events-none hidden md:block"></div>
-
-                    <!-- Top Header Row -->
-                    <div class="relative z-10 flex items-center justify-between">
-                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-950/90 text-amber-300 border border-amber-400/50 text-[11px] xs:text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-md">
-                            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                            03 · 블렌디드 러닝 (BLENDED LEARNING)
-                        </span>
-                    </div>
-
-                    <!-- Bottom Content Overlay -->
-                    <div class="relative z-10 max-w-3xl space-y-1.5 sm:space-y-2.5 mt-auto">
-                        <div>
-                            <h3 class="text-base xs:text-lg sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] break-keep">
-                                온·오프라인 교육의 완벽한 융합
-                            </h3>
-                        </div>
-
-                        <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 폰트 사이즈 업) -->
-                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 pt-1">
-                            
-                            <!-- Solution 1 -->
-                            <div class="bg-slate-950/90 border border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
-                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
-                                    <h4 class="text-[11.5px] xs:text-xs sm:text-base font-bold text-amber-300 tracking-tight leading-tight break-keep">
-                                        하이브리드 설계
-                                    </h4>
-                                </div>
-                                <p class="text-[10px] xs:text-[11px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    플립러닝 시공간 극복
-                                </p>
-                            </div>
-
-                            <!-- Solution 2 -->
-                            <div class="bg-slate-950/90 border border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
-                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
-                                    <h4 class="text-[11.5px] xs:text-xs sm:text-base font-bold text-amber-300 tracking-tight leading-tight break-keep">
-                                        실무 디지털 콘텐츠
-                                    </h4>
-                                </div>
-                                <p class="text-[10px] xs:text-[11px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    현장 즉시 투입 지원
-                                </p>
-                            </div>
-
-                            <!-- Solution 3 -->
-                            <div class="bg-slate-950/90 border border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
-                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
-                                    <h4 class="text-[11.5px] xs:text-xs sm:text-base font-bold text-amber-300 tracking-tight leading-tight break-keep">
-                                        맞춤형 직무 워크숍
-                                    </h4>
-                                </div>
-                                <p class="text-[10px] xs:text-[11px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    B2B·B2G 밀착 설계
                                 </p>
                             </div>
                         </div>
@@ -4396,7 +4436,7 @@
                             <option value="" disabled selected>문의할 희망 항목을 선택해 주세요</option>
                             <option value="이러닝 콘텐츠 개발">이러닝 콘텐츠 개발</option>
                             <option value="공공·기업 영상 제작 &amp; 홍보">공공·기업 영상 제작 &amp; 홍보</option>
-                            <option value="블렌디드 러닝 &amp; 오프라인 교육">블렌디드 러닝 &amp; 오프라인 교육</option>
+                            <option value="교육과정 기획 및 운영">교육과정 기획 및 운영</option>
                             <option value="스마트 스튜디오 대여">스마트 스튜디오 대여</option>
                             <option value="기타 일반 문의">기타 일반 문의</option>
                         </select>
