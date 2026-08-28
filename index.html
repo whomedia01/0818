@@ -4208,32 +4208,24 @@
         <div class="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-6 sm:mb-8">
                 <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mb-3 leading-tight break-keep">
-                    프로젝트 및 제작 상담, 편하게 문의하세요
+                    이러닝 콘텐츠 및 교육과정 개발 / 영상 제작 문의
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-600 font-medium break-keep max-w-xl mx-auto">
                     문의 사항을 남겨주시면 담당자가 확인 후 신속하게 안내해 드립니다.
                 </p>
             </div>
 
-            <!-- Inquiry Form -->
-            <div class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xl">
-                <div class="flex items-center justify-between mb-4 sm:mb-6 pb-3 border-b border-slate-100">
-                    <h3 class="text-base sm:text-lg font-bold text-slate-900">간편 상담 신청</h3>
-                    <span class="text-[10px] sm:text-xs text-blue-600 font-semibold bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">빠른 답변</span>
-                </div>
+            <!-- Inquiry Form Container with Scroll-into-view Entrance Animation -->
+            <div id="inquiry-form-container"
+                 x-data="{ formRevealed: false }"
+                 x-init="const formObs = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { formRevealed = true; formObs.disconnect(); } }, { threshold: 0.1 }); formObs.observe($el);"
+                 :class="formRevealed ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-[0.98]'"
+                 class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xl transition-all duration-700 ease-out will-change-transform">
                 
                 <form @submit.prevent="submitInquiry()" class="space-y-3 sm:space-y-4">
                     <!-- 기관/회사명 (로컬스토리지 히스토리 저장 및 자동완성 지원) -->
                     <div class="relative" @click.outside="companyFocused = false">
-                        <div class="flex items-center justify-between mb-1">
-                            <label class="block text-xs font-bold text-slate-700">기관 / 회사명 (선택)</label>
-                            <span x-show="companyHistory.length > 0" 
-                                  @click="companyFocused = !companyFocused; if(companyFocused) loadCompanyHistory();" 
-                                  class="text-[11px] text-blue-600 font-medium cursor-pointer hover:underline flex items-center gap-1 select-none">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                <span x-text="companyFocused ? '닫기' : '최근 기록 (' + companyHistory.length + ')'"></span>
-                            </span>
-                        </div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">기관 / 회사명 (선택)</label>
                         <div class="relative">
                             <input type="text" 
                                    x-model="inquiryForm.company" 
@@ -4396,35 +4388,35 @@
     <!-- MOBILE QUICK FLOATING APP DOCK NAVIGATION (자연스럽고 조화로운 톤 & 슬림 바) -->
     <div id="mobile-dock-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-2xl border-t border-slate-200/95 px-2 pt-1 pb-safe flex items-center justify-around shadow-[0_-6px_25px_rgba(0,0,0,0.08)] select-none" style="padding-bottom: max(0.35rem, env(safe-area-inset-bottom, 0.35rem));">
         <!-- 1. 사업영역 -->
-        <a href="#services" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-teal-600 active:scale-95 transition-all group">
-            <div class="p-1 rounded-lg group-hover:bg-slate-100 transition-colors">
-                <svg class="w-[18px] h-[18px] text-slate-600 group-hover:text-teal-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <a href="#services" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-blue-600 active:scale-95 transition-all group">
+            <div class="p-1 rounded-lg group-hover:bg-blue-50 transition-colors">
+                <svg class="w-[18px] h-[18px] text-blue-600 group-hover:text-blue-700 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </div>
-            <span class="text-[9.5px] font-bold tracking-tight text-slate-700 group-hover:text-teal-600">사업영역</span>
+            <span class="text-[9.5px] font-bold tracking-tight text-slate-700 group-hover:text-blue-600">사업영역</span>
         </a>
 
         <!-- 2. 스튜디오 -->
-        <a href="#studio" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-teal-600 active:scale-95 transition-all group">
-            <div class="p-1 rounded-lg group-hover:bg-slate-100 transition-colors">
-                <svg class="w-[18px] h-[18px] text-slate-600 group-hover:text-teal-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        <a href="#studio" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-amber-600 active:scale-95 transition-all group">
+            <div class="p-1 rounded-lg group-hover:bg-amber-50 transition-colors">
+                <svg class="w-[18px] h-[18px] text-amber-500 group-hover:text-amber-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
             </div>
-            <span class="text-[9.5px] font-bold tracking-tight text-slate-700 group-hover:text-teal-600">스튜디오</span>
+            <span class="text-[9.5px] font-bold tracking-tight text-slate-700 group-hover:text-amber-600">스튜디오</span>
         </a>
 
         <!-- 3. 포트폴리오 -->
-        <a href="#reference" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-teal-600 active:scale-95 transition-all group">
-            <div class="p-1 rounded-lg group-hover:bg-slate-100 transition-colors">
-                <svg class="w-[18px] h-[18px] text-slate-600 group-hover:text-teal-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 012-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+        <a href="#reference" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-purple-600 active:scale-95 transition-all group">
+            <div class="p-1 rounded-lg group-hover:bg-purple-50 transition-colors">
+                <svg class="w-[18px] h-[18px] text-purple-600 group-hover:text-purple-700 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 012-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
             </div>
-            <span class="text-[9.5px] font-bold tracking-tight text-slate-700 group-hover:text-teal-600">포트폴리오</span>
+            <span class="text-[9.5px] font-bold tracking-tight text-slate-700 group-hover:text-purple-600">포트폴리오</span>
         </a>
 
         <!-- 4. 오시는길 -->
-        <a :href="naverMapUrl" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-teal-600 active:scale-95 transition-all group">
-            <div class="p-1 rounded-lg group-hover:bg-slate-100 transition-colors">
-                <svg class="w-[18px] h-[18px] text-slate-600 group-hover:text-teal-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <a :href="naverMapUrl" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-emerald-600 active:scale-95 transition-all group">
+            <div class="p-1 rounded-lg group-hover:bg-emerald-50 transition-colors">
+                <svg class="w-[18px] h-[18px] text-emerald-600 group-hover:text-emerald-700 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             </div>
-            <span class="text-[9.5px] font-bold tracking-tight text-slate-700 group-hover:text-teal-600">오시는길</span>
+            <span class="text-[9.5px] font-bold tracking-tight text-slate-700 group-hover:text-emerald-600">오시는길</span>
         </a>
 
         <!-- 5. 문의하기 (차분하고 세련된 다크 슬레이트 & 틸 포인트) -->
