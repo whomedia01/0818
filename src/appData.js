@@ -82,13 +82,39 @@ document.addEventListener('alpine:init', () => {
         mobileMenuOpen: false, 
         splashVisible: true,
         splashFading: false,
-        skipSplash() {
-            if (!this.splashVisible || this.splashFading) return;
-            this.splashFading = true;
+        isCinematicTransition: false,
+        splashFlashActive: false,
+        splashAutoTimer: null,
+        
+        startCinematicTransition() {
+            if (!this.splashVisible || this.isCinematicTransition) return;
+            if (this.splashAutoTimer) {
+                clearTimeout(this.splashAutoTimer);
+                this.splashAutoTimer = null;
+            }
+            this.isCinematicTransition = true;
+
+            // 1. Trigger cinematic anamorphic flash & optic bloom
+            setTimeout(() => {
+                this.splashFlashActive = true;
+            }, 450);
+
+            // 2. Smoothly start fading splash screen to reveal main hero video
+            setTimeout(() => {
+                this.splashFading = true;
+            }, 600);
+
+            // 3. Complete transition, unmount splash overlay and reset flags cleanly
             setTimeout(() => {
                 this.splashVisible = false;
+                this.isCinematicTransition = false;
+                this.splashFlashActive = false;
                 this.splashFading = false;
-            }, 450);
+            }, 880);
+        },
+
+        skipSplash() {
+            this.startCinematicTransition();
         },
         refTab: 'all',
         searchQuery: '',

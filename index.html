@@ -2448,38 +2448,200 @@
             max-width: 100vw;
             overflow-x: hidden;
         }
+
+        /* =========================================================
+           CINEMATIC VIDEO PRODUCTION TRANSITION (영상 전문 프로덕션 연출)
+        ========================================================= */
+        @keyframes anamorphicStreak {
+            0% {
+                opacity: 0;
+                transform: scaleX(0.05) scaleY(0.3);
+                filter: blur(8px) brightness(1.2);
+            }
+            35% {
+                opacity: 1;
+                transform: scaleX(1.8) scaleY(1.5);
+                filter: blur(1.5px) brightness(3.2);
+            }
+            70% {
+                opacity: 0.85;
+                transform: scaleX(2.6) scaleY(0.8);
+                filter: blur(4px) brightness(2);
+            }
+            100% {
+                opacity: 0;
+                transform: scaleX(3.5) scaleY(0.05);
+                filter: blur(14px) brightness(1);
+            }
+        }
+
+        @keyframes filmLetterboxTop {
+            0% { transform: translateY(-100%); }
+            35% { transform: translateY(0); }
+            65% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+
+        @keyframes filmLetterboxBottom {
+            0% { transform: translateY(100%); }
+            35% { transform: translateY(0); }
+            65% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+
+        @keyframes cameraHudPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.92); }
+        }
+
+        @keyframes opticBloomFlash {
+            0% { opacity: 0; }
+            45% { opacity: 0.92; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes audioMeterLevel {
+            0%, 100% { width: 35%; }
+            30% { width: 85%; }
+            60% { width: 60%; }
+            80% { width: 95%; }
+        }
+
+        .animate-anamorphic-streak {
+            animation: anamorphicStreak 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-film-top {
+            animation: filmLetterboxTop 0.88s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .animate-film-bottom {
+            animation: filmLetterboxBottom 0.88s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .animate-optic-flash {
+            animation: opticBloomFlash 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-rec-blink {
+            animation: cameraHudPulse 0.65s infinite ease-in-out;
+        }
+
+        .animate-audio-bar-1 {
+            animation: audioMeterLevel 0.4s infinite ease-in-out alternate;
+        }
+        .animate-audio-bar-2 {
+            animation: audioMeterLevel 0.35s infinite ease-in-out alternate-reverse;
+        }
     </style>
 </head>
     <body x-cloak
       x-data="whomediaApp"
       @scroll.window="scrolled = (window.pageYOffset > 20)"
       @keydown.escape.window="closeModal(); if (mobileMenuOpen) mobileMenuOpen = false;"
-      :class="{ 'overflow-hidden': mobileMenuOpen || splashVisible, 'pb-20 md:pb-0': true }">
+      :class="{ 'overflow-hidden': mobileMenuOpen || splashVisible, 'pb-14 md:pb-0': true }">
 
-    <!-- MOBILE SPLASH SCREEN (모바일 진입 시 인트로 스플래시 노출 - 화면 터치 시 즉시 건너뛰기) -->
+    <!-- MOBILE SPLASH SCREEN (영상 전문 프로덕션 시네마틱 렌즈 플레어 & 카메라 뷰파인더 랙포커스 트랜지션) -->
     <div x-show="splashVisible"
          x-cloak
          @click="skipSplash()"
          @touchstart.passive="skipSplash()"
          :class="splashFading ? 'opacity-0 pointer-events-none' : 'opacity-100'"
-         class="fixed inset-0 z-[9999] w-full h-[100dvh] bg-black transition-opacity duration-500 md:hidden flex flex-col justify-between p-6 select-none overflow-hidden cursor-pointer"
+         class="fixed inset-0 z-[9999] w-full h-[100dvh] bg-black transition-opacity duration-300 md:hidden flex flex-col justify-between p-6 select-none overflow-hidden cursor-pointer"
          style="background-image: url('/splash-mobile.jpg'); background-size: cover; background-position: center;"
          title="화면을 터치하면 메인으로 이동합니다">
         
-        <!-- Splash Background Video (자동 무음 재생 & poster 이미지 백업) -->
-        <video class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
+        <!-- 1. Splash Background Video (시네마틱 랙포커스 & 줌인 인터랙션) -->
+        <video class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 transition-transform duration-700 ease-out"
+               :class="isCinematicTransition ? 'scale-[1.12] blur-[3px] brightness-[1.25]' : 'scale-100 blur-0'"
                autoplay loop muted playsinline poster="/splash-mobile.jpg" aria-hidden="true">
             <source src="/who-main.mp4" type="video/mp4" />
         </video>
 
-        <!-- 1. 이미지 가독성 확보용 딤 레이어 (Dark Overlay) -->
+        <!-- 2. 기본 가독성 딤 레이어 (Dark Overlay) -->
         <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px] pointer-events-none z-[1]"></div>
 
-        <!-- 2. 상단 안전 영역 여백 -->
+        <!-- 3. 시네마틱 영상 프로덕션 카메라 HUD 뷰파인더 (터치 시 순간 활성화) -->
+        <div x-show="isCinematicTransition" 
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100"
+             class="absolute inset-0 z-[15] pointer-events-none p-4 flex flex-col justify-between font-mono text-[10px] text-white/90">
+            
+            <!-- Top HUD Bar -->
+            <div class="flex items-center justify-between pt-safe">
+                <div class="flex items-center gap-2 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded border border-white/20">
+                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-600 shadow-[0_0_8px_#ef4444] animate-rec-blink"></span>
+                    <span class="font-black tracking-wider text-red-500">REC</span>
+                    <span class="text-white/40">|</span>
+                    <span class="text-emerald-400 font-bold">4K UHD 60P</span>
+                    <span class="text-white/40">|</span>
+                    <span class="text-cyan-300 font-bold">LOG 3</span>
+                </div>
+                <div class="flex items-center gap-2 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded border border-white/20">
+                    <div class="flex flex-col gap-0.5 w-10">
+                        <div class="h-1 bg-white/20 rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-400 rounded-full animate-audio-bar-1"></div>
+                        </div>
+                        <div class="h-1 bg-white/20 rounded-full overflow-hidden">
+                            <div class="h-full bg-cyan-400 rounded-full animate-audio-bar-2"></div>
+                        </div>
+                    </div>
+                    <span class="text-amber-400 font-bold">PRORES HQ</span>
+                </div>
+            </div>
+
+            <!-- Center Viewfinder Crosshair & AF Focus Target Box -->
+            <div class="relative flex items-center justify-center my-auto">
+                <div class="w-24 h-24 border border-white/40 rounded-lg relative flex items-center justify-center shadow-[0_0_15px_rgba(0,245,212,0.3)]">
+                    <div class="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-[#00F5D4]"></div>
+                    <div class="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-[#00F5D4]"></div>
+                    <div class="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-[#00F5D4]"></div>
+                    <div class="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-[#00F5D4]"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-[#00F5D4] shadow-[0_0_8px_#00F5D4]"></div>
+                    <span class="absolute -bottom-5 text-[8.5px] font-bold text-[#00F5D4] tracking-widest uppercase">AF-LOCK · 0.85m</span>
+                </div>
+            </div>
+
+            <!-- Bottom HUD Bar -->
+            <div class="flex items-center justify-between pb-safe">
+                <div class="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded border border-white/20 flex items-center gap-2">
+                    <span class="text-white/60">TC</span>
+                    <span class="text-amber-300 font-bold tracking-widest">00:00:01:24</span>
+                </div>
+                <div class="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded border border-white/20 flex items-center gap-2 text-zinc-300">
+                    <span>1/120s</span>
+                    <span class="text-white/40">·</span>
+                    <span>f/1.8</span>
+                    <span class="text-white/40">·</span>
+                    <span class="text-blue-300 font-bold">5600K</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 아나모픽 렌즈 플레어 광선 (Anamorphic Streak Light Flare) -->
+        <div x-show="isCinematicTransition"
+             class="absolute inset-0 z-[20] flex items-center justify-center pointer-events-none overflow-hidden">
+            <div class="w-[200vw] h-[6px] bg-gradient-to-r from-transparent via-[#00F5D4] via-white via-[#FFAA00] to-transparent animate-anamorphic-streak shadow-[0_0_35px_#00F5D4,0_0_60px_#FFAA00]"></div>
+            <div class="absolute w-40 h-40 rounded-full bg-white/40 blur-2xl animate-optic-flash"></div>
+        </div>
+
+        <!-- 5. 2.39:1 시네마스코프 셔터 레터박스 매트 (CinemaScope Matte Bars) -->
+        <div x-show="isCinematicTransition"
+             class="absolute top-0 left-0 right-0 h-16 bg-black z-[25] pointer-events-none animate-film-top"></div>
+        <div x-show="isCinematicTransition"
+             class="absolute bottom-0 left-0 right-0 h-16 bg-black z-[25] pointer-events-none animate-film-bottom"></div>
+
+        <!-- 6. 옵틱 블룸 플래시 (White Optical Flash) -->
+        <div x-show="splashFlashActive"
+             class="absolute inset-0 bg-white z-[30] pointer-events-none animate-optic-flash"></div>
+
+        <!-- 상단 안전 영역 여백 -->
         <div class="relative z-10 w-full pt-safe pointer-events-none"></div>
 
-        <!-- 3. 중앙 영역: 후미디어(WHOMEDIA) 로고 & 핵심 슬로건 -->
-        <div class="relative z-10 w-full flex flex-col items-center justify-center text-center px-4 my-auto pointer-events-none">
+        <!-- 중앙 영역: 후미디어(WHOMEDIA) 로고 & 핵심 슬로건 -->
+        <div class="relative z-10 w-full flex flex-col items-center justify-center text-center px-4 my-auto pointer-events-none transition-all duration-300"
+             :class="isCinematicTransition ? 'opacity-0 scale-90' : 'opacity-100 scale-100'">
             <div class="inline-block px-4 py-1.5 rounded-full bg-[#00F5D4]/10 border border-[#00F5D4]/30 text-[#00F5D4] text-xs font-bold tracking-widest uppercase mb-3 shadow-[0_0_15px_rgba(0,245,212,0.2)]">
                 EDUTECH &amp; PRODUCTION
             </div>
@@ -2492,8 +2654,9 @@
             </p>
         </div>
 
-        <!-- 4. 하단 영역: 사업영역 핵심 키워드 -->
-        <div class="relative z-10 w-full text-center pb-4 pb-safe pointer-events-none">
+        <!-- 하단 영역: 사업영역 핵심 키워드 -->
+        <div class="relative z-10 w-full text-center pb-4 pb-safe pointer-events-none transition-all duration-300"
+             :class="isCinematicTransition ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'">
             <div class="inline-flex items-center justify-center flex-wrap gap-1.5 bg-black/55 py-2 px-4 rounded-full backdrop-blur-md border border-white/15 shadow-xl">
                 <span class="text-[11.5px] font-bold text-teal-300">이러닝 개발</span>
                 <span class="text-white/40 text-[10px]">·</span>
@@ -3291,13 +3454,10 @@
 
                     <!-- Bottom Content Overlay -->
                     <div class="relative z-10 max-w-3xl space-y-1.5 sm:space-y-2.5 mt-auto">
-                        <div class="space-y-0.5">
+                        <div>
                             <h3 class="text-base xs:text-lg sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] break-keep">
                                 맞춤형 디지털 학습 모델 구축
                             </h3>
-                            <p class="text-xs xs:text-xs sm:text-sm text-slate-200 leading-tight sm:leading-snug font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] break-keep">
-                                교육 목표에 최적화된 학습 설계와 SCORM 표준 규격을 완벽 준수합니다.
-                            </p>
                         </div>
 
                         <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 폰트 사이즈 업) -->
@@ -3379,13 +3539,10 @@
 
                     <!-- Bottom Content Overlay -->
                     <div class="relative z-10 max-w-3xl space-y-1.5 sm:space-y-2.5 mt-auto">
-                        <div class="space-y-0.5">
+                        <div>
                             <h3 class="text-base xs:text-lg sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] break-keep">
                                 기획부터 완제품까지 원스톱 영상 제작
                             </h3>
-                            <p class="text-xs xs:text-xs sm:text-sm text-slate-200 leading-tight sm:leading-snug font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] break-keep">
-                                160평 대형 자체 스튜디오와 최상위 장비로 몰입도 높은 교육 영상을 완성합니다.
-                            </p>
                         </div>
 
                         <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 폰트 사이즈 업) -->
@@ -3468,13 +3625,10 @@
 
                     <!-- Bottom Content Overlay -->
                     <div class="relative z-10 max-w-3xl space-y-1.5 sm:space-y-2.5 mt-auto">
-                        <div class="space-y-0.5">
+                        <div>
                             <h3 class="text-base xs:text-lg sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] break-keep">
                                 온·오프라인 교육의 완벽한 융합
                             </h3>
-                            <p class="text-xs xs:text-xs sm:text-sm text-slate-200 leading-tight sm:leading-snug font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] break-keep">
-                                현장 실무 실습과 디지털 콘텐츠를 결합해 교육 효과와 실무 적용력을 극대화합니다.
-                            </p>
                         </div>
 
                         <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 폰트 사이즈 업) -->
@@ -4270,27 +4424,45 @@
         </div>
     </footer>
 
-    <!-- MOBILE QUICK FLOATING APP DOCK NAVIGATION -->
-    <div id="mobile-dock-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 px-3 pt-2 pb-safe flex items-center justify-around shadow-2xl select-none" style="padding-bottom: max(0.6rem, env(safe-area-inset-bottom, 0.6rem));">
-        <a href="#services" class="flex flex-col items-center justify-center min-w-[54px] min-h-[44px] py-1 px-1.5 text-slate-600 hover:text-blue-600 active:scale-90 transition-all">
-            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-            <span class="text-[10px] font-bold mt-0.5 tracking-tight">사업영역</span>
+    <!-- MOBILE QUICK FLOATING APP DOCK NAVIGATION (컴팩트 슬림 세로폭 & 고시인성 네온/글로우 효과) -->
+    <div id="mobile-dock-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-2xl border-t border-slate-200/95 px-2 pt-1 pb-safe flex items-center justify-around shadow-[0_-6px_25px_rgba(0,0,0,0.12)] select-none" style="padding-bottom: max(0.35rem, env(safe-area-inset-bottom, 0.35rem));">
+        <!-- 1. 사업영역 -->
+        <a href="#services" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-blue-600 active:scale-95 transition-all group">
+            <div class="p-1 rounded-lg group-hover:bg-blue-50 transition-colors">
+                <svg class="w-[18px] h-[18px] text-blue-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <span class="text-[9.5px] font-black tracking-tight text-slate-800 group-hover:text-blue-600">사업영역</span>
         </a>
-        <a href="#studio" class="flex flex-col items-center justify-center min-w-[54px] min-h-[44px] py-1 px-1.5 text-slate-600 hover:text-amber-600 active:scale-90 transition-all">
-            <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-            <span class="text-[10px] font-bold mt-0.5 tracking-tight">스튜디오</span>
+
+        <!-- 2. 스튜디오 -->
+        <a href="#studio" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-amber-600 active:scale-95 transition-all group">
+            <div class="p-1 rounded-lg group-hover:bg-amber-50 transition-colors">
+                <svg class="w-[18px] h-[18px] text-amber-500 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            </div>
+            <span class="text-[9.5px] font-black tracking-tight text-slate-800 group-hover:text-amber-600">스튜디오</span>
         </a>
-        <a href="#reference" class="flex flex-col items-center justify-center min-w-[54px] min-h-[44px] py-1 px-1.5 text-slate-600 hover:text-purple-600 active:scale-90 transition-all">
-            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 012-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-            <span class="text-[10px] font-bold mt-0.5 tracking-tight">포트폴리오</span>
+
+        <!-- 3. 포트폴리오 -->
+        <a href="#reference" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-purple-600 active:scale-95 transition-all group">
+            <div class="p-1 rounded-lg group-hover:bg-purple-50 transition-colors">
+                <svg class="w-[18px] h-[18px] text-purple-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 012-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            </div>
+            <span class="text-[9.5px] font-black tracking-tight text-slate-800 group-hover:text-purple-600">포트폴리오</span>
         </a>
-        <a :href="naverMapUrl" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center min-w-[54px] min-h-[44px] py-1 px-1.5 text-slate-600 hover:text-emerald-600 active:scale-90 transition-all">
-            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            <span class="text-[10px] font-bold mt-0.5 tracking-tight">오시는길</span>
+
+        <!-- 4. 오시는길 -->
+        <a :href="naverMapUrl" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center min-w-[50px] min-h-[38px] py-0.5 px-1 text-slate-700 hover:text-emerald-600 active:scale-95 transition-all group">
+            <div class="p-1 rounded-lg group-hover:bg-emerald-50 transition-colors">
+                <svg class="w-[18px] h-[18px] text-emerald-600 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <span class="text-[9.5px] font-black tracking-tight text-slate-800 group-hover:text-emerald-600">오시는길</span>
         </a>
-        <a href="#contact" class="flex flex-col items-center justify-center min-w-[58px] min-h-[44px] py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-extrabold shadow-md active:scale-90 transition-all">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-            <span class="text-[10.5px] font-black mt-0.5 tracking-tight">문의하기</span>
+
+        <!-- 5. 문의하기 (눈에 확 띄는 비비드 블루 그라데이션 + 발광 섀도우) -->
+        <a href="#contact" class="flex flex-col items-center justify-center min-w-[62px] min-h-[36px] py-1 px-3 bg-gradient-to-r from-blue-600 via-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-black shadow-[0_2px_12px_rgba(37,99,235,0.45)] border border-blue-400/30 active:scale-95 transition-all cursor-pointer relative overflow-hidden">
+            <div class="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition-opacity"></div>
+            <svg class="w-[17px] h-[17px] relative z-10 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+            <span class="text-[10px] font-black tracking-tight mt-[1px] relative z-10">문의하기</span>
         </a>
     </div>
 
