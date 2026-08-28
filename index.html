@@ -1386,6 +1386,30 @@
                     this.startCinematicTransition();
                 },
 
+                openSplash() {
+                    this.mobileMenuOpen = false;
+                    if (this.splashAutoTimer) {
+                        clearTimeout(this.splashAutoTimer);
+                        this.splashAutoTimer = null;
+                    }
+                    if (this.splashTimerFade) {
+                        clearTimeout(this.splashTimerFade);
+                        this.splashTimerFade = null;
+                    }
+                    if (this.splashTimerHide) {
+                        clearTimeout(this.splashTimerHide);
+                        this.splashTimerHide = null;
+                    }
+                    this.splashVisible = true;
+                    this.splashFading = false;
+                    this.isCinematicTransition = false;
+                    this.splashFlashActive = false;
+                    window.scrollTo({ top: 0, behavior: 'instant' });
+                    this.splashAutoTimer = setTimeout(() => {
+                        this.startCinematicTransition();
+                    }, 5500);
+                },
+
                 refTab: 'all',
                 searchQuery: '',
                 portfolioIndex: 0,
@@ -2958,7 +2982,7 @@
             
             <!-- Top Bar with Brand Logo and Close Button -->
             <div class="flex items-center justify-between pb-4 border-b border-slate-800 shrink-0">
-                <a href="#" @click="mobileMenuOpen = false" class="flex flex-col select-none" title="(주)후미디어">
+                <a href="#" @click.prevent="openSplash()" class="flex flex-col select-none" title="(주)후미디어 메인 스플래시로 이동">
                     <div class="flex items-center text-xl font-black brand-logo-font tracking-tight">
                         <span class="font-black text-[#E31B23]">WHO</span>
                         <span class="font-black text-white ml-[1px]">MEDIA</span>
@@ -2979,16 +3003,15 @@
             <div class="my-auto py-4 space-y-3 shrink-0">
                 <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">전체 메뉴</div>
                 <div class="grid grid-cols-2 gap-2.5">
-                    <!-- Home -->
-                    <a @click="mobileMenuOpen = false" href="#" 
+                    <!-- Home (스플래시 메인 연결) -->
+                    <a @click.prevent="openSplash()" href="#" 
                        class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-xl">🏠</span>
-                            <span class="text-[9px] font-bold text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">MAIN</span>
+                            <span class="text-2xl">🏠</span>
                         </div>
                         <div>
                             <div class="font-black text-sm text-white">홈</div>
-                            <div class="text-[10px] text-slate-400 mt-0.5">후미디어 메인 비전</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">시네마틱 인트로 &amp; 메인</div>
                         </div>
                     </a>
 
@@ -2996,8 +3019,7 @@
                     <a @click="openOrgChart()" href="#organization" 
                        class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-xl">👥</span>
-                            <span class="text-[9px] font-bold text-blue-400 bg-blue-950/60 px-1.5 py-0.5 rounded border border-blue-800/50">ORGANIZATION</span>
+                            <span class="text-2xl">👥</span>
                         </div>
                         <div>
                             <div class="font-black text-sm text-white">조직도</div>
@@ -3009,12 +3031,11 @@
                     <a @click="mobileMenuOpen = false" href="#services" 
                        class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-xl">💼</span>
-                            <span class="text-[9px] font-bold text-emerald-400 bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-800/50">SERVICES</span>
+                            <span class="text-2xl">💼</span>
                         </div>
                         <div>
                             <div class="font-black text-sm text-white">사업영역</div>
-                            <div class="text-[10px] text-slate-400 mt-0.5">에듀테크 &amp; 영상 솔루션</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">이러닝 · 교육기획 · 영상제작</div>
                         </div>
                     </a>
 
@@ -3022,12 +3043,11 @@
                     <a @click="mobileMenuOpen = false" href="#studio" 
                        class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-xl">🎬</span>
-                            <span class="text-[9px] font-bold text-amber-400 bg-amber-950/60 px-1.5 py-0.5 rounded border border-amber-800/50">STUDIO</span>
+                            <span class="text-2xl">🎬</span>
                         </div>
                         <div>
                             <div class="font-black text-sm text-white">스튜디오</div>
-                            <div class="text-[10px] text-slate-400 mt-0.5">160평 최첨단 촬영 환경</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">160평 전용 촬영 인프라</div>
                         </div>
                     </a>
 
@@ -3035,12 +3055,11 @@
                     <a @click="mobileMenuOpen = false" href="#reference" 
                        class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-xl">📁</span>
-                            <span class="text-[9px] font-bold text-purple-400 bg-purple-950/60 px-1.5 py-0.5 rounded border border-purple-800/50">WORKS</span>
+                            <span class="text-2xl">📁</span>
                         </div>
                         <div>
                             <div class="font-black text-sm text-white">포트폴리오</div>
-                            <div class="text-[10px] text-slate-400 mt-0.5">K-MOOC·공공·기업 실적</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">K-MOOC · 공공 · 기업 실적</div>
                         </div>
                     </a>
 
@@ -3051,8 +3070,7 @@
                        rel="noopener noreferrer" 
                        class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 text-white hover:border-emerald-500 hover:bg-slate-800/90 transition-all flex flex-col justify-between active:scale-[0.98]">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-xl">📍</span>
-                            <span class="text-[9px] font-bold text-teal-400 bg-teal-950/60 px-1.5 py-0.5 rounded border border-teal-800/50">MAP ↗</span>
+                            <span class="text-2xl">📍</span>
                         </div>
                         <div>
                             <div class="font-black text-sm text-white">오시는 길</div>
