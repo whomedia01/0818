@@ -3122,9 +3122,6 @@
 
         <div class="w-full max-w-[1280px] mx-auto px-3.5 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-3xl mx-auto mb-4 sm:mb-6">
-                <span class="inline-block px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1 sm:mb-2 shadow-xs">
-                    ORGANIZATION &amp; ECOSYSTEM
-                </span>
                 <h2 class="text-xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1 sm:mb-2 break-keep">
                     조직도
                 </h2>
@@ -3438,9 +3435,6 @@
     <section id="services" aria-label="주요 사업 영역 (에듀테크 및 K-MOOC 전문화 솔루션)" class="scroll-mt-14 py-4 sm:py-12 lg:py-16 bg-white text-slate-900 border-t border-b border-slate-200" @mouseenter="stopServiceAutoPlay()" @mouseleave="startServiceAutoPlay()">
         <div class="w-full max-w-[1280px] mx-auto px-3 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-2.5 sm:mb-6">
-                <span class="inline-block px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200 text-xs font-bold tracking-wider uppercase mb-1 sm:mb-2 shadow-xs">
-                    BUSINESS AREAS
-                </span>
                 <h2 class="text-xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-1 sm:mb-2 break-keep">
                     핵심 사업 영역
                 </h2>
@@ -3457,27 +3451,27 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
                 </button>
 
-                <!-- Category Pills Bar -->
-                <div class="grid grid-cols-3 gap-1.5 sm:flex sm:items-center sm:gap-3 sm:overflow-x-auto no-scrollbar py-0.5 px-0.5 w-full sm:w-auto flex-1 justify-center">
+                <!-- Category Pills Bar (텍스트 넘침 방지 및 반응형 콤팩트 패딩) -->
+                <div class="grid grid-cols-3 gap-1 xs:gap-1.5 sm:flex sm:items-center sm:gap-3 sm:overflow-x-auto no-scrollbar py-0.5 px-0.5 w-full sm:w-auto flex-1 justify-center">
                     <button @click="selectServiceCard(0); restartServiceAutoPlay(8000);"
                             :class="activeServiceIndex === 0 ? 'bg-teal-600 text-white font-black shadow-md border-teal-600 ring-2 ring-teal-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
-                            class="px-2 py-1.5 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
-                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 0 ? 'bg-white animate-pulse' : 'bg-teal-500'"></span>
-                        <span class="whitespace-nowrap font-bold">1. 이러닝 콘텐츠 개발</span>
+                            class="min-w-0 px-1 py-1.5 xs:px-2 xs:py-2 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10.5px] xs:text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
+                        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0" :class="activeServiceIndex === 0 ? 'bg-white animate-pulse' : 'bg-teal-500'"></span>
+                        <span class="break-keep leading-tight font-bold">이러닝 콘텐츠 개발</span>
                     </button>
 
                     <button @click="selectServiceCard(1); restartServiceAutoPlay(8000);"
                             :class="activeServiceIndex === 1 ? 'bg-amber-600 text-white font-black shadow-md border-amber-600 ring-2 ring-amber-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
-                            class="px-2 py-1.5 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
-                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 1 ? 'bg-white animate-pulse' : 'bg-amber-500'"></span>
-                        <span class="whitespace-nowrap font-bold">2. 교육과정 기획/운영</span>
+                            class="min-w-0 px-1 py-1.5 xs:px-2 xs:py-2 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10.5px] xs:text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
+                        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0" :class="activeServiceIndex === 1 ? 'bg-white animate-pulse' : 'bg-amber-500'"></span>
+                        <span class="break-keep leading-tight font-bold">교육과정 기획/운영</span>
                     </button>
 
                     <button @click="selectServiceCard(2); restartServiceAutoPlay(8000);"
                             :class="activeServiceIndex === 2 ? 'bg-blue-600 text-white font-black shadow-md border-blue-600 ring-2 ring-blue-400/40' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold border-slate-200'"
-                            class="px-2 py-1.5 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
-                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" :class="activeServiceIndex === 2 ? 'bg-white animate-pulse' : 'bg-blue-500'"></span>
-                        <span class="whitespace-nowrap font-bold">3. 전문 영상 제작</span>
+                            class="min-w-0 px-1 py-1.5 xs:px-2 xs:py-2 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10.5px] xs:text-xs sm:text-sm border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1 sm:gap-2 text-center">
+                        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0" :class="activeServiceIndex === 2 ? 'bg-white animate-pulse' : 'bg-blue-500'"></span>
+                        <span class="break-keep leading-tight font-bold">전문 영상 제작</span>
                     </button>
                 </div>
 
@@ -3494,7 +3488,7 @@
                  class="spotlight-section relative w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl bg-slate-900 text-white overflow-hidden shadow-xl sm:shadow-2xl border border-slate-200/80 mb-2 sm:mb-6 min-h-[290px] xs:min-h-[310px] sm:min-h-[420px] lg:min-h-[480px]">
                 
                 <!-- ========================================================= -->
-                <!-- Slide 0: 01. 이러닝 콘텐츠 개발 (E-LEARNING) -->
+                <!-- Slide 0: 이러닝 콘텐츠 개발 -->
                 <!-- ========================================================= -->
                 <div x-show="activeServiceIndex === 0"
                      x-transition:enter="transition ease-out duration-400 transform opacity-0 translate-x-8"
@@ -3521,7 +3515,7 @@
                     <div class="relative z-10 flex items-center justify-between">
                         <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-950/90 text-teal-300 border border-teal-400/50 text-[11px] xs:text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-md">
                             <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
-                            01 · 이러닝 콘텐츠 개발 (E-LEARNING)
+                            이러닝 콘텐츠 개발
                         </span>
                     </div>
 
@@ -3579,7 +3573,7 @@
                 </div>
 
                 <!-- ========================================================= -->
-                <!-- Slide 1: 02. 교육과정 기획/운영 (CURRICULUM PLANNING & OPERATIONS) -->
+                <!-- Slide 1: 교육과정 기획/운영 -->
                 <!-- ========================================================= -->
                 <div x-show="activeServiceIndex === 1"
                      x-transition:enter="transition ease-out duration-400 transform opacity-0 translate-x-8"
@@ -3607,7 +3601,7 @@
                     <div class="relative z-10 flex items-center justify-between">
                         <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-950/90 text-amber-300 border border-amber-400/50 text-[11px] xs:text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-md">
                             <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                            02 · 교육과정 기획/운영 (CURRICULUM PLANNING &amp; OPERATIONS)
+                            교육과정 기획/운영
                         </span>
                     </div>
 
@@ -3665,7 +3659,7 @@
                 </div>
 
                 <!-- ========================================================= -->
-                <!-- Slide 2: 03. 전문 영상 제작 (MEDIA PRODUCTION) -->
+                <!-- Slide 2: 전문 영상 제작 -->
                 <!-- ========================================================= -->
                 <div x-show="activeServiceIndex === 2"
                      x-transition:enter="transition ease-out duration-400 transform opacity-0 translate-x-8"
@@ -3692,7 +3686,7 @@
                     <div class="relative z-10 flex items-center justify-between">
                         <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-950/90 text-cyan-300 border border-cyan-400/50 text-[11px] xs:text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-md">
                             <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                            03 · 전문 영상 제작 (MEDIA PRODUCTION)
+                            전문 영상 제작
                         </span>
                     </div>
 
@@ -3773,9 +3767,6 @@
 
         <div class="w-full max-w-[1280px] mx-auto px-3.5 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-3xl mx-auto mb-2 sm:mb-12">
-                <span class="inline-block px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-blue-50 text-blue-600 text-[10px] sm:text-xs font-extrabold tracking-wider uppercase mb-1 sm:mb-3 border border-blue-200 shadow-xs">
-                    Studio &amp; Production System
-                </span>
                 <h2 class="text-xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight mb-1 sm:mb-3 leading-tight break-keep">
                     스튜디오 &amp; 제작 환경
                 </h2>
@@ -4134,9 +4125,6 @@
     <section id="reference" aria-label="포트폴리오 및 주요 제작 실적" class="py-8 sm:py-16 lg:py-24 bg-white relative overflow-hidden">
         <div class="w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-5 sm:mb-8">
-                <span class="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200 text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3 shadow-2xs">
-                    PORTFOLIO &amp; ARCHIVE
-                </span>
                 <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mb-2 tracking-tight">콘텐츠 개발 &amp; 영상 포트폴리오</h2>
                 <p class="text-slate-600 text-xs sm:text-base font-medium break-keep">교육 컨설팅부터 미디어 영상 제작, 이러닝, 평생교육, 디지털 홍보까지 분야별 주요 수행 사례입니다.</p>
             </div>
@@ -4247,10 +4235,6 @@
         <div class="w-full max-w-[1280px] mx-auto px-4 sm:px-6 relative z-10">
             <!-- Header Section (Ultra-Compact) -->
             <div class="text-center mb-4 sm:mb-5">
-                <div class="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#00F5D4] tracking-wider uppercase bg-[#00F5D4]/10 px-2.5 py-0.5 rounded-full border border-[#00F5D4]/30 shadow-xs mb-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#00F5D4] animate-pulse"></span>
-                    CLIENTS &amp; PARTNERS
-                </div>
                 <h3 class="text-base sm:text-xl font-extrabold text-white tracking-tight">
                     함께하는 주요 파트너사
                 </h3>
@@ -4308,9 +4292,6 @@
     <section id="contact" aria-label="제작 및 대관 상담 문의" class="py-10 sm:py-16 lg:py-20 bg-slate-50 text-slate-900 border-t border-slate-200">
         <div class="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-6 sm:mb-8">
-                <span class="inline-block px-3.5 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-bold mb-3 border border-blue-200">
-                    EASY CONTACT
-                </span>
                 <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mb-3 leading-tight break-keep">
                     프로젝트 및 제작 상담, 편하게 문의하세요
                 </h2>
