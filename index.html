@@ -1364,18 +1364,18 @@
                     this.isScanning = true;
                     this.heroRevealed = true;
 
-                    // 1. AX Neural Laser Scan Sweep triggers immediately
-                    // 2. Smoothly fade splash screen at 600ms to reveal main hero video
+                    // 1. AX Neural Laser Scan Sweep triggers immediately (0.0s ~ 1.2s)
+                    // 2. Smoothly fade splash screen at 600ms (0.6s) to reveal main hero video
                     this.splashTimerFade = setTimeout(() => {
                         this.splashFading = true;
                     }, 600);
 
-                    // 3. Complete AX transition and unmount splash overlay cleanly at 1300ms
+                    // 3. Complete AX transition and unmount splash overlay cleanly at 1200ms (1.2s)
                     this.splashTimerHide = setTimeout(() => {
                         this.splashVisible = false;
                         this.isScanning = false;
                         this.splashFading = false;
-                    }, 1300);
+                    }, 1200);
                 },
 
                 skipSplash() {
@@ -2658,45 +2658,43 @@
         }
 
         /* =========================================================
-           AX (AI EXPERIENCE) NEURAL LASER SCAN TRANSITION
+           AX (AI EXPERIENCE) NEURAL LASER SCAN & RACK FOCUS
         ========================================================= */
-        @keyframes axLaserScanSweep {
+        @keyframes neuralLaserScan {
             0% {
-                transform: translate3d(0, -140px, 0);
+                transform: translate3d(0, -100%, 0);
                 opacity: 0;
             }
-            8% {
+            15% {
                 opacity: 1;
             }
-            92% {
+            85% {
                 opacity: 1;
             }
             100% {
-                transform: translate3d(0, calc(100dvh + 140px), 0);
+                transform: translate3d(0, 100vh, 0);
                 opacity: 0;
             }
         }
 
-        @keyframes axSmoothHeroReveal {
+        @keyframes rackFocusReveal {
             0% {
-                filter: blur(8px);
-                transform: scale(1.04);
-                opacity: 0.85;
+                filter: blur(14px) brightness(1.2);
+                transform: scale(1.06);
             }
             100% {
-                filter: blur(0px);
-                transform: scale(1.0);
-                opacity: 1;
+                filter: blur(0px) brightness(1);
+                transform: scale(1);
             }
         }
 
-        .animate-ax-scan {
-            animation: axLaserScanSweep 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        .animate-neural-scan {
+            animation: neuralLaserScan 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
             will-change: transform, opacity;
         }
 
-        .animate-ax-hero-reveal {
-            animation: axSmoothHeroReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .animate-rack-focus {
+            animation: rackFocusReveal 1.0s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
             will-change: filter, transform;
         }
     </style>
@@ -2719,7 +2717,7 @@
         
         <!-- 1. Splash Background Video -->
         <video class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 transition-all duration-1000 ease-out"
-               :class="isScanning ? 'scale-[1.06] blur-[3px] brightness-[1.1]' : 'scale-100 blur-0 brightness-100'"
+               :class="isScanning ? 'scale-[1.06] blur-[4px] brightness-[1.2]' : 'scale-100 blur-0 brightness-100'"
                autoplay loop muted playsinline poster="/splash-mobile.jpg" aria-hidden="true">
             <source src="/who-main.mp4" type="video/mp4" />
         </video>
@@ -2728,22 +2726,22 @@
         <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px] pointer-events-none z-[1] transition-opacity duration-700"
              :class="isScanning ? 'opacity-40' : 'opacity-100'"></div>
 
-        <!-- 3. AX Neural AI Laser Scan Sweep & Attached HUD Badge (1.3초간 상단에서 하단으로 완주) -->
+        <!-- 3. AX Neural AI Laser Scan Sweep & Attached HUD Badge (1.2s Timeline) -->
         <div x-show="isScanning"
-             class="absolute inset-x-0 top-0 z-[40] pointer-events-none animate-ax-scan flex flex-col items-center">
+             class="absolute inset-x-0 top-0 z-[40] pointer-events-none animate-neural-scan flex flex-col items-center">
             
             <!-- 사이버 트레일 잔상 (Trailing Glow: 위쪽으로 뻗는 은은한 네온 그라데이션) -->
-            <div class="w-full h-32 bg-gradient-to-t from-[#00F5D4]/25 via-emerald-500/10 to-transparent pointer-events-none"></div>
+            <div class="w-full h-28 bg-gradient-to-t from-[#00F5D4]/25 via-emerald-500/10 to-transparent pointer-events-none"></div>
 
             <!-- 스캔 레이저 빔 (Laser Sweep Line) & 부착된 AI Scan HUD 배지 -->
             <div class="relative w-full flex items-center justify-center">
                 <!-- Laser Sweep Line (초고휘도 네온 에메랄드/시안 가로 광선) -->
-                <div class="w-full h-[3px] bg-gradient-to-r from-transparent via-[#00F5D4] via-white via-[#10B981] to-transparent shadow-[0_0_25px_#00F5D4,0_0_50px_#10B981,0_0_80px_rgba(0,245,212,0.85)]"></div>
+                <div class="w-full h-[3px] bg-gradient-to-r from-transparent via-[#00F5D4] via-white via-[#10B981] to-transparent shadow-[0_0_25px_#00F5D4,0_0_50px_#10B981,0_0_80px_rgba(0,245,212,0.9)]"></div>
                 
-                <!-- AI Scan HUD 배지 (레이저와 일체화되어 함께 이동) -->
+                <!-- AI Scan HUD 배지 (레이저와 일체화되어 함께 하강) -->
                 <div class="absolute -top-7 px-3.5 py-1 rounded-md bg-black/90 backdrop-blur-md border border-[#00F5D4] shadow-[0_0_20px_rgba(0,245,212,0.7)] flex items-center gap-1.5 font-mono text-[10px] sm:text-[11px] font-black text-[#00F5D4] tracking-[0.2em] uppercase whitespace-nowrap">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#00F5D4] shadow-[0_0_8px_#00F5D4] animate-ping inline-block"></span>
-                    <span>[ AI NEURAL SCAN · RENDERING MAIN ]</span>
+                    <span>[ AI NEURAL SCAN : DECODING &amp; SYNC ]</span>
                 </div>
             </div>
         </div>
@@ -3000,7 +2998,7 @@
         <!-- ========================================================================= -->
         <!-- [PC 전용 UI 레이아웃] (md:flex hidden: Absolute Layout over Fullscreen Video) -->
         <!-- ========================================================================= -->
-        <div :class="heroRevealed ? 'animate-ax-hero-reveal' : ''"
+        <div :class="heroRevealed ? 'animate-rack-focus' : ''"
              class="hidden md:flex absolute inset-0 z-10 flex-col justify-between pt-24 lg:pt-28 pb-8 px-6 lg:px-12 w-full max-w-[1280px] mx-auto left-0 right-0 pointer-events-none select-none">
             
             <!-- 1. PC 중앙: 메인 슬로건 + 롤링 전광판 그룹 (정중앙 고정 & 영상 엔딩 로고 노출 시 부드러운 페이드아웃) -->
@@ -3071,7 +3069,7 @@
         <!-- ========================================================================= -->
         <!-- [모바일 전용 순차적 세로 배치(Stacked Flow) 레이아웃] (md:hidden flex flex-col) -->
         <!-- ========================================================================= -->
-        <div :class="heroRevealed ? 'animate-ax-hero-reveal' : ''"
+        <div :class="heroRevealed ? 'animate-rack-focus' : ''"
              class="md:hidden flex flex-col justify-between w-full h-full flex-1 relative z-20 space-y-2 sm:space-y-3">
             
             <!-- 1. [모바일] 상단 메인 슬로건 (슬로건-영상 간 여백 최적화로 영상 상단 배치) -->
