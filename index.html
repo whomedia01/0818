@@ -1498,14 +1498,47 @@
                 },
 
                 openModal(videoId, videoTitle) {
-                    this.activeVideoId = videoId;
-                    this.activeVideoTitle = videoTitle;
+                    if (videoId) {
+                        const foundIdx = this.portfolioItems.findIndex(item => item.id === videoId);
+                        if (foundIdx !== -1) {
+                            this.portfolioIndex = foundIdx;
+                        }
+                    }
+                    this.activeVideoId = videoId || this.currentPortfolioItem.id;
+                    this.activeVideoTitle = videoTitle || this.currentPortfolioItem.title;
                     this.videoModalOpen = true;
                 },
                 closeModal() {
                     this.videoModalOpen = false;
                     this.activeVideoId = '';
                     this.activeVideoTitle = '';
+                    if (document.fullscreenElement && document.exitFullscreen) {
+                        document.exitFullscreen().catch(() => {});
+                    }
+                },
+                nextModalVideo() {
+                    this.nextPortfolioItem();
+                    this.activeVideoId = this.currentPortfolioItem.id;
+                    this.activeVideoTitle = this.currentPortfolioItem.title;
+                },
+                prevModalVideo() {
+                    this.prevPortfolioItem();
+                    this.activeVideoId = this.currentPortfolioItem.id;
+                    this.activeVideoTitle = this.currentPortfolioItem.title;
+                },
+                toggleFullScreen() {
+                    const elem = this.$refs.videoModalContainer || document.documentElement;
+                    if (!document.fullscreenElement) {
+                        if (elem.requestFullscreen) {
+                            elem.requestFullscreen().catch(() => {});
+                        } else if (elem.webkitRequestFullscreen) {
+                            elem.webkitRequestFullscreen();
+                        }
+                    } else {
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen().catch(() => {});
+                        }
+                    }
                 },
                 openImageModal(imgUrl, title) {
                     this.activeStudioImg = imgUrl;
@@ -4233,33 +4266,95 @@
         </a>
     </div>
 
-    <!-- PORTFOLIO YOUTUBE VIDEO MODAL -->
+    <!-- PORTFOLIO YOUTUBE VIDEO MODAL (전체화면 시네마 모달) -->
     <div x-show="videoModalOpen" 
+         x-ref="videoModalContainer"
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+         @keydown.escape.window="if (videoModalOpen) closeModal()"
+         class="fixed inset-0 z-50 flex flex-col justify-between p-2.5 sm:p-4 md:p-6 bg-black/95 backdrop-blur-2xl select-none overflow-hidden"
+         style="touch-action: pan-y;">
         
-        <div @click="closeModal()" class="absolute inset-0"></div>
+        <!-- Top Floating Cinema Bar -->
+        <div class="relative z-10 w-full max-w-6xl mx-auto flex items-center justify-between gap-3 py-2 px-3 sm:px-4 bg-slate-900/80 backdrop-blur-md rounded-xl sm:rounded-2xl border border-white/10 shrink-0">
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0 pr-2">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600/90 text-white text-[10.5px] sm:text-xs font-black shadow-sm shrink-0"
+                      x-text="currentPortfolioItem.tag || 'PORTFOLIO'">
+                </span>
+                <span class="text-white/60 font-mono text-xs font-bold shrink-0 hidden sm:inline">
+                    <span class="text-blue-400 font-black" x-text="String(portfolioIndex + 1).padStart(2, '0')"></span> / <span x-text="String(portfolioItems.length).padStart(2, '0')"></span>
+                </span>
+                <h3 x-text="activeVideoTitle" class="text-white font-bold text-xs sm:text-base truncate"></h3>
+            </div>
 
-        <div class="relative w-full max-w-4xl bg-brand-navy rounded-2xl overflow-hidden shadow-2xl border border-white/20 z-10 flex flex-col">
-            <div class="flex items-center justify-between p-3.5 sm:p-4 bg-brand-navy-dark border-b border-gray-800">
-                <h3 x-text="activeVideoTitle" class="text-white font-bold text-sm sm:text-base truncate pr-3"></h3>
-                <button @click="closeModal()" class="text-gray-300 hover:text-white min-w-[44px] min-h-[44px] flex items-center justify-center p-2 rounded-xl bg-white/5 active:scale-90 transition-all focus:outline-none" aria-label="모달 닫기">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <!-- 전체화면 토글 버튼 -->
+                <button @click="toggleFullScreen()" 
+                        class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white text-xs font-semibold transition-all border border-white/10 active:scale-95 cursor-pointer"
+                        title="전체화면 전환">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                    <span>전체화면</span>
+                </button>
+
+                <!-- 닫기 버튼 -->
+                <button @click="closeModal()" 
+                        class="min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center p-2 rounded-xl bg-red-600/80 hover:bg-red-600 text-white active:scale-90 transition-all focus:outline-none cursor-pointer shadow-md" 
+                        aria-label="모달 닫기" 
+                        title="닫기 (ESC)">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <div class="aspect-video w-full bg-black">
+        </div>
+
+        <!-- Main Full-Screen Player Stage -->
+        <div class="relative flex-1 w-full max-w-6xl mx-auto flex items-center justify-center my-auto min-h-0 py-2 sm:py-4">
+            
+            <!-- Video Container -->
+            <div class="relative w-full aspect-video max-h-[82vh] bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.9)] border border-white/15 flex items-center justify-center">
                 <template x-if="activeVideoId">
-                    <iframe :src="'https://www.youtube.com/embed/' + activeVideoId + '?autoplay=1&mute=1&enablejsapi=1'" 
+                    <iframe :src="'https://www.youtube.com/embed/' + activeVideoId + '?autoplay=1&enablejsapi=1&rel=0&modestbranding=1'" 
                             class="w-full h-full border-0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" 
                             allowfullscreen></iframe>
                 </template>
+
+                <!-- Floating Prev / Next Controls Over Video (모달 내 이전/다음 영상 바로 넘김) -->
+                <button @click="prevModalVideo()"
+                        class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-blue-600 text-white flex items-center justify-center transition-all opacity-70 hover:opacity-100 cursor-pointer shadow-2xl border border-white/20 z-20 active:scale-95"
+                        title="이전 영상">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+
+                <button @click="nextModalVideo()"
+                        class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-blue-600 text-white flex items-center justify-center transition-all opacity-70 hover:opacity-100 cursor-pointer shadow-2xl border border-white/20 z-20 active:scale-95"
+                        title="다음 영상">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                </button>
             </div>
+        </div>
+
+        <!-- Bottom Quick Navigation Bar -->
+        <div class="relative z-10 w-full max-w-6xl mx-auto flex items-center justify-between gap-2 py-2 px-3 sm:px-4 bg-slate-900/80 backdrop-blur-md rounded-xl sm:rounded-2xl border border-white/10 shrink-0">
+            <button @click="prevModalVideo()" 
+                    class="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer active:scale-95">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                <span>이전 영상</span>
+            </button>
+
+            <!-- Video Progress Indicator -->
+            <div class="text-xs text-slate-400 font-medium text-center truncate px-2">
+                <span class="text-white font-bold" x-text="portfolioIndex + 1"></span>번째 영상 / 총 <span x-text="portfolioItems.length"></span>개
+            </div>
+
+            <button @click="nextModalVideo()" 
+                    class="px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95">
+                <span>다음 영상</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            </button>
         </div>
     </div>
 
