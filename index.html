@@ -3537,73 +3537,77 @@
                      x-transition:leave-end="opacity-0 -translate-x-8"
                      class="absolute inset-0 w-full h-full p-3 xs:p-4 sm:p-7 lg:p-9 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated">
                     
-                    <!-- High-Definition Background Image -->
+                    <!-- High-Definition Background Image with mobile subtle dimming -->
                     <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1400&q=85" 
                          alt="이러닝 콘텐츠 개발" 
                          loading="eager"
                          referrerpolicy="no-referrer"
                          style="aspect-ratio: 16/9;"
-                         class="absolute inset-0 w-full h-full object-cover brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                         class="absolute inset-0 w-full h-full object-cover opacity-60 sm:opacity-100 brightness-90 sm:brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
                     
-                    <!-- Clean Light Directional Scrim (최적화된 투명도 - 이미지 화사하게 노출) -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-transparent z-0 pointer-events-none"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/40 to-transparent z-0 pointer-events-none hidden md:block"></div>
+                    <!-- Clean Contrast Scrim (모바일에서 텍스트가 극대화되어 보이도록 딤 강화) -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/98 via-slate-950/80 to-slate-950/40 sm:from-slate-950/95 sm:via-slate-950/50 sm:to-transparent z-0 pointer-events-none"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent z-0 pointer-events-none hidden md:block"></div>
 
                     <!-- Top Header Row -->
                     <div class="relative z-10 flex items-center justify-between">
-                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-950/90 text-teal-300 border border-teal-400/50 text-[11px] xs:text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-md">
+                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-900/95 text-teal-300 border border-teal-400/60 text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-lg">
                             <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
                             이러닝 콘텐츠 개발
                         </span>
                     </div>
 
                     <!-- Bottom Content Overlay -->
-                    <div class="relative z-10 max-w-3xl space-y-1.5 sm:space-y-2.5 mt-auto">
-                        <div>
-                            <h3 class="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] break-keep">
+                    <div class="relative z-10 max-w-3xl space-y-2 sm:space-y-2.5 mt-auto">
+                        <div class="bg-slate-900/80 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none p-2.5 sm:p-0 rounded-xl border border-white/10 sm:border-0 shadow-sm">
+                            <div class="text-[11px] sm:text-xs font-bold text-teal-400 mb-0.5 tracking-wide">E-LEARNING ARCHITECTURE</div>
+                            <h3 class="text-xl xs:text-2xl sm:text-2xl lg:text-3xl font-black text-white leading-snug tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] break-keep">
                                 맞춤형 디지털 학습 모델 구축
                             </h3>
+                            <p class="text-xs sm:text-sm text-slate-200 font-normal mt-1 leading-snug break-keep sm:hidden">
+                                NCS 기반 교수설계부터 LMS 연동까지 완벽 지원
+                            </p>
                         </div>
 
-                        <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 폰트 사이즈 업) -->
-                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 pt-1">
+                        <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 텍스트 부각 강화) -->
+                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 pt-0.5 sm:pt-1">
                             
                             <!-- Solution 1 -->
-                            <div class="bg-slate-950/90 border border-white/20 hover:border-teal-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
+                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-teal-500/30 sm:border-white/20 hover:border-teal-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
                                 <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0 shadow-[0_0_6px_#2dd4bf]"></span>
-                                    <h4 class="text-xs sm:text-base font-bold text-teal-300 tracking-tight leading-tight break-keep">
+                                    <h4 class="text-xs sm:text-base font-extrabold text-teal-300 tracking-tight leading-tight break-keep">
                                         맞춤 교수설계
                                     </h4>
                                 </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
+                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
                                     스토리보드 최적화
                                 </p>
                             </div>
 
                             <!-- Solution 2 -->
-                            <div class="bg-slate-950/90 border border-white/20 hover:border-teal-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
+                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-teal-500/30 sm:border-white/20 hover:border-teal-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
                                 <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0 shadow-[0_0_6px_#2dd4bf]"></span>
-                                    <h4 class="text-xs sm:text-base font-bold text-teal-300 tracking-tight leading-tight break-keep">
+                                    <h4 class="text-xs sm:text-base font-extrabold text-teal-300 tracking-tight leading-tight break-keep">
                                         반응형 웹·LMS
                                     </h4>
                                 </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
+                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
                                     SCORM 100% 호환
                                 </p>
                             </div>
 
                             <!-- Solution 3 -->
-                            <div class="bg-slate-950/90 border border-white/20 hover:border-teal-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
+                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-teal-500/30 sm:border-white/20 hover:border-teal-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
                                 <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0 shadow-[0_0_6px_#2dd4bf]"></span>
-                                    <h4 class="text-xs sm:text-base font-bold text-teal-300 tracking-tight leading-tight break-keep">
-                                        인터랙티브 모듈
+                                    <h4 class="text-xs sm:text-base font-extrabold text-teal-300 tracking-tight leading-tight break-keep">
+                                        인터랙티브
                                     </h4>
                                 </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    시뮬레이션·퀴즈 몰입
+                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
+                                    시뮬레이션·퀴즈
                                 </p>
                             </div>
                         </div>
@@ -3622,73 +3626,77 @@
                      x-transition:leave-end="opacity-0 -translate-x-8"
                      class="absolute inset-0 w-full h-full p-3 xs:p-4 sm:p-7 lg:p-9 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated">
                     
-                    <!-- High-Definition Background Video -->
+                    <!-- High-Definition Background Video with mobile subtle dimming -->
                     <video src="/blended-physical-ai.mp4" 
                            poster="/blended-physical-ai-poster.jpg" 
                            autoplay loop muted playsinline 
                            aria-hidden="true"
                            style="aspect-ratio: 16/9;"
-                           class="absolute inset-0 w-full h-full object-cover brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                           class="absolute inset-0 w-full h-full object-cover opacity-60 sm:opacity-100 brightness-90 sm:brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
                     </video>
                     
-                    <!-- Clean Light Directional Scrim (화사하고 선명한 비디오 뷰) -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-transparent z-0 pointer-events-none"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/35 to-transparent z-0 pointer-events-none hidden md:block"></div>
+                    <!-- Clean Contrast Scrim (모바일에서 텍스트가 극대화되어 보이도록 딤 강화) -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/98 via-slate-950/80 to-slate-950/40 sm:from-slate-950/95 sm:via-slate-950/50 sm:to-transparent z-0 pointer-events-none"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent z-0 pointer-events-none hidden md:block"></div>
 
                     <!-- Top Header Row -->
                     <div class="relative z-10 flex items-center justify-between">
-                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-950/90 text-amber-300 border border-amber-400/50 text-[11px] xs:text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-md">
+                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-900/95 text-amber-300 border border-amber-400/60 text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-lg">
                             <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                             교육과정 기획/운영
                         </span>
                     </div>
 
                     <!-- Bottom Content Overlay -->
-                    <div class="relative z-10 max-w-3xl space-y-1.5 sm:space-y-2.5 mt-auto">
-                        <div>
-                            <h3 class="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] break-keep">
+                    <div class="relative z-10 max-w-3xl space-y-2 sm:space-y-2.5 mt-auto">
+                        <div class="bg-slate-900/80 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none p-2.5 sm:p-0 rounded-xl border border-white/10 sm:border-0 shadow-sm">
+                            <div class="text-[11px] sm:text-xs font-bold text-amber-400 mb-0.5 tracking-wide">CURRICULUM &amp; OPERATION</div>
+                            <h3 class="text-xl xs:text-2xl sm:text-2xl lg:text-3xl font-black text-white leading-snug tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] break-keep">
                                 맞춤형 교육과정 설계 및 체계적 운영
                             </h3>
+                            <p class="text-xs sm:text-sm text-slate-200 font-normal mt-1 leading-snug break-keep sm:hidden">
+                                AI·직무 교육 기획 및 공공·기업 연수 전주기 매니지먼트
+                            </p>
                         </div>
 
-                        <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 폰트 사이즈 업) -->
-                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 pt-1">
+                        <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 텍스트 부각 강화) -->
+                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 pt-0.5 sm:pt-1">
                             
                             <!-- Solution 1 -->
-                            <div class="bg-slate-950/90 border border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
+                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-amber-500/30 sm:border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
                                 <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
-                                    <h4 class="text-xs sm:text-base font-bold text-amber-300 tracking-tight leading-tight break-keep">
+                                    <h4 class="text-xs sm:text-base font-extrabold text-amber-300 tracking-tight leading-tight break-keep">
                                         커리큘럼 기획
                                     </h4>
                                 </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
+                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
                                     체계적 교육 설계
                                 </p>
                             </div>
 
                             <!-- Solution 2 -->
-                            <div class="bg-slate-950/90 border border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
+                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-amber-500/30 sm:border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
                                 <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
-                                    <h4 class="text-xs sm:text-base font-bold text-amber-300 tracking-tight leading-tight break-keep">
+                                    <h4 class="text-xs sm:text-base font-extrabold text-amber-300 tracking-tight leading-tight break-keep">
                                         전문 운영 관리
                                     </h4>
                                 </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
+                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
                                     학습자 밀착 케어
                                 </p>
                             </div>
 
                             <!-- Solution 3 -->
-                            <div class="bg-slate-950/90 border border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
+                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-amber-500/30 sm:border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
                                 <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
-                                    <h4 class="text-xs sm:text-base font-bold text-amber-300 tracking-tight leading-tight break-keep">
+                                    <h4 class="text-xs sm:text-base font-extrabold text-amber-300 tracking-tight leading-tight break-keep">
                                         맞춤형 워크숍
                                     </h4>
                                 </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
+                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
                                     B2B·B2G 밀착 운영
                                 </p>
                             </div>
@@ -3708,72 +3716,76 @@
                      x-transition:leave-end="opacity-0 -translate-x-8"
                      class="absolute inset-0 w-full h-full p-3 xs:p-4 sm:p-7 lg:p-9 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated">
                     
-                    <!-- High-Definition Background Image -->
+                    <!-- High-Definition Background Image with mobile subtle dimming -->
                     <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1400&q=85" 
                          alt="전문 영상 제작" 
                          loading="eager"
                          referrerpolicy="no-referrer"
                          style="aspect-ratio: 16/9;"
-                         class="absolute inset-0 w-full h-full object-cover brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                         class="absolute inset-0 w-full h-full object-cover opacity-60 sm:opacity-100 brightness-90 sm:brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
                     
-                    <!-- Clean Light Directional Scrim (화사하고 선명한 미디어 뷰) -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-transparent z-0 pointer-events-none"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/40 to-transparent z-0 pointer-events-none hidden md:block"></div>
+                    <!-- Clean Contrast Scrim (모바일에서 텍스트가 극대화되어 보이도록 딤 강화) -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/98 via-slate-950/80 to-slate-950/40 sm:from-slate-950/95 sm:via-slate-950/50 sm:to-transparent z-0 pointer-events-none"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent z-0 pointer-events-none hidden md:block"></div>
 
                     <!-- Top Header Row -->
                     <div class="relative z-10 flex items-center justify-between">
-                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-950/90 text-cyan-300 border border-cyan-400/50 text-[11px] xs:text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-md">
+                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-900/95 text-cyan-300 border border-cyan-400/60 text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-lg">
                             <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                             전문 영상 제작
                         </span>
                     </div>
 
                     <!-- Bottom Content Overlay -->
-                    <div class="relative z-10 max-w-3xl space-y-1.5 sm:space-y-2.5 mt-auto">
-                        <div>
-                            <h3 class="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] break-keep">
+                    <div class="relative z-10 max-w-3xl space-y-2 sm:space-y-2.5 mt-auto">
+                        <div class="bg-slate-900/80 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none p-2.5 sm:p-0 rounded-xl border border-white/10 sm:border-0 shadow-sm">
+                            <div class="text-[11px] sm:text-xs font-bold text-cyan-400 mb-0.5 tracking-wide">STUDIO &amp; POST PRODUCTION</div>
+                            <h3 class="text-xl xs:text-2xl sm:text-2xl lg:text-3xl font-black text-white leading-snug tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] break-keep">
                                 기획부터 완제품까지 원스톱 영상 제작
                             </h3>
+                            <p class="text-xs sm:text-sm text-slate-200 font-normal mt-1 leading-snug break-keep sm:hidden">
+                                160평 6개 전용 스튜디오 인프라 및 CG·모션그래픽 고도화
+                            </p>
                         </div>
 
-                        <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 폰트 사이즈 업) -->
-                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 pt-1">
+                        <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 텍스트 부각 강화) -->
+                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 pt-0.5 sm:pt-1">
                             
                             <!-- Solution 1 -->
-                            <div class="bg-slate-950/90 border border-white/20 hover:border-cyan-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
+                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-cyan-500/30 sm:border-white/20 hover:border-cyan-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
                                 <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0 shadow-[0_0_6px_#22d3ee]"></span>
-                                    <h4 class="text-xs sm:text-base font-bold text-cyan-300 tracking-tight leading-tight break-keep">
+                                    <h4 class="text-xs sm:text-base font-extrabold text-cyan-300 tracking-tight leading-tight break-keep">
                                         6개 전용 스튜디오
                                     </h4>
                                 </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
+                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
                                     자체 대형 인프라
                                 </p>
                             </div>
 
                             <!-- Solution 2 -->
-                            <div class="bg-slate-950/90 border border-white/20 hover:border-cyan-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
+                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-cyan-500/30 sm:border-white/20 hover:border-cyan-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
                                 <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0 shadow-[0_0_6px_#22d3ee]"></span>
-                                    <h4 class="text-xs sm:text-base font-bold text-cyan-300 tracking-tight leading-tight break-keep">
+                                    <h4 class="text-xs sm:text-base font-extrabold text-cyan-300 tracking-tight leading-tight break-keep">
                                         모션그래픽·VFX
                                     </h4>
                                 </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
+                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
                                     인포그래픽 시각화
                                 </p>
                             </div>
 
                             <!-- Solution 3 -->
-                            <div class="bg-slate-950/90 border border-white/20 hover:border-cyan-400/60 p-2 sm:p-3.5 rounded-lg sm:rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start">
+                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-cyan-500/30 sm:border-white/20 hover:border-cyan-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
                                 <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0 shadow-[0_0_6px_#22d3ee]"></span>
-                                    <h4 class="text-xs sm:text-base font-bold text-cyan-300 tracking-tight leading-tight break-keep">
+                                    <h4 class="text-xs sm:text-base font-extrabold text-cyan-300 tracking-tight leading-tight break-keep">
                                         라이브 스트리밍
                                     </h4>
                                 </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-medium leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
+                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
                                     무결점 저지연 송출
                                 </p>
                             </div>
