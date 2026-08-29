@@ -3518,10 +3518,10 @@
                 </button>
             </div>
 
-            <!-- PROMINENT ANIMATED ROLLING FEATURED SLIDER (IMAGE BACKGROUND + OVERLAID TEXT + INTERACTIVE SOLUTIONS) -->
+            <!-- PROMINENT ANIMATED ROLLING FEATURED SLIDER (TEXT-FIRST ARCHITECTURE + COMPACT PREVIEWS) -->
             <div @touchstart="touchStartX = $event.touches[0].clientX"
                  @touchend="touchEndX = $event.changedTouches[0].clientX; if (touchStartX - touchEndX > 30) { nextServiceCard(); restartServiceAutoPlay(8000); } else if (touchEndX - touchStartX > 30) { prevServiceCard(); restartServiceAutoPlay(8000); }"
-                 class="spotlight-section relative w-full max-w-5xl mx-auto mt-1 rounded-2xl sm:rounded-3xl bg-slate-900 text-white overflow-hidden shadow-xl sm:shadow-2xl border border-slate-200/80 flex-1 min-h-0 h-[48vh] max-h-[380px] sm:h-auto sm:max-h-none sm:min-h-[420px] lg:min-h-[480px]">
+                 class="spotlight-section relative w-full max-w-5xl mx-auto mt-1 rounded-2xl sm:rounded-3xl bg-slate-950 text-white overflow-hidden shadow-xl sm:shadow-2xl border border-slate-800 flex-1 min-h-0 h-[48vh] max-h-[380px] sm:h-auto sm:max-h-none sm:min-h-[380px] lg:min-h-[420px]">
                 
                 <!-- ========================================================= -->
                 <!-- Slide 0: 이러닝 콘텐츠 개발 -->
@@ -3533,80 +3533,75 @@
                      x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
                      x-transition:leave-start="opacity-100 translate-x-0"
                      x-transition:leave-end="opacity-0 -translate-x-8"
-                     class="absolute inset-0 w-full h-full p-3 xs:p-4 sm:p-7 lg:p-9 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated">
+                     class="absolute inset-0 w-full h-full p-3.5 xs:p-4 sm:p-6 lg:p-8 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900">
                     
-                    <!-- High-Definition Background Image with mobile subtle dimming -->
-                    <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1400&q=85" 
-                         alt="이러닝 콘텐츠 개발" 
-                         loading="eager"
-                         referrerpolicy="no-referrer"
-                         style="aspect-ratio: 16/9;"
-                         class="absolute inset-0 w-full h-full object-cover opacity-60 sm:opacity-100 brightness-90 sm:brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
-                    
-                    <!-- Clean Contrast Scrim (모바일에서 텍스트가 극대화되어 보이도록 딤 강화) -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/98 via-slate-950/80 to-slate-950/40 sm:from-slate-950/95 sm:via-slate-950/50 sm:to-transparent z-0 pointer-events-none"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent z-0 pointer-events-none hidden md:block"></div>
-
-                    <!-- Top Header Row -->
-                    <div class="relative z-10 flex items-center justify-between">
-                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-900/95 text-teal-300 border border-teal-400/60 text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-lg">
+                    <!-- Top Header Row: Category Badge + Compact Thumbnail Preview -->
+                    <div class="relative z-10 flex items-center justify-between gap-3 shrink-0">
+                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-teal-950/90 text-teal-300 border border-teal-500/50 text-xs font-black tracking-wider shadow-sm">
                             <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
                             이러닝 콘텐츠 개발
                         </span>
+
+                        <!-- Compact Image Thumbnail Preview (이미지 화면 최소화) -->
+                        <div class="w-20 h-11 xs:w-24 xs:h-12 sm:w-32 sm:h-16 rounded-xl overflow-hidden border border-teal-500/30 shadow-md shrink-0 bg-slate-900 relative">
+                            <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=400&q=80" 
+                                 alt="이러닝 개발 예시" 
+                                 loading="eager"
+                                 referrerpolicy="no-referrer"
+                                 class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500">
+                        </div>
                     </div>
 
-                    <!-- Bottom Content Overlay -->
-                    <div class="relative z-10 max-w-3xl space-y-2 sm:space-y-2.5 mt-auto">
-                        <div class="bg-slate-900/80 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none p-2.5 sm:p-0 rounded-xl border border-white/10 sm:border-0 shadow-sm">
-                            <h3 class="text-xl xs:text-2xl sm:text-2xl lg:text-3xl font-black text-white leading-snug tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] break-keep">
-                                맞춤형 디지털 학습 모델 구축
-                            </h3>
-                            <p class="text-xs sm:text-sm text-slate-200 font-normal mt-1 leading-snug break-keep sm:hidden">
-                                NCS 기반 교수설계부터 LMS 연동까지 완벽 지원
+                    <!-- Main Text Area: Maximized Readability & Contrast -->
+                    <div class="relative z-10 my-auto py-1">
+                        <h3 class="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-black text-white leading-snug tracking-tight break-keep">
+                            맞춤형 디지털 학습 모델 구축
+                        </h3>
+                        <p class="text-xs sm:text-sm md:text-base text-slate-200 font-medium mt-1 leading-relaxed break-keep">
+                            NCS 기반 교수설계부터 반응형 HTML5·LMS 연동까지 학습자 몰입도를 극대화하는 표준 이러닝 솔루션을 구축합니다.
+                        </p>
+                    </div>
+
+                    <!-- 3 Core Solutions Grid: Text-Centric Cards with High Contrast -->
+                    <div class="grid grid-cols-3 gap-1.5 sm:gap-3.5 pt-1 shrink-0 relative z-10">
+                        
+                        <!-- Solution 1 -->
+                        <div class="bg-slate-900 border border-teal-500/40 hover:border-teal-400 p-2 sm:p-3.5 rounded-xl transition-all duration-200 flex flex-col justify-start shadow-md">
+                            <div class="flex items-center gap-1 sm:gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-teal-400 shrink-0 shadow-[0_0_6px_#2dd4bf]"></span>
+                                <h4 class="text-xs sm:text-base font-black text-teal-300 tracking-tight leading-tight break-keep">
+                                    맞춤 교수설계
+                                </h4>
+                            </div>
+                            <p class="text-[11.5px] sm:text-xs text-slate-200 font-semibold leading-tight break-keep pl-3 mt-0.5">
+                                스토리보드 및 학습목표 분석
                             </p>
                         </div>
 
-                        <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 텍스트 부각 강화) -->
-                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 pt-0.5 sm:pt-1">
-                            
-                            <!-- Solution 1 -->
-                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-teal-500/30 sm:border-white/20 hover:border-teal-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
-                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0 shadow-[0_0_6px_#2dd4bf]"></span>
-                                    <h4 class="text-xs sm:text-base font-extrabold text-teal-300 tracking-tight leading-tight break-keep">
-                                        맞춤 교수설계
-                                    </h4>
-                                </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    스토리보드 최적화
-                                </p>
+                        <!-- Solution 2 -->
+                        <div class="bg-slate-900 border border-teal-500/40 hover:border-teal-400 p-2 sm:p-3.5 rounded-xl transition-all duration-200 flex flex-col justify-start shadow-md">
+                            <div class="flex items-center gap-1 sm:gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-teal-400 shrink-0 shadow-[0_0_6px_#2dd4bf]"></span>
+                                <h4 class="text-xs sm:text-base font-black text-teal-300 tracking-tight leading-tight break-keep">
+                                    반응형 웹·LMS
+                                </h4>
                             </div>
+                            <p class="text-[11.5px] sm:text-xs text-slate-200 font-semibold leading-tight break-keep pl-3 mt-0.5">
+                                SCORM 100% 표준 호환
+                            </p>
+                        </div>
 
-                            <!-- Solution 2 -->
-                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-teal-500/30 sm:border-white/20 hover:border-teal-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
-                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0 shadow-[0_0_6px_#2dd4bf]"></span>
-                                    <h4 class="text-xs sm:text-base font-extrabold text-teal-300 tracking-tight leading-tight break-keep">
-                                        반응형 웹·LMS
-                                    </h4>
-                                </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    SCORM 100% 호환
-                                </p>
+                        <!-- Solution 3 -->
+                        <div class="bg-slate-900 border border-teal-500/40 hover:border-teal-400 p-2 sm:p-3.5 rounded-xl transition-all duration-200 flex flex-col justify-start shadow-md">
+                            <div class="flex items-center gap-1 sm:gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-teal-400 shrink-0 shadow-[0_0_6px_#2dd4bf]"></span>
+                                <h4 class="text-xs sm:text-base font-black text-teal-300 tracking-tight leading-tight break-keep">
+                                    인터랙티브
+                                </h4>
                             </div>
-
-                            <!-- Solution 3 -->
-                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-teal-500/30 sm:border-white/20 hover:border-teal-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
-                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0 shadow-[0_0_6px_#2dd4bf]"></span>
-                                    <h4 class="text-xs sm:text-base font-extrabold text-teal-300 tracking-tight leading-tight break-keep">
-                                        인터랙티브
-                                    </h4>
-                                </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    시뮬레이션·퀴즈
-                                </p>
-                            </div>
+                            <p class="text-[11.5px] sm:text-xs text-slate-200 font-semibold leading-tight break-keep pl-3 mt-0.5">
+                                실시간 시뮬레이션·퀴즈
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -3621,81 +3616,76 @@
                      x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
                      x-transition:leave-start="opacity-100 translate-x-0"
                      x-transition:leave-end="opacity-0 -translate-x-8"
-                     class="absolute inset-0 w-full h-full p-3 xs:p-4 sm:p-7 lg:p-9 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated">
+                     class="absolute inset-0 w-full h-full p-3.5 xs:p-4 sm:p-6 lg:p-8 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900">
                     
-                    <!-- High-Definition Background Video with mobile subtle dimming -->
-                    <video src="/blended-physical-ai.mp4" 
-                           poster="/blended-physical-ai-poster.jpg" 
-                           autoplay loop muted playsinline 
-                           aria-hidden="true"
-                           style="aspect-ratio: 16/9;"
-                           class="absolute inset-0 w-full h-full object-cover opacity-60 sm:opacity-100 brightness-90 sm:brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
-                    </video>
-                    
-                    <!-- Clean Contrast Scrim (모바일에서 텍스트가 극대화되어 보이도록 딤 강화) -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/98 via-slate-950/80 to-slate-950/40 sm:from-slate-950/95 sm:via-slate-950/50 sm:to-transparent z-0 pointer-events-none"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent z-0 pointer-events-none hidden md:block"></div>
-
-                    <!-- Top Header Row -->
-                    <div class="relative z-10 flex items-center justify-between">
-                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-900/95 text-amber-300 border border-amber-400/60 text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-lg">
+                    <!-- Top Header Row: Category Badge + Compact Thumbnail Preview -->
+                    <div class="relative z-10 flex items-center justify-between gap-3 shrink-0">
+                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-amber-950/90 text-amber-300 border border-amber-500/50 text-xs font-black tracking-wider shadow-sm">
                             <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                             교육과정 기획/운영
                         </span>
+
+                        <!-- Compact Video Thumbnail Preview (영상 화면 최소화) -->
+                        <div class="w-20 h-11 xs:w-24 xs:h-12 sm:w-32 sm:h-16 rounded-xl overflow-hidden border border-amber-500/30 shadow-md shrink-0 bg-slate-900 relative">
+                            <video src="/blended-physical-ai.mp4" 
+                                   poster="/blended-physical-ai-poster.jpg" 
+                                   autoplay loop muted playsinline 
+                                   aria-hidden="true"
+                                   class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500">
+                            </video>
+                        </div>
                     </div>
 
-                    <!-- Bottom Content Overlay -->
-                    <div class="relative z-10 max-w-3xl space-y-2 sm:space-y-2.5 mt-auto">
-                        <div class="bg-slate-900/80 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none p-2.5 sm:p-0 rounded-xl border border-white/10 sm:border-0 shadow-sm">
-                            <h3 class="text-xl xs:text-2xl sm:text-2xl lg:text-3xl font-black text-white leading-snug tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] break-keep">
-                                맞춤형 교육과정 설계 및 체계적 운영
-                            </h3>
-                            <p class="text-xs sm:text-sm text-slate-200 font-normal mt-1 leading-snug break-keep sm:hidden">
-                                AI·직무 교육 기획 및 공공·기업 연수 전주기 매니지먼트
+                    <!-- Main Text Area: Maximized Readability & Contrast -->
+                    <div class="relative z-10 my-auto py-1">
+                        <h3 class="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-black text-white leading-snug tracking-tight break-keep">
+                            맞춤형 교육과정 설계 및 체계적 운영
+                        </h3>
+                        <p class="text-xs sm:text-sm md:text-base text-slate-200 font-medium mt-1 leading-relaxed break-keep">
+                            공공기관·기업체 대상 맞춤형 AI·직무 교육과정 기획, 커리큘럼 설계 및 연수생 전주기 학습 매니지먼트를 제공합니다.
+                        </p>
+                    </div>
+
+                    <!-- 3 Core Solutions Grid: Text-Centric Cards with High Contrast -->
+                    <div class="grid grid-cols-3 gap-1.5 sm:gap-3.5 pt-1 shrink-0 relative z-10">
+                        
+                        <!-- Solution 1 -->
+                        <div class="bg-slate-900 border border-amber-500/40 hover:border-amber-400 p-2 sm:p-3.5 rounded-xl transition-all duration-200 flex flex-col justify-start shadow-md">
+                            <div class="flex items-center gap-1 sm:gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
+                                <h4 class="text-xs sm:text-base font-black text-amber-300 tracking-tight leading-tight break-keep">
+                                    커리큘럼 기획
+                                </h4>
+                            </div>
+                            <p class="text-[11.5px] sm:text-xs text-slate-200 font-semibold leading-tight break-keep pl-3 mt-0.5">
+                                최신 트렌드 직무·AI 설계
                             </p>
                         </div>
 
-                        <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 텍스트 부각 강화) -->
-                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 pt-0.5 sm:pt-1">
-                            
-                            <!-- Solution 1 -->
-                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-amber-500/30 sm:border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
-                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
-                                    <h4 class="text-xs sm:text-base font-extrabold text-amber-300 tracking-tight leading-tight break-keep">
-                                        커리큘럼 기획
-                                    </h4>
-                                </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    체계적 교육 설계
-                                </p>
+                        <!-- Solution 2 -->
+                        <div class="bg-slate-900 border border-amber-500/40 hover:border-amber-400 p-2 sm:p-3.5 rounded-xl transition-all duration-200 flex flex-col justify-start shadow-md">
+                            <div class="flex items-center gap-1 sm:gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
+                                <h4 class="text-xs sm:text-base font-black text-amber-300 tracking-tight leading-tight break-keep">
+                                    전문 운영 관리
+                                </h4>
                             </div>
+                            <p class="text-[11.5px] sm:text-xs text-slate-200 font-semibold leading-tight break-keep pl-3 mt-0.5">
+                                연수생 밀착 학습 케어
+                            </p>
+                        </div>
 
-                            <!-- Solution 2 -->
-                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-amber-500/30 sm:border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
-                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
-                                    <h4 class="text-xs sm:text-base font-extrabold text-amber-300 tracking-tight leading-tight break-keep">
-                                        전문 운영 관리
-                                    </h4>
-                                </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    학습자 밀착 케어
-                                </p>
+                        <!-- Solution 3 -->
+                        <div class="bg-slate-900 border border-amber-500/40 hover:border-amber-400 p-2 sm:p-3.5 rounded-xl transition-all duration-200 flex flex-col justify-start shadow-md">
+                            <div class="flex items-center gap-1 sm:gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
+                                <h4 class="text-xs sm:text-base font-black text-amber-300 tracking-tight leading-tight break-keep">
+                                    맞춤형 워크숍
+                                </h4>
                             </div>
-
-                            <!-- Solution 3 -->
-                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-amber-500/30 sm:border-white/20 hover:border-amber-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
-                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_#fbbf24]"></span>
-                                    <h4 class="text-xs sm:text-base font-extrabold text-amber-300 tracking-tight leading-tight break-keep">
-                                        맞춤형 워크숍
-                                    </h4>
-                                </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    B2B·B2G 밀착 운영
-                                </p>
-                            </div>
+                            <p class="text-[11.5px] sm:text-xs text-slate-200 font-semibold leading-tight break-keep pl-3 mt-0.5">
+                                B2B·B2G 현장 밀착 진행
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -3710,80 +3700,75 @@
                      x-transition:leave="transition ease-in duration-300 transform opacity-100 absolute inset-0"
                      x-transition:leave-start="opacity-100 translate-x-0"
                      x-transition:leave-end="opacity-0 -translate-x-8"
-                     class="absolute inset-0 w-full h-full p-3 xs:p-4 sm:p-7 lg:p-9 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated">
+                     class="absolute inset-0 w-full h-full p-3.5 xs:p-4 sm:p-6 lg:p-8 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900">
                     
-                    <!-- High-Definition Background Image with mobile subtle dimming -->
-                    <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1400&q=85" 
-                         alt="전문 영상 제작" 
-                         loading="eager"
-                         referrerpolicy="no-referrer"
-                         style="aspect-ratio: 16/9;"
-                         class="absolute inset-0 w-full h-full object-cover opacity-60 sm:opacity-100 brightness-90 sm:brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
-                    
-                    <!-- Clean Contrast Scrim (모바일에서 텍스트가 극대화되어 보이도록 딤 강화) -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/98 via-slate-950/80 to-slate-950/40 sm:from-slate-950/95 sm:via-slate-950/50 sm:to-transparent z-0 pointer-events-none"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent z-0 pointer-events-none hidden md:block"></div>
-
-                    <!-- Top Header Row -->
-                    <div class="relative z-10 flex items-center justify-between">
-                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-900/95 text-cyan-300 border border-cyan-400/60 text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-lg">
+                    <!-- Top Header Row: Category Badge + Compact Thumbnail Preview -->
+                    <div class="relative z-10 flex items-center justify-between gap-3 shrink-0">
+                        <span class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-cyan-950/90 text-cyan-300 border border-cyan-500/50 text-xs font-black tracking-wider shadow-sm">
                             <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                             전문 영상 제작
                         </span>
+
+                        <!-- Compact Image Thumbnail Preview (이미지 화면 최소화) -->
+                        <div class="w-20 h-11 xs:w-24 xs:h-12 sm:w-32 sm:h-16 rounded-xl overflow-hidden border border-cyan-500/30 shadow-md shrink-0 bg-slate-900 relative">
+                            <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=400&q=80" 
+                                 alt="전문 영상 제작 예시" 
+                                 loading="eager"
+                                 referrerpolicy="no-referrer"
+                                 class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500">
+                        </div>
                     </div>
 
-                    <!-- Bottom Content Overlay -->
-                    <div class="relative z-10 max-w-3xl space-y-2 sm:space-y-2.5 mt-auto">
-                        <div class="bg-slate-900/80 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none p-2.5 sm:p-0 rounded-xl border border-white/10 sm:border-0 shadow-sm">
-                            <h3 class="text-xl xs:text-2xl sm:text-2xl lg:text-3xl font-black text-white leading-snug tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] break-keep">
-                                기획부터 완제품까지 원스톱 영상 제작
-                            </h3>
-                            <p class="text-xs sm:text-sm text-slate-200 font-normal mt-1 leading-snug break-keep sm:hidden">
-                                160평 6개 전용 스튜디오 인프라 및 CG·모션그래픽 고도화
+                    <!-- Main Text Area: Maximized Readability & Contrast -->
+                    <div class="relative z-10 my-auto py-1">
+                        <h3 class="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-black text-white leading-snug tracking-tight break-keep">
+                            기획부터 완제품까지 원스톱 영상 제작
+                        </h3>
+                        <p class="text-xs sm:text-sm md:text-base text-slate-200 font-medium mt-1 leading-relaxed break-keep">
+                            160평 6개 전용 스튜디오 인프라, 4K 카메라, 전자칠판, 대형 크로마키 및 CG·모션그래픽 후반 작업을 일괄 진행합니다.
+                        </p>
+                    </div>
+
+                    <!-- 3 Core Solutions Grid: Text-Centric Cards with High Contrast -->
+                    <div class="grid grid-cols-3 gap-1.5 sm:gap-3.5 pt-1 shrink-0 relative z-10">
+                        
+                        <!-- Solution 1 -->
+                        <div class="bg-slate-900 border border-cyan-500/40 hover:border-cyan-400 p-2 sm:p-3.5 rounded-xl transition-all duration-200 flex flex-col justify-start shadow-md">
+                            <div class="flex items-center gap-1 sm:gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-cyan-400 shrink-0 shadow-[0_0_6px_#22d3ee]"></span>
+                                <h4 class="text-xs sm:text-base font-black text-cyan-300 tracking-tight leading-tight break-keep">
+                                    6개 전용 스튜디오
+                                </h4>
+                            </div>
+                            <p class="text-[11.5px] sm:text-xs text-slate-200 font-semibold leading-tight break-keep pl-3 mt-0.5">
+                                자체 160평 대형 인프라
                             </p>
                         </div>
 
-                        <!-- 3 Core Solutions Grid (모바일 가로 3분할 콤팩트 배치 & 텍스트 부각 강화) -->
-                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 pt-0.5 sm:pt-1">
-                            
-                            <!-- Solution 1 -->
-                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-cyan-500/30 sm:border-white/20 hover:border-cyan-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
-                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0 shadow-[0_0_6px_#22d3ee]"></span>
-                                    <h4 class="text-xs sm:text-base font-extrabold text-cyan-300 tracking-tight leading-tight break-keep">
-                                        6개 전용 스튜디오
-                                    </h4>
-                                </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    자체 대형 인프라
-                                </p>
+                        <!-- Solution 2 -->
+                        <div class="bg-slate-900 border border-cyan-500/40 hover:border-cyan-400 p-2 sm:p-3.5 rounded-xl transition-all duration-200 flex flex-col justify-start shadow-md">
+                            <div class="flex items-center gap-1 sm:gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-cyan-400 shrink-0 shadow-[0_0_6px_#22d3ee]"></span>
+                                <h4 class="text-xs sm:text-base font-black text-cyan-300 tracking-tight leading-tight break-keep">
+                                    모션그래픽·VFX
+                                </h4>
                             </div>
+                            <p class="text-[11.5px] sm:text-xs text-slate-200 font-semibold leading-tight break-keep pl-3 mt-0.5">
+                                인포그래픽 시각화 연출
+                            </p>
+                        </div>
 
-                            <!-- Solution 2 -->
-                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-cyan-500/30 sm:border-white/20 hover:border-cyan-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
-                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0 shadow-[0_0_6px_#22d3ee]"></span>
-                                    <h4 class="text-xs sm:text-base font-extrabold text-cyan-300 tracking-tight leading-tight break-keep">
-                                        모션그래픽·VFX
-                                    </h4>
-                                </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    인포그래픽 시각화
-                                </p>
+                        <!-- Solution 3 -->
+                        <div class="bg-slate-900 border border-cyan-500/40 hover:border-cyan-400 p-2 sm:p-3.5 rounded-xl transition-all duration-200 flex flex-col justify-start shadow-md">
+                            <div class="flex items-center gap-1 sm:gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-cyan-400 shrink-0 shadow-[0_0_6px_#22d3ee]"></span>
+                                <h4 class="text-xs sm:text-base font-black text-cyan-300 tracking-tight leading-tight break-keep">
+                                    라이브 스트리밍
+                                </h4>
                             </div>
-
-                            <!-- Solution 3 -->
-                            <div class="bg-slate-900/95 sm:bg-slate-950/90 border border-cyan-500/30 sm:border-white/20 hover:border-cyan-400/60 p-2 sm:p-3.5 rounded-xl backdrop-blur-md transition-all duration-200 flex flex-col justify-start shadow-md">
-                                <div class="flex items-center gap-1 sm:gap-1.5 mb-0.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0 shadow-[0_0_6px_#22d3ee]"></span>
-                                    <h4 class="text-xs sm:text-base font-extrabold text-cyan-300 tracking-tight leading-tight break-keep">
-                                        라이브 스트리밍
-                                    </h4>
-                                </div>
-                                <p class="text-[11.5px] sm:text-[13px] text-slate-200 font-semibold leading-tight break-keep pl-2.5 sm:pl-3 mt-0.5">
-                                    무결점 저지연 송출
-                                </p>
-                            </div>
+                            <p class="text-[11.5px] sm:text-xs text-slate-200 font-semibold leading-tight break-keep pl-3 mt-0.5">
+                                무결점 실시간 고화질 송출
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -3811,111 +3796,95 @@
                 </p>
             </div>
 
-            <!-- Dynamic High-Tech Compact Studio Environment Cards (제작 인프라 4대 핵심) -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3.5 my-1 sm:mb-6 shrink-0">
+            <!-- Dynamic High-Tech Studio Infrastructure Cards (제작 인프라 4대 핵심 - 텍스트 가독성 최우선) -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3.5 my-1 sm:mb-4 shrink-0">
                 
                 <!-- Card 01: 대형 스튜디오 -->
-                <div class="tilt-card group relative bg-slate-950/95 rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-3 border border-slate-800 hover:border-emerald-400/80 shadow-xs sm:shadow-lg transition-all duration-300 overflow-hidden isolate flex items-center justify-between">
-                    <div class="absolute -right-6 -bottom-6 w-16 h-16 sm:w-28 sm:h-28 bg-emerald-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-emerald-400/30 transition-all duration-500"></div>
-                    <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
-
-                    <div class="relative z-10 text-left pr-8">
-                        <h3 class="text-sm font-bold text-white mb-0.5 tracking-tight group-hover:text-emerald-300 transition-colors drop-shadow-sm truncate">
+                <div class="tilt-card group relative bg-slate-950 rounded-xl px-3.5 py-3 sm:px-4 sm:py-3.5 border border-slate-800 hover:border-emerald-400 shadow-md transition-all duration-300 overflow-hidden isolate flex items-center justify-between">
+                    <div class="relative z-10 text-left pr-4">
+                        <span class="text-[11px] sm:text-xs font-black text-emerald-400 block mb-0.5">160평 인프라</span>
+                        <h3 class="text-sm sm:text-base font-black text-white mb-0.5 tracking-tight group-hover:text-emerald-300 transition-colors truncate">
                             대형 스튜디오
                         </h3>
-                        <p class="text-[11.5px] sm:text-xs text-slate-300/90 font-normal leading-tight break-keep">
-                            6개 전용 스튜디오 인프라
+                        <p class="text-xs sm:text-sm text-slate-200 font-medium leading-tight break-keep">
+                            6개 전용 스튜디오 세트 구축
                         </p>
                     </div>
 
-                    <div class="absolute bottom-2.5 right-3 z-10 text-emerald-400">
-                        <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-full border border-emerald-500/40 relative flex items-center justify-center overflow-hidden bg-emerald-950/40">
-                            <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500/40 to-transparent origin-bottom-left animate-studio-radar"></div>
-                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 z-10 shadow-[0_0_4px_#34d399]"></div>
+                    <div class="shrink-0 text-emerald-400">
+                        <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-emerald-500/40 relative flex items-center justify-center overflow-hidden bg-emerald-950/60">
+                            <div class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]"></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Card 02: 전자칠판 -->
-                <div class="tilt-card group relative bg-slate-950/95 rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-3 border border-slate-800 hover:border-blue-400/80 shadow-xs sm:shadow-lg transition-all duration-300 overflow-hidden isolate flex items-center justify-between">
-                    <div class="absolute -right-6 -bottom-6 w-16 h-16 sm:w-28 sm:h-28 bg-blue-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-blue-400/30 transition-all duration-500"></div>
-                    <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
-
-                    <div class="relative z-10 text-left pr-8">
-                        <h3 class="text-sm font-bold text-white mb-0.5 tracking-tight group-hover:text-blue-300 transition-colors drop-shadow-sm truncate">
+                <div class="tilt-card group relative bg-slate-950 rounded-xl px-3.5 py-3 sm:px-4 sm:py-3.5 border border-slate-800 hover:border-blue-400 shadow-md transition-all duration-300 overflow-hidden isolate flex items-center justify-between">
+                    <div class="relative z-10 text-left pr-4">
+                        <span class="text-[11px] sm:text-xs font-black text-blue-400 block mb-0.5">4K UHD 터치</span>
+                        <h3 class="text-sm sm:text-base font-black text-white mb-0.5 tracking-tight group-hover:text-blue-300 transition-colors truncate">
                             전자칠판
                         </h3>
-                        <p class="text-[11.5px] sm:text-xs text-slate-300/90 font-normal leading-tight break-keep">
-                            실시간 판서 이러닝 시스템
+                        <p class="text-xs sm:text-sm text-slate-200 font-medium leading-tight break-keep">
+                            86" 실시간 판서 이러닝 시스템
                         </p>
                     </div>
 
-                    <div class="absolute bottom-2.5 right-3 z-10 text-blue-400">
-                        <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-lg bg-blue-950/60 border border-blue-500/40 flex items-center justify-center relative">
-                            <span class="animate-studio-touch w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full border border-blue-400/80 bg-blue-400/20"></span>
+                    <div class="shrink-0 text-blue-400">
+                        <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-blue-950/60 border border-blue-500/40 flex items-center justify-center">
+                            <span class="w-2.5 h-2.5 rounded-full border border-blue-400 bg-blue-400/40"></span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Card 03: 대형 크로마키 -->
-                <div class="tilt-card group relative bg-slate-950/95 rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-3 border border-slate-800 hover:border-teal-400/80 shadow-xs sm:shadow-lg transition-all duration-300 overflow-hidden isolate flex items-center justify-between">
-                    <div class="absolute -right-6 -bottom-6 w-16 h-16 sm:w-28 sm:h-28 bg-teal-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-teal-400/30 transition-all duration-500"></div>
-                    <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
-
-                    <div class="relative z-10 text-left pr-8">
-                        <h3 class="text-sm font-bold text-white mb-0.5 tracking-tight group-hover:text-teal-300 transition-colors drop-shadow-sm truncate">
+                <div class="tilt-card group relative bg-slate-950 rounded-xl px-3.5 py-3 sm:px-4 sm:py-3.5 border border-slate-800 hover:border-teal-400 shadow-md transition-all duration-300 overflow-hidden isolate flex items-center justify-between">
+                    <div class="relative z-10 text-left pr-4">
+                        <span class="text-[11px] sm:text-xs font-black text-teal-400 block mb-0.5">6.6m 곡면 세트</span>
+                        <h3 class="text-sm sm:text-base font-black text-white mb-0.5 tracking-tight group-hover:text-teal-300 transition-colors truncate">
                             대형 크로마키
                         </h3>
-                        <p class="text-[11.5px] sm:text-xs text-slate-300/90 font-normal leading-tight break-keep">
-                            실시간 CG 가상합성 세트
+                        <p class="text-xs sm:text-sm text-slate-200 font-medium leading-tight break-keep">
+                            실시간 CG·가상합성 스튜디오
                         </p>
                     </div>
 
-                    <div class="absolute bottom-2.5 right-3 z-10 text-teal-400">
-                        <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-lg bg-teal-950/60 border border-teal-500/40 flex items-center justify-center">
-                            <div class="animate-studio-chroma flex flex-col gap-0.5 items-center justify-center">
-                                <span class="w-2.5 sm:w-2.5 h-0.5 bg-teal-400 rounded-full"></span>
-                                <span class="w-2 sm:w-2 h-0.5 bg-teal-300 rounded-full"></span>
-                                <span class="w-1.5 sm:w-1.5 h-0.5 bg-teal-200 rounded-full"></span>
-                            </div>
+                    <div class="shrink-0 text-teal-400">
+                        <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-teal-950/60 border border-teal-500/40 flex items-center justify-center">
+                            <span class="w-2.5 h-2.5 bg-teal-400 rounded-sm"></span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Card 04: 전용 부조정실 -->
-                <div class="tilt-card group relative bg-slate-950/95 rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-3 border border-slate-800 hover:border-purple-400/80 shadow-xs sm:shadow-lg transition-all duration-300 overflow-hidden isolate flex items-center justify-between">
-                    <div class="absolute -right-6 -bottom-6 w-16 h-16 sm:w-28 sm:h-28 bg-purple-500/15 rounded-full blur-xl pointer-events-none animate-studio-glow group-hover:bg-purple-400/30 transition-all duration-500"></div>
-                    <div class="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none"></div>
-
-                    <div class="relative z-10 text-left pr-8">
-                        <h3 class="text-sm font-bold text-white mb-0.5 tracking-tight group-hover:text-purple-300 transition-colors drop-shadow-sm truncate">
+                <div class="tilt-card group relative bg-slate-950 rounded-xl px-3.5 py-3 sm:px-4 sm:py-3.5 border border-slate-800 hover:border-purple-400 shadow-md transition-all duration-300 overflow-hidden isolate flex items-center justify-between">
+                    <div class="relative z-10 text-left pr-4">
+                        <span class="text-[11px] sm:text-xs font-black text-purple-400 block mb-0.5">4K 멀티 스위쳐</span>
+                        <h3 class="text-sm sm:text-base font-black text-white mb-0.5 tracking-tight group-hover:text-purple-300 transition-colors truncate">
                             전용 부조정실
                         </h3>
-                        <p class="text-[11.5px] sm:text-xs text-slate-300/90 font-normal leading-tight break-keep">
-                            다채널 스위쳐 &amp; 모니터링
+                        <p class="text-xs sm:text-sm text-slate-200 font-medium leading-tight break-keep">
+                            다채널 스위칭 &amp; 실시간 모니터링
                         </p>
                     </div>
 
-                    <div class="absolute bottom-2.5 right-3 z-10 text-purple-400">
-                        <div class="flex items-end gap-0.5 h-3.5 sm:h-4 px-1 py-0.5 bg-purple-950/60 rounded border border-purple-500/40">
-                            <span class="w-0.5 h-2 bg-purple-400 rounded-xs"></span>
-                            <span class="w-0.5 h-3 bg-purple-300 rounded-xs"></span>
-                            <span class="w-0.5 h-2.5 bg-purple-400 rounded-xs"></span>
-                            <span class="w-0.5 h-1.5 bg-purple-200 rounded-xs"></span>
+                    <div class="shrink-0 text-purple-400">
+                        <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-purple-950/60 border border-purple-500/40 flex items-center justify-center">
+                            <span class="w-2.5 h-2.5 bg-purple-400 rounded-sm"></span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- CLEAN VISUAL SHOWCASE SLIDER (100% Pure Studio Photography - 실사 갤러리 상시 노출 & 뷰포트 확대) -->
+            <!-- COMPACT VISUAL SHOWCASE (사진 화면 최소화 & 텍스트 중심 구조) -->
             <div class="relative w-full max-w-5xl mx-auto flex-1 min-h-0 flex flex-col justify-between my-auto py-1">
-                <!-- Main Cinematic Slider Stage (Expanded Aspect Ratio for Mobile) -->
+                <!-- Compact Slider Stage -->
                 <div @touchstart="studioTouchStartX = $event.touches[0].clientX"
                      @touchend="studioTouchEndX = $event.changedTouches[0].clientX; if (studioTouchStartX - studioTouchEndX > 40) { nextStudioSlide(); } else if (studioTouchEndX - studioTouchStartX > 40) { prevStudioSlide(); }"
-                     class="cinematic-stage-container relative w-full aspect-[16/10] sm:aspect-[16/9] max-h-[38vh] sm:max-h-none rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 shadow-2xl border border-slate-200/90 group cursor-pointer isolate shrink-0"
+                     class="cinematic-stage-container relative w-full aspect-[21/9] sm:aspect-[24/9] max-h-[140px] sm:max-h-[190px] rounded-2xl overflow-hidden bg-slate-950 shadow-xl border border-slate-800 group cursor-pointer isolate shrink-0"
                      @click="openImageModal(studioInfrastructure[activeStudioIndex]?.imageUrl || studioInfrastructure[activeStudioIndex]?.fallbackUrl, studioInfrastructure[activeStudioIndex]?.title || '스튜디오 전경')">
 
-                    <!-- Studio Slide Images Loop (Clean View - High-End Tone & Ken Burns Depth) -->
+                    <!-- Studio Slide Images Loop -->
                     <template x-for="(item, idx) in studioInfrastructure" :key="item.id">
                         <div x-show="activeStudioIndex === idx"
                              x-transition:enter="transition-opacity ease-out duration-500"
@@ -3924,43 +3893,37 @@
                              x-transition:leave="transition-opacity ease-in duration-300 absolute inset-0"
                              x-transition:leave-start="opacity-100"
                              x-transition:leave-end="opacity-0"
-                             :class="activeStudioIndex === idx ? 'studio-slide-active' : ''"
-                             class="studio-slide-wrapper w-full h-full absolute inset-0 overflow-hidden bg-slate-950 flex items-center justify-center will-change-transform-opacity gpu-accelerated">
-                            
-                            <!-- Unified Cinematic Exposure Scrim & Vignette -->
-                            <div class="cinematic-dark-overlay"></div>
-                            <div class="cinematic-vignette"></div>
-
+                             class="w-full h-full absolute inset-0 overflow-hidden bg-slate-950 flex items-center justify-center">
                             <img :src="item.imageUrl"
                                  @error="if ($el.dataset.fallbackTried !== '1') { $el.dataset.fallbackTried = '1'; $el.src = item.rawUrl; }"
                                  :alt="item.title"
                                  referrerpolicy="no-referrer"
                                  loading="eager"
-                                 class="cinematic-stage-image w-full h-full object-cover">
+                                 class="w-full h-full object-cover opacity-90">
                         </div>
                     </template>
 
                     <!-- Left / Right Navigation Arrow Buttons -->
                     <button @click.stop="prevStudioSlide()" 
-                            class="absolute left-2 sm:left-5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all duration-200 shadow-xl opacity-90 hover:opacity-100 active:scale-95 z-20 cursor-pointer"
+                            class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-900/90 hover:bg-slate-900 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all duration-200 shadow-lg z-20 cursor-pointer"
                             aria-label="이전 스튜디오 사진">
-                        <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
                     </button>
 
                     <button @click.stop="nextStudioSlide()" 
-                            class="absolute right-2 sm:right-5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all duration-200 shadow-xl opacity-90 hover:opacity-100 active:scale-95 z-20 cursor-pointer"
+                            class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-900/90 hover:bg-slate-900 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all duration-200 shadow-lg z-20 cursor-pointer"
                             aria-label="다음 스튜디오 사진">
-                        <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
                 </div>
 
-                <!-- Clean Thumbnail Selector Bar (Enlarged for Mobile) -->
-                <div id="studio-thumbs-container" class="mt-2 sm:mt-4 flex items-center justify-start gap-2 sm:gap-2.5 overflow-x-auto no-scrollbar py-1 px-0.5">
+                <!-- Clean Thumbnail Selector Bar -->
+                <div id="studio-thumbs-container" class="mt-1.5 sm:mt-2.5 flex items-center justify-start gap-2 overflow-x-auto no-scrollbar py-0.5 px-0.5">
                     <template x-for="(item, idx) in studioInfrastructure" :key="'thumb-' + item.id">
                         <button :id="'studio-thumb-' + idx"
                                 @click="selectStudioSlide(idx)"
-                                :class="activeStudioIndex === idx ? 'ring-2 ring-blue-600 scale-105 opacity-100 shadow-md' : 'opacity-60 hover:opacity-100 ring-1 ring-slate-200'"
-                                class="relative w-16 h-10 sm:w-20 sm:h-auto sm:aspect-video rounded-xl overflow-hidden shrink-0 transition-all duration-300 cursor-pointer bg-slate-100 border border-slate-200 shadow-xs">
+                                :class="activeStudioIndex === idx ? 'ring-2 ring-blue-500 scale-105 opacity-100 shadow-md' : 'opacity-60 hover:opacity-100 ring-1 ring-slate-700'"
+                                class="relative w-14 h-9 sm:w-18 sm:h-11 rounded-lg overflow-hidden shrink-0 transition-all duration-300 cursor-pointer bg-slate-900 border border-slate-700 shadow-xs">
                             <img :src="item.imageUrl"
                                  @error="if ($el.dataset.fallbackTried !== '1') { $el.dataset.fallbackTried = '1'; $el.src = item.rawUrl; }"
                                  :alt="item.title"
@@ -4099,60 +4062,76 @@
                 </p>
             </div>
 
-            <!-- SINGLE VIDEO SHOWCASE & SEPARATED BOTTOM CONTROLLER -->
-            <div class="w-full max-w-3xl mx-auto flex-1 min-h-0 flex flex-col justify-between my-auto py-1 gap-2 sm:gap-4"
+            <!-- TEXT-CENTRIC PORTFOLIO CARD (영상 화면 최소화 & 텍스트 정보 극대화) -->
+            <div class="w-full max-w-3xl mx-auto flex-1 min-h-0 flex flex-col justify-between my-auto py-1"
                  @touchstart="portfolioTouchStartX = $event.touches[0].clientX"
                  @touchend="portfolioTouchEndX = $event.changedTouches[0].clientX; if (portfolioTouchStartX - portfolioTouchEndX > 40) { nextPortfolioItem(); } else if (portfolioTouchEndX - portfolioTouchStartX > 40) { prevPortfolioItem(); }">
                 
-                <!-- Main Showcase Video Card (Pure Cinema Visual Stage) -->
-                <div class="group relative w-full flex-1 min-h-0 bg-slate-950 rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-800 shadow-2xl transition-all duration-300 flex flex-col justify-center cursor-pointer"
-                     @click="openModal(currentPortfolioItem.id, currentPortfolioItem.title)">
+                <!-- Main Card Container -->
+                <div class="w-full bg-slate-950 border border-slate-800 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-xl flex flex-col justify-between flex-1 min-h-0 gap-3">
                     
-                    <div class="relative w-full h-full min-h-[30vh] sm:min-h-[38vh] bg-slate-950 overflow-hidden flex items-center justify-center">
-                        <img :src="'https://img.youtube.com/vi/' + currentPortfolioItem.id + '/maxresdefault.jpg'" 
-                             @error="$el.src='https://img.youtube.com/vi/' + currentPortfolioItem.id + '/hqdefault.jpg'"
-                             :alt="currentPortfolioItem.title" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
-                             referrerpolicy="no-referrer">
-                        
-                        <!-- Ambient gradient overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-black/20 pointer-events-none"></div>
-
-                        <!-- Top Tag Badge -->
-                        <div class="absolute top-2.5 sm:top-4 left-2.5 sm:left-4 z-10 pointer-events-none">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1 rounded-full bg-slate-900/90 backdrop-blur-md text-white text-xs font-bold shadow-md border border-white/20"
+                    <!-- Top Info Row: Category + Project Counter -->
+                    <div class="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-2.5 shrink-0">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 rounded-full bg-teal-950 text-teal-300 border border-teal-500/40 text-xs font-black"
                                   x-text="currentPortfolioItem.tag">
                             </span>
+                            <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[11px] sm:text-xs font-semibold"
+                                  x-text="currentPortfolioItem.label">
+                            </span>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Separated Bottom Controller Bar (영상 화면에서 분리되어 하단에 도톰하게 안착) -->
-                <div class="w-full shrink-0 bg-slate-900 border border-slate-800 rounded-2xl p-3 sm:p-4 shadow-xl flex flex-col gap-2.5">
-                    <div class="w-full flex items-center justify-between gap-2">
-                        <h3 class="text-sm sm:text-base font-bold text-white truncate"
-                            x-text="currentPortfolioItem.title"></h3>
-                        <span class="text-xs text-slate-400 font-mono shrink-0" 
+                        <span class="text-xs text-slate-400 font-mono font-bold" 
                               x-text="(portfolioIndex + 1) + ' / ' + (portfolioItems ? portfolioItems.length : 0)"></span>
                     </div>
 
-                    <!-- Click To Next / Play Controls -->
-                    <div class="flex items-center justify-between gap-2 w-full">
+                    <!-- Middle Content: Compact Thumbnail on Left/Top + Rich Text on Right/Bottom -->
+                    <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-5 flex-1 min-h-0 my-auto">
+                        <!-- Compact Video Thumbnail Screen (화면 크기 최소화) -->
+                        <div class="relative w-full sm:w-64 aspect-[16/9] max-h-[120px] sm:max-h-[150px] bg-slate-900 rounded-xl overflow-hidden border border-slate-700 shadow-md shrink-0 cursor-pointer group flex items-center justify-center"
+                             @click="openModal(currentPortfolioItem.id, currentPortfolioItem.title)">
+                            <img :src="'https://img.youtube.com/vi/' + currentPortfolioItem.id + '/hqdefault.jpg'" 
+                                 :alt="currentPortfolioItem.title" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
+                                 referrerpolicy="no-referrer">
+                            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-red-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                    <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Maximized Text Information Area -->
+                        <div class="flex-1 text-left w-full">
+                            <h3 class="text-base sm:text-xl font-black text-white leading-snug tracking-tight break-keep"
+                                x-text="currentPortfolioItem.title"></h3>
+                            <p class="text-xs sm:text-sm text-slate-200 font-medium mt-1.5 leading-relaxed break-keep">
+                                최고 수준의 촬영 및 후반 편집 공정을 거친 맞춤형 영상 콘텐츠 제작 사례입니다.
+                            </p>
+                            <div class="flex flex-wrap items-center gap-1.5 mt-2">
+                                <span class="text-[11px] sm:text-xs text-teal-300 font-semibold bg-slate-900 px-2 py-0.5 rounded-md border border-slate-800">4K 마스터링</span>
+                                <span class="text-[11px] sm:text-xs text-cyan-300 font-semibold bg-slate-900 px-2 py-0.5 rounded-md border border-slate-800">모션그래픽/CG</span>
+                                <span class="text-[11px] sm:text-xs text-blue-300 font-semibold bg-slate-900 px-2 py-0.5 rounded-md border border-slate-800">맞춤형 연출</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Controls -->
+                    <div class="flex items-center justify-between gap-2 w-full pt-1 shrink-0">
                         <button @click="prevPortfolioItem()" 
-                                class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs sm:text-sm font-bold transition-all flex items-center gap-1 cursor-pointer border border-slate-700 active:scale-95 shadow-xs"
+                                class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-xs sm:text-sm font-bold transition-all flex items-center gap-1 cursor-pointer border border-slate-700 active:scale-95 shadow-xs"
                                 title="이전 영상">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                             <span>이전</span>
                         </button>
 
                         <button @click="openModal(currentPortfolioItem.id, currentPortfolioItem.title)"
-                                class="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-teal-300 hover:text-teal-200 border border-teal-500/40 hover:border-teal-400 text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95">
-                            <svg class="w-3.5 h-3.5 text-teal-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            <span>영상 재생</span>
+                                class="flex-1 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md active:scale-95">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <span>영상 바로보기</span>
                         </button>
 
                         <button @click="nextPortfolioItem()" 
-                                class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1 cursor-pointer shadow-md active:scale-95 border border-blue-400/30">
+                                class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1 cursor-pointer shadow-md active:scale-95 border border-blue-400/30">
                             <span>다음 영상</span>
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                         </button>
