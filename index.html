@@ -1353,12 +1353,18 @@
                     this.isMosaicShattering = true;
                     this.heroRevealed = true;
 
-                    // 1. Generate High-Tech Mosaic Shatter Matrix Grid (10x16 = 160 Tiles + Floating Cyber Sparks)
+                    // 1. Pause splash background video immediately to eliminate conflict & free GPU resources
+                    const splashVideo = document.getElementById('splash-video');
+                    if (splashVideo) {
+                        try { splashVideo.pause(); } catch(e) {}
+                    }
+
+                    // 2. Generate Ultra-Lightweight Mosaic Grid (4 cols x 6 rows = 24 shards, 60fps Hardware Accelerated)
                     const mosaicContainer = document.getElementById('splash-mosaic-grid');
                     if (mosaicContainer) {
                         mosaicContainer.innerHTML = '';
-                        const cols = 10;
-                        const rows = 16;
+                        const cols = 4;
+                        const rows = 6;
                         const centerCol = (cols - 1) / 2;
                         const centerRow = (rows - 1) / 2;
                         const maxDist = Math.hypot(centerCol, centerRow);
@@ -1368,92 +1374,52 @@
                         for (let r = 0; r < rows; r++) {
                             for (let c = 0; c < cols; c++) {
                                 const tile = document.createElement('div');
-                                tile.className = 'mosaic-shard';
+                                tile.className = 'mosaic-shard-fast';
 
-                                // Grid positioning & slicing
                                 const leftPercent = (c / cols) * 100;
                                 const topPercent = (r / rows) * 100;
                                 const widthPercent = 100 / cols;
                                 const heightPercent = 100 / rows;
 
-                                // Wave-like stagger delay from center outward (0ms ~ 240ms)
                                 const distFromCenter = Math.hypot(c - centerCol, r - centerRow);
                                 const normalizedDist = distFromCenter / maxDist;
-                                const staggerDelay = Math.floor(normalizedDist * 180 + Math.random() * 60);
+                                const staggerDelay = Math.floor(normalizedDist * 60);
 
-                                // 3D Trajectory & Scatter offsets
                                 const angle = Math.atan2(r - centerRow, c - centerCol) + (Math.random() - 0.5) * 0.4;
-                                const distance = 100 + Math.random() * 240;
-                                const tx = (Math.cos(angle) * distance + (Math.random() - 0.5) * 80).toFixed(1);
-                                const ty = (Math.sin(angle) * distance + (Math.random() - 0.5) * 80).toFixed(1);
-                                const tz = (Math.random() * 280 + 60).toFixed(1);
-
-                                // Dynamic 3D rotation & disintegration
-                                const rz = ((Math.random() - 0.5) * 80).toFixed(1); // -40deg ~ 40deg
-                                const rx = ((Math.random() - 0.5) * 60).toFixed(1); // -30deg ~ 30deg
-                                const ry = ((Math.random() - 0.5) * 60).toFixed(1);
-
-                                // Neon Cyan / Mint Emerald Particle Flare (#00F5D4 / #10B981)
-                                const glowColor = Math.random() > 0.45 ? '#00F5D4' : '#10B981';
+                                const distance = 70 + Math.random() * 140;
+                                const tx = (Math.cos(angle) * distance).toFixed(1);
+                                const ty = (Math.sin(angle) * distance).toFixed(1);
+                                const tr = ((Math.random() - 0.5) * 40).toFixed(1);
 
                                 tile.style.cssText = `
                                     left: ${leftPercent}%;
                                     top: ${topPercent}%;
-                                    width: ${widthPercent + 0.25}%;
-                                    height: ${heightPercent + 0.25}%;
+                                    width: ${widthPercent + 0.5}%;
+                                    height: ${heightPercent + 0.5}%;
                                     background-position: ${leftPercent}% ${topPercent}%;
                                     background-size: ${cols * 100}% ${rows * 100}%;
                                     --tx: ${tx}px;
                                     --ty: ${ty}px;
-                                    --tz: ${tz}px;
-                                    --rx: ${rx}deg;
-                                    --ry: ${ry}deg;
-                                    --rz: ${rz}deg;
-                                    --delay: ${staggerDelay}ms;
-                                    --glow: ${glowColor};
+                                    --tr: ${tr}deg;
+                                    animation-delay: ${staggerDelay}ms;
                                 `;
                                 fragment.appendChild(tile);
                             }
                         }
-
-                        // Add Floating Neon Digital Spark Pixels
-                        for (let p = 0; p < 28; p++) {
-                            const spark = document.createElement('div');
-                            spark.className = 'mosaic-spark-particle';
-                            const sx = Math.random() * 100;
-                            const sy = Math.random() * 100;
-                            const spTx = (Math.random() - 0.5) * 360;
-                            const spTy = (Math.random() - 0.5) * 360;
-                            const spDelay = Math.random() * 180;
-                            const spColor = Math.random() > 0.5 ? '#00F5D4' : '#10B981';
-                            const spSize = Math.random() * 4 + 2;
-                            spark.style.cssText = `
-                                left: ${sx}%;
-                                top: ${sy}%;
-                                width: ${spSize}px;
-                                height: ${spSize}px;
-                                --tx: ${spTx}px;
-                                --ty: ${spTy}px;
-                                --delay: ${spDelay}ms;
-                                --color: ${spColor};
-                            `;
-                            fragment.appendChild(spark);
-                        }
-
                         mosaicContainer.appendChild(fragment);
                     }
 
-                    // 2. Synchronized Main Hero Sharpen Reveal
+                    // 3. Synchronized Main Hero Sharpen Reveal
                     const hero = document.getElementById('hero');
                     if (hero) hero.classList.add('animate-hero-reveal');
 
-                    // 3. Unmount splash screen cleanly after shatter animation completes (1100ms)
+                    // 4. Unmount splash screen cleanly after fast shatter animation completes (750ms)
                     setTimeout(() => {
                         this.splashVisible = false;
                         this.isMosaicShattering = false;
                         if (hero) hero.classList.remove('animate-hero-reveal');
                         if (mosaicContainer) mosaicContainer.innerHTML = '';
-                    }, 1100);
+                    }, 750);
                 },
 
                 skipSplash() {
@@ -1470,6 +1436,13 @@
                     if (mosaicContainer) mosaicContainer.innerHTML = '';
                     const hero = document.getElementById('hero');
                     if (hero) hero.classList.remove('animate-hero-reveal');
+                    const splashVideo = document.getElementById('splash-video');
+                    if (splashVideo) {
+                        try {
+                            splashVideo.currentTime = 0;
+                            splashVideo.play();
+                        } catch(e) {}
+                    }
 
                     this.splashVisible = true;
                     this.isMosaicShattering = false;
@@ -1960,7 +1933,7 @@
                         this.startStudioAutoPlay();
                         this.loadStudioImagesFromGithub();
 
-                        // [구글 검색엔진 최적화 (SEO) 본문 실시간 분석 및 메타태그 자동 업데이트 실행]
+                        // [구글 검색엔진 최적화 (SEO) 본문 분석 및 메타태그 자동 업데이트 실행]
                         setTimeout(() => {
                             this.refreshSeoKeywords();
                         }, 300);
@@ -2331,7 +2304,7 @@
         });
 
         // =========================================================================
-        // [Google SEO 최적화] 웹페이지 본문 실시간 분석 및 메타 태그 동적 추출/업데이트 엔진
+        // [Google SEO 최적화] 웹페이지 본문 분석 및 메타 태그 동적 추출/업데이트 엔진
         // =========================================================================
         function extractAndApplyDynamicSeoMetaKeywords() {
             try {
@@ -2731,7 +2704,7 @@
         }
 
         /* =========================================================
-           MOSAIC SHATTER & PIXEL FRAGMENTATION TRANSITION (모자이크 쪼개짐/해체)
+           FAST MOSAIC SHATTER TRANSITION (초경량 60fps 모자이크 해체)
         ========================================================= */
         #splash-mosaic-grid {
             position: absolute;
@@ -2739,77 +2712,27 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            perspective: 1200px;
-            perspective-origin: center center;
             overflow: hidden;
             z-index: 50;
         }
 
-        .mosaic-shard {
+        .mosaic-shard-fast {
             position: absolute;
             background-image: url('/splash-mobile.jpg');
             background-repeat: no-repeat;
             box-sizing: border-box;
-            will-change: transform, opacity, filter, box-shadow;
-            transform-style: preserve-3d;
-            backface-visibility: hidden;
-            animation: mosaicShardShatter 0.95s cubic-bezier(0.18, 0.9, 0.32, 1) forwards;
-            animation-delay: var(--delay, 0ms);
-        }
-
-        @keyframes mosaicShardShatter {
-            0% {
-                transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
-                opacity: 1;
-                box-shadow: 0 0 0px transparent;
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                filter: blur(0px);
-            }
-            15% {
-                opacity: 1;
-                border: 1px solid var(--glow, #00F5D4);
-                box-shadow: 0 0 14px var(--glow, #00F5D4), inset 0 0 8px var(--glow, #00F5D4);
-                filter: drop-shadow(0 0 10px var(--glow, #00F5D4));
-            }
-            45% {
-                opacity: 0.95;
-            }
-            80% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translate3d(var(--tx, 0px), var(--ty, 0px), var(--tz, 100px)) 
-                           rotateX(var(--rx, 20deg)) 
-                           rotateY(var(--ry, 20deg)) 
-                           rotateZ(var(--rz, 30deg)) 
-                           scale(0.28);
-                opacity: 0;
-                filter: blur(6px) drop-shadow(0 0 16px var(--glow, #00F5D4));
-                box-shadow: 0 0 24px var(--glow, #00F5D4);
-            }
-        }
-
-        .mosaic-spark-particle {
-            position: absolute;
-            border-radius: 50%;
-            background-color: var(--color, #00F5D4);
-            box-shadow: 0 0 12px var(--color, #00F5D4), 0 0 24px var(--color, #00F5D4);
-            pointer-events: none;
             will-change: transform, opacity;
-            animation: sparkScatter 0.85s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-            animation-delay: var(--delay, 0ms);
+            backface-visibility: hidden;
+            animation: fastMosaicExplode 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        @keyframes sparkScatter {
+        @keyframes fastMosaicExplode {
             0% {
-                transform: translate3d(0, 0, 0) scale(1);
+                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
                 opacity: 1;
             }
-            60% {
-                opacity: 0.8;
-            }
             100% {
-                transform: translate3d(var(--tx, 50px), var(--ty, 50px), 0) scale(0);
+                transform: translate3d(var(--tx, 50px), var(--ty, 50px), 0) scale(0.1) rotate(var(--tr, 20deg));
                 opacity: 0;
             }
         }
@@ -2838,24 +2761,26 @@
       @keydown.escape.window="closeModal(); if (mobileMenuOpen) mobileMenuOpen = false;"
       :class="{ 'overflow-hidden': mobileMenuOpen || splashVisible, 'pb-14 md:pb-0': true }">
 
-    <!-- MOBILE SPLASH SCREEN (모자이크 쪼개짐/해체 Mosaic Shatter & Pixel Disintegration Transition) -->
+    <!-- MOBILE SPLASH SCREEN (초경량 고성능 모자이크 쪼개짐 & 메인 히어로 즉시 노출) -->
     <div x-show="splashVisible"
          x-cloak
          @click="triggerMosaicExit()"
          @touchstart.passive="triggerMosaicExit()"
-         class="fixed inset-0 z-[9999] w-full h-[100dvh] bg-black md:hidden flex flex-col justify-between p-6 select-none overflow-hidden cursor-pointer"
-         style="background-image: url('/splash-mobile.jpg'); background-size: cover; background-position: center;"
+         :class="isMosaicShattering ? '!bg-transparent pointer-events-none' : 'bg-black'"
+         class="fixed inset-0 z-[9999] w-full h-[100dvh] md:hidden flex flex-col justify-between p-6 select-none overflow-hidden cursor-pointer"
+         :style="isMosaicShattering ? 'background: transparent !important;' : 'background-image: url(/splash-mobile.jpg); background-size: cover; background-position: center;'"
          title="화면을 터치하면 메인으로 이동합니다">
         
-        <!-- 1. Splash Background Video -->
-        <video class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 transition-opacity duration-300 ease-out"
+        <!-- 1. Splash Background Video (해체 트리거 즉시 opacity-0 및 일시정지) -->
+        <video id="splash-video"
+               class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 transition-opacity duration-150 ease-out"
                :class="isMosaicShattering ? 'opacity-0' : 'opacity-100'"
                autoplay loop muted playsinline poster="/splash-mobile.jpg" aria-hidden="true">
             <source src="/who-main.mp4" type="video/mp4" />
         </video>
 
-        <!-- 2. Dark Overlay -->
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px] pointer-events-none z-[1] transition-opacity duration-300"
+        <!-- 2. Dark Overlay (해체 트리거 즉시 투명화) -->
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px] pointer-events-none z-[1] transition-opacity duration-150"
              :class="isMosaicShattering ? 'opacity-0' : 'opacity-100'"></div>
 
         <!-- 3. Dynamic Mosaic Shatter & Pixel Matrix Grid Container -->
@@ -2864,9 +2789,9 @@
         <!-- 4. Upper Safe Area -->
         <div class="relative z-10 w-full pt-safe pointer-events-none"></div>
 
-        <!-- 5. Center Content: Logo & Slogan -->
-        <div class="relative z-10 w-full flex flex-col items-center justify-center text-center px-4 my-auto pointer-events-none transition-all duration-300"
-             :class="isMosaicShattering ? 'opacity-0 scale-95' : 'opacity-100 scale-100'">
+        <!-- 5. Center Content: Logo & Slogan (해체 트리거 즉시 사라짐) -->
+        <div class="relative z-10 w-full flex flex-col items-center justify-center text-center px-4 my-auto pointer-events-none transition-all duration-150"
+             :class="isMosaicShattering ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'">
             <div class="inline-block px-4 py-1.5 rounded-full bg-[#00F5D4]/10 border border-[#00F5D4]/30 text-[#00F5D4] text-xs font-bold tracking-widest uppercase mb-3 shadow-[0_0_15px_rgba(0,245,212,0.2)]">
                 에듀테크 &amp; 영상 제작
             </div>
@@ -2880,8 +2805,8 @@
         </div>
 
         <!-- 6. Bottom Keyword Badges -->
-        <div class="relative z-10 w-full text-center pb-4 pb-safe pointer-events-none transition-all duration-300"
-             :class="isMosaicShattering ? 'opacity-0 translate-y-3' : 'opacity-100 translate-y-0'">
+        <div class="relative z-10 w-full text-center pb-4 pb-safe pointer-events-none transition-all duration-150"
+             :class="isMosaicShattering ? 'opacity-0 translate-y-3 pointer-events-none' : 'opacity-100 translate-y-0'">
             <div class="inline-flex items-center justify-center flex-wrap gap-1.5 bg-black/55 py-2 px-4 rounded-full backdrop-blur-md border border-white/15 shadow-xl">
                 <span class="text-[11.5px] font-bold text-teal-300">이러닝 콘텐츠 개발</span>
                 <span class="text-white/40 text-[10px]">·</span>
@@ -3185,10 +3110,10 @@
         <!-- [모바일 전용 순차적 세로 배치(Stacked Flow) 레이아웃] (md:hidden flex flex-col) -->
         <!-- ========================================================================= -->
         <div :class="heroRevealed ? 'animate-rack-focus' : ''"
-             class="md:hidden flex flex-col justify-between w-full h-full flex-1 relative z-20 space-y-2 sm:space-y-3">
+             class="md:hidden flex flex-col justify-between w-full h-full flex-1 relative z-20">
             
-            <!-- 1. [모바일] 상단 메인 슬로건 (슬로건-영상 간 여백 최적화로 영상 상단 배치) -->
-            <div class="w-full px-4 pt-2.5 pb-1 xs:pt-3.5 xs:pb-1.5 sm:pt-5 sm:pb-3 flex flex-col items-center justify-center text-center shrink-0">
+            <!-- 1. [모바일] 상단 메인 슬로건 (상단 헤더(로고+햄버거 메뉴)와 메인 영상 사이 영역의 정중앙 세로 배치) -->
+            <div class="w-full px-4 flex-1 flex flex-col items-center justify-center text-center my-auto min-h-[85px] xs:min-h-[98px] sm:min-h-[110px] py-1">
                 <div class="flex flex-col items-center justify-center text-center space-y-1.5 text-[23px] xs:text-[25px] sm:text-3xl font-black text-white leading-snug tracking-tight select-none px-1 drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">
                     <div class="flex items-center justify-center gap-1.5 flex-wrap">
                         <span class="text-white inline-flex items-baseline"><span class="highlight-keyword-learner text-emerald-400 font-black drop-shadow-[0_0_12px_rgba(52,211,153,0.4)]">학습자</span><span class="text-white">의</span></span>
@@ -3214,10 +3139,10 @@
                 </div>
             </div>
 
-            <!-- 3. [모바일] 영상 하단 전광판 (4번 영역: 에메랄드 네온 뱃지로 선명하게 부각) -->
-            <div class="w-full px-4 pt-1 flex justify-center shrink-0">
-                <div class="inline-flex items-center justify-center bg-slate-950/80 backdrop-blur-md border border-emerald-500/40 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.25)] py-2 px-5 max-w-full ring-1 ring-emerald-400/20">
-                    <div id="mosaic-ticker-mobile" class="mosaic-ticker-container relative overflow-hidden min-h-[32px] sm:min-h-[36px] flex items-center justify-center font-bold text-sm text-white">
+            <!-- 3. [모바일] 영상 하단 전광판 (4번 영역: 에메랄드 네온 뱃지로 선명하게 부각 & 폰트 크기 확대) -->
+            <div class="w-full px-3.5 sm:px-4 pt-1.5 pb-0.5 flex justify-center shrink-0">
+                <div class="inline-flex items-center justify-center bg-slate-950/85 backdrop-blur-md border border-emerald-500/50 rounded-full shadow-[0_0_22px_rgba(16,185,129,0.3)] py-2 sm:py-2.5 px-4 sm:px-6 w-auto max-w-[96vw] ring-1 ring-emerald-400/30">
+                    <div id="mosaic-ticker-mobile" class="mosaic-ticker-container relative overflow-hidden min-h-[34px] sm:min-h-[38px] flex items-center justify-center font-bold text-white">
                         <!-- Dynamically generated & assembled by initMosaicTicker() -->
                     </div>
                 </div>
@@ -3961,7 +3886,7 @@
                             전자칠판
                         </h3>
                         <p class="text-[11.5px] sm:text-xs text-slate-300/90 font-normal leading-tight break-keep">
-                            실시간 판서 이러닝 시스템
+                            전자 판서 이러닝 시스템
                         </p>
                     </div>
 
@@ -3982,7 +3907,7 @@
                             대형 크로마키
                         </h3>
                         <p class="text-[11.5px] sm:text-xs text-slate-300/90 font-normal leading-tight break-keep">
-                            실시간 CG 가상합성 세트
+                            4K CG 가상합성 세트
                         </p>
                     </div>
 
@@ -4112,7 +4037,7 @@
                             <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-blue-500 shadow-xs shrink-0"></span>
                             <strong class="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-blue-700 tracking-tight">스튜디오 03 · 86인치 4K UHD 전자칠판</strong>
                             <span class="text-slate-300 font-bold mx-1 sm:mx-1.5 text-base sm:text-lg">|</span>
-                            <span class="text-xs sm:text-sm md:text-base text-slate-700 font-medium tracking-normal leading-relaxed">86" 4K 멀티터치 · 실시간 판서 모듈 · 무반사 조명 이러닝</span>
+                            <span class="text-xs sm:text-sm md:text-base text-slate-700 font-medium tracking-normal leading-relaxed">86" 4K 멀티터치 · 디지털 판서 모듈 · 무반사 조명 이러닝</span>
                         </div>
 
                         <div class="inline-flex items-center gap-2.5 sm:gap-3.5 px-4 py-3 sm:px-6 sm:py-4 md:px-7 md:py-4.5 rounded-xl sm:rounded-2xl bg-slate-50 border border-indigo-200 shadow-xs min-w-max">
@@ -4133,7 +4058,7 @@
                             <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-cyan-500 shadow-xs shrink-0"></span>
                             <strong class="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-cyan-700 tracking-tight">스튜디오 06 · 전용 다채널 스위쳐 부조정실</strong>
                             <span class="text-slate-300 font-bold mx-1 sm:mx-1.5 text-base sm:text-lg">|</span>
-                            <span class="text-xs sm:text-sm md:text-base text-slate-700 font-medium tracking-normal leading-relaxed">통유리 뷰어 · 4K 멀티 스위쳐 · 오디오 믹서 · 실시간 모니터링</span>
+                            <span class="text-xs sm:text-sm md:text-base text-slate-700 font-medium tracking-normal leading-relaxed">통유리 뷰어 · 4K 멀티 스위쳐 · 오디오 믹서 · 방송 모니터링</span>
                         </div>
 
                         <div class="inline-flex items-center gap-2.5 sm:gap-3.5 px-4 py-3 sm:px-6 sm:py-4 md:px-7 md:py-4.5 rounded-xl sm:rounded-2xl bg-slate-50 border border-amber-200 shadow-xs min-w-max">
@@ -4164,7 +4089,7 @@
                             <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-blue-500 shadow-xs shrink-0"></span>
                             <strong class="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-blue-700 tracking-tight">스튜디오 03 · 86인치 4K UHD 전자칠판</strong>
                             <span class="text-slate-300 font-bold mx-1 sm:mx-1.5 text-base sm:text-lg">|</span>
-                            <span class="text-xs sm:text-sm md:text-base text-slate-700 font-medium tracking-normal leading-relaxed">86" 4K 멀티터치 · 실시간 판서 모듈 · 무반사 조명 이러닝</span>
+                            <span class="text-xs sm:text-sm md:text-base text-slate-700 font-medium tracking-normal leading-relaxed">86" 4K 멀티터치 · 디지털 판서 모듈 · 무반사 조명 이러닝</span>
                         </div>
 
                         <div class="inline-flex items-center gap-2.5 sm:gap-3.5 px-4 py-3 sm:px-6 sm:py-4 md:px-7 md:py-4.5 rounded-xl sm:rounded-2xl bg-slate-50 border border-indigo-200 shadow-xs min-w-max">
@@ -4185,7 +4110,7 @@
                             <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-cyan-500 shadow-xs shrink-0"></span>
                             <strong class="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-cyan-700 tracking-tight">스튜디오 06 · 전용 다채널 스위쳐 부조정실</strong>
                             <span class="text-slate-300 font-bold mx-1 sm:mx-1.5 text-base sm:text-lg">|</span>
-                            <span class="text-xs sm:text-sm md:text-base text-slate-700 font-medium tracking-normal leading-relaxed">통유리 뷰어 · 4K 멀티 스위쳐 · 오디오 믹서 · 실시간 모니터링</span>
+                            <span class="text-xs sm:text-sm md:text-base text-slate-700 font-medium tracking-normal leading-relaxed">통유리 뷰어 · 4K 멀티 스위쳐 · 오디오 믹서 · 방송 모니터링</span>
                         </div>
 
                         <div class="inline-flex items-center gap-2.5 sm:gap-3.5 px-4 py-3 sm:px-6 sm:py-4 md:px-7 md:py-4.5 rounded-xl sm:rounded-2xl bg-slate-50 border border-amber-200 shadow-xs min-w-max">
@@ -4947,7 +4872,7 @@
             observer.observe(document.body, { childList: true, subtree: true });
 
             // ==========================================
-            // 3. ANIMATED STAT COUNTERS (실시간 카운팅)
+            // 3. ANIMATED STAT COUNTERS (동적 카운팅)
             // ==========================================
             function animateCounter(el) {
                 if (el.dataset.animated === 'true') return;
@@ -5095,7 +5020,7 @@
                     "160평 규모 6개 이러닝 전용 스튜디오",
                     "4K 멀티캠 시네마틱 영상 제작",
                     "3D 모션그래픽 및 VFX 시각 효과",
-                    "고화질 실시간 라이브 스트리밍",
+                    "고화질 라이브 스트리밍",
                     "온·오프라인 융합 하이브리드 교육 설계",
                     "현장 실무 중심 디지털 콘텐츠 결합",
                     "B2B·B2G 맞춤형 직무 워크숍"
@@ -5148,8 +5073,8 @@
                             const charSpan = document.createElement('span');
                             charSpan.textContent = char;
                             charSpan.className = isMobile
-                                ? 'mosaic-char text-xs xs:text-sm sm:text-base font-semibold text-white/95 tracking-tight leading-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]'
-                                : 'mosaic-char text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white/95 tracking-tight leading-normal drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]';
+                                ? 'mosaic-char text-[13.5px] xs:text-[15px] sm:text-base font-extrabold text-white tracking-tight leading-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]'
+                                : 'mosaic-char text-base sm:text-lg md:text-xl lg:text-[22px] font-black text-white tracking-tight leading-normal drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)]';
 
                             // Random scatter parameters
                             const scatterX = (Math.random() - 0.5) * (isMobile ? 80 : 140);

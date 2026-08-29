@@ -190,6 +190,6 @@
     <path d="M 35 40 L 42 47 L 55 31" stroke="#FFFFFF" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     <!-- Text Info -->
     <text x="82" y="38" font-family="'Pretendard', sans-serif" font-size="20" font-weight="900" fill="#FFFFFF">6.6m 대형 곡면 무이음 크로마키 세트</text>
-    <text x="82" y="62" font-family="'Pretendard', sans-serif" font-size="14" font-weight="700" fill="#86EFAC">실시간 4K 가상 CG 합성 · 천장 그리드 LED 시스템 조명</text>
+    <text x="82" y="62" font-family="'Pretendard', sans-serif" font-size="14" font-weight="700" fill="#86EFAC">4K 가상 CG 합성 세트 · 천장 그리드 LED 시스템 조명</text>
   </g>
 </svg>

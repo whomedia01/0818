@@ -277,7 +277,7 @@ document.addEventListener('alpine:init', () => {
                 this.startStudioAutoPlay();
                 this.loadStudioImagesFromGithub();
 
-                // [구글 검색엔진 최적화 (SEO) 본문 실시간 분석 및 메타태그 자동 업데이트 실행]
+                // [구글 검색엔진 최적화 (SEO) 본문 분석 및 메타태그 자동 업데이트 실행]
                 setTimeout(() => {
                     this.refreshSeoKeywords();
                 }, 300);
@@ -587,7 +587,7 @@ document.addEventListener('alpine:init', () => {
 });
 
 // =========================================================================
-// [Google SEO 최적화] 웹페이지 본문 실시간 분석 및 메타 태그 동적 추출/업데이트 엔진
+// [Google SEO 최적화] 웹페이지 본문 분석 및 메타 태그 동적 추출/업데이트 엔진
 // =========================================================================
 function extractAndApplyDynamicSeoMetaKeywords() {
     try {
