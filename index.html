@@ -1989,6 +1989,7 @@
                     company: '',
                     name: '',
                     phone: '',
+                    email: '',
                     category: '',
                     message: '',
                     consent: false
@@ -2175,14 +2176,12 @@
                 },
 
                 async submitInquiry() {
-                    if (!this.inquiryForm.name || !this.inquiryForm.phone || !this.inquiryForm.category || !this.inquiryForm.message) {
-                        this.inquirySuccessMessage = '필수 항목(성함, 연락처, 문의유형, 내용)을 모두 작성해 주세요.';
-                        this.inquirySuccessModal = true;
+                    if (!this.inquiryForm.name || !this.inquiryForm.phone || !this.inquiryForm.email || !this.inquiryForm.category || !this.inquiryForm.message) {
+                        alert('필수 항목(성함, 연락처, 이메일, 문의유형, 문의내용)을 모두 작성해 주세요.');
                         return;
                     }
                     if (!this.inquiryForm.consent) {
-                        this.inquirySuccessMessage = '개인정보 수집 및 이용 동의에 체크해 주세요.';
-                        this.inquirySuccessModal = true;
+                        alert('개인정보 수집 및 이용 동의에 체크해 주세요.');
                         return;
                     }
 
@@ -2198,6 +2197,7 @@
                         company: (this.inquiryForm.company || '').trim(),
                         name: this.inquiryForm.name.trim(),
                         phone: this.inquiryForm.phone.trim(),
+                        email: this.inquiryForm.email.trim(),
                         category: this.inquiryForm.category,
                         message: this.inquiryForm.message.trim(),
                         status: '대기',
@@ -2213,7 +2213,7 @@
                         })
                     };
 
-                    // 1. [IMMEDIATE DOUBLE-SAFE BACKUP] Save instantly to multiple local storage keys
+                    // 1. [LOCAL STORAGE PERSISTENCE] Save safely to local storage for Admin Dashboard
                     try {
                         const localInquiries = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
                         const backupInquiries = JSON.parse(localStorage.getItem('whomedia_inquiries_backup') || '[]');
@@ -2225,7 +2225,6 @@
                         localStorage.setItem('whomedia_inquiries_backup', JSON.stringify(updatedBackup));
                         localStorage.setItem('whomedia_inquiry_event', Date.now().toString());
 
-                        // Multi-channel broadcast for immediate admin dashboard recognition
                         if (typeof BroadcastChannel !== 'undefined') {
                             const bc = new BroadcastChannel('whomedia_channel');
                             bc.postMessage({ type: 'NEW_INQUIRY', inquiry: newInquiryRecord });
@@ -2236,53 +2235,53 @@
                         console.warn('Local storage write note:', storageErr);
                     }
 
-                    // 2. [SERVER API TRANSMISSION] Dispatch to Express Backend DB (/api/inquiry & /api/inquiries)
+                    // 2. [WEB3FORMS API & BACKEND API TRANSMISSION]
                     try {
-                        const response = await fetch('/api/inquiry', {
+                        const web3Payload = {
+                            access_key: '7c2b49d5-6b56-47fb-ad38-402cc111eacd',
+                            subject: `[(주)후미디어 홈페이지 신규 문의] ${this.inquiryForm.name}님 (${this.inquiryForm.category})`,
+                            from_name: this.inquiryForm.name.trim(),
+                            name: this.inquiryForm.name.trim(),
+                            email: this.inquiryForm.email.trim(),
+                            phone: this.inquiryForm.phone.trim(),
+                            company: (this.inquiryForm.company || '').trim() || '미입력(개인)',
+                            category: this.inquiryForm.category,
+                            message: this.inquiryForm.message.trim()
+                        };
+
+                        // Web3Forms API 전송 (POST https://api.web3forms.com/submit)
+                        const web3Response = await fetch('https://api.web3forms.com/submit', {
                             method: 'POST',
-                            headers: { 
+                            headers: {
                                 'Content-Type': 'application/json',
                                 'Accept': 'application/json'
                             },
-                            body: JSON.stringify({
-                                id: newInquiryRecord.id,
-                                company: (this.inquiryForm.company || '').trim(),
-                                name: this.inquiryForm.name.trim(),
-                                phone: this.inquiryForm.phone.trim(),
-                                category: this.inquiryForm.category,
-                                message: this.inquiryForm.message.trim()
-                            })
+                            body: JSON.stringify(web3Payload)
                         });
 
-                        if (response.ok) {
-                            const result = await response.json().catch(() => ({}));
-                            const savedRecord = result.inquiry || newInquiryRecord;
-                            
-                            // Re-sync with confirmed server payload
-                            try {
-                                const currentLocal = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
-                                const idx = currentLocal.findIndex(i => i.id === newInquiryRecord.id || (i.name === newInquiryRecord.name && i.phone === newInquiryRecord.phone));
-                                if (idx >= 0) {
-                                    currentLocal[idx] = savedRecord;
-                                } else {
-                                    currentLocal.unshift(savedRecord);
-                                }
-                                localStorage.setItem('whomedia_inquiries', JSON.stringify(currentLocal));
-                                localStorage.setItem('whomedia_inquiries_backup', JSON.stringify(currentLocal));
-                                localStorage.setItem('whomedia_inquiry_event', Date.now().toString());
-                            } catch (e) {}
+                        const web3Result = await web3Response.json().catch(() => ({}));
 
-                            this.inquirySuccessMessage = result.message || '작성해주신 프로젝트/임대 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
+                        // 내부 DB 백업 전송 병행 (실패해도 무방)
+                        fetch('/api/inquiry', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(newInquiryRecord)
+                        }).catch(() => {});
+
+                        if (web3Response.ok && (web3Result.success || web3Result.status === 200 || !web3Result.error)) {
+                            // 전송 성공 시: alert 알림 및 폼 초기화
+                            alert('문의가 성공적으로 접수되었습니다. 확인 후 신속히 연락드리겠습니다.');
+                            this.inquiryForm = { company: '', name: '', phone: '', email: '', category: '', message: '', consent: false };
                         } else {
-                            this.inquirySuccessMessage = '작성해주신 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
+                            // 전송 실패 시
+                            console.error('Web3Forms response error:', web3Result);
+                            alert('전송 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
                         }
                     } catch (err) {
-                        console.warn('Backend connection note, inquiry safely preserved locally:', err);
-                        this.inquirySuccessMessage = '작성해주신 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
+                        console.error('Web3Forms network/submit error:', err);
+                        alert('전송 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
                     } finally {
-                        this.inquiryForm = { company: '', name: '', phone: '', category: '', message: '', consent: false };
                         this.inquirySubmitting = false;
-                        this.inquirySuccessModal = true;
                     }
                 },
                 activeServiceIndex: 0,
@@ -4474,13 +4473,15 @@
                  :class="formRevealed ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-[0.98]'"
                  class="bg-white p-3 sm:p-7 rounded-xl sm:rounded-3xl border border-slate-200 shadow-lg sm:shadow-xl transition-all duration-700 ease-out will-change-transform flex-1 min-h-0 flex flex-col justify-between mt-1">
                 
-                <form @submit.prevent="submitInquiry()" class="space-y-2 sm:space-y-3.5 flex-1 flex flex-col justify-between min-h-0">
+                <form action="https://api.web3forms.com/submit" method="POST" @submit.prevent="submitInquiry()" class="space-y-2 sm:space-y-3.5 flex-1 flex flex-col justify-between min-h-0">
+                    <input type="hidden" name="access_key" value="7c2b49d5-6b56-47fb-ad38-402cc111eacd">
                     <div class="space-y-2 sm:space-y-3 overflow-y-auto no-scrollbar pr-0.5 flex-1 flex flex-col min-h-0">
                         <!-- 기관/회사명 (로컬스토리지 히스토리 저장 및 자동완성 지원) -->
                         <div class="relative shrink-0" @click.outside="companyFocused = false">
                             <label class="block text-[12px] sm:text-xs font-bold text-slate-700 mb-0.5 sm:mb-1">기관 / 회사명 (선택)</label>
                             <div class="relative">
                                 <input type="text" 
+                                       name="company"
                                        x-model="inquiryForm.company" 
                                        @focus="companyFocused = true; loadCompanyHistory()"
                                        @input="companyFocused = true"
@@ -4561,31 +4562,37 @@
                         <div class="grid grid-cols-2 gap-2 sm:gap-3.5 shrink-0">
                             <div>
                                 <label class="block text-[12px] sm:text-xs font-bold text-slate-700 mb-0.5 sm:mb-1">성함 / 담당자 *</label>
-                                <input type="text" x-model="inquiryForm.name" required placeholder="홍길동" class="w-full px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
+                                <input type="text" name="name" x-model="inquiryForm.name" required placeholder="홍길동" class="w-full px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
                             </div>
                             <div>
                                 <label class="block text-[12px] sm:text-xs font-bold text-slate-700 mb-0.5 sm:mb-1">연락처 *</label>
-                                <input type="text" x-model="inquiryForm.phone" required placeholder="010-0000-0000" class="w-full px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
+                                <input type="tel" name="phone" x-model="inquiryForm.phone" required placeholder="010-0000-0000" class="w-full px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
                             </div>
                         </div>
 
-                        <!-- 문의 유형 -->
-                        <div class="shrink-0">
-                            <label class="block text-[12px] sm:text-xs font-bold text-slate-700 mb-0.5 sm:mb-1">문의 유형 *</label>
-                            <select x-model="inquiryForm.category" required class="w-full px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-blue-600 transition-colors">
-                                <option value="" disabled selected>문의할 희망 항목을 선택해 주세요</option>
-                                <option value="이러닝 콘텐츠 개발">이러닝 콘텐츠 개발</option>
-                                <option value="공공·기업 영상 제작 &amp; 홍보">공공·기업 영상 제작 &amp; 홍보</option>
-                                <option value="교육과정 기획 및 운영">교육과정 기획 및 운영</option>
-                                <option value="스마트 스튜디오 대여">스마트 스튜디오 대여</option>
-                                <option value="기타 일반 문의">기타 일반 문의</option>
-                            </select>
+                        <!-- 2-Col inputs (이메일 / 문의 유형) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3.5 shrink-0">
+                            <div>
+                                <label class="block text-[12px] sm:text-xs font-bold text-slate-700 mb-0.5 sm:mb-1">이메일 주소 *</label>
+                                <input type="email" name="email" x-model="inquiryForm.email" required placeholder="example@company.com" class="w-full px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-[12px] sm:text-xs font-bold text-slate-700 mb-0.5 sm:mb-1">문의 유형 *</label>
+                                <select name="category" x-model="inquiryForm.category" required class="w-full px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-blue-600 transition-colors">
+                                    <option value="" disabled selected>문의할 희망 항목을 선택해 주세요</option>
+                                    <option value="이러닝 콘텐츠 개발">이러닝 콘텐츠 개발</option>
+                                    <option value="공공·기업 영상 제작 &amp; 홍보">공공·기업 영상 제작 &amp; 홍보</option>
+                                    <option value="교육과정 기획 및 운영">교육과정 기획 및 운영</option>
+                                    <option value="스마트 스튜디오 대여">스마트 스튜디오 대여</option>
+                                    <option value="기타 일반 문의">기타 일반 문의</option>
+                                </select>
+                            </div>
                         </div>
 
                         <!-- 문의 내용 (하단 공간까지 꽉 차게 확장되는 flex-1 레이아웃) -->
                         <div class="flex-1 flex flex-col min-h-[90px] sm:min-h-[140px]">
                             <label class="block text-[12px] sm:text-xs font-bold text-slate-700 mb-0.5 sm:mb-1">문의 내용 *</label>
-                            <textarea x-model="inquiryForm.message" required placeholder="궁금하신 점이나 요청사항을 자유롭게 작성해 주세요." class="w-full flex-1 min-h-[85px] sm:min-h-[130px] px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors resize-none"></textarea>
+                            <textarea name="message" x-model="inquiryForm.message" required placeholder="궁금하신 점이나 요청사항을 자유롭게 작성해 주세요." class="w-full flex-1 min-h-[85px] sm:min-h-[130px] px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 text-xs sm:text-sm transition-colors resize-none"></textarea>
                         </div>
                     </div>
 

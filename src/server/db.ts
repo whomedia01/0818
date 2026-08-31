@@ -7,6 +7,7 @@ export interface Inquiry {
   company: string;
   name: string;
   phone: string;
+  email?: string;
   category: string;
   message: string;
   status: '대기' | '확인중' | '답변완료';
@@ -112,7 +113,7 @@ export class InquiryDatabase {
     return this.inquiries.find(item => item.id === id);
   }
 
-  public create(data: { id?: string; company?: string; name: string; phone: string; category: string; message: string; status?: '대기' | '확인중' | '답변완료'; adminNote?: string; createdAt?: string }): Inquiry {
+  public create(data: { id?: string; company?: string; name: string; phone: string; email?: string; category: string; message: string; status?: '대기' | '확인중' | '답변완료'; adminNote?: string; createdAt?: string }): Inquiry {
     this.ensureFreshData();
     const now = new Date();
     const id = data.id || `inq_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${Math.random().toString(36).substring(2, 7)}`;
@@ -121,6 +122,7 @@ export class InquiryDatabase {
     const existing = this.inquiries.find(i => i.id === id);
     if (existing) {
       if (data.status) existing.status = data.status;
+      if (data.email) existing.email = data.email;
       if (data.adminNote !== undefined) existing.adminNote = data.adminNote;
       this.save();
       return existing;
@@ -131,6 +133,7 @@ export class InquiryDatabase {
       company: data.company?.trim() || '(미기재)',
       name: data.name.trim(),
       phone: data.phone.trim(),
+      email: data.email?.trim() || '',
       category: data.category.trim(),
       message: data.message.trim(),
       status: data.status || '대기',
