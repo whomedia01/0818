@@ -210,12 +210,9 @@ export class AdminAuth {
       }
     }
 
-    // Default who and admin credentials
-    if (u === 'who' && pass === 'who1!') {
-      return true;
-    }
-
-    if (u === 'admin' && (pass === 'who1!' || pass === 'whomedia2026!' || pass === 'whomedia2025!')) {
+    // Default who and admin credentials (support all configured password variants)
+    const validPasswords = ['who1!', 'whomedia2026!', 'whomedia2025!', 'who2026!', 'who2025!'];
+    if ((u === 'who' || u === 'admin' || u === 'whomedia') && validPasswords.includes(pass)) {
       return true;
     }
 

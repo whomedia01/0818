@@ -230,9 +230,13 @@
 
                 <!-- Right Actions: Live Refresh, Time, User Profile & Logout -->
                 <div class="flex items-center gap-2 sm:gap-4">
-                    <!-- Live Server Indicator -->
-                    <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-xs text-slate-300">
+                    <!-- Live Server DB Sync Indicator -->
+                    <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/40 text-xs text-emerald-300 shadow-sm" title="어디서나 접속 가능한 중앙 데이터베이스와 실시간 연동 중">
                         <span class="w-2 h-2 rounded-full bg-admin-mint animate-pulse"></span>
+                        <span class="font-bold text-[11px]">중앙 DB 실시간 연동</span>
+                    </div>
+
+                    <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-xs text-slate-300">
                         <span class="font-mono text-[11px]" x-text="currentTime"></span>
                     </div>
 
@@ -902,12 +906,12 @@
                         this.checkAuth();
                     }
 
-                    // Start background periodic polling if logged in (every 30s)
+                    // Start background periodic polling if logged in (every 15s for live real-time sync across any device)
                     this.autoRefreshInterval = setInterval(() => {
-                        if (this.isLoggedIn) {
+                        if (this.isLoggedIn && this.token) {
                             this.fetchInquiries(false);
                         }
-                    }, 30000);
+                    }, 15000);
                 },
 
                 updateTime() {
@@ -935,46 +939,31 @@
                         const response = await fetch('/api/admin/login', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(this.loginForm)
+                            body: JSON.stringify({ username: uname, password: upass })
                         });
 
                         if (response.ok) {
                             const data = await response.json();
-                            if (data.success) {
+                            if (data.success && data.token) {
                                 this.token = data.token;
-                                this.currentUser = data.user;
+                                this.currentUser = data.user || { username: uname, role: 'super_admin' };
                                 this.isLoggedIn = true;
                                 localStorage.setItem('whomedia_admin_token', data.token);
                                 this.addToast('관리자 대시보드에 성공적으로 접속하였습니다.', 'success');
-                                this.fetchInquiries();
+                                await this.fetchInquiries();
                                 return;
                             } else {
                                 this.loginError = data.message || '아이디 또는 비밀번호가 올바르지 않습니다.';
                                 return;
                             }
-                        } else if (response.status === 401 || response.status === 400) {
+                        } else {
                             const data = await response.json().catch(() => ({}));
                             this.loginError = data.message || '아이디 또는 비밀번호가 일치하지 않습니다.';
                             return;
                         }
-                        throw new Error('API unreachable');
                     } catch (err) {
-                        // Static/Offline fallback authentication check
-                        const u = uname.toLowerCase();
-                        const validWho = (u === 'who' && (upass === 'who1!' || upass === 'whomedia2026!' || upass === 'whomedia2025!'));
-                        const validAdmin = (u === 'admin' && (upass === 'who1!' || upass === 'whomedia2026!' || upass === 'whomedia2025!'));
-
-                        if (validWho || validAdmin) {
-                            const fallbackToken = 'local_admin_token_' + Date.now();
-                            this.token = fallbackToken;
-                            this.currentUser = { username: uname, role: 'super_admin' };
-                            this.isLoggedIn = true;
-                            localStorage.setItem('whomedia_admin_token', fallbackToken);
-                            this.addToast('관리자 대시보드에 접속하였습니다.', 'success');
-                            this.fetchInquiries();
-                        } else {
-                            this.loginError = '아이디 또는 비밀번호가 올바르지 않습니다.';
-                        }
+                        console.error('Login network exception:', err);
+                        this.loginError = '서버 연결에 실패하였습니다. 네트워크 상태를 확인해 주세요.';
                     } finally {
                         this.loginLoading = false;
                     }
@@ -987,7 +976,7 @@
                         total: list.length,
                         pending: list.filter(i => i.status === '대기').length,
                         inProgress: list.filter(i => i.status === '확인중').length,
-                        completed: list.filter(i => i.status === '완료').length,
+                        completed: list.filter(i => i.status === '답변완료' || i.status === '완료').length,
                         todayCount: list.filter(i => {
                             if (!i.createdAt) return false;
                             const createdDate = new Date(i.createdAt).toISOString().slice(0, 10);
@@ -1000,25 +989,25 @@
                     if (!this.token) return;
                     try {
                         const response = await fetch('/api/admin/check-auth', {
-                            headers: { 'Authorization': 'Bearer ' + this.token }
+                            headers: { 
+                                'Authorization': 'Bearer ' + this.token,
+                                'Accept': 'application/json'
+                            }
                         });
                         if (response.ok) {
                             const data = await response.json().catch(() => ({}));
                             if (data.success) {
                                 this.isLoggedIn = true;
                                 this.currentUser = data.user || { username: 'who', role: 'super_admin' };
-                                this.fetchInquiries();
+                                await this.fetchInquiries();
                                 return;
                             }
                         }
+                        // Token invalid or expired - reset session cleanly
+                        this.handleLogout(false);
                     } catch (e) {
-                        // Offline or static environment fallback
+                        console.warn('Auth check connection note:', e);
                     }
-
-                    // Keep authenticated in hybrid/offline mode
-                    this.isLoggedIn = true;
-                    this.currentUser = { username: 'who', role: 'super_admin' };
-                    this.fetchInquiries();
                 },
 
                 handleLogout(showToast = true) {
@@ -1035,66 +1024,82 @@
                     if (isManual) this.refreshing = true;
                     else this.loading = true;
 
-                    // 1. Instantly load locally saved inquiries (filter out any legacy mock dummy data)
-                    let localData = [];
+                    // 1. Initial cached data preview for instantaneous response
+                    let cachedData = [];
                     try {
-                        const rawLocal = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
-                        if (Array.isArray(rawLocal)) {
-                            localData = rawLocal.filter(item => 
-                                item && item.id && !item.id.startsWith('inq_20260310_') && !item.id.startsWith('inq_20260309_') && !item.id.startsWith('inq_20260308_')
-                            );
-                            localStorage.setItem('whomedia_inquiries', JSON.stringify(localData));
+                        const raw = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
+                        if (Array.isArray(raw)) {
+                            cachedData = raw;
+                            if (this.inquiries.length === 0) {
+                                this.inquiries = cachedData;
+                                this.stats = this.calculateStats(cachedData);
+                            }
                         }
-                        this.inquiries = localData;
-                        this.stats = this.calculateStats(localData);
                     } catch(e) {}
 
-                    // 2. Try online sync with backend API if token exists
+                    // 2. Fetch fresh data from centralized server API (universal from any network/IP)
                     if (this.token) {
                         try {
                             const response = await fetch('/api/admin/inquiries', {
-                                headers: { 'Authorization': 'Bearer ' + this.token }
+                                headers: { 
+                                    'Authorization': 'Bearer ' + this.token,
+                                    'Accept': 'application/json'
+                                }
                             });
 
                             if (response.ok) {
                                 const data = await response.json().catch(() => ({}));
                                 if (data.success && Array.isArray(data.inquiries)) {
-                                    // Merge server and local inquiries to ensure zero data loss
-                                    const idMap = new Map();
-                                    data.inquiries.forEach(item => idMap.set(item.id, item));
-                                    localData.forEach(item => {
-                                        if (!idMap.has(item.id)) {
-                                            idMap.set(item.id, item);
-                                        }
-                                    });
-
-                                    const merged = Array.from(idMap.values()).sort((a, b) => {
-                                        return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
-                                    });
-
-                                    this.inquiries = merged;
-                                    this.stats = this.calculateStats(merged);
+                                    this.inquiries = data.inquiries;
+                                    this.stats = data.stats || this.calculateStats(data.inquiries);
+                                    
                                     try {
-                                        localStorage.setItem('whomedia_inquiries', JSON.stringify(merged));
+                                        localStorage.setItem('whomedia_inquiries', JSON.stringify(data.inquiries));
                                     } catch(e) {}
 
+                                    // Check if there are any un-synced local inquiries from this browser and push them
+                                    if (cachedData.length > 0) {
+                                        const serverIds = new Set(data.inquiries.map(i => i.id));
+                                        const unSynced = cachedData.filter(i => i.id && !serverIds.has(i.id));
+                                        if (unSynced.length > 0) {
+                                            for (const item of unSynced) {
+                                                try {
+                                                    await fetch('/api/inquiry', {
+                                                        method: 'POST',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify({
+                                                            company: item.company,
+                                                            name: item.name,
+                                                            phone: item.phone,
+                                                            category: item.category,
+                                                            message: item.message
+                                                        })
+                                                    });
+                                                } catch(err) {}
+                                            }
+                                        }
+                                    }
+
                                     if (isManual) {
-                                        this.addToast('문의 데이터가 최신 상태로 갱신되었습니다.', 'success');
+                                        this.addToast('중앙 데이터베이스와 실시간 동기화되었습니다.', 'success');
                                     }
                                     this.loading = false;
                                     this.refreshing = false;
                                     return;
                                 }
+                            } else if (response.status === 401) {
+                                this.handleLogout(false);
+                                this.loginError = '인증 세션이 만료되었습니다. 다시 로그인해 주세요.';
                             }
                         } catch (err) {
-                            console.log('Background sync note:', err);
+                            console.warn('Inquiries fetch network note:', err);
                         }
                     }
 
                     // 3. Set stats from current list and finalize
                     this.stats = this.calculateStats(this.inquiries);
                     if (isManual) {
-                        this.addToast('문의 내역 조회가 완료되었습니다.', 'success');
+                        this.addToast('문의 내역 조회가 완료되었습니다.', 'info');
                     }
                     this.loading = false;
                     this.refreshing = false;

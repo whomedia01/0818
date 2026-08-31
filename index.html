@@ -2178,31 +2178,52 @@
                         })
                     };
 
-                    // Persist to Local Storage immediately
-                    try {
-                        const localInquiries = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
-                        localInquiries.unshift(newInquiryRecord);
-                        localStorage.setItem('whomedia_inquiries', JSON.stringify(localInquiries));
-                    } catch (storageErr) {
-                        console.warn('LocalStorage save non-blocking warning:', storageErr);
-                    }
-
-                    // Dispatch to Express Backend DB (/api/inquiry) if available
+                    // Dispatch to Express Backend DB (/api/inquiry) - Accessible from any IP/device/network
                     try {
                         const response = await fetch('/api/inquiry', {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(this.inquiryForm)
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                company: (this.inquiryForm.company || '').trim(),
+                                name: this.inquiryForm.name.trim(),
+                                phone: this.inquiryForm.phone.trim(),
+                                category: this.inquiryForm.category,
+                                message: this.inquiryForm.message.trim()
+                            })
                         });
 
                         if (response.ok) {
                             const result = await response.json().catch(() => ({}));
+                            const savedRecord = result.inquiry || newInquiryRecord;
+                            
+                            // Persist confirmed server record to local cache
+                            try {
+                                const localInquiries = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
+                                const filtered = localInquiries.filter(item => item.id !== savedRecord.id);
+                                filtered.unshift(savedRecord);
+                                localStorage.setItem('whomedia_inquiries', JSON.stringify(filtered));
+                            } catch (e) {}
+
                             this.inquirySuccessMessage = result.message || '작성해주신 프로젝트/임대 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
                         } else {
+                            // Fallback cache if server returned non-200
+                            try {
+                                const localInquiries = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
+                                localInquiries.unshift(newInquiryRecord);
+                                localStorage.setItem('whomedia_inquiries', JSON.stringify(localInquiries));
+                            } catch (e) {}
                             this.inquirySuccessMessage = '작성해주신 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
                         }
                     } catch (err) {
-                        console.log('Online server connection note:', err);
+                        console.warn('Backend connection note, stored locally:', err);
+                        try {
+                            const localInquiries = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
+                            localInquiries.unshift(newInquiryRecord);
+                            localStorage.setItem('whomedia_inquiries', JSON.stringify(localInquiries));
+                        } catch (e) {}
                         this.inquirySuccessMessage = '작성해주신 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
                     } finally {
                         this.inquiryForm = { company: '', name: '', phone: '', category: '', message: '', consent: false };

@@ -1,12 +1,21 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
+import cors from "cors";
 import { InquiryDatabase, AdminAuth } from "./src/server/db.ts";
 
 async function startServer() {
   const app = express();
   const PORT = 3000;
   const db = InquiryDatabase.getInstance();
+
+  // Enable CORS for all origins, methods, and headers so admin can access from any IP/device/network
+  app.use(cors({
+    origin: true,
+    credentials: true,
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
+  }));
 
   app.use(express.json());
   app.use(express.static(path.join(process.cwd(), "public")));
