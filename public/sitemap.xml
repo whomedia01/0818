@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://whomedia.co.kr/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://whomedia.co.kr/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://whomedia.co.kr/"/>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&amp;fit=crop&amp;w=1200&amp;h=630&amp;q=85</image:loc>
+      <image:title>(주)후미디어 160평 4K 스튜디오 및 영상 프로덕션 시설</image:title>
+      <image:caption>86인치 전자칠판, 6.6m 크로마키, 전용 부조정실을 갖춘 후미디어 방송 촬영 스튜디오</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://whomedia.co.kr/#services</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://whomedia.co.kr/#studio</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://whomedia.co.kr/#reference</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://whomedia.co.kr/#organization</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://whomedia.co.kr/#contact</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+</urlset>

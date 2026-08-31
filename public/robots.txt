@@ -1,0 +1,47 @@
+# Robots.txt for WHO MEDIA ((주)후미디어)
+# https://whomedia.co.kr
+
+User-agent: *
+Allow: /
+Disallow: /adm.html
+Disallow: /api/
+
+# AI Search & LLM Answer Engines (AEO & GEO Optimization)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# Sitemap
+Sitemap: https://whomedia.co.kr/sitemap.xml

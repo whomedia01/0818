@@ -1,6 +1,6 @@
 {
-  "name": "(주)후미디어 - WHO MEDIA",
-  "description": "AI·디지털 교육 콘텐츠 및 영상 제작 전문기업 (주)후미디어 공식 웹사이트",
+  "name": "(주)후미디어 | 온·오프라인 교육 콘텐츠 개발 · 영상 제작 · 160평 스튜디오",
+  "description": "체계적인 교수설계 기반 온·오프라인 교육 콘텐츠 개발, 방송 홍보 영상 제작, 160평 첨단 스튜디오 대관 전문 솔루션",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
