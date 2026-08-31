@@ -78,7 +78,7 @@ async function startServer() {
   // ==========================================
   // Public Customer Inquiry Submission API
   // ==========================================
-  app.post("/api/inquiry", (req, res) => {
+  const handleInquirySubmission = (req: express.Request, res: express.Response) => {
     try {
       const { company, name, phone, category, message } = req.body;
 
@@ -111,7 +111,10 @@ async function startServer() {
       console.error("Inquiry processing error:", error);
       return res.status(500).json({ success: false, message: "문의 접수 중 서버 오류가 발생했습니다." });
     }
-  });
+  };
+
+  app.post("/api/inquiry", handleInquirySubmission);
+  app.post("/api/inquiries", handleInquirySubmission);
 
   // ==========================================
   // Admin Authentication & Protected Endpoints
@@ -120,11 +123,18 @@ async function startServer() {
   // Admin Auth Middleware
   const requireAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    let token = "";
+
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.substring(7);
+    } else if (typeof req.query.token === "string" && req.query.token) {
+      token = req.query.token;
+    }
+
+    if (!token) {
       return res.status(401).json({ success: false, message: "관리자 로그인이 필요합니다." });
     }
 
-    const token = authHeader.substring(7);
     const authResult = AdminAuth.verifyToken(token);
     if (!authResult.valid) {
       return res.status(401).json({ success: false, message: "세션이 만료되었거나 유효하지 않은 인증 토큰입니다. 다시 로그인해 주세요." });

@@ -44,22 +44,25 @@ export class InquiryDatabase {
   }
 
   private init() {
+    this.ensureFreshData();
+  }
+
+  private ensureFreshData() {
     ensureDataDir();
     if (fs.existsSync(INQUIRIES_FILE)) {
       try {
         const raw = fs.readFileSync(INQUIRIES_FILE, 'utf-8');
-        this.inquiries = JSON.parse(raw);
-        if (!Array.isArray(this.inquiries)) {
-          this.inquiries = [];
-          this.save();
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          this.inquiries = parsed;
+          return;
         }
       } catch (e) {
-        this.inquiries = [];
-        this.save();
+        console.warn('Error reading inquiries file, initializing empty array:', e);
       }
-    } else {
+    }
+    if (!this.inquiries) {
       this.inquiries = [];
-      this.save();
     }
   }
 
@@ -75,6 +78,7 @@ export class InquiryDatabase {
   }
 
   public getAll(filter?: { status?: string; search?: string; category?: string }): Inquiry[] {
+    this.ensureFreshData();
     let result = [...this.inquiries];
 
     if (filter?.status && filter.status !== 'all') {
@@ -88,11 +92,12 @@ export class InquiryDatabase {
     if (filter?.search && filter.search.trim()) {
       const q = filter.search.trim().toLowerCase();
       result = result.filter(item =>
-        item.name.toLowerCase().includes(q) ||
+        (item.name && item.name.toLowerCase().includes(q)) ||
         (item.company && item.company.toLowerCase().includes(q)) ||
-        item.phone.toLowerCase().includes(q) ||
-        item.message.toLowerCase().includes(q) ||
-        item.category.toLowerCase().includes(q)
+        (item.phone && item.phone.toLowerCase().includes(q)) ||
+        (item.message && item.message.toLowerCase().includes(q)) ||
+        (item.category && item.category.toLowerCase().includes(q)) ||
+        (item.adminNote && item.adminNote.toLowerCase().includes(q))
       );
     }
 
@@ -103,10 +108,12 @@ export class InquiryDatabase {
   }
 
   public getById(id: string): Inquiry | undefined {
+    this.ensureFreshData();
     return this.inquiries.find(item => item.id === id);
   }
 
   public create(data: { company?: string; name: string; phone: string; category: string; message: string }): Inquiry {
+    this.ensureFreshData();
     const now = new Date();
     const id = `inq_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${Math.random().toString(36).substring(2, 7)}`;
     
@@ -130,6 +137,7 @@ export class InquiryDatabase {
   }
 
   public updateStatus(id: string, status: '대기' | '확인중' | '답변완료', adminNote?: string): Inquiry | null {
+    this.ensureFreshData();
     const item = this.inquiries.find(i => i.id === id);
     if (!item) return null;
 
@@ -143,6 +151,7 @@ export class InquiryDatabase {
   }
 
   public updateNote(id: string, adminNote: string): Inquiry | null {
+    this.ensureFreshData();
     const item = this.inquiries.find(i => i.id === id);
     if (!item) return null;
 
@@ -153,6 +162,7 @@ export class InquiryDatabase {
   }
 
   public delete(id: string): boolean {
+    this.ensureFreshData();
     const initialLen = this.inquiries.length;
     this.inquiries = this.inquiries.filter(i => i.id !== id);
     if (this.inquiries.length !== initialLen) {
@@ -163,6 +173,7 @@ export class InquiryDatabase {
   }
 
   public getStats() {
+    this.ensureFreshData();
     const total = this.inquiries.length;
     const pending = this.inquiries.filter(i => i.status === '대기').length;
     const inProgress = this.inquiries.filter(i => i.status === '확인중').length;

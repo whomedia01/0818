@@ -2205,6 +2205,7 @@
                                 const filtered = localInquiries.filter(item => item.id !== savedRecord.id);
                                 filtered.unshift(savedRecord);
                                 localStorage.setItem('whomedia_inquiries', JSON.stringify(filtered));
+                                localStorage.setItem('whomedia_inquiry_event', Date.now().toString());
                             } catch (e) {}
 
                             this.inquirySuccessMessage = result.message || '작성해주신 프로젝트/임대 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';

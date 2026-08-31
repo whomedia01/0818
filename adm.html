@@ -911,12 +911,34 @@
                         this.checkAuth();
                     }
 
-                    // Start background periodic polling if logged in (every 15s for live real-time sync across any device)
+                    // Start background periodic polling if logged in (every 10s for live real-time sync across all devices)
                     this.autoRefreshInterval = setInterval(() => {
                         if (this.isLoggedIn && this.token) {
                             this.fetchInquiries(false);
                         }
-                    }, 15000);
+                    }, 10000);
+
+                    // Auto refresh on tab focus / visibility change
+                    window.addEventListener('focus', () => {
+                        if (this.isLoggedIn && this.token) {
+                            this.fetchInquiries(false);
+                        }
+                    });
+
+                    document.addEventListener('visibilitychange', () => {
+                        if (document.visibilityState === 'visible' && this.isLoggedIn && this.token) {
+                            this.fetchInquiries(false);
+                        }
+                    });
+
+                    // Cross-tab synchronization when an inquiry is submitted in another tab
+                    window.addEventListener('storage', (e) => {
+                        if (e.key === 'whomedia_inquiries' || e.key === 'whomedia_inquiry_event') {
+                            if (this.isLoggedIn && this.token) {
+                                this.fetchInquiries(false);
+                            }
+                        }
+                    });
                 },
 
                 updateTime() {
@@ -964,7 +986,7 @@
                             this.isLoggedIn = true;
                             localStorage.setItem('whomedia_admin_token', data.token);
                             this.addToast('관리자 대시보드에 성공적으로 접속하였습니다.', 'success');
-                            await this.fetchInquiries();
+                            await this.fetchInquiries(false);
                             this.loginLoading = false;
                             return;
                         } else {
@@ -1008,7 +1030,7 @@
                             if (data.success) {
                                 this.isLoggedIn = true;
                                 this.currentUser = data.user || { username: 'who', role: 'super_admin' };
-                                await this.fetchInquiries();
+                                await this.fetchInquiries(false);
                                 return;
                             }
                         }
@@ -1031,13 +1053,13 @@
 
                 async fetchInquiries(isManual = false) {
                     if (isManual) this.refreshing = true;
-                    else this.loading = true;
+                    else if (this.inquiries.length === 0) this.loading = true;
 
                     // 1. Initial cached data preview for instantaneous response
                     let cachedData = [];
                     try {
                         const raw = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
-                        if (Array.isArray(raw)) {
+                        if (Array.isArray(raw) && raw.length > 0) {
                             cachedData = raw;
                             if (this.inquiries.length === 0) {
                                 this.inquiries = cachedData;
@@ -1059,21 +1081,14 @@
                             if (response.ok) {
                                 const data = await response.json().catch(() => ({}));
                                 if (data.success && Array.isArray(data.inquiries)) {
-                                    this.inquiries = data.inquiries;
-                                    this.stats = data.stats || this.calculateStats(data.inquiries);
-                                    
-                                    try {
-                                        localStorage.setItem('whomedia_inquiries', JSON.stringify(data.inquiries));
-                                    } catch(e) {}
-
                                     // Check if there are any un-synced local inquiries from this browser and push them
                                     if (cachedData.length > 0) {
                                         const serverIds = new Set(data.inquiries.map(i => i.id));
-                                        const unSynced = cachedData.filter(i => i.id && !serverIds.has(i.id));
+                                        const unSynced = cachedData.filter(i => i && i.name && !serverIds.has(i.id));
                                         if (unSynced.length > 0) {
                                             for (const item of unSynced) {
                                                 try {
-                                                    await fetch('/api/inquiry', {
+                                                    const pushRes = await fetch('/api/inquiry', {
                                                         method: 'POST',
                                                         headers: { 'Content-Type': 'application/json' },
                                                         body: JSON.stringify({
@@ -1084,10 +1099,23 @@
                                                             message: item.message
                                                         })
                                                     });
+                                                    if (pushRes.ok) {
+                                                        const pushData = await pushRes.json();
+                                                        if (pushData.inquiry) {
+                                                            data.inquiries.unshift(pushData.inquiry);
+                                                        }
+                                                    }
                                                 } catch(err) {}
                                             }
                                         }
                                     }
+
+                                    this.inquiries = [...data.inquiries];
+                                    this.stats = data.stats || this.calculateStats(data.inquiries);
+                                    
+                                    try {
+                                        localStorage.setItem('whomedia_inquiries', JSON.stringify(this.inquiries));
+                                    } catch(e) {}
 
                                     if (isManual) {
                                         this.addToast('중앙 데이터베이스와 실시간 동기화되었습니다.', 'success');
