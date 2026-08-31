@@ -80,18 +80,22 @@ async function startServer() {
   // ==========================================
   const handleInquirySubmission = (req: express.Request, res: express.Response) => {
     try {
-      const { company, name, phone, category, message } = req.body;
+      const { id, company, name, phone, category, message, status, adminNote, createdAt } = req.body;
 
       if (!name || !phone || !category || !message) {
         return res.status(400).json({ success: false, message: "필수 입력 항목(성함, 연락처, 문의유형, 내용)이 누락되었습니다." });
       }
 
       const newInquiry = db.create({
+        id,
         company,
         name,
         phone,
         category,
-        message
+        message,
+        status,
+        adminNote,
+        createdAt
       });
 
       console.log(`[INQUIRY SAVED TO DB - ID: ${newInquiry.id}]`, {

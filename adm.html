@@ -245,6 +245,16 @@
                         <span class="font-mono text-[11px]" x-text="currentTime"></span>
                     </div>
 
+                    <!-- CSV Export Button -->
+                    <button @click="exportToCSV()" 
+                            title="문의 내역 엑셀(CSV) 다운로드"
+                            class="hidden md:flex p-2 sm:px-3 sm:py-1.5 rounded-xl bg-emerald-950/50 hover:bg-emerald-900/60 border border-emerald-700/60 text-emerald-300 hover:text-white text-xs font-semibold transition-all items-center gap-1.5 cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span>엑셀 다운로드</span>
+                    </button>
+
                     <!-- Manual Refresh Button -->
                     <button @click="fetchInquiries(true)" 
                             :disabled="refreshing"
@@ -899,6 +909,7 @@
 
                 // Auto Refresh Timer
                 autoRefreshInterval: null,
+                broadcastChannel: null,
 
                 initApp() {
                     this.updateTime();
@@ -911,12 +922,28 @@
                         this.checkAuth();
                     }
 
-                    // Start background periodic polling if logged in (every 10s for live real-time sync across all devices)
+                    // Setup BroadcastChannel for instant cross-tab sync
+                    if (typeof BroadcastChannel !== 'undefined') {
+                        try {
+                            this.broadcastChannel = new BroadcastChannel('whomedia_channel');
+                            this.broadcastChannel.onmessage = (event) => {
+                                if (event.data && (event.data.type === 'NEW_INQUIRY' || event.data.type === 'REFRESH_INQUIRIES')) {
+                                    if (this.isLoggedIn) {
+                                        this.fetchInquiries(false);
+                                    }
+                                }
+                            };
+                        } catch (e) {
+                            console.warn('BroadcastChannel note:', e);
+                        }
+                    }
+
+                    // Start background periodic polling if logged in (every 8s for live real-time sync across all devices)
                     this.autoRefreshInterval = setInterval(() => {
                         if (this.isLoggedIn && this.token) {
                             this.fetchInquiries(false);
                         }
-                    }, 10000);
+                    }, 8000);
 
                     // Auto refresh on tab focus / visibility change
                     window.addEventListener('focus', () => {
@@ -933,10 +960,17 @@
 
                     // Cross-tab synchronization when an inquiry is submitted in another tab
                     window.addEventListener('storage', (e) => {
-                        if (e.key === 'whomedia_inquiries' || e.key === 'whomedia_inquiry_event') {
-                            if (this.isLoggedIn && this.token) {
+                        if (e.key === 'whomedia_inquiries' || e.key === 'whomedia_inquiries_backup' || e.key === 'whomedia_inquiry_event') {
+                            if (this.isLoggedIn) {
                                 this.fetchInquiries(false);
                             }
+                        }
+                    });
+
+                    // In-page custom event listener
+                    window.addEventListener('whomedia_inquiry_saved', () => {
+                        if (this.isLoggedIn) {
+                            this.fetchInquiries(false);
                         }
                     });
                 },
@@ -1008,7 +1042,7 @@
                             return;
                         }
                     } catch (err) {
-                        console.warn('API login request error:', err);
+                        console.warn('API login request note:', err);
                     }
 
                     // Client fallback authentication for valid admin accounts
@@ -1038,8 +1072,12 @@
                         completed: list.filter(i => i.status === '답변완료' || i.status === '완료').length,
                         todayCount: list.filter(i => {
                             if (!i.createdAt) return false;
-                            const createdDate = new Date(i.createdAt).toISOString().slice(0, 10);
-                            return createdDate === todayStr;
+                            try {
+                                const createdDate = new Date(i.createdAt).toISOString().slice(0, 10);
+                                return createdDate === todayStr;
+                            } catch(e) {
+                                return false;
+                            }
                         }).length
                     };
                 },
@@ -1089,24 +1127,54 @@
                     }
                 },
 
+                // Collect and deduplicate all local storage inquiries
+                getLocalInquiries() {
+                    const map = new Map();
+                    try {
+                        const raw1 = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
+                        if (Array.isArray(raw1)) {
+                            raw1.forEach(item => {
+                                if (item && (item.id || item.phone)) {
+                                    const key = item.id || `${item.name}_${item.phone}_${item.createdAt}`;
+                                    map.set(key, item);
+                                }
+                            });
+                        }
+                    } catch (e) {}
+
+                    try {
+                        const raw2 = JSON.parse(localStorage.getItem('whomedia_inquiries_backup') || '[]');
+                        if (Array.isArray(raw2)) {
+                            raw2.forEach(item => {
+                                if (item && (item.id || item.phone)) {
+                                    const key = item.id || `${item.name}_${item.phone}_${item.createdAt}`;
+                                    if (!map.has(key)) {
+                                        map.set(key, item);
+                                    }
+                                }
+                            });
+                        }
+                    } catch (e) {}
+
+                    return Array.from(map.values()).sort((a, b) => {
+                        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                        return timeB - timeA;
+                    });
+                },
+
                 async fetchInquiries(isManual = false) {
                     if (isManual) this.refreshing = true;
                     else if (this.inquiries.length === 0) this.loading = true;
 
-                    // 1. Initial cached data preview for instantaneous response
-                    let cachedData = [];
-                    try {
-                        const raw = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
-                        if (Array.isArray(raw) && raw.length > 0) {
-                            cachedData = raw;
-                            if (this.inquiries.length === 0) {
-                                this.inquiries = cachedData;
-                                this.stats = this.calculateStats(cachedData);
-                            }
-                        }
-                    } catch(e) {}
+                    // 1. Instant rendering from local storage cache
+                    const localData = this.getLocalInquiries();
+                    if (localData.length > 0) {
+                        this.inquiries = localData;
+                        this.stats = this.calculateStats(localData);
+                    }
 
-                    // 2. Fetch fresh data from centralized server API (universal from any network/IP)
+                    // 2. Fetch fresh data from centralized server API
                     if (this.token) {
                         try {
                             const response = await fetch('/api/admin/inquiries', {
@@ -1119,41 +1187,60 @@
                             if (response.ok) {
                                 const data = await response.json().catch(() => ({}));
                                 if (data.success && Array.isArray(data.inquiries)) {
-                                    // Check if there are any un-synced local inquiries from this browser and push them
-                                    if (cachedData.length > 0) {
-                                        const serverIds = new Set(data.inquiries.map(i => i.id));
-                                        const unSynced = cachedData.filter(i => i && i.name && !serverIds.has(i.id));
-                                        if (unSynced.length > 0) {
-                                            for (const item of unSynced) {
-                                                try {
-                                                    const pushRes = await fetch('/api/inquiry', {
-                                                        method: 'POST',
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                        body: JSON.stringify({
-                                                            company: item.company,
-                                                            name: item.name,
-                                                            phone: item.phone,
-                                                            category: item.category,
-                                                            message: item.message
-                                                        })
-                                                    });
-                                                    if (pushRes.ok) {
-                                                        const pushData = await pushRes.json();
-                                                        if (pushData.inquiry) {
-                                                            data.inquiries.unshift(pushData.inquiry);
-                                                        }
-                                                    }
-                                                } catch(err) {}
-                                            }
-                                        }
-                                    }
-
-                                    this.inquiries = [...data.inquiries];
-                                    this.stats = data.stats || this.calculateStats(data.inquiries);
+                                    // Non-destructive smart merge: Combine server list with local list
+                                    const mergedMap = new Map();
                                     
+                                    // First add server inquiries
+                                    data.inquiries.forEach(item => {
+                                        if (item && item.id) {
+                                            mergedMap.set(item.id, item);
+                                        }
+                                    });
+
+                                    // Then add any local inquiries that are not yet on the server, and sync them to server
+                                    const unsyncedItems = [];
+                                    localData.forEach(item => {
+                                        if (item && item.id && !mergedMap.has(item.id)) {
+                                            mergedMap.set(item.id, item);
+                                            unsyncedItems.push(item);
+                                        }
+                                    });
+
+                                    const mergedList = Array.from(mergedMap.values()).sort((a, b) => {
+                                        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                                        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                                        return timeB - timeA;
+                                    });
+
+                                    this.inquiries = mergedList;
+                                    this.stats = this.calculateStats(mergedList);
+
+                                    // Save back to local storage
                                     try {
-                                        localStorage.setItem('whomedia_inquiries', JSON.stringify(this.inquiries));
+                                        localStorage.setItem('whomedia_inquiries', JSON.stringify(mergedList));
+                                        localStorage.setItem('whomedia_inquiries_backup', JSON.stringify(mergedList));
                                     } catch(e) {}
+
+                                    // Asynchronously push un-synced items to server in background
+                                    if (unsyncedItems.length > 0) {
+                                        unsyncedItems.forEach(item => {
+                                            fetch('/api/inquiry', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({
+                                                    id: item.id,
+                                                    company: item.company,
+                                                    name: item.name,
+                                                    phone: item.phone,
+                                                    category: item.category,
+                                                    message: item.message,
+                                                    status: item.status,
+                                                    adminNote: item.adminNote,
+                                                    createdAt: item.createdAt
+                                                })
+                                            }).catch(() => {});
+                                        });
+                                    }
 
                                     if (isManual) {
                                         this.addToast('중앙 데이터베이스와 실시간 동기화되었습니다.', 'success');
@@ -1167,11 +1254,11 @@
                                 this.loginError = '인증 세션이 만료되었습니다. 다시 로그인해 주세요.';
                             }
                         } catch (err) {
-                            console.warn('Inquiries fetch network note:', err);
+                            console.warn('Inquiries fetch network note (safely using local copy):', err);
                         }
                     }
 
-                    // 3. Set stats from current list and finalize
+                    // 3. Finalize with current in-memory / local state
                     this.stats = this.calculateStats(this.inquiries);
                     if (isManual) {
                         this.addToast('문의 내역 조회가 완료되었습니다.', 'info');
@@ -1222,6 +1309,7 @@
                         this.stats = this.calculateStats(this.inquiries);
                         try {
                             localStorage.setItem('whomedia_inquiries', JSON.stringify(this.inquiries));
+                            localStorage.setItem('whomedia_inquiries_backup', JSON.stringify(this.inquiries));
                         } catch(e) {}
                         this.addToast(`상태가 '${newStatus}'(으)로 변경되었습니다.`, 'success');
                     }
@@ -1265,6 +1353,7 @@
                         this.stats = this.calculateStats(this.inquiries);
                         try {
                             localStorage.setItem('whomedia_inquiries', JSON.stringify(this.inquiries));
+                            localStorage.setItem('whomedia_inquiries_backup', JSON.stringify(this.inquiries));
                         } catch(e) {}
                     }
                     this.addToast('상태 및 관리자 메모가 저장되었습니다.', 'success');
@@ -1304,6 +1393,7 @@
                     this.stats = this.calculateStats(this.inquiries);
                     try {
                         localStorage.setItem('whomedia_inquiries', JSON.stringify(this.inquiries));
+                        localStorage.setItem('whomedia_inquiries_backup', JSON.stringify(this.inquiries));
                     } catch(e) {}
 
                     if (this.activeInquiry && this.activeInquiry.id === targetId) {
@@ -1324,6 +1414,45 @@
                             console.log('Deferred delete sync:', err);
                         }
                     }
+                },
+
+                exportToCSV() {
+                    if (!this.inquiries || this.inquiries.length === 0) {
+                        this.addToast('다운로드할 문의 내역이 없습니다.', 'warning');
+                        return;
+                    }
+
+                    const headers = ['접수번호', '접수일시', '상태', '회사/소속', '담당자명', '연락처', '문의유형', '문의내용', '관리자메모'];
+                    const escapeCSV = (val) => {
+                        if (val === null || val === undefined) return '""';
+                        const str = String(val).replace(/"/g, '""');
+                        return `"${str}"`;
+                    };
+
+                    const rows = this.inquiries.map(i => [
+                        escapeCSV(i.id),
+                        escapeCSV(i.formattedDate || i.createdAt),
+                        escapeCSV(i.status),
+                        escapeCSV(i.company || ''),
+                        escapeCSV(i.name || ''),
+                        escapeCSV(i.phone || ''),
+                        escapeCSV(i.category || ''),
+                        escapeCSV(i.message || ''),
+                        escapeCSV(i.adminNote || '')
+                    ]);
+
+                    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
+                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', `whomedia_inquiries_${dateStr}.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                    this.addToast('엑셀(CSV) 파일이 정상적으로 다운로드되었습니다.', 'success');
                 },
 
                 copyToClipboard(text, label = '텍스트') {

@@ -2159,7 +2159,7 @@
                     this.inquirySubmitting = true;
 
                     const newInquiryRecord = {
-                        id: 'inq_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+                        id: 'inq_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
                         company: (this.inquiryForm.company || '').trim(),
                         name: this.inquiryForm.name.trim(),
                         phone: this.inquiryForm.phone.trim(),
@@ -2178,7 +2178,30 @@
                         })
                     };
 
-                    // Dispatch to Express Backend DB (/api/inquiry) - Accessible from any IP/device/network
+                    // 1. [IMMEDIATE DOUBLE-SAFE BACKUP] Save instantly to multiple local storage keys
+                    try {
+                        const localInquiries = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
+                        const backupInquiries = JSON.parse(localStorage.getItem('whomedia_inquiries_backup') || '[]');
+                        
+                        const updatedLocal = [newInquiryRecord, ...localInquiries.filter(i => i.id !== newInquiryRecord.id)];
+                        const updatedBackup = [newInquiryRecord, ...backupInquiries.filter(i => i.id !== newInquiryRecord.id)];
+                        
+                        localStorage.setItem('whomedia_inquiries', JSON.stringify(updatedLocal));
+                        localStorage.setItem('whomedia_inquiries_backup', JSON.stringify(updatedBackup));
+                        localStorage.setItem('whomedia_inquiry_event', Date.now().toString());
+
+                        // Multi-channel broadcast for immediate admin dashboard recognition
+                        if (typeof BroadcastChannel !== 'undefined') {
+                            const bc = new BroadcastChannel('whomedia_channel');
+                            bc.postMessage({ type: 'NEW_INQUIRY', inquiry: newInquiryRecord });
+                            setTimeout(() => bc.close(), 1000);
+                        }
+                        window.dispatchEvent(new CustomEvent('whomedia_inquiry_saved', { detail: newInquiryRecord }));
+                    } catch (storageErr) {
+                        console.warn('Local storage write note:', storageErr);
+                    }
+
+                    // 2. [SERVER API TRANSMISSION] Dispatch to Express Backend DB (/api/inquiry & /api/inquiries)
                     try {
                         const response = await fetch('/api/inquiry', {
                             method: 'POST',
@@ -2187,6 +2210,7 @@
                                 'Accept': 'application/json'
                             },
                             body: JSON.stringify({
+                                id: newInquiryRecord.id,
                                 company: (this.inquiryForm.company || '').trim(),
                                 name: this.inquiryForm.name.trim(),
                                 phone: this.inquiryForm.phone.trim(),
@@ -2199,32 +2223,26 @@
                             const result = await response.json().catch(() => ({}));
                             const savedRecord = result.inquiry || newInquiryRecord;
                             
-                            // Persist confirmed server record to local cache
+                            // Re-sync with confirmed server payload
                             try {
-                                const localInquiries = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
-                                const filtered = localInquiries.filter(item => item.id !== savedRecord.id);
-                                filtered.unshift(savedRecord);
-                                localStorage.setItem('whomedia_inquiries', JSON.stringify(filtered));
+                                const currentLocal = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
+                                const idx = currentLocal.findIndex(i => i.id === newInquiryRecord.id || (i.name === newInquiryRecord.name && i.phone === newInquiryRecord.phone));
+                                if (idx >= 0) {
+                                    currentLocal[idx] = savedRecord;
+                                } else {
+                                    currentLocal.unshift(savedRecord);
+                                }
+                                localStorage.setItem('whomedia_inquiries', JSON.stringify(currentLocal));
+                                localStorage.setItem('whomedia_inquiries_backup', JSON.stringify(currentLocal));
                                 localStorage.setItem('whomedia_inquiry_event', Date.now().toString());
                             } catch (e) {}
 
                             this.inquirySuccessMessage = result.message || '작성해주신 프로젝트/임대 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
                         } else {
-                            // Fallback cache if server returned non-200
-                            try {
-                                const localInquiries = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
-                                localInquiries.unshift(newInquiryRecord);
-                                localStorage.setItem('whomedia_inquiries', JSON.stringify(localInquiries));
-                            } catch (e) {}
                             this.inquirySuccessMessage = '작성해주신 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
                         }
                     } catch (err) {
-                        console.warn('Backend connection note, stored locally:', err);
-                        try {
-                            const localInquiries = JSON.parse(localStorage.getItem('whomedia_inquiries') || '[]');
-                            localInquiries.unshift(newInquiryRecord);
-                            localStorage.setItem('whomedia_inquiries', JSON.stringify(localInquiries));
-                        } catch (e) {}
+                        console.warn('Backend connection note, inquiry safely preserved locally:', err);
                         this.inquirySuccessMessage = '작성해주신 문의가 안전하게 접수되었습니다. (주)후미디어 담당자가 확인 후 신속하게 연락드리겠습니다.';
                     } finally {
                         this.inquiryForm = { company: '', name: '', phone: '', category: '', message: '', consent: false };

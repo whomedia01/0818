@@ -112,11 +112,20 @@ export class InquiryDatabase {
     return this.inquiries.find(item => item.id === id);
   }
 
-  public create(data: { company?: string; name: string; phone: string; category: string; message: string }): Inquiry {
+  public create(data: { id?: string; company?: string; name: string; phone: string; category: string; message: string; status?: '대기' | '확인중' | '답변완료'; adminNote?: string; createdAt?: string }): Inquiry {
     this.ensureFreshData();
     const now = new Date();
-    const id = `inq_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${Math.random().toString(36).substring(2, 7)}`;
+    const id = data.id || `inq_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${Math.random().toString(36).substring(2, 7)}`;
     
+    // Check if item already exists by id
+    const existing = this.inquiries.find(i => i.id === id);
+    if (existing) {
+      if (data.status) existing.status = data.status;
+      if (data.adminNote !== undefined) existing.adminNote = data.adminNote;
+      this.save();
+      return existing;
+    }
+
     const newInquiry: Inquiry = {
       id,
       company: data.company?.trim() || '(미기재)',
@@ -124,10 +133,10 @@ export class InquiryDatabase {
       phone: data.phone.trim(),
       category: data.category.trim(),
       message: data.message.trim(),
-      status: '대기',
-      adminNote: '',
-      createdAt: now.toISOString(),
-      formattedDate: now.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+      status: data.status || '대기',
+      adminNote: data.adminNote || '',
+      createdAt: data.createdAt || now.toISOString(),
+      formattedDate: data.createdAt ? new Date(data.createdAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }) : now.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
       updatedAt: now.toISOString()
     };
 
