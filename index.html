@@ -1657,6 +1657,41 @@
                     });
                 },
 
+                get filteredPortfolioItems() {
+                    let items = this.portfolioItems;
+                    if (this.refTab !== 'all') {
+                        items = items.filter(p => p.cat === this.refTab);
+                    }
+                    if (this.searchQuery && this.searchQuery.trim()) {
+                        const q = this.searchQuery.trim().toLowerCase();
+                        items = items.filter(p => 
+                            (p.title && p.title.toLowerCase().includes(q)) ||
+                            (p.tag && p.tag.toLowerCase().includes(q)) ||
+                            (p.label && p.label.toLowerCase().includes(q))
+                        );
+                    }
+                    return items;
+                },
+
+                get portfolioCategoryCounts() {
+                    return {
+                        all: this.portfolioItems.length,
+                        edu: this.portfolioItems.filter(p => p.cat === 'edu').length,
+                        production: this.portfolioItems.filter(p => p.cat === 'production').length,
+                        press: this.portfolioItems.filter(p => p.cat === 'press').length,
+                        hucampus: this.portfolioItems.filter(p => p.cat === 'hucampus').length
+                    };
+                },
+
+                selectPortfolioVideo(item) {
+                    if (!item) return;
+                    const idx = this.portfolioItems.findIndex(p => p.id === item.id);
+                    if (idx !== -1) {
+                        this.portfolioIndex = idx;
+                    }
+                    this.openModal(item.id, item.title);
+                },
+
                 get currentPortfolioItem() {
                     return this.portfolioItems[this.portfolioIndex] || this.portfolioItems[0];
                 },
@@ -4272,76 +4307,149 @@
 
     <!-- PORTFOLIO -->
     <section id="reference" aria-label="포트폴리오 및 주요 제작 실적" 
-             class="scroll-mt-0 md:scroll-mt-20 bg-white relative overflow-hidden border-t border-b border-slate-200 mobile-snap-section flex flex-col justify-between pt-3 pb-2 sm:py-16 lg:py-24 px-3.5 sm:px-6 lg:px-8">
-        <div class="w-full max-w-[1280px] mx-auto flex-1 flex flex-col justify-between min-h-0">
-            <!-- Header (Mobile Compact & Centered) -->
-            <div class="w-full text-center mb-1 sm:mb-6 flex flex-col items-center shrink-0">
-                <h2 class="text-lg sm:text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight mb-0.5 break-keep">
-                    콘텐츠 개발 &amp; 영상 포트폴리오
+             class="scroll-mt-0 md:scroll-mt-20 bg-slate-50 relative overflow-hidden border-t border-b border-slate-200 py-10 sm:py-16 lg:py-20 px-3.5 sm:px-6 lg:px-8">
+        <div class="w-full max-w-[1280px] mx-auto flex flex-col">
+            <!-- Header Section -->
+            <div class="w-full text-center mb-6 sm:mb-8 flex flex-col items-center">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-black tracking-wider uppercase mb-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+                    PORTFOLIO &amp; WORKS
+                </div>
+                <h2 class="text-xl sm:text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-2 break-keep">
+                    콘텐츠 개발 &amp; 영상 제작 포트폴리오
                 </h2>
-                <p class="text-xs sm:text-sm text-slate-600 font-normal leading-tight md:leading-relaxed max-w-lg mx-auto mb-1 break-keep">
-                    교육 컨설팅부터 미디어 영상 제작, 이러닝, 평생교육, 디지털 홍보까지 주요 수행 사례입니다.
+                <p class="text-xs sm:text-sm md:text-base text-slate-600 font-normal leading-relaxed max-w-2xl mx-auto break-keep">
+                    전체 제작 실적을 먼저 확인하신 후, 원하는 영상을 클릭하여 고화질로 감상하실 수 있습니다.
                 </p>
             </div>
 
-            <!-- SINGLE VIDEO SHOWCASE & SEPARATED BOTTOM CONTROLLER -->
-            <div class="w-full max-w-3xl mx-auto flex-1 min-h-0 flex flex-col justify-between my-auto py-1 gap-2 sm:gap-4"
-                 @touchstart="portfolioTouchStartX = $event.touches[0].clientX"
-                 @touchend="portfolioTouchEndX = $event.changedTouches[0].clientX; if (portfolioTouchStartX - portfolioTouchEndX > 40) { nextPortfolioItem(); } else if (portfolioTouchEndX - portfolioTouchStartX > 40) { prevPortfolioItem(); }">
-                
-                <!-- Main Showcase Video Card (Pure Cinema Visual Stage) -->
-                <div class="group relative w-full flex-1 min-h-0 bg-slate-950 rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-800 shadow-2xl transition-all duration-300 flex flex-col justify-center cursor-pointer"
-                     @click="openModal(currentPortfolioItem.id, currentPortfolioItem.title)">
-                    
-                    <div class="relative w-full h-full min-h-[30vh] sm:min-h-[38vh] bg-slate-950 overflow-hidden flex items-center justify-center">
-                        <img :src="'https://img.youtube.com/vi/' + currentPortfolioItem.id + '/maxresdefault.jpg'" 
-                             @error="$el.src='https://img.youtube.com/vi/' + currentPortfolioItem.id + '/hqdefault.jpg'"
-                             :alt="currentPortfolioItem.title" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
-                             referrerpolicy="no-referrer">
-                        
-                        <!-- Ambient gradient overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-black/20 pointer-events-none"></div>
+            <!-- Filter & Search Controls Bar -->
+            <div class="w-full max-w-5xl mx-auto mb-6 sm:mb-8 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
+                <!-- Category Filter Tabs -->
+                <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-1 w-full md:w-auto justify-start sm:justify-center">
+                    <button @click="refTab = 'all'" 
+                            :class="refTab === 'all' ? 'bg-slate-900 text-white font-bold shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200'"
+                            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 cursor-pointer shrink-0 flex items-center gap-1.5">
+                        <span>전체</span>
+                        <span class="text-[11px] px-1.5 py-0.2 rounded-full font-mono font-bold"
+                              :class="refTab === 'all' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'"
+                              x-text="portfolioCategoryCounts.all"></span>
+                    </button>
 
-                        <!-- Top Tag Badge -->
-                        <div class="absolute top-2.5 sm:top-4 left-2.5 sm:left-4 z-10 pointer-events-none">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1 rounded-full bg-slate-900/90 backdrop-blur-md text-white text-xs font-bold shadow-md border border-white/20"
-                                  x-text="currentPortfolioItem.tag">
-                            </span>
-                        </div>
-                    </div>
+                    <button @click="refTab = 'edu'" 
+                            :class="refTab === 'edu' ? 'bg-teal-700 text-white font-bold shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200'"
+                            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 cursor-pointer shrink-0 flex items-center gap-1.5">
+                        <span>이러닝·교육콘텐츠</span>
+                        <span class="text-[11px] px-1.5 py-0.2 rounded-full font-mono font-bold"
+                              :class="refTab === 'edu' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'"
+                              x-text="portfolioCategoryCounts.edu"></span>
+                    </button>
+
+                    <button @click="refTab = 'production'" 
+                            :class="refTab === 'production' ? 'bg-blue-700 text-white font-bold shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200'"
+                            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 cursor-pointer shrink-0 flex items-center gap-1.5">
+                        <span>영상 프로덕션·모션</span>
+                        <span class="text-[11px] px-1.5 py-0.2 rounded-full font-mono font-bold"
+                              :class="refTab === 'production' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'"
+                              x-text="portfolioCategoryCounts.production"></span>
+                    </button>
+
+                    <button @click="refTab = 'press'" 
+                            :class="refTab === 'press' ? 'bg-purple-700 text-white font-bold shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200'"
+                            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 cursor-pointer shrink-0 flex items-center gap-1.5">
+                        <span>디지털 홍보·PR</span>
+                        <span class="text-[11px] px-1.5 py-0.2 rounded-full font-mono font-bold"
+                              :class="refTab === 'press' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'"
+                              x-text="portfolioCategoryCounts.press"></span>
+                    </button>
                 </div>
 
-                <!-- Separated Bottom Controller Bar (영상 화면에서 분리되어 하단에 도톰하게 안착) -->
-                <div class="w-full shrink-0 bg-slate-900 border border-slate-800 rounded-2xl p-3 sm:p-4 shadow-xl flex flex-col gap-2.5">
-                    <div class="w-full flex items-center justify-between gap-2">
-                        <h3 class="text-sm sm:text-base font-bold text-white truncate"
-                            x-text="currentPortfolioItem.title"></h3>
-                        <span class="text-xs text-slate-400 font-mono shrink-0" 
-                              x-text="(portfolioIndex + 1) + ' / ' + (portfolioItems ? portfolioItems.length : 0)"></span>
-                    </div>
+                <!-- Quick Title/Tag Search Input -->
+                <div class="relative w-full md:w-64 shrink-0">
+                    <input type="text" 
+                           x-model="searchQuery" 
+                           placeholder="프로젝트 / 고객사 검색..." 
+                           class="w-full pl-9 pr-8 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 text-xs sm:text-sm shadow-2xs transition-colors">
+                    <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <button type="button" 
+                            x-show="searchQuery && searchQuery.length > 0" 
+                            @click="searchQuery = ''" 
+                            class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
 
-                    <!-- Click To Next / Play Controls -->
-                    <div class="flex items-center justify-between gap-2 w-full">
-                        <button @click="prevPortfolioItem()" 
-                                class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs sm:text-sm font-bold transition-all flex items-center gap-1 cursor-pointer border border-slate-700 active:scale-95 shadow-xs"
-                                title="이전 영상">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                            <span>이전</span>
-                        </button>
+            <!-- ALL PORTFOLIO VIDEOS GRID (우선 전체가 다 펼쳐져 보여지는 갤러리 구조) -->
+            <div class="w-full max-w-6xl mx-auto">
+                <!-- Video Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+                    <template x-for="(item, idx) in filteredPortfolioItems" :key="item.id">
+                        <div class="group relative bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-xs hover:shadow-xl hover:border-blue-400 transition-all duration-300 flex flex-col cursor-pointer transform hover:-translate-y-1"
+                             @click="selectPortfolioVideo(item)">
+                            
+                            <!-- Thumbnail Area with Play Overlay -->
+                            <div class="relative w-full aspect-video bg-slate-950 overflow-hidden isolate">
+                                <img :src="'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg'" 
+                                     :alt="item.title" 
+                                     loading="lazy"
+                                     referrerpolicy="no-referrer"
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-95">
+                                
+                                <!-- Dim gradient -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30 group-hover:from-slate-950/90 transition-colors pointer-events-none"></div>
 
-                        <button @click="openModal(currentPortfolioItem.id, currentPortfolioItem.title)"
-                                class="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-teal-300 hover:text-teal-200 border border-teal-500/40 hover:border-teal-400 text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95">
-                            <svg class="w-3.5 h-3.5 text-teal-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            <span>영상 재생</span>
-                        </button>
+                                <!-- Floating Client Tag Badge (Top-Left) -->
+                                <div class="absolute top-2.5 left-2.5 z-10">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-slate-900/90 backdrop-blur-xs text-white text-[11px] font-bold border border-white/20 shadow-xs"
+                                          x-text="item.tag"></span>
+                                </div>
 
-                        <button @click="nextPortfolioItem()" 
-                                class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1 cursor-pointer shadow-md active:scale-95 border border-blue-400/30">
-                            <span>다음 영상</span>
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                        </button>
-                    </div>
+                                <!-- Floating Category Label Badge (Top-Right) -->
+                                <div class="absolute top-2.5 right-2.5 z-10" x-show="item.label">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-900/80 backdrop-blur-xs text-blue-200 text-[10.5px] font-medium border border-blue-400/30"
+                                          x-text="item.label"></span>
+                                </div>
+
+                                <!-- Center Play Button on Hover -->
+                                <div class="absolute inset-0 flex items-center justify-center z-10">
+                                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-blue-600/90 group-hover:bg-blue-600 group-hover:scale-110 text-white flex items-center justify-center shadow-lg transition-all duration-300 border border-white/40">
+                                        <svg class="w-5 h-5 text-white translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card Info Details -->
+                            <div class="p-3.5 sm:p-4 flex-1 flex flex-col justify-between bg-white">
+                                <div>
+                                    <h3 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug break-keep"
+                                        x-text="item.title"></h3>
+                                </div>
+                                <div class="mt-2.5 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                                    <span class="font-medium text-slate-600 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+                                        클릭하여 재생
+                                    </span>
+                                    <span class="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
+                                        영상 보기 →
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Empty State (No Search Results) -->
+                <div x-show="filteredPortfolioItems.length === 0" 
+                     class="w-full py-12 text-center bg-white rounded-2xl border border-slate-200 shadow-xs p-6">
+                    <p class="text-sm font-bold text-slate-700 mb-1">검색 결과가 없습니다.</p>
+                    <p class="text-xs text-slate-500 mb-4">다른 검색어를 입력하시거나 카테고리를 전체로 변경해 보세요.</p>
+                    <button @click="searchQuery = ''; refTab = 'all'" 
+                            class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all cursor-pointer">
+                        전체 포트폴리오 보기
+                    </button>
                 </div>
             </div>
         </div>
