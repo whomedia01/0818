@@ -3,6 +3,8 @@
 
 User-agent: *
 Allow: /
+Disallow: /adm
+Disallow: /adm/
 Disallow: /adm.html
 Disallow: /api/
 

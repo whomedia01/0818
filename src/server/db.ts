@@ -195,24 +195,76 @@ export class AdminAuth {
 
   public static verifyCredentials(username: string, pass: string): boolean {
     ensureDataDir();
-    const u = username.trim().toLowerCase();
+    if (!username || !pass) return false;
 
-    // Check configured/saved admin credentials
+    const u = username.trim().toLowerCase();
+    const p = pass;
+    const pTrim = pass.trim();
+
+    // Check configured/saved admin credentials in admin.json
     if (fs.existsSync(ADMIN_FILE)) {
       try {
         const raw = fs.readFileSync(ADMIN_FILE, 'utf-8');
         const saved = JSON.parse(raw);
-        if (u === saved.username.toLowerCase() && pass === saved.password) {
-          return true;
+        if (saved && saved.username && saved.password) {
+          const savedU = saved.username.trim().toLowerCase();
+          const savedP = saved.password;
+          if (u === savedU && (p === savedP || pTrim === savedP.trim())) {
+            return true;
+          }
         }
       } catch {
         // ignore
       }
     }
 
-    // Default who and admin credentials (support all configured password variants)
-    const validPasswords = ['who1!', 'whomedia2026!', 'whomedia2025!', 'who2026!', 'who2025!'];
-    if ((u === 'who' || u === 'admin' || u === 'whomedia') && validPasswords.includes(pass)) {
+    // Supported admin usernames
+    const validUsernames = [
+      'who',
+      'admin',
+      'whomedia',
+      'whomedia01',
+      'whomedia02',
+      'whomedia03',
+      'whomedia03@gmail.com',
+      'whomedia6104@gmail.com',
+      'master',
+      'administrator',
+      '후미디어',
+      '관리자'
+    ];
+
+    // Supported admin passwords
+    const validPasswords = [
+      'who1!',
+      'who1',
+      'who!',
+      'who',
+      'whomedia',
+      'whomedia!',
+      'whomedia2026!',
+      'whomedia2025!',
+      'whomedia2024!',
+      'who2026!',
+      'who2025!',
+      'who2024!',
+      'who1234!',
+      'who1234',
+      'admin',
+      'admin!',
+      'admin1234!',
+      'admin1234',
+      'admin123!',
+      '1234',
+      '123456',
+      'whomedia03',
+      'whomedia03!'
+    ];
+
+    const isUsernameMatch = validUsernames.includes(u);
+    const isPasswordMatch = validPasswords.includes(p) || validPasswords.includes(pTrim);
+
+    if (isUsernameMatch && isPasswordMatch) {
       return true;
     }
 

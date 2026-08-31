@@ -152,6 +152,20 @@
 
             <!-- Login Form -->
             <form @submit.prevent="handleLogin()" class="space-y-4 relative z-10">
+                <!-- Credentials Guide Box -->
+                <div class="p-3.5 bg-slate-800/90 border border-admin-mint/30 rounded-2xl flex items-center justify-between gap-3 text-xs shadow-sm">
+                    <div class="text-slate-300">
+                        <span class="text-admin-mint font-bold">기본 계정:</span> 
+                        <span class="font-mono text-white font-bold bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">who</span> / 
+                        <span class="font-mono text-white font-bold bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">who1!</span>
+                    </div>
+                    <button type="button" 
+                            @click="fillDefaultLogin()" 
+                            class="px-2.5 py-1 bg-admin-mint/20 hover:bg-admin-mint/30 border border-admin-mint/40 text-admin-mint rounded-lg font-bold text-[11px] transition-all cursor-pointer whitespace-nowrap">
+                        원클릭 자동입력
+                    </button>
+                </div>
+
                 <div>
                     <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wider">관리자 아이디 (ID)</label>
                     <div class="relative">
@@ -161,7 +175,7 @@
                         <input type="text" 
                                x-model="loginForm.username" 
                                required 
-                               placeholder="관리자 아이디 입력" 
+                               placeholder="관리자 아이디 입력 (예: who)" 
                                class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-admin-mint focus:ring-1 focus:ring-admin-mint transition-all">
                     </div>
                 </div>
@@ -175,7 +189,7 @@
                         <input :type="showPassword ? 'text' : 'password'" 
                                x-model="loginForm.password" 
                                required 
-                               placeholder="비밀번호 입력" 
+                               placeholder="비밀번호 입력 (예: who1!)" 
                                class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-10 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-admin-mint focus:ring-1 focus:ring-admin-mint transition-all">
                         <button type="button" @click="showPassword = !showPassword" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-white">
                             <svg x-show="!showPassword" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
@@ -184,7 +198,15 @@
                     </div>
                 </div>
 
-                <div x-show="loginError" class="p-3 bg-rose-950/80 border border-rose-500/50 rounded-xl text-rose-300 text-xs font-semibold" x-text="loginError"></div>
+                <div x-show="loginError" class="p-3 bg-rose-950/80 border border-rose-500/50 rounded-xl text-rose-300 text-xs font-semibold flex items-start gap-2">
+                    <span class="shrink-0 mt-0.5">⚠️</span>
+                    <div class="flex-1">
+                        <div x-text="loginError"></div>
+                        <div class="mt-1 text-[11px] text-rose-400">
+                            기본 계정 <span class="font-bold underline cursor-pointer" @click="fillDefaultLogin()">who / who1!</span> 로 로그인해 보세요.
+                        </div>
+                    </div>
+                </div>
 
                 <button type="submit" 
                         :disabled="loginLoading"
@@ -928,12 +950,25 @@
                     });
                 },
 
+                fillDefaultLogin() {
+                    this.loginForm.username = 'who';
+                    this.loginForm.password = 'who1!';
+                    this.loginError = '';
+                    this.addToast('기본 계정 정보(who / who1!)가 입력되었습니다.', 'info');
+                },
+
                 async handleLogin() {
                     this.loginLoading = true;
                     this.loginError = '';
 
-                    const uname = this.loginForm.username.trim();
-                    const upass = this.loginForm.password;
+                    const uname = (this.loginForm.username || '').trim();
+                    const upass = (this.loginForm.password || '').trim();
+
+                    if (!uname || !upass) {
+                        this.loginError = '아이디와 비밀번호를 모두 입력해 주세요.';
+                        this.loginLoading = false;
+                        return;
+                    }
 
                     try {
                         const response = await fetch('/api/admin/login', {
