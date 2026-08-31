@@ -584,31 +584,23 @@
             will-change: transform, opacity;
         }
 
-        /* Cinematic Dark Scrim Overlay (Unifies Exposure & Adds High-End Spatial Depth) */
+        /* Cinematic Stage Image: 100% Crystal-Clear Original Quality */
         .cinematic-dark-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(2, 6, 23, 0.20) 0%, rgba(2, 6, 23, 0.10) 40%, rgba(2, 6, 23, 0.35) 100%);
-            mix-blend-mode: multiply;
-            pointer-events: none;
-            z-index: 10;
+            display: none !important;
         }
 
         .cinematic-vignette {
-            position: absolute;
-            inset: 0;
-            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.4);
-            pointer-events: none;
-            z-index: 11;
+            display: none !important;
         }
 
-        /* Image Filter & Ken Burns Spatial Depth Animation */
+        /* Image Filter & Pure Original Quality Presentation */
         .cinematic-stage-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
             aspect-ratio: 16 / 9;
-            filter: contrast(1.05) saturate(1.1);
+            filter: none !important;
+            image-rendering: auto;
             transform: scale(1.0) translate3d(0, 0, 0);
             -webkit-transform: scale(1.0) translate3d(0, 0, 0);
             transition: transform 5s ease-out;
@@ -1357,9 +1349,9 @@
         const GITHUB_REPO = 'who-new809';   // 신규 GitHub 저장소
         const GITHUB_BRANCH = 'main';
 
-        // GitHub / jsDelivr 글로벌 CDN 및 raw 이미지 URL 생성 유틸리티 (who-new809/img/ 전용 매핑)
-        const getStudioCdnUrl = (fileName) => `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/img/${encodeURIComponent(fileName)}`;
+        // GitHub / jsDelivr 글로벌 원본 raw 이미지 URL 매핑 (100% 무손실 원본 퀄리티 유지)
         const getGithubRawUrl = (fileName) => `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/img/${encodeURIComponent(fileName)}`;
+        const getStudioCdnUrl = (fileName) => getGithubRawUrl(fileName);
 
         // https://github.com/whomedia01/who-new809/tree/main/img 폴더 내 실제 이미지 파일 32종 전수 매핑
         const STUDIO_PHOTO_FILES = [
@@ -3754,15 +3746,25 @@
                      x-transition:leave-end="opacity-0 -translate-x-8"
                      class="absolute inset-0 w-full h-full p-3 xs:p-4 sm:p-7 lg:p-9 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated">
                     
-                    <!-- High-Definition Background Image with mobile subtle dimming -->
-                    <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1400&q=85" 
-                         alt="이러닝 콘텐츠 개발" 
-                         loading="eager"
-                         referrerpolicy="no-referrer"
-                         style="aspect-ratio: 16/9;"
-                         class="absolute inset-0 w-full h-full object-cover opacity-60 sm:opacity-100 brightness-90 sm:brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <!-- High-Definition Background Video: 경희사이버대학교 가상 크로마키 강좌 (PTqpVR-yIKg) -->
+                    <div class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
+                        <!-- Poster Fallback Image -->
+                        <img src="https://img.youtube.com/vi/PTqpVR-yIKg/maxresdefault.jpg" 
+                             @error="$el.src='https://img.youtube.com/vi/PTqpVR-yIKg/hqdefault.jpg'"
+                             alt="경희대학교 가상 크로마키 강좌" 
+                             class="absolute inset-0 w-full h-full object-cover opacity-70 sm:opacity-100 brightness-90 sm:brightness-105 contrast-105 pointer-events-none">
+                        
+                        <!-- Chromakey Video Background Frame -->
+                        <iframe class="w-full h-full absolute inset-0 object-cover scale-[1.35] pointer-events-none opacity-85 sm:opacity-100"
+                                src="https://www.youtube-nocookie.com/embed/PTqpVR-yIKg?autoplay=1&mute=1&controls=0&loop=1&playlist=PTqpVR-yIKg&playsinline=1&rel=0&showinfo=0&iv_load_policy=3&modestbranding=1&enablejsapi=1"
+                                title="경희대학교 가상 크로마키 강좌"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin">
+                        </iframe>
+                    </div>
                     
-                    <!-- Clean Contrast Scrim (모바일에서 텍스트가 극대화되어 보이도록 딤 강화) -->
+                    <!-- Clean Contrast Scrim (모바일 및 PC에서 텍스트가 극대화되어 보이도록 딤 강화) -->
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/98 via-slate-950/80 to-slate-950/40 sm:from-slate-950/95 sm:via-slate-950/50 sm:to-transparent z-0 pointer-events-none"></div>
                     <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent z-0 pointer-events-none hidden md:block"></div>
 
@@ -3931,15 +3933,25 @@
                      x-transition:leave-end="opacity-0 -translate-x-8"
                      class="absolute inset-0 w-full h-full p-3 xs:p-4 sm:p-7 lg:p-9 flex flex-col justify-between group overflow-y-auto no-scrollbar will-change-transform-opacity gpu-accelerated">
                     
-                    <!-- High-Definition Background Image with mobile subtle dimming -->
-                    <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1400&q=85" 
-                         alt="전문 영상 제작" 
-                         loading="eager"
-                         referrerpolicy="no-referrer"
-                         style="aspect-ratio: 16/9;"
-                         class="absolute inset-0 w-full h-full object-cover opacity-60 sm:opacity-100 brightness-90 sm:brightness-105 contrast-105 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <!-- High-Definition Background Video: 에듀팡 일본어 모션그래픽 인트로 (PAvJORGcUTU) -->
+                    <div class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
+                        <!-- Poster Fallback Image -->
+                        <img src="https://img.youtube.com/vi/PAvJORGcUTU/maxresdefault.jpg" 
+                             @error="$el.src='https://img.youtube.com/vi/PAvJORGcUTU/hqdefault.jpg'"
+                             alt="에듀팡 일본어 모션그래픽 인트로" 
+                             class="absolute inset-0 w-full h-full object-cover opacity-70 sm:opacity-100 brightness-90 sm:brightness-105 contrast-105 pointer-events-none">
+                        
+                        <!-- Motion Graphic Background Video Frame -->
+                        <iframe class="w-full h-full absolute inset-0 object-cover scale-[1.35] pointer-events-none opacity-85 sm:opacity-100"
+                                src="https://www.youtube-nocookie.com/embed/PAvJORGcUTU?autoplay=1&mute=1&controls=0&loop=1&playlist=PAvJORGcUTU&playsinline=1&rel=0&showinfo=0&iv_load_policy=3&modestbranding=1&enablejsapi=1"
+                                title="에듀팡 일본어 모션그래픽 인트로"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin">
+                        </iframe>
+                    </div>
                     
-                    <!-- Clean Contrast Scrim (모바일에서 텍스트가 극대화되어 보이도록 딤 강화) -->
+                    <!-- Clean Contrast Scrim (모바일 및 PC에서 텍스트가 극대화되어 보이도록 딤 강화) -->
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/98 via-slate-950/80 to-slate-950/40 sm:from-slate-950/95 sm:via-slate-950/50 sm:to-transparent z-0 pointer-events-none"></div>
                     <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent z-0 pointer-events-none hidden md:block"></div>
 

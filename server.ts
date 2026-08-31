@@ -49,17 +49,20 @@ async function startServer() {
         const imageExtensions = /\.(jpe?g|png|webp|svg|gif|avif)$/i;
         const filteredImages = contents
           .filter((item: any) => item.type === "file" && imageExtensions.test(item.name))
-          .map((item: any, idx: number) => ({
-            id: `studio_img_${idx + 1}`,
-            index: idx + 1,
-            title: `후미디어 전문 스튜디오 전경 #${String(idx + 1).padStart(2, '0')}`,
-            fileName: item.name,
-            imageUrl: `https://cdn.jsdelivr.net/gh/whomedia01/who-new809@main/img/${encodeURIComponent(item.name)}`,
-            rawUrl: item.download_url || `https://raw.githubusercontent.com/whomedia01/who-new809/main/img/${encodeURIComponent(item.name)}`,
-            thumbUrl: `https://cdn.jsdelivr.net/gh/whomedia01/who-new809@main/img/${encodeURIComponent(item.name)}`,
-            size: item.size,
-            sha: item.sha
-          }));
+          .map((item: any, idx: number) => {
+            const raw = item.download_url || `https://raw.githubusercontent.com/whomedia01/who-new809/main/img/${encodeURIComponent(item.name)}`;
+            return {
+              id: `studio_img_${idx + 1}`,
+              index: idx + 1,
+              title: `후미디어 전문 스튜디오 전경 #${String(idx + 1).padStart(2, '0')}`,
+              fileName: item.name,
+              imageUrl: raw,
+              rawUrl: raw,
+              thumbUrl: raw,
+              size: item.size,
+              sha: item.sha
+            };
+          });
 
         if (filteredImages.length > 0) {
           studioImagesCache = filteredImages;
