@@ -152,20 +152,6 @@
 
             <!-- Login Form -->
             <form @submit.prevent="handleLogin()" class="space-y-4 relative z-10">
-                <!-- Credentials Guide Box -->
-                <div class="p-3.5 bg-slate-800/90 border border-admin-mint/30 rounded-2xl flex items-center justify-between gap-3 text-xs shadow-sm">
-                    <div class="text-slate-300">
-                        <span class="text-admin-mint font-bold">기본 계정:</span> 
-                        <span class="font-mono text-white font-bold bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">who</span> / 
-                        <span class="font-mono text-white font-bold bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">who1!</span>
-                    </div>
-                    <button type="button" 
-                            @click="fillDefaultLogin()" 
-                            class="px-2.5 py-1 bg-admin-mint/20 hover:bg-admin-mint/30 border border-admin-mint/40 text-admin-mint rounded-lg font-bold text-[11px] transition-all cursor-pointer whitespace-nowrap">
-                        원클릭 자동입력
-                    </button>
-                </div>
-
                 <div>
                     <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wider">관리자 아이디 (ID)</label>
                     <div class="relative">
@@ -175,7 +161,8 @@
                         <input type="text" 
                                x-model="loginForm.username" 
                                required 
-                               placeholder="관리자 아이디 입력 (예: who)" 
+                               autocomplete="username"
+                               placeholder="아이디를 입력하세요" 
                                class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-admin-mint focus:ring-1 focus:ring-admin-mint transition-all">
                     </div>
                 </div>
@@ -189,7 +176,8 @@
                         <input :type="showPassword ? 'text' : 'password'" 
                                x-model="loginForm.password" 
                                required 
-                               placeholder="비밀번호 입력 (예: who1!)" 
+                               autocomplete="current-password"
+                               placeholder="비밀번호를 입력하세요" 
                                class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-10 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-admin-mint focus:ring-1 focus:ring-admin-mint transition-all">
                         <button type="button" @click="showPassword = !showPassword" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-white">
                             <svg x-show="!showPassword" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
@@ -198,14 +186,9 @@
                     </div>
                 </div>
 
-                <div x-show="loginError" class="p-3 bg-rose-950/80 border border-rose-500/50 rounded-xl text-rose-300 text-xs font-semibold flex items-start gap-2">
-                    <span class="shrink-0 mt-0.5">⚠️</span>
-                    <div class="flex-1">
-                        <div x-text="loginError"></div>
-                        <div class="mt-1 text-[11px] text-rose-400">
-                            기본 계정 <span class="font-bold underline cursor-pointer" @click="fillDefaultLogin()">who / who1!</span> 로 로그인해 보세요.
-                        </div>
-                    </div>
+                <div x-show="loginError" class="p-3 bg-rose-950/80 border border-rose-500/50 rounded-xl text-rose-300 text-xs font-semibold flex items-center gap-2">
+                    <span class="shrink-0">⚠️</span>
+                    <span x-text="loginError"></span>
                 </div>
 
                 <button type="submit" 
@@ -950,30 +933,6 @@
                     });
                 },
 
-                isAllowedAdmin(uname, upass) {
-                    const u = (uname || '').trim().toLowerCase();
-                    const p = (upass || '').trim();
-                    const validUsers = [
-                        'who', 'admin', 'whomedia', 'whomedia01', 'whomedia02', 'whomedia03', 
-                        'whomedia03@gmail.com', 'whomedia6104@gmail.com', 'master', 'administrator', '후미디어', '관리자'
-                    ];
-                    const validPass = [
-                        'who1!', 'who1', 'who!', 'who', 'whomedia', 'whomedia!', 
-                        'whomedia2026!', 'whomedia2025!', 'whomedia2024!', 
-                        'who2026!', 'who2025!', 'who2024!', 'who1234!', 'who1234',
-                        'admin', 'admin!', 'admin1234!', 'admin1234', 'admin123!', 
-                        '1234', '123456', 'whomedia03', 'whomedia03!'
-                    ];
-                    return validUsers.includes(u) && validPass.includes(p);
-                },
-
-                fillDefaultLogin() {
-                    this.loginForm.username = 'who';
-                    this.loginForm.password = 'who1!';
-                    this.loginError = '';
-                    this.addToast('기본 계정 정보(who / who1!)가 입력되었습니다.', 'info');
-                },
-
                 async handleLogin() {
                     this.loginLoading = true;
                     this.loginError = '';
@@ -987,48 +946,36 @@
                         return;
                     }
 
-                    const isLocalApproved = this.isAllowedAdmin(uname, upass);
-
-                    // 1. Try server-side authentication
                     try {
                         const response = await fetch('/api/admin/login', {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
                             body: JSON.stringify({ username: uname, password: upass })
                         });
 
-                        if (response.ok) {
-                            const data = await response.json().catch(() => ({}));
-                            if (data.success && data.token) {
-                                this.token = data.token;
-                                this.currentUser = data.user || { username: uname, role: 'super_admin' };
-                                this.isLoggedIn = true;
-                                localStorage.setItem('whomedia_admin_token', data.token);
-                                this.addToast('관리자 대시보드에 성공적으로 접속하였습니다.', 'success');
-                                await this.fetchInquiries();
-                                this.loginLoading = false;
-                                return;
-                            }
+                        const data = await response.json().catch(() => ({}));
+
+                        if (response.ok && data.success && data.token) {
+                            this.token = data.token;
+                            this.currentUser = data.user || { username: uname, role: 'super_admin' };
+                            this.isLoggedIn = true;
+                            localStorage.setItem('whomedia_admin_token', data.token);
+                            this.addToast('관리자 대시보드에 성공적으로 접속하였습니다.', 'success');
+                            await this.fetchInquiries();
+                            this.loginLoading = false;
+                            return;
+                        } else {
+                            this.loginError = data.message || '아이디 또는 비밀번호가 일치하지 않습니다.';
                         }
                     } catch (err) {
-                        console.warn('Backend login request exception:', err);
-                    }
-
-                    // 2. If valid credentials, grant instant access even on static/offline hosts
-                    if (isLocalApproved) {
-                        const sessionToken = 'whomedia_admin_' + Date.now();
-                        this.token = sessionToken;
-                        this.currentUser = { username: uname, role: 'super_admin' };
-                        this.isLoggedIn = true;
-                        localStorage.setItem('whomedia_admin_token', sessionToken);
-                        this.addToast('관리자 대시보드에 접속하였습니다.', 'success');
-                        await this.fetchInquiries();
+                        console.error('Login network error:', err);
+                        this.loginError = '서버 연결에 실패하였습니다. 네트워크 상태를 확인해 주세요.';
+                    } finally {
                         this.loginLoading = false;
-                        return;
                     }
-
-                    this.loginError = '아이디 또는 비밀번호가 일치하지 않습니다.';
-                    this.loginLoading = false;
                 },
 
                 calculateStats(list) {
