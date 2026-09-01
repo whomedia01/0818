@@ -1212,39 +1212,53 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* Korean typography & mobile readability optimizations */
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+
+        h1, h2, h3, h4, h5, h6, p, span, a, button, label {
+            word-break: keep-all;
+        }
+
         button, a, select, input, textarea {
             touch-action: manipulation;
         }
 
-        /* Mobile 1-Screen (100dvh) Viewport Fit & Snap Styles */
+        /* Mobile Viewport Readability & Smooth Flow Styles */
         @media (max-width: 767px) {
             html, body {
-                scroll-snap-type: y mandatory;
                 scroll-padding-top: 3.5rem; /* 56px = mobile fixed header height */
-                scroll-padding-bottom: 4.2rem;
+                scroll-padding-bottom: 4.5rem;
+                -webkit-overflow-scrolling: touch;
             }
 
             section {
-                scroll-margin-top: 0 !important;
+                scroll-margin-top: 3.5rem !important;
             }
 
             .mobile-snap-section {
-                height: calc(100dvh - 3.5rem) !important;
-                min-height: calc(100dvh - 3.5rem) !important;
-                max-height: calc(100dvh - 3.5rem) !important;
-                scroll-snap-align: start !important;
-                scroll-snap-stop: always !important;
-                overflow: hidden !important;
+                min-height: calc(100dvh - 3.5rem);
                 box-sizing: border-box !important;
-                padding-top: 0.5rem !important;
-                padding-bottom: calc(4.2rem + env(safe-area-inset-bottom, 0.5rem)) !important;
+                padding-top: 1rem !important;
+                padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0.5rem)) !important;
+                overflow-y: visible !important;
             }
 
             .mobile-screen-section {
                 min-height: auto;
                 height: auto;
-                padding-top: 1rem;
-                padding-bottom: 2rem;
+                padding-top: 1.25rem;
+                padding-bottom: 2.5rem;
                 box-sizing: border-box;
             }
 
@@ -5588,6 +5602,133 @@
                 }
                 requestAnimationFrame(checkVideoTime);
             })();
+
+            /* =========================================================
+               SEO KEYWORD ANALYZER & META OPTIMIZER
+               - DOM 구조(H1~H4, 메인 본문, 네비게이션)와 PORTFOLIO_DATA를 종합 분석
+               - 네이버 서치어드바이저 및 구글 검색 엔진 최적화 핵심 키워드/요약 자동 추출
+               - Meta Keywords, Description, OG, Twitter, JSON-LD 태그 동적 갱신
+            ========================================================= */
+            window.optimizeSeoMetaTags = function optimizeSeoMetaTags(options = {}) {
+                try {
+                    const config = Object.assign({
+                        updateMeta: true,
+                        updateJsonLd: true,
+                        maxKeywords: 15,
+                        logResult: false
+                    }, options);
+
+                    // 1. PORTFOLIO_DATA 키워드 및 토큰 추출
+                    const portfolioKeywords = [];
+                    if (typeof PORTFOLIO_DATA !== 'undefined' && Array.isArray(PORTFOLIO_DATA)) {
+                        PORTFOLIO_DATA.forEach(item => {
+                            if (item.tag) portfolioKeywords.push(item.tag);
+                            if (item.label) portfolioKeywords.push(item.label);
+                            if (item.title) {
+                                // 2글자 이상의 의미 있는 단어 추출
+                                const words = item.title.match(/[가-힣a-zA-Z0-9]{2,}/g) || [];
+                                portfolioKeywords.push(...words);
+                            }
+                        });
+                    }
+
+                    // 2. DOM 텍스트 컨텐츠 수집 (헤딩, 주요 섹션 우선 가중치 부여)
+                    const weightedTokens = new Map();
+                    const addTokens = (text, weight) => {
+                        if (!text) return;
+                        const tokens = text.match(/[가-힣a-zA-Z0-9]{2,}/g) || [];
+                        tokens.forEach(token => {
+                            // 불용어 및 무의미한 단어 필터링
+                            const stopWords = ['있습니다', '합니다', '위한', '통해', '함께', '있는', '것을', '위해', '대한', '모든', '기반', '제공', '바로', '지금'];
+                            if (stopWords.includes(token) || token.length < 2) return;
+                            const count = weightedTokens.get(token) || 0;
+                            weightedTokens.set(token, count + weight);
+                        });
+                    };
+
+                    // DOM 가중치 수집
+                    document.querySelectorAll('h1, h2').forEach(el => addTokens(el.innerText, 5));
+                    document.querySelectorAll('h3, h4').forEach(el => addTokens(el.innerText, 3));
+                    document.querySelectorAll('nav a, #services, #studio, #reference, #organization').forEach(el => addTokens(el.innerText, 2));
+                    document.querySelectorAll('p, span.font-bold').forEach(el => addTokens(el.innerText, 1));
+                    
+                    // PORTFOLIO_DATA 데이터 토큰에 높은 가중치 부여
+                    portfolioKeywords.forEach(kw => addTokens(kw, 4));
+
+                    // 3. 상위 핵심 키워드 정렬 및 도메인 핵심 키워드 결합
+                    const sortedTokens = Array.from(weightedTokens.entries())
+                        .sort((a, b) => b[1] - a[1])
+                        .map(entry => entry[0]);
+
+                    // 기본 필수 핵심 키워드
+                    const corePrefix = ['후미디어', '이러닝개발', '교육과정기획', '160평스튜디오', '전자칠판촬영', '크로마키스튜디오', '방송급영상제작'];
+                    const finalKeywordSet = new Set([...corePrefix, ...sortedTokens]);
+                    const selectedKeywords = Array.from(finalKeywordSet).slice(0, config.maxKeywords);
+                    const keywordsString = selectedKeywords.join(', ');
+
+                    // 4. 메타태그 동적 갱신
+                    if (config.updateMeta) {
+                        // Meta Keywords
+                        let metaKeywords = document.querySelector('meta[name="keywords"]');
+                        if (!metaKeywords) {
+                            metaKeywords = document.createElement('meta');
+                            metaKeywords.name = 'keywords';
+                            document.head.appendChild(metaKeywords);
+                        }
+                        metaKeywords.setAttribute('content', keywordsString);
+
+                        // Meta Subject
+                        const metaSubject = document.querySelector('meta[name="subject"]');
+                        if (metaSubject) {
+                            metaSubject.setAttribute('content', '이러닝 개발, 교육과정 기획, 160평 스튜디오, 영상 프로덕션');
+                        }
+
+                        // DC.subject
+                        const dcSubject = document.querySelector('meta[name="DC.subject"]');
+                        if (dcSubject) {
+                            dcSubject.setAttribute('content', keywordsString);
+                        }
+                    }
+
+                    // 5. JSON-LD Structured Data 키워드 동기화
+                    if (config.updateJsonLd) {
+                        const jsonLdScripts = document.querySelectorAll('script[type="application/ld+json"]');
+                        jsonLdScripts.forEach(script => {
+                            try {
+                                const data = JSON.parse(script.textContent);
+                                if (data['@graph'] && Array.isArray(data['@graph'])) {
+                                    data['@graph'].forEach(node => {
+                                        if (node['@type'] === 'Organization' || node['@type'] === 'Corporation' || node['@type'] === 'WebSite') {
+                                            node.keywords = selectedKeywords;
+                                        }
+                                    });
+                                    script.textContent = JSON.stringify(data, null, 2);
+                                }
+                            } catch (e) {
+                                // Ignore json parsing error
+                            }
+                        });
+                    }
+
+                    if (config.logResult) {
+                        console.log('[SEO Auto-Optimizer] Core Keywords Analyzed:', selectedKeywords);
+                    }
+
+                    return {
+                        keywords: selectedKeywords,
+                        keywordsString: keywordsString,
+                        totalAnalyzedTokens: weightedTokens.size
+                    };
+                } catch (error) {
+                    console.error('[SEO Auto-Optimizer] Error analyzing SEO keywords:', error);
+                    return null;
+                }
+            };
+
+            // DOM 및 포트폴리오 로드 후 자동 실행
+            setTimeout(() => {
+                window.optimizeSeoMetaTags({ logResult: false });
+            }, 600);
         });
     </script>
 </body>
