@@ -22,6 +22,16 @@
     <link rel="alternate" hreflang="x-default" href="https://www.whomedia.co.kr/">
     <link rel="alternate" type="application/rss+xml" title="(주)후미디어 RSS Feed" href="https://www.whomedia.co.kr/rss.xml">
 
+    <!-- Automatic 301-equivalent redirect for legacy staging / alias domains (e.g. whomedia1.iisweb.co.kr) -->
+    <script>
+      (function() {
+        var host = (window.location.hostname || '').toLowerCase();
+        if (host.indexOf('whomedia1.iisweb.co.kr') !== -1 || (host.indexOf('iisweb.co.kr') !== -1 && host.indexOf('whomedia') !== -1)) {
+          window.location.replace('https://www.whomedia.co.kr' + window.location.pathname + window.location.search + window.location.hash);
+        }
+      })();
+    </script>
+
     <!-- Search Engine Verification (Naver, Google) -->
     <meta name="naver-site-verification" content="ba3773b7cd80d68634cbcac47c2a4d56a1dae8c2">
 
@@ -4677,7 +4687,8 @@
                  class="bg-white p-3 sm:p-7 rounded-xl sm:rounded-3xl border border-slate-200 shadow-lg sm:shadow-xl transition-all duration-700 ease-out will-change-transform flex-1 min-h-0 flex flex-col justify-between mt-1">
                 
                 <form action="https://api.web3forms.com/submit" method="POST" @submit.prevent="submitInquiry()" class="space-y-2 sm:space-y-3.5 flex-1 flex flex-col justify-between min-h-0">
-                    <input type="hidden" name="access_key" value="7c2b49d5-6b56-47fb-ad38-402cc111eacd">
+                    <input type="hidden" name="access_key" value="bfee19e2-0eab-4de4-9410-d6cd9d14b547">
+                    <input type="hidden" name="subject" value="[WHOMEDIA 고객 문의 접수]">
                     <div class="space-y-2 sm:space-y-3 overflow-y-auto no-scrollbar pr-0.5 flex-1 flex flex-col min-h-0">
                         <!-- 기관/회사명 (로컬스토리지 히스토리 저장 및 자동완성 지원) -->
                         <div class="relative shrink-0" @click.outside="companyFocused = false">

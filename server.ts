@@ -17,6 +17,15 @@ async function startServer() {
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
   }));
 
+  // Canonical Domain 301 Redirect for legacy / hosting alias domains
+  app.use((req, res, next) => {
+    const host = (req.headers.host || "").toLowerCase();
+    if (host.includes("whomedia1.iisweb.co.kr") || host.includes("iisweb.co.kr")) {
+      return res.redirect(301, `https://www.whomedia.co.kr${req.originalUrl}`);
+    }
+    next();
+  });
+
   app.use(express.json());
   app.use(express.static(path.join(process.cwd(), "public")));
 

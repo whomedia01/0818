@@ -263,6 +263,7 @@ document.addEventListener('alpine:init', () => {
             company: '',
             name: '',
             phone: '',
+            email: '',
             category: '',
             message: '',
             consent: false
@@ -360,6 +361,31 @@ document.addEventListener('alpine:init', () => {
                 console.warn('Inquiry API dispatch fallback:', err);
             }
 
+            // Dispatch to Web3Forms API (Access Key: bfee19e2-0eab-4de4-9410-d6cd9d14b547)
+            try {
+                await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json' 
+                    },
+                    body: JSON.stringify({
+                        access_key: 'bfee19e2-0eab-4de4-9410-d6cd9d14b547',
+                        subject: '[WHOMEDIA 신규 프로젝트 문의] ' + (this.inquiryForm.company ? this.inquiryForm.company + ' - ' : '') + this.inquiryForm.name + '님',
+                        from_name: this.inquiryForm.name || '(주)후미디어 웹사이트',
+                        company: this.inquiryForm.company || '미입력',
+                        name: this.inquiryForm.name,
+                        email: this.inquiryForm.email || '미입력',
+                        phone: this.inquiryForm.phone,
+                        category: this.inquiryForm.category,
+                        message: this.inquiryForm.message,
+                        created_at: createdAt
+                    })
+                });
+            } catch (web3Err) {
+                console.warn('Web3Forms dispatch fallback:', web3Err);
+            }
+
             // Direct client-side dispatch to FormSubmit API for target email list
             const targetEmails = ['whomedia03@gmail.com', 'james5183@naver.com', 'apark12321@gmail.com'];
             
@@ -378,6 +404,7 @@ document.addEventListener('alpine:init', () => {
                             '기관/회사명': this.inquiryForm.company,
                             '담당자': this.inquiryForm.name,
                             '연락처': this.inquiryForm.phone,
+                            '이메일': this.inquiryForm.email,
                             '문의유형': this.inquiryForm.category,
                             '상세내용': this.inquiryForm.message,
                             '접수시각': createdAt
@@ -390,7 +417,7 @@ document.addEventListener('alpine:init', () => {
 
             this.inquirySuccessMessage = '작성해주신 프로젝트/임대 문의가 담당자에게 성공적으로 접수되었습니다.';
             this.inquirySuccessModal = true;
-            this.inquiryForm = { company: '', name: '', phone: '', category: '', message: '', consent: false };
+            this.inquiryForm = { company: '', name: '', phone: '', email: '', category: '', message: '', consent: false };
             this.inquirySubmitting = false;
         },
         activeServiceIndex: 0,
