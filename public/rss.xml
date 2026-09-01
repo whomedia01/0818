@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" 
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>(주)후미디어 | 이러닝 개발·교육과정 기획·160평 스튜디오</title>
+    <link>https://www.whomedia.co.kr/</link>
+    <description>온·오프라인 교육 콘텐츠 개발 및 160평 자체 스튜디오. 교수설계, 표준 코스웨어, 전자칠판 기반 방송급 영상 제작 원스톱 제공.</description>
+    <language>ko-KR</language>
+    <copyright>Copyright (c) 2009-2026 (주)후미디어 All rights reserved.</copyright>
+    <managingEditor>whomedia03@gmail.com ((주)후미디어)</managingEditor>
+    <webMaster>whomedia03@gmail.com ((주)후미디어)</webMaster>
+    <pubDate>Tue, 01 Sep 2026 00:00:00 +0900</pubDate>
+    <lastBuildDate>Tue, 01 Sep 2026 00:00:00 +0900</lastBuildDate>
+    <docs>https://www.rssboard.org/rss-specification</docs>
+    <generator>WHO MEDIA RSS Generator</generator>
+    <atom:link href="https://www.whomedia.co.kr/rss.xml" rel="self" type="application/rss+xml" />
+
+    <!-- 1. 메인 홈페이지 -->
+    <item>
+      <title>(주)후미디어 공식 웹사이트 - 이러닝 개발 · 교육과정 기획 · 160평 스튜디오</title>
+      <link>https://www.whomedia.co.kr/</link>
+      <description><![CDATA[온·오프라인 교육의 완성을 설계하는 에듀테크 & 미디어 전문 기업 (주)후미디어. 17년 업력의 체계적인 교수설계, 사업주훈련 표준 코스웨어 개발, 160평 자체 스튜디오 및 86인치 UHD 전자칠판 기반 방송급 영상 제작을 원스톱으로 제공합니다.]]></description>
+      <author>whomedia03@gmail.com ((주)후미디어)</author>
+      <guid isPermaLink="true">https://www.whomedia.co.kr/</guid>
+      <pubDate>Tue, 01 Sep 2026 00:00:00 +0900</pubDate>
+    </item>
+
+    <!-- 2. 이러닝 콘텐츠 개발 및 교수설계 솔루션 -->
+    <item>
+      <title>온라인 이러닝 콘텐츠 개발 및 체계적 교수설계 솔루션</title>
+      <link>https://www.whomedia.co.kr/#services</link>
+      <description><![CDATA[공공기관, 대학교, 대기업 맞춤형 ADDIE/SAM 교수설계, 사업주 직업능력개발훈련 SCORM/LMS 표준 코스웨어, 마이크로러닝, K-MOOC 및 AI 디지털 교과서 반응형 웹 이러닝 콘텐츠 기획·제작 서비스.]]></description>
+      <author>whomedia03@gmail.com ((주)후미디어)</author>
+      <guid isPermaLink="true">https://www.whomedia.co.kr/#services</guid>
+      <pubDate>Tue, 01 Sep 2026 00:00:00 +0900</pubDate>
+    </item>
+
+    <!-- 3. 160평 첨단 4K 스튜디오 대관 및 방송 장비 인프라 -->
+    <item>
+      <title>160평 4K 방송급 스튜디오 대관 및 전자칠판·크로마키 촬영</title>
+      <link>https://www.whomedia.co.kr/#studio</link>
+      <description><![CDATA[서울 가산디지털단지 한라시그마밸리 160평 대형 스튜디오. 86인치 4K UHD 터치 전자칠판 세트, 6.6m 대형 곡면 크로마키 세트, 전용 다채널 부조정실, 4K 카메라, 프롬프터, 특수 무반사 방송 조명 완비 대여.]]></description>
+      <author>whomedia03@gmail.com ((주)후미디어)</author>
+      <guid isPermaLink="true">https://www.whomedia.co.kr/#studio</guid>
+      <pubDate>Tue, 01 Sep 2026 00:00:00 +0900</pubDate>
+    </item>
+
+    <!-- 4. 포트폴리오 및 주요 제작 실적 -->
+    <item>
+      <title>(주)후미디어 주요 이러닝 및 영상 포트폴리오 실적</title>
+      <link>https://www.whomedia.co.kr/#reference</link>
+      <description><![CDATA[정부 공공기관, 지자체, 대학교 K-MOOC, 금융 및 대기업 교육과정 등 1,500+ 차시 이상의 이러닝 코스웨어 개발 및 방송 홍보영상 수행 실적 포트폴리오.]]></description>
+      <author>whomedia03@gmail.com ((주)후미디어)</author>
+      <guid isPermaLink="true">https://www.whomedia.co.kr/#reference</guid>
+      <pubDate>Tue, 01 Sep 2026 00:00:00 +0900</pubDate>
+    </item>
+
+    <!-- 5. 견적 및 제작/대관 문의 -->
+    <item>
+      <title>이러닝 제작 · 교육과정 기획 · 스튜디오 대관 견적 문의</title>
+      <link>https://www.whomedia.co.kr/#contact</link>
+      <description><![CDATA[(주)후미디어 프로젝트 견적 문의 및 160평 스튜디오 답사 예약 (서울 금천구 가산디지털2로 53 한라시그마밸리 1102~1104호 / 대표전화: 02-6443-4222).]]></description>
+      <author>whomedia03@gmail.com ((주)후미디어)</author>
+      <guid isPermaLink="true">https://www.whomedia.co.kr/#contact</guid>
+      <pubDate>Tue, 01 Sep 2026 00:00:00 +0900</pubDate>
+    </item>
+  </channel>
+</rss>
