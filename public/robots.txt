@@ -1,5 +1,5 @@
 # Robots.txt for WHO MEDIA ((주)후미디어)
-# https://whomedia.co.kr
+# https://www.whomedia.co.kr
 
 User-agent: *
 Allow: /
@@ -46,4 +46,4 @@ User-agent: cohere-ai
 Allow: /
 
 # Sitemap
-Sitemap: https://whomedia.co.kr/sitemap.xml
+Sitemap: https://www.whomedia.co.kr/sitemap.xml
