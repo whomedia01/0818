@@ -71,7 +71,7 @@ const STUDIO_IMAGES = STUDIO_PHOTO_FILES.map(fileName => getStudioCdnUrl(fileNam
 
 const ORGANIZATION_DATA = [
     { id: 'div-rd', code: 'R&D CENTER', name: '기업부설연구소', desc: 'AI 기반 교육 및 미디어 융합 기술 연구' },
-    { id: 'div-1', code: 'DIVISION 01', name: '콘텐츠미디어본부', desc: '이러닝 교수설계, 맞춤형 콘텐츠 개발, 전문 스튜디오 운영, 멀티캠 제작' },
+    { id: 'div-1', code: 'DIVISION 01', name: '콘텐츠사업본부', desc: '이러닝 교수설계, 맞춤형 콘텐츠 개발, 전문 스튜디오 운영, 멀티캠 제작' },
     { id: 'div-2', code: 'DIVISION 02', name: '교육사업본부', desc: 'AI·직무기술 특화 교육, 한국AI교육일보 발행, 후캠퍼스 평생교육원 운영' },
     { id: 'div-4', code: 'STAFF / SUPPORT', name: '경영지원팀', desc: '경영 기획, 재무, 인사 총괄' }
 ];
