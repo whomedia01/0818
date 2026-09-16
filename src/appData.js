@@ -31,23 +31,11 @@ const GITHUB_BRANCH = 'main';
 const getStudioCdnUrl = (fileName) => `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/img/${encodeURIComponent(fileName)}`;
 const getGithubRawUrl = (fileName) => `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/img/${encodeURIComponent(fileName)}`;
 
-// https://github.com/whomedia01/who-new809/tree/main/img 폴더 내 실제 이미지 파일 32종 전수 매핑
-const STUDIO_PHOTO_FILES = [
-    'DSCF0043.JPG',
-    'DSCF0045.JPG',
-    'DSCF0046.JPG',
-    'DSCF0048.JPG',
-    'DSCF0049.JPG',
-    'DSCF0050.JPG',
+// 그린 크로마키 이미지 전수 배제 블랙리스트 (사용자 요청: 그린 크로마키 전수 완전 삭제)
+const EXCLUDED_CHROMAKEY_FILES = new Set([
     'DSCF0058.JPG',
     'DSCF0060.JPG',
     'DSCF0090.JPG',
-    'DSCF0100.JPG',
-    'DSCF0103.JPG',
-    'DSCF0104.JPG',
-    'DSCF0105.JPG',
-    'DSCF0106.JPG',
-    'DSCF0107.JPG',
     'DSCF0129.JPG',
     'DSCF0142.JPG',
     'DSCF0169.JPG',
@@ -55,19 +43,86 @@ const STUDIO_PHOTO_FILES = [
     'DSCF0183.JPG',
     'DSCF0191.JPG',
     'DSCF0196.JPG',
-    'DSCF0219.JPG',
     'DSCF0233.JPG',
     'DSCF0240.JPG',
     'DSCF0254.JPG',
     'DSCF0257.JPG',
-    'KakaoTalk_20240124_151422660_01.jpg',
     'KakaoTalk_20240125_151732483_01.jpg',
     'KakaoTalk_20240126_151923014_05.jpg',
     'KakaoTalk_20240523_150928871.jpg',
-    'KakaoTalk_20240523_150928871_02.jpg'
+    'KakaoTalk_20240523_150928871_02.jpg',
+    'studio_chromakey.svg',
+    'studio_white_horizont.svg'
+]);
+
+// 후미디어 전문 스튜디오 검증된 클린 실사 이미지 (화이트 호리존트, 전자칠판, 부조정실, 전문 장비)
+const STUDIO_PHOTO_FILES = [
+    'KakaoTalk_20240124_151422660_01.jpg',
+    'KakaoTalk_20260917_003738719_01.jpg',
+    'KakaoTalk_20260917_003738719_04.jpg',
+    'KakaoTalk_20260917_003738719_06.jpg',
+    'KakaoTalk_20260917_003738719_07.jpg',
+    'DSCF0043.JPG',
+    'DSCF0045.JPG',
+    'DSCF0046.JPG',
+    'DSCF0048.JPG',
+    'DSCF0049.JPG',
+    'DSCF0050.JPG',
+    'DSCF0057.JPG',
+    'DSCF0100.JPG',
+    'DSCF0103.JPG',
+    'DSCF0104.JPG',
+    'DSCF0105.JPG',
+    'DSCF0106.JPG',
+    'DSCF0107.JPG',
+    'DSCF0219.JPG'
 ];
 
-const STUDIO_IMAGES = STUDIO_PHOTO_FILES.map(fileName => getStudioCdnUrl(fileName));
+const STUDIO_PHOTO_TITLES = {
+    'KakaoTalk_20240124_151422660_01.jpg': '후미디어 대형 무이음 화이트 호리존트 세트',
+    'KakaoTalk_20260917_003738719_01.jpg': '후미디어 대형 화이트 호리존트 와이드 전경',
+    'KakaoTalk_20260917_003738719_04.jpg': '화이트 호리존트 특수 조명 & 멀티 앵글 세팅',
+    'KakaoTalk_20260917_003738719_06.jpg': '무이음 화이트 호리존트 인터랙티브 연출 환경',
+    'KakaoTalk_20260917_003738719_07.jpg': '화이트 호리존트 4K 멀티캠 촬영 시스템',
+    'DSCF0043.JPG': '후미디어 부조정실 메인 콘솔 시스템',
+    'DSCF0045.JPG': '스튜디오 실시간 모니터링 디스플레이',
+    'DSCF0046.JPG': '전자칠판 및 방송 제작 데스크',
+    'DSCF0048.JPG': '전문 스튜디오 종합 영상 제작 환경',
+    'DSCF0049.JPG': '라이브 스트리밍 및 영상 송출 제어실',
+    'DSCF0050.JPG': '부조정실 멀티뷰 모니터링 시스템',
+    'DSCF0057.JPG': '후미디어 스튜디오 촬영 입구 전경',
+    'DSCF0100.JPG': '후미디어 스튜디오 종합 제작 환경',
+    'DSCF0103.JPG': '스마트 전자칠판 전용 스튜디오 세트',
+    'DSCF0104.JPG': '전자칠판 인터랙티브 강의 촬영 세트',
+    'DSCF0105.JPG': '이러닝 및 멀티미디어 강의 녹화 시스템',
+    'DSCF0106.JPG': '프리미엄 강의 제작 전용 스튜디오',
+    'DSCF0107.JPG': '화이트 스튜디오 강의 및 촬영 전경',
+    'DSCF0219.JPG': '스튜디오 방송용 카메라 및 전문 조명 세팅'
+};
+
+const STUDIO_IMAGE_DETAILS = {
+    'KakaoTalk_20240124_151422660_01.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '무이음 대형 호리존 · 4K 멀티캠 촬영 · 균일 확산 조명' },
+    'KakaoTalk_20260917_003738719_01.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '대형 와이드 화이트 호리존 세트 전경 · 특수 탑라이트' },
+    'KakaoTalk_20260917_003738719_04.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '무이음 곡면 라운드 처리 · 정밀 캘리브레이션 조명' },
+    'KakaoTalk_20260917_003738719_06.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '인터랙티브 모션 & 멀티 앵글 실시간 촬영 환경' },
+    'KakaoTalk_20260917_003738719_07.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '4K UHD 고해상도 시네마 카메라 & 소프트박스 조명' },
+    'DSCF0103.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '86인치 4K UHD 전자 판서 모니터 · 이러닝 특화' },
+    'DSCF0104.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '인터랙티브 교수설계 강의 녹화 및 라이브 솔루션' },
+    'DSCF0105.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '고감도 터치 센서 & 실시간 판서 녹화 시스템' },
+    'DSCF0106.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '프리미엄 강의 제작 전용 독립 방음 스튜디오' },
+    'DSCF0043.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: 'Blackmagic ATEM 다채널 스위쳐 & 오디오 믹싱 콘솔' },
+    'DSCF0045.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: '실시간 멀티뷰 모니터링 & 레코딩 스테이션' },
+    'DSCF0046.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: '방송 송출 엔지니어링 데스크 & 실시간 인터콤' },
+    'DSCF0048.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: 'UHD 고화질 실시간 인코딩 및 마스터링 시스템' },
+    'DSCF0049.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: '원격 라이브 스트리밍 및 다중 플랫폼 동시 송출' },
+    'DSCF0050.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: '부조정실 전문 마스터 모니터링 환경' },
+    'DSCF0057.JPG': { category: 'large_studio', categoryName: '대형 스튜디오', spec: '160평 규모 복합 이러닝 제작 센터 메인 엔트런스' },
+    'DSCF0100.JPG': { category: 'large_studio', categoryName: '대형 스튜디오', spec: '6개 전용 스튜디오 인프라 & 종합 방송 연출 공간' },
+    'DSCF0107.JPG': { category: 'large_studio', categoryName: '대형 스튜디오', spec: '화이트 스튜디오 연출 공간 및 다목적 촬영 세트' },
+    'DSCF0219.JPG': { category: 'large_studio', categoryName: '대형 스튜디오', spec: '방송용 전문 카메라 리그 & 천장 조명 바텐 시스템' }
+};
+
+const STUDIO_IMAGES = STUDIO_PHOTO_FILES.map(fileName => `/img/studio/${fileName}`);
 
 const ORGANIZATION_DATA = [
     { id: 'div-rd', code: 'R&D CENTER', name: '기업부설연구소', desc: 'AI 기반 교육 및 미디어 융합 기술 연구' },
@@ -184,7 +239,7 @@ document.addEventListener('alpine:init', () => {
                 // 키워드별 맥락 보강
                 if (/이러닝|교육|강의|교재|교수설계|학습|수업|학교|대학/i.test(clean)) {
                     refinedQuery = `(주)후미디어 "${clean}" 이러닝 콘텐츠 개발`;
-                } else if (/영상|촬영|스튜디오|크로마키|카메라|편집|모션|그래픽|홍보/i.test(clean)) {
+                } else if (/영상|촬영|스튜디오|크로마키|호리존|호리존트|화이트호리존트|카메라|편집|모션|그래픽|홍보/i.test(clean)) {
                     refinedQuery = `후미디어 "${clean}" 영상 제작 스튜디오`;
                 } else if (/ebs|능률|동아|웅진|천재|신사고|미래엔/i.test(clean)) {
                     refinedQuery = `후미디어 "${clean}" 제작 실적 포트폴리오`;
@@ -472,15 +527,15 @@ document.addEventListener('alpine:init', () => {
         studioTouchStartX: 0,
         studioTouchEndX: 0,
 
-        // https://github.com/whomedia01/who-new809/tree/main/img 내 실제 파일 32종으로만 100% 구성
+        // 후미디어 전문 스튜디오 인프라 (화이트 호리존트 실사 + 검증된 스튜디오 전경 15종 전수 매핑)
         studioInfrastructure: STUDIO_PHOTO_FILES.map((fileName, idx) => ({
             id: `studio_img_${idx + 1}`,
             index: idx + 1,
-            title: `후미디어 전문 스튜디오 전경 #${String(idx + 1).padStart(2, '0')}`,
+            title: STUDIO_PHOTO_TITLES[fileName] || `후미디어 전문 스튜디오 전경 #${String(idx + 1).padStart(2, '0')}`,
             fileName: fileName,
-            imageUrl: getStudioCdnUrl(fileName),
+            imageUrl: `/img/studio/${fileName}`,
             rawUrl: getGithubRawUrl(fileName),
-            thumbUrl: getStudioCdnUrl(fileName)
+            thumbUrl: `/img/studio/${fileName}`
         })),
 
         startStudioAutoPlay() {
@@ -521,17 +576,23 @@ document.addEventListener('alpine:init', () => {
         },
         async loadStudioImagesFromGithub() {
             try {
-                // 1. Try server-side cached endpoint first
+                // 1. 서버 사이드 캐시 및 클린 필터링 API 우선 호출
                 const res = await fetch('/api/studio-images');
                 if (res.ok) {
                     const data = await res.json();
                     if (data.success && Array.isArray(data.images) && data.images.length > 0) {
-                        this.studioInfrastructure = data.images;
-                        this.studioImagesList = data.images.map(img => img.imageUrl);
-                        if (this.activeStudioIndex >= this.studioInfrastructure.length) {
-                            this.activeStudioIndex = 0;
+                        const clean = data.images.filter(img => 
+                            !EXCLUDED_CHROMAKEY_FILES.has(img.fileName) && 
+                            !/chroma|green/i.test(img.fileName)
+                        );
+                        if (clean.length > 0) {
+                            this.studioInfrastructure = clean;
+                            this.studioImagesList = clean.map(img => img.imageUrl);
+                            if (this.activeStudioIndex >= this.studioInfrastructure.length) {
+                                this.activeStudioIndex = 0;
+                            }
+                            return;
                         }
-                        return;
                     }
                 }
             } catch (e) {
@@ -539,7 +600,7 @@ document.addEventListener('alpine:init', () => {
             }
 
             try {
-                // 2. Direct GitHub API fallback
+                // 2. GitHub API 직접 연동 시에도 그린 크로마키 엄격 배제
                 const ghRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/img?ref=${GITHUB_BRANCH}`, {
                     headers: { 'Accept': 'application/vnd.github.v3+json' }
                 });
@@ -547,17 +608,22 @@ document.addEventListener('alpine:init', () => {
                     const ghData = await ghRes.json();
                     if (Array.isArray(ghData)) {
                         const imageExts = /\.(jpe?g|png|webp|svg|gif|avif)$/i;
-                        const liveImages = ghData
-                            .filter(item => item.type === 'file' && imageExts.test(item.name))
-                            .map((item, idx) => ({
-                                id: `studio_img_${idx + 1}`,
-                                index: idx + 1,
-                                title: `후미디어 전문 스튜디오 전경 #${String(idx + 1).padStart(2, '0')}`,
-                                fileName: item.name,
-                                imageUrl: getStudioCdnUrl(item.name),
-                                rawUrl: item.download_url || getGithubRawUrl(item.name),
-                                thumbUrl: getStudioCdnUrl(item.name)
-                            }));
+                        const safeFiles = ghData.filter(item => 
+                            item.type === 'file' && 
+                            imageExts.test(item.name) &&
+                            !EXCLUDED_CHROMAKEY_FILES.has(item.name) &&
+                            !/chroma|green/i.test(item.name)
+                        );
+
+                        const liveImages = safeFiles.map((item, idx) => ({
+                            id: `studio_img_${idx + 1}`,
+                            index: idx + 1,
+                            title: STUDIO_PHOTO_TITLES[item.name] || `후미디어 전문 스튜디오 전경 #${String(idx + 1).padStart(2, '0')}`,
+                            fileName: item.name,
+                            imageUrl: `/img/studio/${item.name}`,
+                            rawUrl: item.download_url || getGithubRawUrl(item.name),
+                            thumbUrl: `/img/studio/${item.name}`
+                        }));
 
                         if (liveImages.length > 0) {
                             this.studioInfrastructure = liveImages;
@@ -638,7 +704,8 @@ function extractAndApplyDynamicSeoMetaKeywords() {
             { term: '기업 홍보영상', weight: 9 },
             { term: '160평 전문 스튜디오', weight: 10 },
             { term: '전자칠판 강의 스튜디오', weight: 10 },
-            { term: '대형 곡면 크로마키', weight: 10 },
+            { term: '대형 화이트 호리존트', weight: 10 },
+            { term: '화이트 호리존트 스튜디오', weight: 10 },
             { term: '부조정실 스튜디오 대여', weight: 9 },
             { term: '후캠퍼스 평생교육원', weight: 9 },
             { term: '한국AI교육일보', weight: 9 },

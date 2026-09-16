@@ -29,12 +29,144 @@ async function startServer() {
   app.use(express.json());
   app.use(express.static(path.join(process.cwd(), "public")));
 
+  // Explicitly excluded chromakey files per user mandate
+  const EXCLUDED_CHROMAKEY_FILES = new Set([
+    'DSCF0058.JPG',
+    'DSCF0060.JPG',
+    'DSCF0090.JPG',
+    'DSCF0129.JPG',
+    'DSCF0142.JPG',
+    'DSCF0169.JPG',
+    'DSCF0173.JPG',
+    'DSCF0183.JPG',
+    'DSCF0191.JPG',
+    'DSCF0196.JPG',
+    'DSCF0233.JPG',
+    'DSCF0240.JPG',
+    'DSCF0254.JPG',
+    'DSCF0257.JPG',
+    'KakaoTalk_20240125_151732483_01.jpg',
+    'KakaoTalk_20240126_151923014_05.jpg',
+    'KakaoTalk_20240523_150928871.jpg',
+    'KakaoTalk_20240523_150928871_02.jpg',
+    'studio_chromakey.svg',
+    'studio_white_horizont.svg'
+  ]);
+
+  // Verified authentic studio facility photos (White Horizont, Electronic Blackboard, Control Room, Equipment)
+  const VERIFIED_CLEAN_STUDIO_METADATA: Record<string, string> = {
+    'KakaoTalk_20260917_003738719.jpg': '후미디어 대형 화이트 호리존트 와이드 전경',
+    'KakaoTalk_20260917_003738719_01.jpg': '후미디어 대형 화이트 호리존트 와이드 전경',
+    'KakaoTalk_20260917_003738719_04.jpg': '화이트 호리존트 특수 조명 & 멀티 앵글 세팅',
+    'KakaoTalk_20260917_003738719_06.jpg': '무이음 화이트 호리존트 인터랙티브 연출 환경',
+    'KakaoTalk_20260917_003738719_07.jpg': '화이트 호리존트 4K 멀티캠 촬영 시스템',
+    'KakaoTalk_20240124_151422660_01.jpg': '후미디어 대형 무이음 화이트 호리존트 세트',
+    'DSCF0043.JPG': '후미디어 부조정실 메인 콘솔 시스템',
+    'DSCF0045.JPG': '스튜디오 실시간 모니터링 디스플레이',
+    'DSCF0046.JPG': '전자칠판 및 방송 제작 데스크',
+    'DSCF0048.JPG': '전문 스튜디오 종합 영상 제작 환경',
+    'DSCF0049.JPG': '라이브 스트리밍 및 영상 송출 제어실',
+    'DSCF0050.JPG': '부조정실 멀티뷰 모니터링 시스템',
+    'DSCF0057.JPG': '후미디어 스튜디오 촬영 입구 전경',
+    'DSCF0100.JPG': '후미디어 스튜디오 종합 제작 환경',
+    'DSCF0103.JPG': '스마트 전자칠판 전용 스튜디오 세트',
+    'DSCF0104.JPG': '전자칠판 인터랙티브 강의 촬영 세트',
+    'DSCF0105.JPG': '이러닝 및 멀티미디어 강의 녹화 시스템',
+    'DSCF0106.JPG': '프리미엄 강의 제작 전용 스튜디오',
+    'DSCF0107.JPG': '화이트 스튜디오 강의 및 촬영 전경',
+    'DSCF0219.JPG': '스튜디오 방송용 카메라 및 전문 조명 세팅'
+  };
+
+  const DEFAULT_CLEAN_STUDIO_ORDER = [
+    'KakaoTalk_20260917_003738719.jpg',
+    'KakaoTalk_20260917_003738719_04.jpg',
+    'KakaoTalk_20260917_003738719_06.jpg',
+    'KakaoTalk_20260917_003738719_07.jpg',
+    'KakaoTalk_20240124_151422660_01.jpg',
+    'DSCF0043.JPG',
+    'DSCF0045.JPG',
+    'DSCF0046.JPG',
+    'DSCF0048.JPG',
+    'DSCF0049.JPG',
+    'DSCF0050.JPG',
+    'DSCF0057.JPG',
+    'DSCF0100.JPG',
+    'DSCF0103.JPG',
+    'DSCF0104.JPG',
+    'DSCF0105.JPG',
+    'DSCF0106.JPG',
+    'DSCF0107.JPG',
+    'DSCF0219.JPG'
+  ];
+
+  const STUDIO_IMAGE_DETAILS: Record<string, { category: string; categoryName: string; spec: string }> = {
+    'KakaoTalk_20260917_003738719.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '대형 와이드 화이트 호리존 세트 전경 · 특수 탑라이트' },
+    'KakaoTalk_20260917_003738719_01.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '대형 와이드 화이트 호리존 세트 전경 · 특수 탑라이트' },
+    'KakaoTalk_20260917_003738719_04.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '무이음 곡면 라운드 처리 · 정밀 캘리브레이션 조명' },
+    'KakaoTalk_20260917_003738719_06.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '인터랙티브 모션 & 멀티 앵글 실시간 촬영 환경' },
+    'KakaoTalk_20260917_003738719_07.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '4K UHD 고해상도 시네마 카메라 & 소프트박스 조명' },
+    'KakaoTalk_20240124_151422660_01.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '무이음 대형 호리존 · 4K 멀티캠 촬영 · 균일 확산 조명' },
+    'DSCF0103.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '86인치 4K UHD 전자 판서 모니터 · 이러닝 특화' },
+    'DSCF0104.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '인터랙티브 교수설계 강의 녹화 및 라이브 솔루션' },
+    'DSCF0105.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '고감도 터치 센서 & 실시간 판서 녹화 시스템' },
+    'DSCF0106.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '프리미엄 강의 제작 전용 독립 방음 스튜디오' },
+    'DSCF0043.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: 'Blackmagic ATEM 다채널 스위쳐 & 오디오 믹싱 콘솔' },
+    'DSCF0045.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: '실시간 멀티뷰 모니터링 & 레코딩 스테이션' },
+    'DSCF0046.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: '방송 송출 엔지니어링 데스크 & 실시간 인터콤' },
+    'DSCF0048.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: 'UHD 고화질 실시간 인코딩 및 마스터링 시스템' },
+    'DSCF0049.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: '원격 라이브 스트리밍 및 다중 플랫폼 동시 송출' },
+    'DSCF0050.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: '부조정실 전문 마스터 모니터링 환경' },
+    'DSCF0057.JPG': { category: 'large_studio', categoryName: '대형 스튜디오', spec: '160평 규모 복합 이러닝 제작 센터 메인 엔트런스' },
+    'DSCF0100.JPG': { category: 'large_studio', categoryName: '대형 스튜디오', spec: '6개 전용 스튜디오 인프라 & 종합 방송 연출 공간' },
+    'DSCF0107.JPG': { category: 'large_studio', categoryName: '대형 스튜디오', spec: '화이트 스튜디오 연출 공간 및 다목적 촬영 세트' },
+    'DSCF0219.JPG': { category: 'large_studio', categoryName: '대형 스튜디오', spec: '방송용 전문 카메라 리그 & 천장 조명 바텐 시스템' }
+  };
+
+  function buildCleanStudioList(githubFiles?: any[]): any[] {
+    const list: any[] = [];
+    const localDir = path.join(process.cwd(), 'public', 'img', 'studio');
+
+    // Use default clean order
+    DEFAULT_CLEAN_STUDIO_ORDER.forEach((fileName, idx) => {
+      const ghItem = githubFiles?.find(f => f.name === fileName);
+      const title = VERIFIED_CLEAN_STUDIO_METADATA[fileName] || `후미디어 전문 스튜디오 전경 #${String(idx + 1).padStart(2, '0')}`;
+      const details = STUDIO_IMAGE_DETAILS[fileName] || {
+        category: 'large_studio',
+        categoryName: '스튜디오 전경',
+        spec: '160평 규모 최첨단 스튜디오 시설'
+      };
+      const localExists = fs.existsSync(path.join(localDir, fileName));
+      const localUrl = `/img/studio/${fileName}`;
+      const raw = ghItem?.download_url || `https://raw.githubusercontent.com/whomedia01/who-new809/main/img/${encodeURIComponent(fileName)}`;
+      const cdnUrl = `https://cdn.jsdelivr.net/gh/whomedia01/who-new809@main/img/${encodeURIComponent(fileName)}`;
+      const primaryUrl = localExists ? localUrl : cdnUrl;
+
+      list.push({
+        id: `studio_img_${idx + 1}`,
+        index: idx + 1,
+        title,
+        fileName,
+        category: details.category,
+        categoryName: details.categoryName,
+        spec: details.spec,
+        imageUrl: primaryUrl,
+        rawUrl: raw,
+        cdnUrl,
+        thumbUrl: primaryUrl,
+        size: ghItem?.size || 400000,
+        sha: ghItem?.sha || ''
+      });
+    });
+
+    return list;
+  }
+
   // Cached studio images store
   let studioImagesCache: any[] = [];
   let studioCacheTimestamp = 0;
   const CACHE_TTL_MS = 30 * 1000; // 30 seconds cache for instant GitHub reflection
 
-  // Dynamic GitHub image sync API for whomedia01/who-new809/img
+  // Dynamic GitHub image sync API for whomedia01/who-new809/img (Strict Chromakey Filtered)
   app.get("/api/studio-images", async (_req, res) => {
     const now = Date.now();
     if (studioImagesCache.length > 0 && now - studioCacheTimestamp < CACHE_TTL_MS) {
@@ -49,42 +181,33 @@ async function startServer() {
         }
       });
 
-      if (!response.ok) {
-        throw new Error(`GitHub API returned status ${response.status}`);
-      }
+      if (response.ok) {
+        const contents = await response.json();
+        if (Array.isArray(contents)) {
+          // Strictly filter out any chromakey or excluded files
+          const safeGithubFiles = contents.filter((item: any) => 
+            item.type === "file" && 
+            !EXCLUDED_CHROMAKEY_FILES.has(item.name) &&
+            !/chroma|green/i.test(item.name)
+          );
 
-      const contents = await response.json();
-      if (Array.isArray(contents)) {
-        const imageExtensions = /\.(jpe?g|png|webp|svg|gif|avif)$/i;
-        const filteredImages = contents
-          .filter((item: any) => item.type === "file" && imageExtensions.test(item.name))
-          .map((item: any, idx: number) => {
-            const raw = item.download_url || `https://raw.githubusercontent.com/whomedia01/who-new809/main/img/${encodeURIComponent(item.name)}`;
-            return {
-              id: `studio_img_${idx + 1}`,
-              index: idx + 1,
-              title: `후미디어 전문 스튜디오 전경 #${String(idx + 1).padStart(2, '0')}`,
-              fileName: item.name,
-              imageUrl: raw,
-              rawUrl: raw,
-              thumbUrl: raw,
-              size: item.size,
-              sha: item.sha
-            };
-          });
-
-        if (filteredImages.length > 0) {
-          studioImagesCache = filteredImages;
-          studioCacheTimestamp = now;
-          return res.json({ success: true, count: filteredImages.length, images: filteredImages, source: 'github_live' });
+          const allImages = buildCleanStudioList(safeGithubFiles);
+          if (allImages.length > 0) {
+            studioImagesCache = allImages;
+            studioCacheTimestamp = now;
+            return res.json({ success: true, count: allImages.length, images: allImages, source: 'github_live' });
+          }
         }
       }
     } catch (err: any) {
       console.warn("Dynamic studio images fetch warning:", err?.message || err);
     }
 
-    // Return current cached or empty list if rate limited
-    return res.json({ success: true, count: studioImagesCache.length, images: studioImagesCache, source: 'fallback' });
+    // Default clean list fallback
+    const fallbackList = buildCleanStudioList();
+    studioImagesCache = fallbackList;
+    studioCacheTimestamp = now;
+    return res.json({ success: true, count: fallbackList.length, images: fallbackList, source: 'clean_local' });
   });
 
   // ==========================================
@@ -119,6 +242,38 @@ async function startServer() {
         category: newInquiry.category,
         time: newInquiry.formattedDate
       });
+
+      // Background ntfy.sh push notification backup
+      try {
+        const clientLabel = newInquiry.company ? `${newInquiry.name} (${newInquiry.company})` : newInquiry.name;
+        const ntfyBody = [
+          `[고객명/회사명] ${clientLabel}`,
+          `[연락처] ${newInquiry.phone}`,
+          `[관심 분야] ${newInquiry.category}`,
+          `[이메일] ${newInquiry.email || '미입력'}`,
+          ``,
+          `[문의 내용]`,
+          newInquiry.message,
+          ``,
+          `접수일시: ${newInquiry.formattedDate}`
+        ].join('\n');
+
+        const encodedTitle = '=?UTF-8?B?' + Buffer.from('[후미디어 신규 문의 접수]').toString('base64') + '?=';
+
+        fetch('https://ntfy.sh/whomedia_inquiry_alert_2026', {
+          method: 'POST',
+          headers: {
+            'Title': encodedTitle,
+            'Priority': 'urgent',
+            'Tags': 'bell,incoming_envelope'
+          },
+          body: ntfyBody
+        }).catch((err) => {
+          console.warn('[ntfy server forward notice]', err);
+        });
+      } catch (pushErr) {
+        console.warn('[ntfy push forward error]', pushErr);
+      }
 
       return res.status(201).json({
         success: true,
