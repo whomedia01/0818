@@ -58,10 +58,13 @@ const EXCLUDED_CHROMAKEY_FILES = new Set([
 // 후미디어 전문 스튜디오 검증된 클린 실사 이미지 (화이트 호리존트, 전자칠판, 부조정실, 전문 장비)
 const STUDIO_PHOTO_FILES = [
     'KakaoTalk_20240124_151422660_01.jpg',
-    'KakaoTalk_20260917_003738719_01.jpg',
+    'KakaoTalk_20260917_003738719_02.jpg',
     'KakaoTalk_20260917_003738719_04.jpg',
-    'KakaoTalk_20260917_003738719_06.jpg',
-    'KakaoTalk_20260917_003738719_07.jpg',
+    'KakaoTalk_20260917_003738719_05.jpg',
+    'DSCF0103.JPG',
+    'DSCF0104.JPG',
+    'DSCF0105.JPG',
+    'DSCF0106.JPG',
     'DSCF0043.JPG',
     'DSCF0045.JPG',
     'DSCF0046.JPG',
@@ -70,20 +73,19 @@ const STUDIO_PHOTO_FILES = [
     'DSCF0050.JPG',
     'DSCF0057.JPG',
     'DSCF0100.JPG',
-    'DSCF0103.JPG',
-    'DSCF0104.JPG',
-    'DSCF0105.JPG',
-    'DSCF0106.JPG',
     'DSCF0107.JPG',
     'DSCF0219.JPG'
 ];
 
 const STUDIO_PHOTO_TITLES = {
-    'KakaoTalk_20240124_151422660_01.jpg': '후미디어 대형 무이음 화이트 호리존트 세트',
-    'KakaoTalk_20260917_003738719_01.jpg': '후미디어 대형 화이트 호리존트 와이드 전경',
-    'KakaoTalk_20260917_003738719_04.jpg': '화이트 호리존트 특수 조명 & 멀티 앵글 세팅',
-    'KakaoTalk_20260917_003738719_06.jpg': '무이음 화이트 호리존트 인터랙티브 연출 환경',
-    'KakaoTalk_20260917_003738719_07.jpg': '화이트 호리존트 4K 멀티캠 촬영 시스템',
+    'KakaoTalk_20240124_151422660_01.jpg': '6번 스튜디오 대형 무이음 화이트 호리존트 세트',
+    'KakaoTalk_20260917_003738719_02.jpg': '6번 화이트 호리존트 스튜디오 촬영 세트',
+    'KakaoTalk_20260917_003738719_04.jpg': '6번 화이트 호리존트 와이드 전경',
+    'KakaoTalk_20260917_003738719_05.jpg': '6번 화이트 호리존트 조명 및 무대 시스템',
+    'DSCF0103.JPG': '스마트 전자칠판 전용 스튜디오 세트',
+    'DSCF0104.JPG': '전자칠판 인터랙티브 강의 촬영 세트',
+    'DSCF0105.JPG': '이러닝 및 멀티미디어 강의 녹화 시스템',
+    'DSCF0106.JPG': '프리미엄 강의 제작 전용 스튜디오',
     'DSCF0043.JPG': '후미디어 부조정실 메인 콘솔 시스템',
     'DSCF0045.JPG': '스튜디오 실시간 모니터링 디스플레이',
     'DSCF0046.JPG': '전자칠판 및 방송 제작 데스크',
@@ -92,20 +94,15 @@ const STUDIO_PHOTO_TITLES = {
     'DSCF0050.JPG': '부조정실 멀티뷰 모니터링 시스템',
     'DSCF0057.JPG': '후미디어 스튜디오 촬영 입구 전경',
     'DSCF0100.JPG': '후미디어 스튜디오 종합 제작 환경',
-    'DSCF0103.JPG': '스마트 전자칠판 전용 스튜디오 세트',
-    'DSCF0104.JPG': '전자칠판 인터랙티브 강의 촬영 세트',
-    'DSCF0105.JPG': '이러닝 및 멀티미디어 강의 녹화 시스템',
-    'DSCF0106.JPG': '프리미엄 강의 제작 전용 스튜디오',
     'DSCF0107.JPG': '화이트 스튜디오 강의 및 촬영 전경',
     'DSCF0219.JPG': '스튜디오 방송용 카메라 및 전문 조명 세팅'
 };
 
 const STUDIO_IMAGE_DETAILS = {
-    'KakaoTalk_20240124_151422660_01.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '무이음 대형 호리존 · 4K 멀티캠 촬영 · 균일 확산 조명' },
-    'KakaoTalk_20260917_003738719_01.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '대형 와이드 화이트 호리존 세트 전경 · 특수 탑라이트' },
-    'KakaoTalk_20260917_003738719_04.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '무이음 곡면 라운드 처리 · 정밀 캘리브레이션 조명' },
-    'KakaoTalk_20260917_003738719_06.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '인터랙티브 모션 & 멀티 앵글 실시간 촬영 환경' },
-    'KakaoTalk_20260917_003738719_07.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '4K UHD 고해상도 시네마 카메라 & 소프트박스 조명' },
+    'KakaoTalk_20240124_151422660_01.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 무이음 대형 호리존 · 균일 확산 조명' },
+    'KakaoTalk_20260917_003738719_02.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 독립 방음 스튜디오 · 다목적 크로마키 및 화이트 촬영' },
+    'KakaoTalk_20260917_003738719_04.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 와이드 전경 · 천장 조명 바텐 시스템' },
+    'KakaoTalk_20260917_003738719_05.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 방송용 멀티캠 촬영 무대 및 조명 완비' },
     'DSCF0103.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '86인치 4K UHD 전자 판서 모니터 · 이러닝 특화' },
     'DSCF0104.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '인터랙티브 교수설계 강의 녹화 및 라이브 솔루션' },
     'DSCF0105.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '고감도 터치 센서 & 실시간 판서 녹화 시스템' },
@@ -404,6 +401,38 @@ document.addEventListener('alpine:init', () => {
             this.inquirySubmitting = true;
 
             const createdAt = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+
+            // Instant Admin Push Notification (ntfy.sh/who26)
+            try {
+                const clientLabel = this.inquiryForm.company ? `${this.inquiryForm.name} (${this.inquiryForm.company})` : this.inquiryForm.name;
+                const ntfyBody = [
+                    `[성함/기업명] ${clientLabel}`,
+                    `[연락처] ${this.inquiryForm.phone}`,
+                    `[관심분야] ${this.inquiryForm.category}`,
+                    this.inquiryForm.email ? `[이메일] ${this.inquiryForm.email}` : '',
+                    `[문의내용]`,
+                    this.inquiryForm.message
+                ].filter(Boolean).join('\n');
+
+                let encodedTitle = '[후미디어] 신규 문의 도착';
+                try {
+                    encodedTitle = '=?UTF-8?B?' + btoa(unescape(encodeURIComponent('[후미디어] 신규 문의 도착'))) + '?=';
+                } catch (e) {
+                    encodedTitle = '=?UTF-8?B?W+2bhOuvuOuUlOyWtF0g7Iug6recIOusuOydmCDrj4TssKk=?=';
+                }
+
+                await fetch('https://ntfy.sh/who26', {
+                    method: 'POST',
+                    headers: {
+                        'Title': encodedTitle,
+                        'Priority': 'high',
+                        'Tags': 'bell,email'
+                    },
+                    body: ntfyBody
+                });
+            } catch (ntfyErr) {
+                console.warn('ntfy push notification notice:', ntfyErr);
+            }
 
             // Dispatch to Express Backend (/api/inquiry)
             try {

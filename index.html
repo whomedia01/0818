@@ -1399,11 +1399,11 @@
 
         // 후미디어 전문 스튜디오 검증된 클린 실사 이미지 (화이트 호리존트, 전자칠판, 부조정실, 전문 장비)
         const STUDIO_PHOTO_FILES = [
-            'KakaoTalk_20260917_003738719.jpg',
-            'KakaoTalk_20260917_003738719_04.jpg',
-            'KakaoTalk_20260917_003738719_06.jpg',
-            'KakaoTalk_20260917_003738719_07.jpg',
             'KakaoTalk_20240124_151422660_01.jpg',
+            'DSCF0103.JPG',
+            'DSCF0104.JPG',
+            'DSCF0105.JPG',
+            'DSCF0106.JPG',
             'DSCF0043.JPG',
             'DSCF0045.JPG',
             'DSCF0046.JPG',
@@ -1412,20 +1412,11 @@
             'DSCF0050.JPG',
             'DSCF0057.JPG',
             'DSCF0100.JPG',
-            'DSCF0103.JPG',
-            'DSCF0104.JPG',
-            'DSCF0105.JPG',
-            'DSCF0106.JPG',
             'DSCF0107.JPG',
             'DSCF0219.JPG'
         ];
 
         const STUDIO_PHOTO_TITLES = {
-            'KakaoTalk_20260917_003738719.jpg': '6번 스튜디오 대형 화이트 호리존트 와이드 전경',
-            'KakaoTalk_20260917_003738719_01.jpg': '6번 스튜디오 대형 화이트 호리존트 와이드 전경',
-            'KakaoTalk_20260917_003738719_04.jpg': '6번 스튜디오 화이트 호리존트 특수 조명 & 멀티 앵글',
-            'KakaoTalk_20260917_003738719_06.jpg': '6번 스튜디오 무이음 화이트 호리존트 인터랙티브 세팅',
-            'KakaoTalk_20260917_003738719_07.jpg': '6번 스튜디오 화이트 호리존트 4K 멀티캠 시스템',
             'KakaoTalk_20240124_151422660_01.jpg': '6번 스튜디오 대형 무이음 화이트 호리존트 세트',
             'DSCF0043.JPG': '후미디어 부조정실 메인 콘솔 시스템',
             'DSCF0045.JPG': '스튜디오 실시간 모니터링 디스플레이',
@@ -1444,11 +1435,6 @@
         };
 
         const STUDIO_IMAGE_DETAILS = {
-            'KakaoTalk_20260917_003738719.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 와이드 전경 · 특수 탑라이트' },
-            'KakaoTalk_20260917_003738719_01.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 와이드 전경 · 특수 탑라이트' },
-            'KakaoTalk_20260917_003738719_04.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 무이음 곡면 라운드 · 정밀 캘리브레이션 조명' },
-            'KakaoTalk_20260917_003738719_06.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 인터랙티브 모션 & 멀티 앵글 실시간 촬영' },
-            'KakaoTalk_20260917_003738719_07.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 4K UHD 시네마 카메라 & 소프트박스' },
             'KakaoTalk_20240124_151422660_01.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 무이음 대형 호리존 · 균일 확산 조명' },
             'DSCF0103.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '86인치 4K UHD 전자 판서 모니터 · 이러닝 특화' },
             'DSCF0104.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '인터랙티브 교수설계 강의 녹화 및 라이브 솔루션' },
@@ -2272,44 +2258,44 @@
                     }
 
                     this.inquirySubmitting = true;
+                    this.inquirySuccessMessage = '';
+                    this.inquiryStatusMessage = '';
 
                     const companyStr = (this.inquiryForm.company || '').trim();
                     const nameStr = this.inquiryForm.name.trim();
                     const clientLabel = companyStr ? `${nameStr} (${companyStr})` : nameStr;
+                    const emailStr = (this.inquiryForm.email || '').trim();
 
                     // ==========================================
-                    // 1. NTFY.SH PUSH NOTIFICATION (관리자 스마트폰 즉각 푸시 알림)
+                    // 1. NTFY.SH PUSH NOTIFICATION (관리자 스마트폰 즉각 푸시 알림: who26 토픽)
                     // ==========================================
-                    // 본문 데이터: [고객명/회사명], [연락처], [관심 분야], [문의 내용] 줄바꿈 텍스트
+                    // 본문 규격: [성함/기업명], [연락처], [관심분야], [문의내용] 줄바꿈 텍스트
                     const ntfyBody = [
-                        `[고객명/회사명] ${clientLabel}`,
+                        `[성함/기업명] ${clientLabel}`,
                         `[연락처] ${this.inquiryForm.phone.trim()}`,
-                        `[관심 분야] ${this.inquiryForm.category}`,
-                        `[이메일] ${this.inquiryForm.email.trim()}`,
-                        ``,
-                        `[문의 내용]`,
-                        this.inquiryForm.message.trim(),
-                        ``,
-                        `접수일시: ${new Date().toLocaleString('ko-KR')}`
-                    ].join('\n');
+                        `[관심분야] ${this.inquiryForm.category}`,
+                        emailStr ? `[이메일] ${emailStr}` : '',
+                        `[문의내용]`,
+                        this.inquiryForm.message.trim()
+                    ].filter(Boolean).join('\n');
 
-                    // RFC 2047 인코딩: 브라우저 fetch() 헤더의 비-ASCII 문자열(한글) ByteString 예외 방지 및 ntfy 자동 디코딩 지원
-                    let encodedTitle = '[후미디어 신규 문의 접수]';
+                    // RFC 2047 인코딩: 브라우저 fetch() 헤더의 비-ASCII 문자열 ByteString 예외 방지 및 ntfy 자동 디코딩 지원
+                    let encodedTitle = '[후미디어] 신규 문의 도착';
                     try {
-                        encodedTitle = '=?UTF-8?B?' + btoa(unescape(encodeURIComponent('[후미디어 신규 문의 접수]'))) + '?=';
+                        encodedTitle = '=?UTF-8?B?' + btoa(unescape(encodeURIComponent('[후미디어] 신규 문의 도착'))) + '?=';
                     } catch (e) {
-                        encodedTitle = 'New Inquiry Alert';
+                        encodedTitle = '=?UTF-8?B?W+2bhOuvuOuUlOyWtF0g7Iug6recIOusuOydmCDrj4TssKk=?=';
                     }
 
                     let ntfyDelivered = false;
 
                     try {
-                        const ntfyResponse = await fetch('https://ntfy.sh/whomedia_inquiry_alert_2026', {
+                        const ntfyResponse = await fetch('https://ntfy.sh/who26', {
                             method: 'POST',
                             headers: {
                                 'Title': encodedTitle,
-                                'Priority': 'urgent',
-                                'Tags': 'bell,incoming_envelope'
+                                'Priority': 'high',
+                                'Tags': 'bell,email'
                             },
                             body: ntfyBody
                         });
@@ -2317,29 +2303,7 @@
                             ntfyDelivered = true;
                         }
                     } catch (ntfyErr) {
-                        console.warn('ntfy raw POST notice:', ntfyErr);
-                    }
-
-                    // 네트워크 환경 또는 헤더 제약 시 JSON 포맷 백업 호출
-                    if (!ntfyDelivered) {
-                        try {
-                            const jsonRes = await fetch('https://ntfy.sh/whomedia_inquiry_alert_2026', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    topic: 'whomedia_inquiry_alert_2026',
-                                    title: '[후미디어 신규 문의 접수]',
-                                    priority: 'urgent',
-                                    tags: ['bell', 'incoming_envelope'],
-                                    message: ntfyBody
-                                })
-                            });
-                            if (jsonRes.ok) {
-                                ntfyDelivered = true;
-                            }
-                        } catch (e2) {
-                            console.warn('ntfy JSON notice:', e2);
-                        }
+                        console.warn('ntfy push notification notice:', ntfyErr);
                     }
 
                     // ==========================================
@@ -2461,8 +2425,8 @@
                     const isSuccessful = ntfyDelivered || serverSaved || web3Saved;
 
                     if (isSuccessful) {
-                        // 전송 성공 시: "문의가 정상 접수되었습니다. 담당자가 신속히 연락드리겠습니다."
-                        const successText = '문의가 정상 접수되었습니다. 담당자가 신속히 연락드리겠습니다.';
+                        // 성공 시: "문의가 접수되었습니다. 신속히 연락드리겠습니다." 안내 후 폼 리셋
+                        const successText = '문의가 접수되었습니다. 신속히 연락드리겠습니다.';
                         this.inquiryStatusType = 'success';
                         this.inquiryStatusTitle = '문의 접수 완료';
                         this.inquiryStatusMessage = successText;
@@ -2470,7 +2434,7 @@
                         this.inquiryStatusModal = false;
                         this.inquirySuccessModal = false;
 
-                        // 입력 폼 초기화(reset)
+                        // 입력 폼 초기화 (reset)
                         this.inquiryForm = {
                             company: '',
                             name: '',
@@ -2481,13 +2445,14 @@
                             consent: false
                         };
                     } else {
-                        // 전송 실패 시: "일시적 오류가 발생했습니다. 전화(02-6443-4222)로 문의해 주세요."
-                        const errorText = '일시적 오류가 발생했습니다. 전화(02-6443-4222)로 문의해 주세요.';
+                        // 실패 시: 안내 팝업 출력 및 대표번호 연결 안내
+                        const errorText = '일시적인 오류로 문의 접수에 실패했습니다. 대표번호(02-6443-4222)로 연락해 주시면 신속히 안내해 드리겠습니다.';
                         this.inquiryStatusType = 'error';
                         this.inquiryStatusTitle = '문의 접수 안내';
                         this.inquiryStatusMessage = errorText;
                         this.inquiryStatusModal = false;
                         this.inquirySuccessModal = false;
+                        alert(errorText);
                     }
 
                     this.inquirySubmitting = false;
@@ -4322,12 +4287,9 @@
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/85 to-slate-950/60 pointer-events-none"></div>
 
                     <div class="relative z-10 text-left flex-1 min-w-0 pr-2">
-                        <div class="flex items-center gap-1.5 mb-0.5">
-                            <h3 class="text-xs sm:text-sm font-bold text-white tracking-tight drop-shadow-sm truncate">
-                                대형 스튜디오
-                            </h3>
-                            <span class="text-[9.5px] sm:text-[10.5px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">실사 5컷</span>
-                        </div>
+                        <h3 class="text-xs sm:text-sm font-bold text-white tracking-tight drop-shadow-sm truncate mb-0.5">
+                            대형 스튜디오
+                        </h3>
                         <p class="text-[11px] sm:text-xs text-slate-300/90 font-normal leading-tight break-keep">
                             전체 160평 6개 전용 세트
                         </p>
@@ -4352,12 +4314,9 @@
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/85 to-slate-950/60 pointer-events-none"></div>
 
                     <div class="relative z-10 text-left flex-1 min-w-0 pr-2">
-                        <div class="flex items-center gap-1.5 mb-0.5">
-                            <h3 class="text-xs sm:text-sm font-bold text-white tracking-tight drop-shadow-sm truncate">
-                                전자칠판
-                            </h3>
-                            <span class="text-[9.5px] sm:text-[10.5px] font-bold px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-300 border border-blue-500/40 shrink-0">실사 4컷</span>
-                        </div>
+                        <h3 class="text-xs sm:text-sm font-bold text-white tracking-tight drop-shadow-sm truncate mb-0.5">
+                            전자칠판
+                        </h3>
                         <p class="text-[11px] sm:text-xs text-slate-300/90 font-normal leading-tight break-keep">
                             86" 4K 인터랙티브 판서
                         </p>
@@ -4374,19 +4333,16 @@
                 <div @click="selectStudioCategory('white_horizont')"
                      :class="activeStudioCategory === 'white_horizont' ? 'ring-2 ring-brand-mint border-brand-mint bg-slate-900 shadow-xl shadow-teal-500/25 scale-[1.03]' : 'border-slate-800/90 hover:border-slate-600 bg-slate-950/95'"
                      class="group relative rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-3 border shadow-xs sm:shadow-lg overflow-hidden isolate flex items-center justify-between cursor-pointer select-none transition-all duration-300">
-                    <img src="/img/studio/KakaoTalk_20260917_003738719.jpg" 
-                         @error="$el.src = '/img/studio/KakaoTalk_20240124_151422660_01.jpg'"
+                    <img src="/img/studio/KakaoTalk_20240124_151422660_01.jpg" 
+                         @error="$el.src = 'https://cdn.jsdelivr.net/gh/whomedia01/who-new809@main/img/KakaoTalk_20240124_151422660_01.jpg'"
                          alt="6번 스튜디오 화이트 호리존트 실사" 
                          class="absolute inset-0 w-full h-full object-cover opacity-35 group-hover:opacity-60 group-hover:scale-105 transition-all duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-900/50 pointer-events-none"></div>
 
                     <div class="relative z-10 text-left flex-1 min-w-0 pr-2">
-                        <div class="flex items-center gap-1.5 mb-0.5">
-                            <h3 class="text-xs sm:text-sm font-extrabold text-brand-mint tracking-tight drop-shadow-sm truncate">
-                                6번 화이트 호리존트
-                            </h3>
-                            <span class="text-[9.5px] sm:text-[10.5px] font-bold px-1.5 py-0.2 rounded bg-brand-mint/25 text-brand-mint border border-brand-mint/50 shrink-0">6번 세트</span>
-                        </div>
+                        <h3 class="text-xs sm:text-sm font-extrabold text-brand-mint tracking-tight drop-shadow-sm truncate mb-0.5">
+                            6번 화이트 호리존트
+                        </h3>
                         <p class="text-[11px] sm:text-xs text-white font-medium leading-tight break-keep">
                             6번 전용 무이음 호리존
                         </p>
@@ -4414,12 +4370,9 @@
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/85 to-slate-950/60 pointer-events-none"></div>
 
                     <div class="relative z-10 text-left flex-1 min-w-0 pr-2">
-                        <div class="flex items-center gap-1.5 mb-0.5">
-                            <h3 class="text-xs sm:text-sm font-bold text-white tracking-tight drop-shadow-sm truncate">
-                                전용 부조정실
-                            </h3>
-                            <span class="text-[9.5px] sm:text-[10.5px] font-bold px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 shrink-0">실사 5컷</span>
-                        </div>
+                        <h3 class="text-xs sm:text-sm font-bold text-white tracking-tight drop-shadow-sm truncate mb-0.5">
+                            전용 부조정실
+                        </h3>
                         <p class="text-[11px] sm:text-xs text-slate-300/90 font-normal leading-tight break-keep">
                             다채널 스위쳐 &amp; 송출 제어
                         </p>
@@ -4467,9 +4420,22 @@
                                  loading="eager"
                                  class="cinematic-stage-image w-full h-full object-cover">
 
+                            <!-- Top Left: Category Badge -->
+                            <div class="absolute top-2.5 sm:top-4 left-2.5 sm:left-5 pointer-events-none z-10">
+                                <span class="bg-slate-950/80 backdrop-blur-md text-emerald-400 text-[10.5px] sm:text-xs font-black px-2.5 py-1 rounded-lg border border-emerald-500/30 shadow-md tracking-wide" x-text="item.categoryName || '스튜디오 실사'"></span>
+                            </div>
+
                             <!-- Top Slide Badges Overlay -->
                             <div class="absolute top-2.5 sm:top-4 right-2.5 sm:right-5 pointer-events-none z-10">
                                 <span class="bg-slate-950/80 backdrop-blur-md text-white text-[10.5px] sm:text-xs font-bold px-2.5 py-1 rounded-lg border border-white/20 shadow-md tracking-wider" x-text="String(activeStudioIndex + 1).padStart(2, '0') + ' / ' + String(studioInfrastructure.length).padStart(2, '0')"></span>
+                            </div>
+
+                            <!-- Bottom Left: Title & Spec Overlay -->
+                            <div class="absolute bottom-2.5 left-2.5 sm:bottom-4 sm:left-5 pointer-events-none z-10 max-w-[70%] sm:max-w-[75%]">
+                                <div class="bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20 text-white shadow-md">
+                                    <p class="text-xs sm:text-sm font-bold text-white truncate" x-text="item.title"></p>
+                                    <p class="text-[10px] sm:text-xs text-slate-300 truncate hidden xs:block" x-text="item.spec"></p>
+                                </div>
                             </div>
 
                             <!-- Bottom Action Overlay (Clean View - Mismatched description text removed) -->

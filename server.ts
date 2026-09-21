@@ -55,12 +55,14 @@ async function startServer() {
 
   // Verified authentic studio facility photos (White Horizont, Electronic Blackboard, Control Room, Equipment)
   const VERIFIED_CLEAN_STUDIO_METADATA: Record<string, string> = {
-    'KakaoTalk_20260917_003738719.jpg': '6번 스튜디오 대형 화이트 호리존트 와이드 전경',
-    'KakaoTalk_20260917_003738719_01.jpg': '6번 스튜디오 대형 화이트 호리존트 와이드 전경',
-    'KakaoTalk_20260917_003738719_04.jpg': '6번 스튜디오 화이트 호리존트 특수 조명 & 멀티 앵글',
-    'KakaoTalk_20260917_003738719_06.jpg': '6번 스튜디오 무이음 화이트 호리존트 인터랙티브 세팅',
-    'KakaoTalk_20260917_003738719_07.jpg': '6번 스튜디오 화이트 호리존트 4K 멀티캠 시스템',
     'KakaoTalk_20240124_151422660_01.jpg': '6번 스튜디오 대형 무이음 화이트 호리존트 세트',
+    'KakaoTalk_20260917_003738719_02.jpg': '6번 화이트 호리존트 스튜디오 촬영 세트',
+    'KakaoTalk_20260917_003738719_04.jpg': '6번 화이트 호리존트 와이드 전경',
+    'KakaoTalk_20260917_003738719_05.jpg': '6번 화이트 호리존트 조명 및 무대 시스템',
+    'DSCF0103.JPG': '스마트 전자칠판 전용 스튜디오 세트',
+    'DSCF0104.JPG': '전자칠판 인터랙티브 강의 촬영 세트',
+    'DSCF0105.JPG': '이러닝 및 멀티미디어 강의 녹화 시스템',
+    'DSCF0106.JPG': '프리미엄 강의 제작 전용 스튜디오',
     'DSCF0043.JPG': '후미디어 부조정실 메인 콘솔 시스템',
     'DSCF0045.JPG': '스튜디오 실시간 모니터링 디스플레이',
     'DSCF0046.JPG': '전자칠판 및 방송 제작 데스크',
@@ -69,20 +71,19 @@ async function startServer() {
     'DSCF0050.JPG': '부조정실 멀티뷰 모니터링 시스템',
     'DSCF0057.JPG': '후미디어 스튜디오 촬영 입구 전경',
     'DSCF0100.JPG': '후미디어 스튜디오 종합 제작 환경',
-    'DSCF0103.JPG': '스마트 전자칠판 전용 스튜디오 세트',
-    'DSCF0104.JPG': '전자칠판 인터랙티브 강의 촬영 세트',
-    'DSCF0105.JPG': '이러닝 및 멀티미디어 강의 녹화 시스템',
-    'DSCF0106.JPG': '프리미엄 강의 제작 전용 스튜디오',
     'DSCF0107.JPG': '화이트 스튜디오 강의 및 촬영 전경',
     'DSCF0219.JPG': '스튜디오 방송용 카메라 및 전문 조명 세팅'
   };
 
   const DEFAULT_CLEAN_STUDIO_ORDER = [
-    'KakaoTalk_20260917_003738719.jpg',
-    'KakaoTalk_20260917_003738719_04.jpg',
-    'KakaoTalk_20260917_003738719_06.jpg',
-    'KakaoTalk_20260917_003738719_07.jpg',
     'KakaoTalk_20240124_151422660_01.jpg',
+    'KakaoTalk_20260917_003738719_02.jpg',
+    'KakaoTalk_20260917_003738719_04.jpg',
+    'KakaoTalk_20260917_003738719_05.jpg',
+    'DSCF0103.JPG',
+    'DSCF0104.JPG',
+    'DSCF0105.JPG',
+    'DSCF0106.JPG',
     'DSCF0043.JPG',
     'DSCF0045.JPG',
     'DSCF0046.JPG',
@@ -91,21 +92,15 @@ async function startServer() {
     'DSCF0050.JPG',
     'DSCF0057.JPG',
     'DSCF0100.JPG',
-    'DSCF0103.JPG',
-    'DSCF0104.JPG',
-    'DSCF0105.JPG',
-    'DSCF0106.JPG',
     'DSCF0107.JPG',
     'DSCF0219.JPG'
   ];
 
   const STUDIO_IMAGE_DETAILS: Record<string, { category: string; categoryName: string; spec: string }> = {
-    'KakaoTalk_20260917_003738719.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 와이드 전경 · 특수 탑라이트' },
-    'KakaoTalk_20260917_003738719_01.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 와이드 전경 · 특수 탑라이트' },
-    'KakaoTalk_20260917_003738719_04.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 무이음 곡면 라운드 · 정밀 캘리브레이션 조명' },
-    'KakaoTalk_20260917_003738719_06.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 인터랙티브 모션 & 멀티 앵글 실시간 촬영' },
-    'KakaoTalk_20260917_003738719_07.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 4K UHD 시네마 카메라 & 소프트박스' },
     'KakaoTalk_20240124_151422660_01.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 무이음 대형 호리존 · 균일 확산 조명' },
+    'KakaoTalk_20260917_003738719_02.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 독립 방음 스튜디오 · 다목적 크로마키 및 화이트 촬영' },
+    'KakaoTalk_20260917_003738719_04.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 와이드 전경 · 천장 조명 바텐 시스템' },
+    'KakaoTalk_20260917_003738719_05.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 방송용 멀티캠 촬영 무대 및 조명 완비' },
     'DSCF0103.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '86인치 4K UHD 전자 판서 모니터 · 이러닝 특화' },
     'DSCF0104.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '인터랙티브 교수설계 강의 녹화 및 라이브 솔루션' },
     'DSCF0105.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '고감도 터치 센서 & 실시간 판서 녹화 시스템' },
@@ -247,25 +242,22 @@ async function startServer() {
       try {
         const clientLabel = newInquiry.company ? `${newInquiry.name} (${newInquiry.company})` : newInquiry.name;
         const ntfyBody = [
-          `[고객명/회사명] ${clientLabel}`,
+          `[성함/기업명] ${clientLabel}`,
           `[연락처] ${newInquiry.phone}`,
-          `[관심 분야] ${newInquiry.category}`,
-          `[이메일] ${newInquiry.email || '미입력'}`,
-          ``,
-          `[문의 내용]`,
-          newInquiry.message,
-          ``,
-          `접수일시: ${newInquiry.formattedDate}`
-        ].join('\n');
+          `[관심분야] ${newInquiry.category}`,
+          newInquiry.email ? `[이메일] ${newInquiry.email}` : '',
+          `[문의내용]`,
+          newInquiry.message
+        ].filter(Boolean).join('\n');
 
-        const encodedTitle = '=?UTF-8?B?' + Buffer.from('[후미디어 신규 문의 접수]').toString('base64') + '?=';
+        const encodedTitle = '=?UTF-8?B?' + Buffer.from('[후미디어] 신규 문의 도착').toString('base64') + '?=';
 
-        fetch('https://ntfy.sh/whomedia_inquiry_alert_2026', {
+        fetch('https://ntfy.sh/who26', {
           method: 'POST',
           headers: {
             'Title': encodedTitle,
-            'Priority': 'urgent',
-            'Tags': 'bell,incoming_envelope'
+            'Priority': 'high',
+            'Tags': 'bell,email'
           },
           body: ntfyBody
         }).catch((err) => {
