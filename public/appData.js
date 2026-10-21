@@ -58,9 +58,11 @@ const EXCLUDED_CHROMAKEY_FILES = new Set([
 // 후미디어 전문 스튜디오 검증된 클린 실사 이미지 (화이트 호리존트, 전자칠판, 부조정실, 전문 장비)
 const STUDIO_PHOTO_FILES = [
     'KakaoTalk_20240124_151422660_01.jpg',
+    'KakaoTalk_20260917_003738719.jpg',
     'KakaoTalk_20260917_003738719_02.jpg',
     'KakaoTalk_20260917_003738719_04.jpg',
     'KakaoTalk_20260917_003738719_05.jpg',
+    'KakaoTalk_20260917_003738719_06.jpg',
     'DSCF0103.JPG',
     'DSCF0104.JPG',
     'DSCF0105.JPG',
@@ -78,10 +80,12 @@ const STUDIO_PHOTO_FILES = [
 ];
 
 const STUDIO_PHOTO_TITLES = {
-    'KakaoTalk_20240124_151422660_01.jpg': '6번 스튜디오 대형 무이음 화이트 호리존트 세트',
-    'KakaoTalk_20260917_003738719_02.jpg': '6번 화이트 호리존트 스튜디오 촬영 세트',
-    'KakaoTalk_20260917_003738719_04.jpg': '6번 화이트 호리존트 와이드 전경',
-    'KakaoTalk_20260917_003738719_05.jpg': '6번 화이트 호리존트 조명 및 무대 시스템',
+    'KakaoTalk_20240124_151422660_01.jpg': '대형 무이음 화이트 호리존트 세트',
+    'KakaoTalk_20260917_003738719.jpg': '화이트 호리존트 와이드 전경',
+    'KakaoTalk_20260917_003738719_02.jpg': '화이트 호리존트 스튜디오 촬영 세트',
+    'KakaoTalk_20260917_003738719_04.jpg': '화이트 호리존트 조명 및 무대 시스템',
+    'KakaoTalk_20260917_003738719_05.jpg': '화이트 호리존트 방송용 멀티캠 촬영 무대',
+    'KakaoTalk_20260917_003738719_06.jpg': '화이트 호리존트 멀티 앵글 연출 환경',
     'DSCF0103.JPG': '스마트 전자칠판 전용 스튜디오 세트',
     'DSCF0104.JPG': '전자칠판 인터랙티브 강의 촬영 세트',
     'DSCF0105.JPG': '이러닝 및 멀티미디어 강의 녹화 시스템',
@@ -96,6 +100,29 @@ const STUDIO_PHOTO_TITLES = {
     'DSCF0100.JPG': '후미디어 스튜디오 종합 제작 환경',
     'DSCF0107.JPG': '화이트 스튜디오 강의 및 촬영 전경',
     'DSCF0219.JPG': '스튜디오 방송용 카메라 및 전문 조명 세팅'
+};
+
+const STUDIO_IMAGE_DETAILS = {
+    'KakaoTalk_20240124_151422660_01.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '화이트 호리존트 스튜디오 · 무이음 대형 호리존 · 균일 확산 조명' },
+    'KakaoTalk_20260917_003738719.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '화이트 호리존트 와이드 전경 · 특수 탑라이트 조명' },
+    'KakaoTalk_20260917_003738719_02.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '화이트 호리존트 독립 방음 스튜디오 · 다목적 크로마키 및 화이트 촬영' },
+    'KakaoTalk_20260917_003738719_04.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '화이트 호리존트 전경 · 천장 조명 바텐 시스템' },
+    'KakaoTalk_20260917_003738719_05.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '화이트 호리존트 방송용 멀티캠 촬영 무대 및 조명 완비' },
+    'KakaoTalk_20260917_003738719_06.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '화이트 호리존트 멀티 앵글 연출 환경 · 다목적 촬영' },
+    'DSCF0103.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '86인치 4K UHD 전자 판서 모니터 · 이러닝 특화' },
+    'DSCF0104.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '인터랙티브 교수설계 강의 녹화 및 라이브 솔루션' },
+    'DSCF0105.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '고감도 터치 센서 & 실시간 판서 녹화 시스템' },
+    'DSCF0106.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '프리미엄 강의 제작 전용 독립 방음 스튜디오' },
+    'DSCF0043.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: 'Blackmagic ATEM 다채널 스위쳐 & 오디오 믹싱 콘솔' },
+    'DSCF0045.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: '실시간 멀티뷰 모니터링 & 레코딩 스테이션' },
+    'DSCF0046.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: '방송 송출 엔지니어링 데스크 & 실시간 인터콤' },
+    'DSCF0048.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: 'UHD 고화질 실시간 인코딩 및 마스터링 시스템' },
+    'DSCF0049.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: '원격 라이브 스트리밍 및 다중 플랫폼 동시 송출' },
+    'DSCF0050.JPG': { category: 'control_room', categoryName: '주·부조정실', spec: '부조정실 전문 마스터 모니터링 환경' },
+    'DSCF0057.JPG': { category: 'large_studio', categoryName: '대형 스튜디오', spec: '160평 규모 복합 이러닝 제작 센터 메인 엔트런스' },
+    'DSCF0100.JPG': { category: 'large_studio', categoryName: '대형 스튜디오', spec: '6개 전용 스튜디오 인프라 & 종합 방송 연출 공간' },
+    'DSCF0107.JPG': { category: 'large_studio', categoryName: '대형 스튜디오', spec: '화이트 스튜디오 연출 공간 및 다목적 촬영 세트' },
+    'DSCF0219.JPG': { category: 'large_studio', categoryName: '대형 스튜디오', spec: '방송용 전문 카메라 리그 & 천장 조명 바텐 시스템' }
 };
 
 const STUDIO_IMAGES = STUDIO_PHOTO_FILES.map(fileName => `/img/studio/${fileName}`);

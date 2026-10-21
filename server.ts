@@ -55,10 +55,12 @@ async function startServer() {
 
   // Verified authentic studio facility photos (White Horizont, Electronic Blackboard, Control Room, Equipment)
   const VERIFIED_CLEAN_STUDIO_METADATA: Record<string, string> = {
-    'KakaoTalk_20240124_151422660_01.jpg': '6번 스튜디오 대형 무이음 화이트 호리존트 세트',
-    'KakaoTalk_20260917_003738719_02.jpg': '6번 화이트 호리존트 스튜디오 촬영 세트',
-    'KakaoTalk_20260917_003738719_04.jpg': '6번 화이트 호리존트 와이드 전경',
-    'KakaoTalk_20260917_003738719_05.jpg': '6번 화이트 호리존트 조명 및 무대 시스템',
+    'KakaoTalk_20240124_151422660_01.jpg': '대형 무이음 화이트 호리존트 세트',
+    'KakaoTalk_20260917_003738719.jpg': '화이트 호리존트 와이드 전경',
+    'KakaoTalk_20260917_003738719_02.jpg': '화이트 호리존트 스튜디오 촬영 세트',
+    'KakaoTalk_20260917_003738719_04.jpg': '화이트 호리존트 조명 및 무대 시스템',
+    'KakaoTalk_20260917_003738719_05.jpg': '화이트 호리존트 방송용 멀티캠 촬영 무대',
+    'KakaoTalk_20260917_003738719_06.jpg': '화이트 호리존트 멀티 앵글 연출 환경',
     'DSCF0103.JPG': '스마트 전자칠판 전용 스튜디오 세트',
     'DSCF0104.JPG': '전자칠판 인터랙티브 강의 촬영 세트',
     'DSCF0105.JPG': '이러닝 및 멀티미디어 강의 녹화 시스템',
@@ -77,9 +79,11 @@ async function startServer() {
 
   const DEFAULT_CLEAN_STUDIO_ORDER = [
     'KakaoTalk_20240124_151422660_01.jpg',
+    'KakaoTalk_20260917_003738719.jpg',
     'KakaoTalk_20260917_003738719_02.jpg',
     'KakaoTalk_20260917_003738719_04.jpg',
     'KakaoTalk_20260917_003738719_05.jpg',
+    'KakaoTalk_20260917_003738719_06.jpg',
     'DSCF0103.JPG',
     'DSCF0104.JPG',
     'DSCF0105.JPG',
@@ -97,10 +101,12 @@ async function startServer() {
   ];
 
   const STUDIO_IMAGE_DETAILS: Record<string, { category: string; categoryName: string; spec: string }> = {
-    'KakaoTalk_20240124_151422660_01.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 스튜디오 · 무이음 대형 호리존 · 균일 확산 조명' },
-    'KakaoTalk_20260917_003738719_02.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 독립 방음 스튜디오 · 다목적 크로마키 및 화이트 촬영' },
-    'KakaoTalk_20260917_003738719_04.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 와이드 전경 · 천장 조명 바텐 시스템' },
-    'KakaoTalk_20260917_003738719_05.jpg': { category: 'white_horizont', categoryName: '6번 화이트 호리존트', spec: '6번 화이트 호리존트 방송용 멀티캠 촬영 무대 및 조명 완비' },
+    'KakaoTalk_20240124_151422660_01.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '화이트 호리존트 스튜디오 · 무이음 대형 호리존 · 균일 확산 조명' },
+    'KakaoTalk_20260917_003738719.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '화이트 호리존트 와이드 전경 · 특수 탑라이트 조명' },
+    'KakaoTalk_20260917_003738719_02.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '화이트 호리존트 독립 방음 스튜디오 · 다목적 크로마키 및 화이트 촬영' },
+    'KakaoTalk_20260917_003738719_04.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '화이트 호리존트 전경 · 천장 조명 바텐 시스템' },
+    'KakaoTalk_20260917_003738719_05.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '화이트 호리존트 방송용 멀티캠 촬영 무대 및 조명 완비' },
+    'KakaoTalk_20260917_003738719_06.jpg': { category: 'white_horizont', categoryName: '화이트 호리존트', spec: '화이트 호리존트 멀티 앵글 연출 환경 · 다목적 촬영' },
     'DSCF0103.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '86인치 4K UHD 전자 판서 모니터 · 이러닝 특화' },
     'DSCF0104.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '인터랙티브 교수설계 강의 녹화 및 라이브 솔루션' },
     'DSCF0105.JPG': { category: 'smart_board', categoryName: '전자칠판 스튜디오', spec: '고감도 터치 센서 & 실시간 판서 녹화 시스템' },
@@ -132,8 +138,13 @@ async function startServer() {
       };
       const localExists = fs.existsSync(path.join(localDir, fileName));
       const localUrl = `/img/studio/${fileName}`;
-      const raw = ghItem?.download_url || `https://raw.githubusercontent.com/whomedia01/who-new809/main/img/${encodeURIComponent(fileName)}`;
-      const cdnUrl = `https://cdn.jsdelivr.net/gh/whomedia01/who-new809@main/img/${encodeURIComponent(fileName)}`;
+      const is0818 = fileName.startsWith('KakaoTalk_2026');
+      const raw = ghItem?.download_url || (is0818 
+        ? `https://raw.githubusercontent.com/whomedia01/0818/main/public/img/studio/${encodeURIComponent(fileName)}`
+        : `https://raw.githubusercontent.com/whomedia01/who-new809/main/img/${encodeURIComponent(fileName)}`);
+      const cdnUrl = is0818
+        ? `https://cdn.jsdelivr.net/gh/whomedia01/0818@main/public/img/studio/${encodeURIComponent(fileName)}`
+        : `https://cdn.jsdelivr.net/gh/whomedia01/who-new809@main/img/${encodeURIComponent(fileName)}`;
       const primaryUrl = localExists ? localUrl : cdnUrl;
 
       list.push({
